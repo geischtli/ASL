@@ -1,12 +1,15 @@
 package org.asl.middleware;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.nio.ByteBuffer;
 import java.nio.channels.AsynchronousSocketChannel;
 import java.nio.channels.CompletionHandler;
 import java.sql.SQLException;
 
 import org.asl.common.message.handler.MessageHandler;
+import org.asl.common.message.serialize.SerializingUtilities;
 import org.asl.middleware.clientsession.ClientSession;
 
 public class Middleware extends AbstractMiddleware {
@@ -24,16 +27,20 @@ public class Middleware extends AbstractMiddleware {
 				ClientSession session = new ClientSession(ssc, -1); //TODO: fix client_id = -1 -> send from client.
 				final ByteBuffer buf = ByteBuffer.allocate(1024);
 				ssc.read(buf, session, new CompletionHandler<Integer, ClientSession>() {
-
+					
 					@Override
 					public void completed(Integer len, ClientSession cs) {
 						boolean ret = cs.handleInput(buf, len);
+						System.out.println("buf = " + buf.position());
 						if (ret) {
 							cs.getChannel().read(buf, cs, this);
 						} else {
 							//sqlHandlerPool.submit(SqlHandler.getHandler(conn, cs.getMessage()));
 							//cs.getMessage().processOnMiddleware(null);
-							System.out.println("Received from client " + cs.getId() + ": " + cs.getMessage().action);
+							System.out.println("Server received: " + cs.getMessage().getClass());
+							cs.getMessage().processOnMiddleware();
+							ByteBuffer outbuf = ByteBuffer.wrap(SerializingUtilities.objectToByteArray(cs.getMessage()));
+							cs.getChannel().write(outbuf);
 							try {
 								cs.getChannel().close();
 							} catch (IOException e) {

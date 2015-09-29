@@ -38,7 +38,7 @@ public class Main {
 		}
 		//threadpool.shutdown();
 		try {
-			if (!threadpool.awaitTermination(60, TimeUnit.SECONDS)) {
+			if (!threadpool.awaitTermination(600, TimeUnit.SECONDS)) {
 				System.out.println("Force threadpool to shutdown");
 				threadpool.shutdownNow();
 			}

@@ -22,20 +22,17 @@ public class BaseClientSession {
 	}
 	
 	public boolean handleInput(ByteBuffer buf, int len) {
-		if (len >= 0) {
-			return true;
-		} else {
-			ByteArrayInputStream is = new ByteArrayInputStream(buf.array());
-			try {
-				ObjectInputStream ois = new ObjectInputStream(is);
-				msg = (Message) ois.readObject();
-			} catch (IOException e) {
-				e.printStackTrace();
-			} catch (ClassNotFoundException e) {
-				e.printStackTrace();
-			}
-			return false;
+		System.out.println("before byteingstream");
+		ByteArrayInputStream is = new ByteArrayInputStream(buf.array());
+		try {
+			ObjectInputStream ois = new ObjectInputStream(is);
+			msg = (Message) ois.readObject();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
 		}
+		return false;
 	}
 	
 	public void handleFailure() {

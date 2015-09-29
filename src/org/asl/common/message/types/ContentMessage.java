@@ -20,7 +20,7 @@ public class ContentMessage extends Message {
 	}
 
 	@Override
-	public void processOnMiddleware(SqlHandler sqlHandler) {
+	public void processOnMiddleware() {
 		// TODO Auto-generated method stub
 		
 	}

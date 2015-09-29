@@ -24,7 +24,7 @@ public class HandshakeMessage extends Message {
 
 	@Override
 	public void processOnMiddleware() {
-				
+		setClientId(313);
 	}
 
 	@Override

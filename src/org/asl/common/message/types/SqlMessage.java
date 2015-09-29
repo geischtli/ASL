@@ -21,7 +21,7 @@ public class SqlMessage extends Message {
 	}
 
 	@Override
-	public void processOnMiddleware(SqlHandler sqlHandler) {
+	public void processOnMiddleware() {
 		System.out.println("Hello from Thread " + Thread.currentThread().getId());
 	}
 

@@ -112,6 +112,6 @@ public abstract class Message implements Serializable {
 		return m;
 	}
 	
-	public abstract void processOnMiddleware(SqlHandler sqlHandler);
+	public abstract void processOnMiddleware();
 	public abstract void processOnClient();
 }
