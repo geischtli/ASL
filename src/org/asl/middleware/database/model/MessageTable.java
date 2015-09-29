@@ -15,4 +15,6 @@ public class MessageTable {
 		this.queue = queue;
 		this.msg = msg;
 	}
+	
+	//TODO: prepare statments for ClientDAO...
 }

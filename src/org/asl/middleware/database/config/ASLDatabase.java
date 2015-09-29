@@ -12,19 +12,19 @@ public class ASLDatabase {
 	private static Properties props;
 	private final Connection conn;
 	
-	private static String DROP_ALL_TABLES_SQL = "DROP SCHEMA PUBLIC CASCADE;" +
+	private static String DROP_ALL_TABLES_AND_SEQUENCES_SQL =
+			"DROP SCHEMA PUBLIC CASCADE;" +
 			"CREATE SCHEMA PUBLIC;";
-	private static String CREATE_CLIENT_TABLE_SQL = "CREATE TABLE CLIENT(" +
+	private static String CREATE_CLIENT_SEQUENCE_SQL =
+			"CREATE SEQUENCE CLIENT START 1;";
+	private static String CREATE_QUEUE_SEQUENCE_SQL =
+			"CREATE SEQUENCE QUEUE START 1;";
+	private static String CREATE_MESSAGE_TABLE_SQL =
+			"CREATE TABLE MESSAGE(" +
 			"ID SERIAL PRIMARY KEY," +
-			"UUID TEXT);";
-	private static String CREATE_QUEUE_TABLE_SQL = "CREATE TABLE QUEUE(" +
-			"ID SERIAL PRIMARY KEY," +
-			"UUID TEXT);";
-	private static String CREATE_MESSAGE_TABLE_SQL = "CREATE TABLE MESSAGE(" +
-			"ID SERIAL PRIMARY KEY," +
-			"SENDER INT NOT NULL REFERENCES CLIENT (ID)," +
-			"RECEIVER INT REFERENCES CLIENT (ID)," +
-			"QUEUE INT NOT NULL REFERENCES QUEUE (ID));";
+			"SENDER INT DEFAULT nextval('client')," +
+			"RECEIVER INT DEFAULT nextval('client')," +
+			"QUEUE INT DEFAULT nextval('queue'));";
 	
 	public ASLDatabase(boolean initDB) throws SQLException {
 		this.url = "jdbc:postgresql://localhost/mydb";
@@ -40,13 +40,13 @@ public class ASLDatabase {
 	}
 	
 	private void initDB() throws SQLException {
-		try (PreparedStatement drop_all_tables = conn.prepareStatement(DROP_ALL_TABLES_SQL);
-				PreparedStatement create_clients_table = conn.prepareStatement(CREATE_CLIENT_TABLE_SQL);
-				PreparedStatement create_queues_table = conn.prepareStatement(CREATE_QUEUE_TABLE_SQL);
+		try (PreparedStatement drop_all_tables_and_sequences_sql = conn.prepareStatement(DROP_ALL_TABLES_AND_SEQUENCES_SQL);
+				PreparedStatement create_clients_sequence = conn.prepareStatement(CREATE_CLIENT_SEQUENCE_SQL);
+				PreparedStatement create_queues_sequence = conn.prepareStatement(CREATE_QUEUE_SEQUENCE_SQL);
 				PreparedStatement create_messages_table = conn.prepareStatement(CREATE_MESSAGE_TABLE_SQL)) {
-			drop_all_tables.execute();
-			create_clients_table.execute();
-			create_queues_table.execute();
+			drop_all_tables_and_sequences_sql.execute();
+			create_clients_sequence.execute();
+			create_queues_sequence.execute();
 			create_messages_table.execute();
 			conn.commit();
 		} catch (SQLException e) {
@@ -64,6 +64,4 @@ public class ASLDatabase {
 		c.setAutoCommit(false);
 		return c;
 	}
-	
-	
 }
