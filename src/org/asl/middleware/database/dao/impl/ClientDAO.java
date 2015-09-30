@@ -5,9 +5,11 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import org.asl.common.message.types.exceptions.HandshakeException;
+import org.asl.middleware.MiddlewareInfo;
 import org.asl.middleware.database.config.ASLDatabase;
 import org.asl.middleware.database.dao.IClientDAO;
-import org.asl.middleware.database.model.ClientSequence;
+import org.asl.middleware.database.model.ClientTable;
 
 public class ClientDAO implements IClientDAO {
 
@@ -16,16 +18,17 @@ public class ClientDAO implements IClientDAO {
 	}
 	
 	@Override
-	public int registerClient() {
+	public int registerClient() throws HandshakeException {
 		try (Connection conn = ASLDatabase.getNewConnection()) {
-			PreparedStatement register_client = conn.prepareStatement(ClientSequence.REGISTER_CLIENT_STRING);
+			PreparedStatement register_client = conn.prepareStatement(ClientTable.REGISTER_CLIENT_STRING);
+			register_client.setInt(1, MiddlewareInfo.getMiddlewareId());
 			ResultSet rs = register_client.executeQuery();
 			rs.next();
+			conn.commit();
 			return rs.getInt(1);
 		} catch (SQLException e) {
-			e.printStackTrace();
+			throw new HandshakeException(e);
 		}
-		return -1;
 	}
 
 }

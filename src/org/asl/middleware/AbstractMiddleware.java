@@ -12,6 +12,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
+import org.asl.common.message.builder.MessageBuilder;
 import org.asl.middleware.database.config.ASLDatabase;
 
 public abstract class AbstractMiddleware {
@@ -22,6 +23,8 @@ public abstract class AbstractMiddleware {
 		this.serverChannel = AsynchronousServerSocketChannel.open();
 		this.serverChannel.bind(new InetSocketAddress(port));
 		this.db = ASLDatabase.getDatabase(initDB);
+		// Register this Middleware instance on the database (i.e. get an id into MiddlewareInfo)
+		MessageBuilder.newRegisterMiddlewareMessage().processOnMiddleware();
 	}
 	
 	public abstract void accept();

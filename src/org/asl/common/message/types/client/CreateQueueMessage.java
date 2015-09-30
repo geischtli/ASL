@@ -10,10 +10,10 @@ import org.asl.middleware.database.dao.impl.QueueDAO;
 public class CreateQueueMessage extends Message {
 
 	private int queue_id;
+	private int creator_id;
 	
-	
-	public CreateQueueMessage(int queue_id) {
-		this.setQueueId(queue_id);
+	public CreateQueueMessage(int creator_id) {
+		this.creator_id = creator_id;
 		this.exception = new CreateQueueException();
 	}
 
@@ -25,11 +25,18 @@ public class CreateQueueMessage extends Message {
 		this.queue_id = queue_id;
 	}
 	
+	public int getCreatorId() {
+		return creator_id;
+	}
+
+	public void setCreatorId(int creator_id) {
+		this.creator_id = creator_id;
+	}
+	
 	@Override
 	public void processOnMiddleware() {
 		try {
-			setQueueId(QueueDAO.getQueueDAO().createQueue());
-			setException(new CreateQueueException(new Exception()));
+			setQueueId(QueueDAO.getQueueDAO().createQueue(creator_id));
 		} catch (CreateQueueException e) {
 			setException(e);
 		}
@@ -39,6 +46,7 @@ public class CreateQueueMessage extends Message {
 	public void processOnClient() throws ASLException {
 		if (!getException().carriesError()) {
 			ClientInfo.setQueueId(queue_id);
+			System.out.println("Queue created with id: " + ClientInfo.getQueueId());
 		} else {
 			throw getException();
 		}

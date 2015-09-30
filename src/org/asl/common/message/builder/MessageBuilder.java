@@ -7,6 +7,7 @@ import org.asl.common.message.types.SqlMessage;
 import org.asl.common.message.types.StatusMessage;
 import org.asl.common.message.types.client.CreateQueueMessage;
 import org.asl.common.message.types.client.HandshakeMessage;
+import org.asl.common.message.types.middleware.RegisterMiddlewareMessage;
 
 /**
  * Builds up the message by setting the values of the fields.
@@ -190,6 +191,10 @@ public class MessageBuilder {
 	
 	public static CreateQueueMessage newCreateQueueMessage() {
 		return new CreateQueueMessage(-1);
+	}
+	
+	public static RegisterMiddlewareMessage newRegisterMiddlewareMessage() {
+		return new RegisterMiddlewareMessage();
 	}
 }
 

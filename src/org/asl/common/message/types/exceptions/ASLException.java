@@ -8,12 +8,12 @@ public class ASLException extends Exception implements Serializable {
 	protected boolean carriesError;
 	
 	public ASLException() {
-		this.carriesError(false);
+		this.carriesError = false;
 	}
 	
 	public ASLException(Exception e) {
 		super(e);
-		this.carriesError(true);
+		this.carriesError = true;
 	}
 
 	public boolean carriesError() {

@@ -41,7 +41,7 @@ public class Client implements Runnable {
 
 			@Override
 			public void completed(Void result, Object attachment) {
-				Message m = MessageBuilder.newCreateQueueMessage();
+				Message m = MessageBuilder.newHandshakeMessage();
 				ByteBuffer outbuf = ByteBuffer.wrap(SerializingUtilities.objectToByteArray(m));
 				sc.write(outbuf, 0L, new CompletionHandler<Integer, Long>() {
 	                
@@ -59,9 +59,7 @@ public class Client implements Runnable {
 									m.processOnClient();
 								} catch (ASLException e) {
 									System.out.println("Reading message failed with type: " + m.getException().getClass());
-									//e.printStackTrace();
 								}
-								System.out.println("Queue created with id: " + ClientInfo.getQueueId());
 							}
 
 							@Override

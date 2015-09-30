@@ -12,19 +12,27 @@ public class ASLDatabase {
 	private static Properties props;
 	private final Connection conn;
 	
-	private static String DROP_ALL_TABLES_AND_SEQUENCES_SQL =
+	private static String DROP_ALL_TABLES_SQL =
 			"DROP SCHEMA PUBLIC CASCADE;" +
 			"CREATE SCHEMA PUBLIC;";
-	private static String CREATE_CLIENT_SEQUENCE_SQL =
-			"CREATE SEQUENCE CLIENT START 1;";
-	private static String CREATE_QUEUE_SEQUENCE_SQL =
-			"CREATE SEQUENCE QUEUE START 1;";
+	private static String CREATE_SEQUENCE_MIDDLEWARE_SQL =
+			"CREATE SEQUENCE MIDDLEWARE START 1";
+	private static String CREATE_CLIENT_TABLE_SQL =
+			"CREATE TABLE CLIENT(" +
+					"ID SERIAL PRIMARY KEY," +
+					"ON_MIDDLEWARE INT DEFAULT nextval('middleware')" +
+			");";
+	private static String CREATE_QUEUE_TABLE_SQL =
+			"CREATE TABLE QUEUE(" +
+					"ID SERIAL PRIMARY KEY," +
+					"CREATOR_CLIENT INT REFERENCES CLIENT (ID)" +
+			");";
 	private static String CREATE_MESSAGE_TABLE_SQL =
 			"CREATE TABLE MESSAGE(" +
 			"ID SERIAL PRIMARY KEY," +
-			"SENDER INT DEFAULT nextval('client')," +
-			"RECEIVER INT DEFAULT nextval('client')," +
-			"QUEUE INT DEFAULT nextval('queue'));";
+			"SENDER INT REFERENCES CLIENT (ID)," +
+			"RECEIVER INT REFERENCES CLIENT (ID)," +
+			"QUEUE INT REFERENCES QUEUE (ID));";
 	
 	public ASLDatabase(boolean initDB) throws SQLException {
 		this.url = "jdbc:postgresql://localhost/mydb";
@@ -40,13 +48,15 @@ public class ASLDatabase {
 	}
 	
 	private void initDB() throws SQLException {
-		try (PreparedStatement drop_all_tables_and_sequences = conn.prepareStatement(DROP_ALL_TABLES_AND_SEQUENCES_SQL);
-				PreparedStatement create_clients_sequence = conn.prepareStatement(CREATE_CLIENT_SEQUENCE_SQL);
-				PreparedStatement create_queues_sequence = conn.prepareStatement(CREATE_QUEUE_SEQUENCE_SQL);
+		try (PreparedStatement drop_all_tables_and_sequences = conn.prepareStatement(DROP_ALL_TABLES_SQL);
+				PreparedStatement create_middleware_sequence = conn.prepareStatement(CREATE_SEQUENCE_MIDDLEWARE_SQL);
+				PreparedStatement create_clients_table= conn.prepareStatement(CREATE_CLIENT_TABLE_SQL);
+				PreparedStatement create_queues_table = conn.prepareStatement(CREATE_QUEUE_TABLE_SQL);
 				PreparedStatement create_messages_table = conn.prepareStatement(CREATE_MESSAGE_TABLE_SQL)) {
 			drop_all_tables_and_sequences.execute();
-			create_clients_sequence.execute();
-			create_queues_sequence.execute();
+			create_middleware_sequence.execute();
+			create_clients_table.execute();
+			create_queues_table.execute();
 			create_messages_table.execute();
 			conn.commit();
 		} catch (SQLException e) {

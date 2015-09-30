@@ -4,5 +4,5 @@ import org.asl.common.message.types.exceptions.CreateQueueException;
 
 public interface IQueueDAO {
 
-	public int createQueue() throws CreateQueueException;
+	public int createQueue(int creator_id) throws CreateQueueException;
 }
