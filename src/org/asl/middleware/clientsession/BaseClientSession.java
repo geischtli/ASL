@@ -22,7 +22,6 @@ public class BaseClientSession {
 	}
 	
 	public boolean handleInput(ByteBuffer buf, int len) {
-		System.out.println("before byteingstream");
 		ByteArrayInputStream is = new ByteArrayInputStream(buf.array());
 		try {
 			ObjectInputStream ois = new ObjectInputStream(is);

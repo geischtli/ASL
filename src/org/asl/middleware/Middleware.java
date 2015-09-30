@@ -31,13 +31,9 @@ public class Middleware extends AbstractMiddleware {
 					@Override
 					public void completed(Integer len, ClientSession cs) {
 						boolean ret = cs.handleInput(buf, len);
-						System.out.println("buf = " + buf.position());
 						if (ret) {
 							cs.getChannel().read(buf, cs, this);
 						} else {
-							//sqlHandlerPool.submit(SqlHandler.getHandler(conn, cs.getMessage()));
-							//cs.getMessage().processOnMiddleware(null);
-							System.out.println("Server received: " + cs.getMessage().getClass());
 							cs.getMessage().processOnMiddleware();
 							ByteBuffer outbuf = ByteBuffer.wrap(SerializingUtilities.objectToByteArray(cs.getMessage()));
 							cs.getChannel().write(outbuf);

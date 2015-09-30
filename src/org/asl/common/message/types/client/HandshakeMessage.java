@@ -4,6 +4,7 @@ package org.asl.common.message.types.client;
 import org.asl.client.ClientInfo;
 import org.asl.common.message.Message;
 import org.asl.middleware.database.SqlHandler;
+import org.asl.middleware.database.dao.impl.ClientDAO;
 
 @SuppressWarnings("serial")
 public class HandshakeMessage extends Message {
@@ -24,7 +25,7 @@ public class HandshakeMessage extends Message {
 
 	@Override
 	public void processOnMiddleware() {
-		setClientId(313);
+		setClientId(ClientDAO.getClientDAO().registerClient());
 	}
 
 	@Override

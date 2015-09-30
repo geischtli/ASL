@@ -54,7 +54,6 @@ public class Client implements Runnable {
 								// TODO Auto-generated method stub
 								outbuf.flip();
 								Message m = (Message)SerializingUtilities.byteArrayToObject(outbuf.array());
-								System.out.println("Client received: " + m.getClass());
 								m.processOnClient();
 								System.out.println("Yaiii got my id: " + ClientInfo.getClientId());
 							}
@@ -62,7 +61,7 @@ public class Client implements Runnable {
 							@Override
 							public void failed(Throwable exc, Object attachment) {
 								// TODO Auto-generated method stub
-								
+								System.out.println("In client: Read failed");
 							}
                     		
                     	});
@@ -80,6 +79,7 @@ public class Client implements Runnable {
 			public void failed(Throwable exc, Object attachment) {
 				int i = 15;
 				int a = i;
+				System.out.println("In client: Connect failed");
 			}
 			
 		});

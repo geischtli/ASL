@@ -40,11 +40,11 @@ public class ASLDatabase {
 	}
 	
 	private void initDB() throws SQLException {
-		try (PreparedStatement drop_all_tables_and_sequences_sql = conn.prepareStatement(DROP_ALL_TABLES_AND_SEQUENCES_SQL);
+		try (PreparedStatement drop_all_tables_and_sequences = conn.prepareStatement(DROP_ALL_TABLES_AND_SEQUENCES_SQL);
 				PreparedStatement create_clients_sequence = conn.prepareStatement(CREATE_CLIENT_SEQUENCE_SQL);
 				PreparedStatement create_queues_sequence = conn.prepareStatement(CREATE_QUEUE_SEQUENCE_SQL);
 				PreparedStatement create_messages_table = conn.prepareStatement(CREATE_MESSAGE_TABLE_SQL)) {
-			drop_all_tables_and_sequences_sql.execute();
+			drop_all_tables_and_sequences.execute();
 			create_clients_sequence.execute();
 			create_queues_sequence.execute();
 			create_messages_table.execute();
