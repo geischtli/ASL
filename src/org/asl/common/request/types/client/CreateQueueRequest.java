@@ -1,18 +1,18 @@
-package org.asl.common.message.types.client;
+package org.asl.common.request.types.client;
 
 import org.asl.client.ClientInfo;
-import org.asl.common.message.Message;
-import org.asl.common.message.types.exceptions.ASLException;
-import org.asl.common.message.types.exceptions.CreateQueueException;
+import org.asl.common.request.Request;
+import org.asl.common.request.types.exceptions.ASLException;
+import org.asl.common.request.types.exceptions.CreateQueueException;
 import org.asl.middleware.database.dao.impl.QueueDAO;
 
 @SuppressWarnings("serial")
-public class CreateQueueMessage extends Message {
+public class CreateQueueRequest extends Request {
 
 	private int queue_id;
 	private int creator_id;
 	
-	public CreateQueueMessage(int creator_id) {
+	public CreateQueueRequest(int creator_id) {
 		this.creator_id = creator_id;
 		this.exception = new CreateQueueException();
 	}

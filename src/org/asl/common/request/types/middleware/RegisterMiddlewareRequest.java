@@ -1,13 +1,13 @@
-package org.asl.common.message.types.middleware;
+package org.asl.common.request.types.middleware;
 
-import org.asl.common.message.Message;
-import org.asl.common.message.types.exceptions.ASLException;
-import org.asl.common.message.types.exceptions.RegisterMiddlewareException;
+import org.asl.common.request.Request;
+import org.asl.common.request.types.exceptions.ASLException;
+import org.asl.common.request.types.exceptions.RegisterMiddlewareException;
 import org.asl.middleware.MiddlewareInfo;
 import org.asl.middleware.database.dao.impl.MiddlewareDAO;
 
 @SuppressWarnings("serial")
-public class RegisterMiddlewareMessage extends Message {
+public class RegisterMiddlewareRequest extends Request {
 
 	@Override
 	public void processOnMiddleware() {

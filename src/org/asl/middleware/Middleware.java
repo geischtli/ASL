@@ -1,16 +1,12 @@
 package org.asl.middleware;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.ObjectOutputStream;
 import java.nio.ByteBuffer;
 import java.nio.channels.AsynchronousSocketChannel;
 import java.nio.channels.CompletionHandler;
 import java.sql.SQLException;
 
-import org.asl.common.message.builder.MessageBuilder;
-import org.asl.common.message.handler.MessageHandler;
-import org.asl.common.message.serialize.SerializingUtilities;
+import org.asl.common.request.serialize.SerializingUtilities;
 import org.asl.middleware.clientsession.ClientSession;
 
 public class Middleware extends AbstractMiddleware {
@@ -35,8 +31,8 @@ public class Middleware extends AbstractMiddleware {
 						if (ret) {
 							cs.getChannel().read(buf, cs, this);
 						} else {
-							cs.getMessage().processOnMiddleware();
-							ByteBuffer outbuf = ByteBuffer.wrap(SerializingUtilities.objectToByteArray(cs.getMessage()));
+							cs.getRequest().processOnMiddleware();
+							ByteBuffer outbuf = ByteBuffer.wrap(SerializingUtilities.objectToByteArray(cs.getRequest()));
 							cs.getChannel().write(outbuf);
 							try {
 								cs.getChannel().close();

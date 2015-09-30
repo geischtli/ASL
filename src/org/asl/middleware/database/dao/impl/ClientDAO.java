@@ -5,7 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import org.asl.common.message.types.exceptions.HandshakeException;
+import org.asl.common.request.types.exceptions.HandshakeException;
 import org.asl.middleware.MiddlewareInfo;
 import org.asl.middleware.database.config.ASLDatabase;
 import org.asl.middleware.database.dao.IClientDAO;

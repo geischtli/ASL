@@ -1,6 +1,6 @@
-package org.asl.common.message.types;
+package org.asl.common.request.types;
 
-import org.asl.common.message.Message;
+import org.asl.common.request.Request;
 import org.asl.middleware.database.SqlHandler;
 
 /**
@@ -9,7 +9,7 @@ import org.asl.middleware.database.SqlHandler;
  * @author Sandro
  */
 @SuppressWarnings("serial")
-public class ContentMessage extends Message {
+public class ContentMessage extends Request {
 	
 	/**
 	 * Construct a ContentMessage based on field values.

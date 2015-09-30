@@ -1,6 +1,6 @@
 package org.asl.middleware.database.dao;
 
-import org.asl.common.message.types.exceptions.CreateQueueException;
+import org.asl.common.request.types.exceptions.CreateQueueException;
 
 public interface IQueueDAO {
 

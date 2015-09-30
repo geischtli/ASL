@@ -1,6 +1,6 @@
 package org.asl.middleware.database.dao;
 
-import org.asl.common.message.types.exceptions.HandshakeException;
+import org.asl.common.request.types.exceptions.HandshakeException;
 
 public interface IClientDAO {
 	

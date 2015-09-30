@@ -1,37 +1,24 @@
 package org.asl.client;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
-import java.net.Socket;
 import java.nio.ByteBuffer;
 import java.nio.channels.AsynchronousSocketChannel;
 import java.nio.channels.CompletionHandler;
-import java.util.UUID;
 
-import org.asl.common.message.Message;
-import org.asl.common.message.builder.MessageBuilder;
-import org.asl.common.message.serialize.SerializingUtilities;
-import org.asl.common.message.types.MessageType;
-import org.asl.common.message.types.exceptions.ASLException;
+import org.asl.common.request.Request;
+import org.asl.common.request.builder.RequestBuilder;
+import org.asl.common.request.serialize.SerializingUtilities;
+import org.asl.common.request.types.exceptions.ASLException;
 
 public class Client implements Runnable {
 
-	private final int id;
-	private final int numMessages;
 	private final int port;
-	private final String uuid;
 	private final AsynchronousSocketChannel sc;
 	
 	public Client(int port, int id, int numMessages) throws IOException {
 		this.port = port;
-		this.id = id;
-		this.numMessages = numMessages;
-		this.uuid = UUID.randomUUID().toString();
 		this.sc = AsynchronousSocketChannel.open();
 	}
 
@@ -41,7 +28,7 @@ public class Client implements Runnable {
 
 			@Override
 			public void completed(Void result, Object attachment) {
-				Message m = MessageBuilder.newHandshakeMessage();
+				Request m = RequestBuilder.newHandshakeRequest();
 				ByteBuffer outbuf = ByteBuffer.wrap(SerializingUtilities.objectToByteArray(m));
 				sc.write(outbuf, 0L, new CompletionHandler<Integer, Long>() {
 	                
@@ -53,7 +40,7 @@ public class Client implements Runnable {
 							@Override
 							public void completed(Integer result, Object attachment) {
 								inbuf.flip();
-								Message m = (Message)SerializingUtilities.byteArrayToObject(inbuf.array());
+								Request m = (Request)SerializingUtilities.byteArrayToObject(inbuf.array());
 								System.out.println("Client received: " + m.getClass());
 								try {
 									m.processOnClient();
@@ -80,8 +67,6 @@ public class Client implements Runnable {
 
 			@Override
 			public void failed(Throwable exc, Object attachment) {
-				int i = 15;
-				int a = i;
 				System.out.println("In client: Connect failed");
 			}
 			

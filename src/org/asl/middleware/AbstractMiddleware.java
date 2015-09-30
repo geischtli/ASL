@@ -3,16 +3,9 @@ package org.asl.middleware;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.nio.channels.AsynchronousServerSocketChannel;
-import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.util.Properties;
-import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
 
-import org.asl.common.message.builder.MessageBuilder;
+import org.asl.common.request.builder.RequestBuilder;
 import org.asl.middleware.database.config.ASLDatabase;
 
 public abstract class AbstractMiddleware {
@@ -24,7 +17,7 @@ public abstract class AbstractMiddleware {
 		this.serverChannel.bind(new InetSocketAddress(port));
 		this.db = ASLDatabase.getDatabase(initDB);
 		// Register this Middleware instance on the database (i.e. get an id into MiddlewareInfo)
-		MessageBuilder.newRegisterMiddlewareMessage().processOnMiddleware();
+		RequestBuilder.newRegisterMiddlewareRequest().processOnMiddleware();
 	}
 	
 	public abstract void accept();

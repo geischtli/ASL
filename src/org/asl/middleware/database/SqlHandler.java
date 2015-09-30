@@ -5,15 +5,15 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import org.asl.common.message.Message;
+import org.asl.common.request.Request;
 
 public class SqlHandler extends AbstractSqlHandler {
 
-	public SqlHandler(Connection conn, Message msg) {
+	public SqlHandler(Connection conn, Request msg) {
 		super(conn, msg);
 	}
 	
-	public static SqlHandler getHandler(Connection conn, Message msg) {
+	public static SqlHandler getHandler(Connection conn, Request msg) {
 		return new SqlHandler(conn, msg);
 	}
 	
@@ -30,13 +30,13 @@ public class SqlHandler extends AbstractSqlHandler {
 	}
 
 	@Override
-	public void sendMessage(Message m) {
+	public void sendMessage(Request m) {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public Message receiveMessage(String tablename) {
+	public Request receiveMessage(String tablename) {
 		// TODO Auto-generated method stub
 		return null;
 	}

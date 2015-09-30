@@ -1,12 +1,10 @@
-package org.asl.common.message.serialize;
+package org.asl.common.request.serialize;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-
-import org.asl.common.message.Message;
 
 public class SerializingUtilities {
 	

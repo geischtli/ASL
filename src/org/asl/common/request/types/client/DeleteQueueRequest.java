@@ -1,13 +1,13 @@
-package org.asl.common.message.types.client;
+package org.asl.common.request.types.client;
 
-import org.asl.common.message.Message;
+import org.asl.common.request.Request;
 
 @SuppressWarnings("serial")
-public class DeleteQueueMessage extends Message {
+public class DeleteQueueRequest extends Request {
 
 	private int queue_id;
 	
-	public DeleteQueueMessage(int queue_id) {
+	public DeleteQueueRequest(int queue_id) {
 		this.queue_id = queue_id;
 	}
 	

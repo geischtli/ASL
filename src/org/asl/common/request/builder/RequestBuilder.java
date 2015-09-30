@@ -1,13 +1,13 @@
-package org.asl.common.message.builder;
+package org.asl.common.request.builder;
 
-import org.asl.common.message.Message;
-import org.asl.common.message.types.ContentMessage;
-import org.asl.common.message.types.MessageType;
-import org.asl.common.message.types.SqlMessage;
-import org.asl.common.message.types.StatusMessage;
-import org.asl.common.message.types.client.CreateQueueMessage;
-import org.asl.common.message.types.client.HandshakeMessage;
-import org.asl.common.message.types.middleware.RegisterMiddlewareMessage;
+import org.asl.common.request.Request;
+import org.asl.common.request.types.ContentMessage;
+import org.asl.common.request.types.MessageType;
+import org.asl.common.request.types.SqlMessage;
+import org.asl.common.request.types.StatusMessage;
+import org.asl.common.request.types.client.CreateQueueRequest;
+import org.asl.common.request.types.client.HandshakeRequest;
+import org.asl.common.request.types.middleware.RegisterMiddlewareRequest;
 
 /**
  * Builds up the message by setting the values of the fields.
@@ -16,7 +16,7 @@ import org.asl.common.message.types.middleware.RegisterMiddlewareMessage;
  * @author Sandro
  *
  */
-public class MessageBuilder {
+public class RequestBuilder {
 	
 	/**
 	 * The globally unique message id. This will onyl be known as soon as
@@ -73,7 +73,7 @@ public class MessageBuilder {
 	/**
 	 * Set the message id.
 	 */
-	public MessageBuilder setID(int id) {
+	public RequestBuilder setID(int id) {
 		this.id = id;
 		return this;
 	}
@@ -81,7 +81,7 @@ public class MessageBuilder {
 	/**
 	 * Set local id.
 	 */
-	public MessageBuilder setLocalID(int local_id) {
+	public RequestBuilder setLocalID(int local_id) {
 		this.local_id = local_id;
 		return this;
 	}
@@ -89,7 +89,7 @@ public class MessageBuilder {
 	/**
 	 * Set the id of the sending client.
 	 */
-	public MessageBuilder setSender(int sender) {
+	public RequestBuilder setSender(int sender) {
 		this.sender = sender;
 		return this;
 	}
@@ -97,7 +97,7 @@ public class MessageBuilder {
 	/**
 	 * Set the id of the receiving client.
 	 */
-	public MessageBuilder setReceiver(int receiver) {
+	public RequestBuilder setReceiver(int receiver) {
 		this.receiver = receiver;
 		return this;
 	}
@@ -105,7 +105,7 @@ public class MessageBuilder {
 	/**
 	 * Set id of destinating queue.
 	 */
-	public MessageBuilder setQueue(int queue) {
+	public RequestBuilder setQueue(int queue) {
 		this.queue = queue;
 		return this;
 	}
@@ -113,7 +113,7 @@ public class MessageBuilder {
 	/**
 	 * Set start time of the message.
 	 */
-	public MessageBuilder setStartTime(long startTime) {
+	public RequestBuilder setStartTime(long startTime) {
 		this.startTime = startTime;
 		return this;
 	}
@@ -121,7 +121,7 @@ public class MessageBuilder {
 	/**
 	 * Set the content.
 	 */
-	public MessageBuilder setContent(String content) {
+	public RequestBuilder setContent(String content) {
 		this.content = content;
 		return this;
 	}
@@ -129,7 +129,7 @@ public class MessageBuilder {
 	/**
 	 * Set the action.
 	 */
-	public MessageBuilder setAction(String action) {
+	public RequestBuilder setAction(String action) {
 		this.action = action;
 		return this;
 	}
@@ -137,7 +137,7 @@ public class MessageBuilder {
 	/**
 	 * Build the message according to the type requested.
 	 */
-	public Message build(MessageType type) {
+	public Request build(MessageType type) {
 		switch(type) {
 		case CONTENT:
 			return new ContentMessage(
@@ -181,20 +181,20 @@ public class MessageBuilder {
 	 * Don't force me to write a new expression in the client code
 	 * of this builder.
 	 */
-	public static MessageBuilder getBuilder() {
-		return new MessageBuilder();
+	public static RequestBuilder getBuilder() {
+		return new RequestBuilder();
 	}
 	
-	public static HandshakeMessage newHandshakeMessage() {
-		return new HandshakeMessage(-1);
+	public static HandshakeRequest newHandshakeRequest() {
+		return new HandshakeRequest(-1);
 	}
 	
-	public static CreateQueueMessage newCreateQueueMessage() {
-		return new CreateQueueMessage(-1);
+	public static CreateQueueRequest newCreateQueueRequest() {
+		return new CreateQueueRequest(-1);
 	}
 	
-	public static RegisterMiddlewareMessage newRegisterMiddlewareMessage() {
-		return new RegisterMiddlewareMessage();
+	public static RegisterMiddlewareRequest newRegisterMiddlewareRequest() {
+		return new RegisterMiddlewareRequest();
 	}
 }
 

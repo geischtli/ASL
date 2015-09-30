@@ -1,4 +1,4 @@
-package org.asl.common.message.types;
+package org.asl.common.request.types;
 
 /**
  * Enum to differentiate between the different message types.

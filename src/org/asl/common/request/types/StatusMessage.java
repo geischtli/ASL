@@ -1,7 +1,6 @@
-package org.asl.common.message.types;
+package org.asl.common.request.types;
 
-import org.asl.common.message.Message;
-import org.asl.middleware.database.SqlHandler;
+import org.asl.common.request.Request;
 
 /**
  * StatusMessage represents the objects which are used as answers
@@ -12,7 +11,7 @@ import org.asl.middleware.database.SqlHandler;
  * @author Sandro
  */
 @SuppressWarnings("serial")
-public class StatusMessage extends Message {
+public class StatusMessage extends Request {
 	
 	/**
 	 * Construct a StatusMessage based on field values.

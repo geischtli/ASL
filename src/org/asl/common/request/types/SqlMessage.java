@@ -1,7 +1,6 @@
-package org.asl.common.message.types;
+package org.asl.common.request.types;
 
-import org.asl.common.message.Message;
-import org.asl.middleware.database.SqlHandler;
+import org.asl.common.request.Request;
 
 /**
  * SqlMessage represents the object which embedds an sql
@@ -10,7 +9,7 @@ import org.asl.middleware.database.SqlHandler;
  * @author Sandro
  */
 @SuppressWarnings("serial")
-public class SqlMessage extends Message {
+public class SqlMessage extends Request {
 	
 	/**
 	 * Construct a SqlMessage based on field values.

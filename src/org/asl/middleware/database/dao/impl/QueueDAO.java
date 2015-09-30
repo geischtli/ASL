@@ -5,7 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import org.asl.common.message.types.exceptions.CreateQueueException;
+import org.asl.common.request.types.exceptions.CreateQueueException;
 import org.asl.middleware.database.config.ASLDatabase;
 import org.asl.middleware.database.dao.IQueueDAO;
 import org.asl.middleware.database.model.QueueTable;

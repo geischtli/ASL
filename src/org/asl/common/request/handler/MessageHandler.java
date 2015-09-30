@@ -1,16 +1,16 @@
-package org.asl.common.message.handler;
+package org.asl.common.request.handler;
 
 import java.sql.Connection;
 
-import org.asl.common.message.Message;
+import org.asl.common.request.Request;
 
 public class MessageHandler extends AbstractMessageHandler implements Runnable {
 	
-	public MessageHandler(Message msg, Connection conn) {
+	public MessageHandler(Request msg, Connection conn) {
 		super(msg, conn);
 	}
 	
-	public static MessageHandler getHandler(Message msg, Connection conn) {
+	public static MessageHandler getHandler(Request msg, Connection conn) {
 		return new MessageHandler(msg, conn);
 	}
 	

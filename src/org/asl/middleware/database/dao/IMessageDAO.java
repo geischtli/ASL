@@ -2,7 +2,7 @@ package org.asl.middleware.database.dao;
 
 import java.util.List;
 
-import org.asl.common.message.Message;
+import org.asl.common.request.Request;
 import org.asl.middleware.clientsession.ClientSession;
 
 public interface IMessageDAO {
@@ -25,39 +25,39 @@ public interface IMessageDAO {
 	/**
 	 * Get All Message By Queue
 	 */
-	List<Message> getMessagesOfQueue(int queue);
+	List<Request> getMessagesOfQueue(int queue);
 	
 	/**
 	 * Get Messages by Queue and Receiver (Actual Client)
 	 * 
 	 * @return Da Messages
 	 */
-	List<Message> getMessagesOfQueueAndReceiver(int queue, ClientSession session);
+	List<Request> getMessagesOfQueueAndReceiver(int queue, ClientSession session);
 	
 	/**
 	 * Pop topmost message of this queue.
 	 */
-	Message popMessageOfQueue(int queue);
+	Request popMessageOfQueue(int queue);
 	
 	/**
 	 * Pop topmost message of this queue by receiver.
 	 */
-	Message popMessageOfQueueAndReceiver(int queue, ClientSession session);
+	Request popMessageOfQueueAndReceiver(int queue, ClientSession session);
 	
 	/**
 	 * Send message to queue without specifying receiver.
 	 */
-	void sendMessageToQueue(Message msg, int queue);
+	void sendMessageToQueue(Request msg, int queue);
 	
 	/**
 	 * Send message to queue with specified receiver.
 	 */
-	void sendMessageToQueueWithReceiver(Message msg, int queue, ClientSession session);
+	void sendMessageToQueueWithReceiver(Request msg, int queue, ClientSession session);
 	
 	/**
 	 * Get at most one message from a particular sender.
 	 */
-	Message getMessagesOfParticularSender(ClientSession session);
+	Request getMessagesOfParticularSender(ClientSession session);
 	
 	/**
 	 * Query for queues where messages are waiting for this client. 

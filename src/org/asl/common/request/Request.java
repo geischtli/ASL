@@ -1,10 +1,10 @@
-package org.asl.common.message;
+package org.asl.common.request;
 
 import java.io.Serializable;
 
-import org.asl.common.message.types.MessageType;
-import org.asl.common.message.types.exceptions.ASLException;
-import org.asl.common.message.types.exceptions.CreateQueueException;
+import org.asl.common.request.types.MessageType;
+import org.asl.common.request.types.exceptions.ASLException;
+import org.asl.common.request.types.exceptions.CreateQueueException;
 import org.asl.middleware.database.SqlHandler;
 
 /**
@@ -14,7 +14,7 @@ import org.asl.middleware.database.SqlHandler;
  * @author Sandro
  */
 @SuppressWarnings("serial")
-public abstract class Message implements Serializable {
+public abstract class Request implements Serializable {
 	
 	protected ASLException exception;
 	
@@ -92,7 +92,7 @@ public abstract class Message implements Serializable {
 	/**
 	 * Default Constructor,
 	 */
-	public Message() {
+	public Request() {
 	}
 	
 	/**
@@ -100,7 +100,7 @@ public abstract class Message implements Serializable {
 	 * unique id of the message we set it to -1 to indicate this. Choose
 	 * this constructor when it is totally new. 
 	 */
-	public Message(MessageType type, int local_id, int sender, int receiver, int queue,
+	public Request(MessageType type, int local_id, int sender, int receiver, int queue,
 			long startTime, String content, String action) {
 		this.type = type;
 		this.id = -1;

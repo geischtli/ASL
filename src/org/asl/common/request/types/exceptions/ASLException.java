@@ -1,4 +1,4 @@
-package org.asl.common.message.types.exceptions;
+package org.asl.common.request.types.exceptions;
 
 import java.io.Serializable;
 
