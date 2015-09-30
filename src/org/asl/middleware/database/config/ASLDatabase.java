@@ -11,6 +11,7 @@ public class ASLDatabase {
 	private static String url;
 	private static Properties props;
 	private final Connection conn;
+	private static int contentLength;
 	
 	private static String DROP_ALL_TABLES_SQL =
 			"DROP SCHEMA PUBLIC CASCADE;" +
@@ -32,15 +33,18 @@ public class ASLDatabase {
 			"ID SERIAL PRIMARY KEY," +
 			"SENDER INT REFERENCES CLIENT (ID)," +
 			"RECEIVER INT REFERENCES CLIENT (ID)," +
-			"QUEUE INT REFERENCES QUEUE (ID));";
+			"QUEUE INT REFERENCES QUEUE (ID)," +
+			"CONTENT VARCHAR("; // dynamic length set in constructor
 	
-	public ASLDatabase(boolean initDB) throws SQLException {
+	public ASLDatabase(boolean initDB, int contentLength) throws SQLException {
 		this.url = "jdbc:postgresql://localhost/mydb";
 		this.props = new Properties();
 		this.props.setProperty("user", "postgres");
 		this.props.setProperty("password", "postgres");
 		this.conn = DriverManager.getConnection(url, props);
 		this.conn.setAutoCommit(false);
+		ASLDatabase.contentLength = contentLength;
+		ASLDatabase.CREATE_MESSAGE_TABLE_SQL += ASLDatabase.contentLength + "));";
 		if (initDB) {
 			System.out.println("I'm gonna clear the DB and set all tables newly up!");
 			initDB();
@@ -48,16 +52,16 @@ public class ASLDatabase {
 	}
 	
 	private void initDB() throws SQLException {
-		try (PreparedStatement drop_all_tables_and_sequences = conn.prepareStatement(DROP_ALL_TABLES_SQL);
-				PreparedStatement create_middleware_sequence = conn.prepareStatement(CREATE_SEQUENCE_MIDDLEWARE_SQL);
-				PreparedStatement create_clients_table= conn.prepareStatement(CREATE_CLIENT_TABLE_SQL);
-				PreparedStatement create_queues_table = conn.prepareStatement(CREATE_QUEUE_TABLE_SQL);
-				PreparedStatement create_messages_table = conn.prepareStatement(CREATE_MESSAGE_TABLE_SQL)) {
-			drop_all_tables_and_sequences.execute();
-			create_middleware_sequence.execute();
-			create_clients_table.execute();
-			create_queues_table.execute();
-			create_messages_table.execute();
+		try (PreparedStatement dropAllTablesAndSequences = conn.prepareStatement(DROP_ALL_TABLES_SQL);
+				PreparedStatement createMiddlewareSequence = conn.prepareStatement(CREATE_SEQUENCE_MIDDLEWARE_SQL);
+				PreparedStatement createClientsTable= conn.prepareStatement(CREATE_CLIENT_TABLE_SQL);
+				PreparedStatement createQueuesTable = conn.prepareStatement(CREATE_QUEUE_TABLE_SQL);
+				PreparedStatement createMessagesTable = conn.prepareStatement(CREATE_MESSAGE_TABLE_SQL)) {
+			dropAllTablesAndSequences.execute();
+			createMiddlewareSequence.execute();
+			createClientsTable.execute();
+			createQueuesTable.execute();
+			createMessagesTable.execute();
 			conn.commit();
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -65,8 +69,8 @@ public class ASLDatabase {
 		}
 	}
 
-	public static ASLDatabase getDatabase(boolean initDB) throws SQLException {
-		return new ASLDatabase(initDB);
+	public static ASLDatabase getDatabase(boolean initDB, int contentLength) throws SQLException {
+		return new ASLDatabase(initDB, contentLength);
 	}
 	
 	public static Connection getNewConnection() throws SQLException {

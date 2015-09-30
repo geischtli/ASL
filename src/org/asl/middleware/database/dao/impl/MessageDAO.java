@@ -1,82 +1,33 @@
 package org.asl.middleware.database.dao.impl;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.util.List;
 
-import org.asl.common.request.Request;
-import org.asl.middleware.clientsession.ClientSession;
+import org.asl.common.request.types.exceptions.SendMessageException;
 import org.asl.middleware.database.config.ASLDatabase;
 import org.asl.middleware.database.dao.IMessageDAO;
+import org.asl.middleware.database.model.MessageTable;
 
 public class MessageDAO implements IMessageDAO {
+
+	public static MessageDAO getMessageDAO() {
+		return new MessageDAO();
+	}
 	
 	@Override
-	public void createQueue() {
+	public void sendMessage(int sender, int receiver, int queue, String content) throws SendMessageException {
 		try (Connection conn = ASLDatabase.getNewConnection()) {
-			
+			PreparedStatement sendMessage = conn.prepareStatement(MessageTable.SEND_MESSAGE_STRING);
+			sendMessage.setInt(1, sender);
+			sendMessage.setInt(2, receiver);
+			sendMessage.setInt(3, queue);
+			sendMessage.setString(4, content);
+			sendMessage.execute();
+			conn.commit();
 		} catch (SQLException e) {
-			e.printStackTrace();
+			throw new SendMessageException(e);
 		}
 	}
-
-	@Override
-	public void createQueue(int queue) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void deleteQueue(int queue) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public List<Request> getMessagesOfQueue(int queue) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public List<Request> getMessagesOfQueueAndReceiver(int queue, ClientSession session) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Request popMessageOfQueue(int queue) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Request popMessageOfQueueAndReceiver(int queue, ClientSession session) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public void sendMessageToQueue(Request msg, int queue) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void sendMessageToQueueWithReceiver(Request msg, int queue, ClientSession session) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public Request getMessagesOfParticularSender(ClientSession session) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public List<Integer> getQueuesWhereMessagesForThisClientReady(ClientSession session) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	
 }

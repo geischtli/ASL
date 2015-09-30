@@ -28,8 +28,8 @@ public class Client implements Runnable {
 
 			@Override
 			public void completed(Void result, Object attachment) {
-				Request m = RequestBuilder.newHandshakeRequest();
-				ByteBuffer outbuf = ByteBuffer.wrap(SerializingUtilities.objectToByteArray(m));
+				Request req = RequestBuilder.newHandshakeRequest();
+				ByteBuffer outbuf = ByteBuffer.wrap(SerializingUtilities.objectToByteArray(req));
 				sc.write(outbuf, 0L, new CompletionHandler<Integer, Long>() {
 	                
 					@Override
