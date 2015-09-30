@@ -25,7 +25,7 @@ public class Middleware extends AbstractMiddleware {
 			@Override
 			public void completed(AsynchronousSocketChannel ssc, Object att) {
 				ClientSession session = new ClientSession(ssc, -1); //TODO: fix client_id = -1 -> send from client.
-				final ByteBuffer buf = ByteBuffer.allocate(1024);
+				final ByteBuffer buf = ByteBuffer.allocate(10240);
 				ssc.read(buf, session, new CompletionHandler<Integer, ClientSession>() {
 					
 					@Override

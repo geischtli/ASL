@@ -26,7 +26,7 @@ public class Main {
 				new ArrayBlockingQueue<Runnable>(64),
 				new ThreadPoolExecutor.CallerRunsPolicy()
 				);
-		int numClients = 10;
+		int numClients = 1;
 		int numMessagesPerClient = 1;
 		for (int i = 0; i < numClients; i++) {
 			try {

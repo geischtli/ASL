@@ -17,6 +17,7 @@ import org.asl.common.message.Message;
 import org.asl.common.message.builder.MessageBuilder;
 import org.asl.common.message.serialize.SerializingUtilities;
 import org.asl.common.message.types.MessageType;
+import org.asl.common.message.types.exceptions.ASLException;
 
 public class Client implements Runnable {
 
@@ -40,27 +41,31 @@ public class Client implements Runnable {
 
 			@Override
 			public void completed(Void result, Object attachment) {
-				Message m = MessageBuilder.newHandshakeMessage();
+				Message m = MessageBuilder.newCreateQueueMessage();
 				ByteBuffer outbuf = ByteBuffer.wrap(SerializingUtilities.objectToByteArray(m));
 				sc.write(outbuf, 0L, new CompletionHandler<Integer, Long>() {
 	                
 					@Override
 					public void completed(final Integer result, final Long attachment) {
-                    	outbuf.flip();
-                    	sc.read(outbuf, null, new CompletionHandler<Integer, Object>() {
+                    	ByteBuffer inbuf = ByteBuffer.allocate(10240);
+                    	sc.read(inbuf, null, new CompletionHandler<Integer, Object>() {
 
 							@Override
 							public void completed(Integer result, Object attachment) {
-								// TODO Auto-generated method stub
-								outbuf.flip();
-								Message m = (Message)SerializingUtilities.byteArrayToObject(outbuf.array());
-								m.processOnClient();
-								System.out.println("Yaiii got my id: " + ClientInfo.getClientId());
+								inbuf.flip();
+								Message m = (Message)SerializingUtilities.byteArrayToObject(inbuf.array());
+								System.out.println("Client received: " + m.getClass());
+								try {
+									m.processOnClient();
+								} catch (ASLException e) {
+									System.out.println("Reading message failed with type: " + m.getException().getClass());
+									//e.printStackTrace();
+								}
+								System.out.println("Queue created with id: " + ClientInfo.getQueueId());
 							}
 
 							@Override
 							public void failed(Throwable exc, Object attachment) {
-								// TODO Auto-generated method stub
 								System.out.println("In client: Read failed");
 							}
                     		

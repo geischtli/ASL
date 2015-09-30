@@ -3,6 +3,8 @@ package org.asl.common.message;
 import java.io.Serializable;
 
 import org.asl.common.message.types.MessageType;
+import org.asl.common.message.types.exceptions.ASLException;
+import org.asl.common.message.types.exceptions.CreateQueueException;
 import org.asl.middleware.database.SqlHandler;
 
 /**
@@ -13,6 +15,22 @@ import org.asl.middleware.database.SqlHandler;
  */
 @SuppressWarnings("serial")
 public abstract class Message implements Serializable {
+	
+	protected ASLException exception;
+	
+	public ASLException getException() {
+		return exception;
+	}
+
+	protected void setException(ASLException e) {
+		this.exception = new CreateQueueException(e);
+	}
+	
+	
+	
+	
+	
+	
 	
 	/**
 	 * The type of the message.
@@ -113,5 +131,5 @@ public abstract class Message implements Serializable {
 	}
 	
 	public abstract void processOnMiddleware();
-	public abstract void processOnClient();
+	public abstract void processOnClient() throws ASLException;
 }

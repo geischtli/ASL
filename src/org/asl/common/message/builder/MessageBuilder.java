@@ -5,6 +5,7 @@ import org.asl.common.message.types.ContentMessage;
 import org.asl.common.message.types.MessageType;
 import org.asl.common.message.types.SqlMessage;
 import org.asl.common.message.types.StatusMessage;
+import org.asl.common.message.types.client.CreateQueueMessage;
 import org.asl.common.message.types.client.HandshakeMessage;
 
 /**
@@ -185,6 +186,10 @@ public class MessageBuilder {
 	
 	public static HandshakeMessage newHandshakeMessage() {
 		return new HandshakeMessage(-1);
+	}
+	
+	public static CreateQueueMessage newCreateQueueMessage() {
+		return new CreateQueueMessage(-1);
 	}
 }
 
