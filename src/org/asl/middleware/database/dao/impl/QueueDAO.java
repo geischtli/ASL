@@ -6,8 +6,12 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import org.asl.common.request.types.exceptions.CreateQueueException;
+import org.asl.common.request.types.exceptions.RemoveTopMessageFromQueueException;
+import org.asl.common.request.types.exceptions.SendMessageException;
 import org.asl.middleware.database.config.ASLDatabase;
 import org.asl.middleware.database.dao.IQueueDAO;
+import org.asl.middleware.database.model.Message;
+import org.asl.middleware.database.model.MessageTable;
 import org.asl.middleware.database.model.QueueTable;
 
 public class QueueDAO implements IQueueDAO {
@@ -26,6 +30,26 @@ public class QueueDAO implements IQueueDAO {
 			return rs.getInt(1);
 		} catch (SQLException e) {
 			throw new CreateQueueException(e);
+		}
+	}
+	
+	@Override
+	public Message removeTopMessageFromQueue(int receiver, int queue) throws RemoveTopMessageFromQueueException {
+		try (Connection conn = ASLDatabase.getNewConnection()) {
+			PreparedStatement getMessage = conn.prepareStatement(QueueTable.REMOVE_TOP_MESSAGE_STRING);
+			getMessage.setInt(1, receiver);
+			getMessage.setInt(2, queue);
+			ResultSet rs = getMessage.executeQuery();
+			conn.commit();
+			return new Message(
+					rs.getInt("ID"),
+					rs.getInt("SENDER"),
+					rs.getInt("RECEIVER"),
+					rs.getInt("QUEUE"),
+					rs.getString("CONTENT")
+			);
+		} catch (SQLException e) {
+			throw new RemoveTopMessageFromQueueException(e);
 		}
 	}
 }

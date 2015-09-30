@@ -7,6 +7,7 @@ import org.asl.common.request.types.SqlMessage;
 import org.asl.common.request.types.StatusMessage;
 import org.asl.common.request.types.client.CreateQueueRequest;
 import org.asl.common.request.types.client.HandshakeRequest;
+import org.asl.common.request.types.client.SendMessageRequest;
 import org.asl.common.request.types.middleware.RegisterMiddlewareRequest;
 
 /**
@@ -191,6 +192,10 @@ public class RequestBuilder {
 	
 	public static CreateQueueRequest newCreateQueueRequest() {
 		return new CreateQueueRequest(-1);
+	}
+	
+	public static SendMessageRequest newSendMessageRequest(int sender, int receiver, int queue, String content) {
+		return new SendMessageRequest(sender, receiver, queue, content);
 	}
 	
 	public static RegisterMiddlewareRequest newRegisterMiddlewareRequest() {

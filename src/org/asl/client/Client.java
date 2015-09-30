@@ -6,6 +6,8 @@ import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
 import java.nio.channels.AsynchronousSocketChannel;
 import java.nio.channels.CompletionHandler;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.asl.common.request.Request;
 import org.asl.common.request.builder.RequestBuilder;
@@ -16,10 +18,26 @@ public class Client implements Runnable {
 
 	private final int port;
 	private final AsynchronousSocketChannel sc;
+	private List<Request> requestList;
+	private boolean jobsDone;
 	
 	public Client(int port, int id, int numMessages) throws IOException {
 		this.port = port;
 		this.sc = AsynchronousSocketChannel.open();
+		this.requestList = new ArrayList<Request>();
+		gatherRequests();
+		this.jobsDone = false;
+	}
+	
+	public void gatherRequests() {
+		requestList.add(RequestBuilder.newHandshakeRequest());
+		requestList.add(RequestBuilder.newCreateQueueRequest());
+		requestList.add(RequestBuilder.newSendMessageRequest(
+				ClientInfo.getClientId(),
+				ClientInfo.getClientId(),
+				ClientInfo.getQueueId(),
+				"This is my first message")
+		);
 	}
 
 	@Override
@@ -71,6 +89,10 @@ public class Client implements Runnable {
 			}
 			
 		});
+		
+		if (!jobsDone) {
+			run();
+		}
 	}
 	
 	/*@Override

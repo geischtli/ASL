@@ -30,4 +30,6 @@ public class MessageDAO implements IMessageDAO {
 		}
 	}
 	
+	
+	
 }
