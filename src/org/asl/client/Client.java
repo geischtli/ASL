@@ -46,7 +46,8 @@ public class Client implements Runnable {
 
 			@Override
 			public void completed(Void result, Object attachment) {
-				Request req = RequestBuilder.newHandshakeRequest();
+				//Request req = RequestBuilder.newSendMessageRequest(1, 1, 1, "this is a test content");
+				Request req = RequestBuilder.newRemoveTopMessageFromQueueRequest(1, 1);
 				ByteBuffer outbuf = ByteBuffer.wrap(SerializingUtilities.objectToByteArray(req));
 				sc.write(outbuf, 0L, new CompletionHandler<Integer, Long>() {
 	                
@@ -64,6 +65,7 @@ public class Client implements Runnable {
 									m.processOnClient();
 								} catch (ASLException e) {
 									System.out.println("Reading message failed with type: " + m.getException().getClass());
+									System.out.println("And reason: " + m.getException().getMessage());
 								}
 							}
 

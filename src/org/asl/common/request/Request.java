@@ -23,7 +23,7 @@ public abstract class Request implements Serializable {
 	}
 
 	protected void setException(ASLException e) {
-		this.exception = new CreateQueueException(e);
+		this.exception = e;
 	}
 	
 	

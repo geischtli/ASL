@@ -7,11 +7,9 @@ import java.sql.SQLException;
 
 import org.asl.common.request.types.exceptions.CreateQueueException;
 import org.asl.common.request.types.exceptions.RemoveTopMessageFromQueueException;
-import org.asl.common.request.types.exceptions.SendMessageException;
 import org.asl.middleware.database.config.ASLDatabase;
 import org.asl.middleware.database.dao.IQueueDAO;
 import org.asl.middleware.database.model.Message;
-import org.asl.middleware.database.model.MessageTable;
 import org.asl.middleware.database.model.QueueTable;
 
 public class QueueDAO implements IQueueDAO {
@@ -40,13 +38,14 @@ public class QueueDAO implements IQueueDAO {
 			getMessage.setInt(1, receiver);
 			getMessage.setInt(2, queue);
 			ResultSet rs = getMessage.executeQuery();
+			rs.next();
 			conn.commit();
 			return new Message(
-					rs.getInt("ID"),
-					rs.getInt("SENDER"),
-					rs.getInt("RECEIVER"),
-					rs.getInt("QUEUE"),
-					rs.getString("CONTENT")
+					rs.getInt(1),
+					rs.getInt(2),
+					rs.getInt(3),
+					rs.getInt(4),
+					rs.getString(5)
 			);
 		} catch (SQLException e) {
 			throw new RemoveTopMessageFromQueueException(e);

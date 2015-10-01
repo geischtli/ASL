@@ -15,7 +15,7 @@ public class Main {
 	private static final int port = 9090;
 	
 	public static void main(String[] args) throws IOException, SQLException {
-		AbstractMiddleware mw = new Middleware(port, true);
+		AbstractMiddleware mw = new Middleware(port, false);
 		System.out.println("Started server");
 		mw.accept();
 		ExecutorService threadpool = new ThreadPoolExecutor(

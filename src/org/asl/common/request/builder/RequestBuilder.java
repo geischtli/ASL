@@ -7,6 +7,7 @@ import org.asl.common.request.types.SqlMessage;
 import org.asl.common.request.types.StatusMessage;
 import org.asl.common.request.types.client.CreateQueueRequest;
 import org.asl.common.request.types.client.HandshakeRequest;
+import org.asl.common.request.types.client.RemoveTopMessageFromQueueRequest;
 import org.asl.common.request.types.client.SendMessageRequest;
 import org.asl.common.request.types.middleware.RegisterMiddlewareRequest;
 
@@ -200,6 +201,10 @@ public class RequestBuilder {
 	
 	public static RegisterMiddlewareRequest newRegisterMiddlewareRequest() {
 		return new RegisterMiddlewareRequest();
+	}
+	
+	public static RemoveTopMessageFromQueueRequest newRemoveTopMessageFromQueueRequest(int queue, int receiver) {
+		return new RemoveTopMessageFromQueueRequest(queue, receiver);
 	}
 }
 

@@ -1,6 +1,9 @@
 package org.asl.middleware.database.model;
 
-public class Message {
+import java.io.Serializable;
+
+@SuppressWarnings("serial")
+public class Message implements Serializable {
 	
 	private final int id;
 	private final int sender;
@@ -18,6 +21,10 @@ public class Message {
 	
 	public static Message getMessage(int id, int sender, int receiver, int queue, String content) {
 		return new Message(id, sender, receiver, queue, content);
+	}
+	
+	public String getContent() {
+		return content;
 	}
 	
 }

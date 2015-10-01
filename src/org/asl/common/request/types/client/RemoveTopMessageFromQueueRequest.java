@@ -3,8 +3,6 @@ package org.asl.common.request.types.client;
 import org.asl.common.request.Request;
 import org.asl.common.request.types.exceptions.ASLException;
 import org.asl.common.request.types.exceptions.RemoveTopMessageFromQueueException;
-import org.asl.common.request.types.exceptions.SendMessageException;
-import org.asl.middleware.database.dao.impl.MessageDAO;
 import org.asl.middleware.database.dao.impl.QueueDAO;
 import org.asl.middleware.database.model.Message;
 
@@ -19,6 +17,7 @@ public class RemoveTopMessageFromQueueRequest extends Request {
 		this.queue = queue;
 		this.receiver = receiver;
 		this.msg = null;
+		this.exception = new RemoveTopMessageFromQueueException();
 	}
 	
 	public int getQueue() {
@@ -56,7 +55,11 @@ public class RemoveTopMessageFromQueueRequest extends Request {
 
 	@Override
 	public void processOnClient() throws ASLException {
-		
+		if (!getException().carriesError()) {
+			System.out.println("Client received message with content: " + msg.getContent());
+		} else {
+			throw getException();
+		}
 	}
 
 }
