@@ -6,10 +6,12 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import org.asl.common.request.types.exceptions.HandshakeException;
+import org.asl.common.request.types.exceptions.ReadMessageFromSenderException;
 import org.asl.middleware.MiddlewareInfo;
 import org.asl.middleware.database.config.ASLDatabase;
 import org.asl.middleware.database.dao.IClientDAO;
 import org.asl.middleware.database.model.ClientTable;
+import org.asl.middleware.database.model.Message;
 
 public class ClientDAO implements IClientDAO {
 
@@ -20,14 +22,39 @@ public class ClientDAO implements IClientDAO {
 	@Override
 	public int registerClient() throws HandshakeException {
 		try (Connection conn = ASLDatabase.getNewConnection()) {
-			PreparedStatement register_client = conn.prepareStatement(ClientTable.REGISTER_CLIENT_STRING);
-			register_client.setInt(1, MiddlewareInfo.getMiddlewareId());
-			ResultSet rs = register_client.executeQuery();
+			PreparedStatement registerClient = conn.prepareStatement(ClientTable.REGISTER_CLIENT_STRING);
+			registerClient.setInt(1, MiddlewareInfo.getMiddlewareId());
+			ResultSet rs = registerClient.executeQuery();
 			rs.next();
 			conn.commit();
 			return rs.getInt(1);
 		} catch (SQLException e) {
 			throw new HandshakeException(e);
+		}
+	}
+
+	@Override
+	public Message readMessageFromSender(int sender, int receiver) throws ReadMessageFromSenderException {
+		try (Connection conn = ASLDatabase.getNewConnection()) {
+			PreparedStatement readMessageFromSender = conn.prepareStatement(ClientTable.READ_MESSAGE_FROM_SENDER);
+			readMessageFromSender.setInt(1, sender);
+			readMessageFromSender.setInt(2, receiver);
+			ResultSet rs = readMessageFromSender.executeQuery();
+			conn.commit();
+			// returns either 0 or 1 message
+			if (rs.next()) {
+				return new Message(
+						rs.getInt(1),
+						rs.getInt(2),
+						rs.getInt(3),
+						rs.getInt(4),
+						rs.getString(5)
+				);
+			} else {
+				return null;
+			}
+		} catch (SQLException e) {
+			throw new ReadMessageFromSenderException(e);
 		}
 	}
 

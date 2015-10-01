@@ -6,7 +6,10 @@ import org.asl.common.request.types.MessageType;
 import org.asl.common.request.types.SqlMessage;
 import org.asl.common.request.types.StatusMessage;
 import org.asl.common.request.types.client.CreateQueueRequest;
+import org.asl.common.request.types.client.GetQueuesWithMessagesForClientRequest;
 import org.asl.common.request.types.client.HandshakeRequest;
+import org.asl.common.request.types.client.ReadAllMessagesOfQueueRequest;
+import org.asl.common.request.types.client.ReadMessageFromSenderRequest;
 import org.asl.common.request.types.client.RemoveTopMessageFromQueueRequest;
 import org.asl.common.request.types.client.SendMessageRequest;
 import org.asl.common.request.types.middleware.RegisterMiddlewareRequest;
@@ -191,8 +194,8 @@ public class RequestBuilder {
 		return new HandshakeRequest(-1);
 	}
 	
-	public static CreateQueueRequest newCreateQueueRequest() {
-		return new CreateQueueRequest(-1);
+	public static CreateQueueRequest newCreateQueueRequest(int creator_client) {
+		return new CreateQueueRequest(creator_client);
 	}
 	
 	public static SendMessageRequest newSendMessageRequest(int sender, int receiver, int queue, String content) {
@@ -203,8 +206,20 @@ public class RequestBuilder {
 		return new RegisterMiddlewareRequest();
 	}
 	
-	public static RemoveTopMessageFromQueueRequest newRemoveTopMessageFromQueueRequest(int queue, int receiver) {
-		return new RemoveTopMessageFromQueueRequest(queue, receiver);
+	public static RemoveTopMessageFromQueueRequest newRemoveTopMessageFromQueueRequest(int receiver, int queue) {
+		return new RemoveTopMessageFromQueueRequest(receiver, queue);
+	}
+	
+	public static ReadAllMessagesOfQueueRequest newReadAllMessagesOfQueueRequest(int receiver, int queue) {
+		return new ReadAllMessagesOfQueueRequest(receiver, queue);
+	}
+	
+	public static ReadMessageFromSenderRequest newReadMessageFromSenderRequest(int sender, int receiver) {
+		return new ReadMessageFromSenderRequest(sender, receiver);
+	}
+	
+	public static GetQueuesWithMessagesForClientRequest newGetQueuesWithMessagesForClientRequest(int receiver) {
+		return new GetQueuesWithMessagesForClientRequest(receiver);
 	}
 }
 

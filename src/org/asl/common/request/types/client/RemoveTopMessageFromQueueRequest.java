@@ -9,23 +9,15 @@ import org.asl.middleware.database.model.Message;
 @SuppressWarnings("serial")
 public class RemoveTopMessageFromQueueRequest extends Request {
 
-	private int queue;
 	private int receiver;
-	private Message msg; 
+	private int queue;
+	private Message message; 
 	
-	public RemoveTopMessageFromQueueRequest(int queue, int receiver) {
-		this.queue = queue;
+	public RemoveTopMessageFromQueueRequest(int receiver, int queue) {
 		this.receiver = receiver;
-		this.msg = null;
-		this.exception = new RemoveTopMessageFromQueueException();
-	}
-	
-	public int getQueue() {
-		return queue;
-	}
-
-	public void setQueue(int queue) {
 		this.queue = queue;
+		this.message = null;
+		this.exception = new RemoveTopMessageFromQueueException();
 	}
 	
 	public int getReceiver() {
@@ -36,18 +28,26 @@ public class RemoveTopMessageFromQueueRequest extends Request {
 		this.receiver = receiver;
 	}
 
-	public Message getMsg() {
-		return msg;
+	public int getQueue() {
+		return queue;
 	}
 
-	public void setMsg(Message msg) {
-		this.msg = msg;
+	public void setQueue(int queue) {
+		this.queue = queue;
+	}
+	
+	public Message getMessage() {
+		return message;
+	}
+
+	public void setMessage(Message msg) {
+		this.message = msg;
 	}
 	
 	@Override
 	public void processOnMiddleware() {
 		try {
-			setMsg(QueueDAO.getQueueDAO().removeTopMessageFromQueue(receiver, queue));
+			setMessage(QueueDAO.getQueueDAO().removeTopMessageFromQueue(receiver, queue));
 		} catch (RemoveTopMessageFromQueueException e) {
 			setException(e);
 		}
@@ -56,7 +56,7 @@ public class RemoveTopMessageFromQueueRequest extends Request {
 	@Override
 	public void processOnClient() throws ASLException {
 		if (!getException().carriesError()) {
-			System.out.println("Client received message with content: " + msg.getContent());
+			System.out.println("Client received message with content: " + message.getContent());
 		} else {
 			throw getException();
 		}

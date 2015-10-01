@@ -31,7 +31,7 @@ public class Client implements Runnable {
 	
 	public void gatherRequests() {
 		requestList.add(RequestBuilder.newHandshakeRequest());
-		requestList.add(RequestBuilder.newCreateQueueRequest());
+		requestList.add(RequestBuilder.newCreateQueueRequest(1));
 		requestList.add(RequestBuilder.newSendMessageRequest(
 				ClientInfo.getClientId(),
 				ClientInfo.getClientId(),
@@ -46,8 +46,12 @@ public class Client implements Runnable {
 
 			@Override
 			public void completed(Void result, Object attachment) {
-				//Request req = RequestBuilder.newSendMessageRequest(1, 1, 1, "this is a test content");
-				Request req = RequestBuilder.newRemoveTopMessageFromQueueRequest(1, 1);
+				//Request req = RequestBuilder.newCreateQueueRequest(1);
+				//Request req = RequestBuilder.newHandshakeRequest();
+				//Request req = RequestBuilder.newSendMessageRequest(1, 2, 1, "this is a test content");
+				//Request req = RequestBuilder.newReadAllMessagesOfQueueRequest(1, 1);
+				//Request req = RequestBuilder.newReadMessageFromSenderRequest(1, 1);
+				Request req = RequestBuilder.newGetQueuesWithMessagesForClientRequest(1);
 				ByteBuffer outbuf = ByteBuffer.wrap(SerializingUtilities.objectToByteArray(req));
 				sc.write(outbuf, 0L, new CompletionHandler<Integer, Long>() {
 	                

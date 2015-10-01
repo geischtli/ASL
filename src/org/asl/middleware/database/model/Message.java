@@ -23,6 +23,22 @@ public class Message implements Serializable {
 		return new Message(id, sender, receiver, queue, content);
 	}
 	
+	public int getId() {
+		return id;
+	}
+	
+	public int getSender() {
+		return sender;
+	}
+	
+	public int getReceiver() {
+		return receiver;
+	}
+	
+	public int getQueue() {
+		return queue;
+	}
+	
 	public String getContent() {
 		return content;
 	}
