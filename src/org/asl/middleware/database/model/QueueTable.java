@@ -9,5 +9,5 @@ public class QueueTable {
 	
 	public static String READ_ALL_MESSAGES_STRING = "SELECT * FROM MESSAGE WHERE RECEIVER=? AND QUEUE=?;";
 	
-	public static String GET_QUEUES_FOR_CLIENT_STRING = "SELECT DISTINCT QUEUE FROM MESSAGE WHERE RECEIVER=?;";
+	public static String GET_QUEUES_FOR_CLIENT_STRING = "SELECT * FROM get_queues_for_client(?);";
 }

@@ -47,10 +47,12 @@ public class GetQueuesWithMessagesForClientRequest extends Request {
 	@Override
 	public void processOnClient() throws ASLException {
 		if (!getException().carriesError()) {
-			System.out.println("Successfully got queues with waiting messages for client");
-			System.out.print("Queues are: " );
-			for (int i = 0; i < queues.size(); i++) {
-				System.out.print(queues.get(i) + " ");
+			System.out.println("Successfully got queues " + queues.size() + " with waiting messages for client");
+			if (queues.size() > 0) {
+				System.out.print("Queues are: " );
+				for (int i = 0; i < queues.size(); i++) {
+					System.out.print(queues.get(i) + " ");
+				}
 			}
 		} else {
 			throw getException();
