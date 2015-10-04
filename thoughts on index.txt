@@ -1,0 +1,21 @@
+FROM MESSAGE WHERE RECEIVER = client_receiver; 											get queues
+MESSAGE WHERE RECEIVER = receiver_id AND QUEUE = queue_id;						read all messages of q
+FROM MESSAGE WHERE SENDER = sender_id AND RECEIVER = receiver_id			read msg from sender
+FROM MESSAGE WHERE RECEIVER = receiver_id AND QUEUE = queue_id				remove top msg
+FROM Queue WHERE ID = queue_id; 																	delete queue
+
+querried columns
+
+On MESSAGE
+
+RECEIVER
+RECEIVER		|	QUEUE
+SENDER		|	RECEIVER
+RECEIVER		|	QUEUE
+
+we use only 1 index on message working on receiver and queue
+this allows also single column querries for receiver to use this index
+and the only other critical querry for sender and receiver can profit
+also from it by reusing the receiver index, but i hope it pays of to not use
+another index because in the doc it says that they have to be used with caution,
+so we rather play a safe game here

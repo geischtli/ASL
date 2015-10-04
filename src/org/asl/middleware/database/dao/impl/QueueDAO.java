@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.asl.common.request.types.exceptions.CreateQueueException;
+import org.asl.common.request.types.exceptions.DeleteQueueException;
 import org.asl.common.request.types.exceptions.GetQueuesWithMessagesForClientException;
 import org.asl.common.request.types.exceptions.ReadAllMessagesOfQueueException;
 import org.asl.common.request.types.exceptions.RemoveTopMessageFromQueueException;
@@ -33,6 +34,20 @@ public class QueueDAO implements IQueueDAO {
 			return rs.getInt(1);
 		} catch (SQLException e) {
 			throw new CreateQueueException(e);
+		}
+	}
+	
+	@Override
+	public int deleteQueue(int queue_id) throws DeleteQueueException {
+		try (Connection conn = ASLDatabase.getNewConnection()) {
+			PreparedStatement deleteQueue = conn.prepareStatement(QueueTable.DELETE_QUEUE_STRING);
+			deleteQueue.setInt(1, queue_id);
+			ResultSet rs = deleteQueue.executeQuery();
+			conn.commit();
+			rs.next();
+			return rs.getInt(1);
+		} catch (SQLException e) {
+			throw new DeleteQueueException(e);
 		}
 	}
 	

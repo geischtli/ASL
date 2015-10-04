@@ -121,3 +121,6 @@ BEGIN
 	END IF;
 END;
 $$ LANGUAGE plpgsql;
+
+-- create the index, for explanations see in thougths on index.txt
+CREATE INDEX msg_rcv_q_idx ON MESSAGE (RECEIVER, QUEUE);

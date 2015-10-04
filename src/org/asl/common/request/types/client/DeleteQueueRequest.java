@@ -1,6 +1,9 @@
 package org.asl.common.request.types.client;
 
 import org.asl.common.request.Request;
+import org.asl.common.request.types.exceptions.ASLException;
+import org.asl.common.request.types.exceptions.DeleteQueueException;
+import org.asl.middleware.database.dao.impl.QueueDAO;
 
 @SuppressWarnings("serial")
 public class DeleteQueueRequest extends Request {
@@ -21,15 +24,20 @@ public class DeleteQueueRequest extends Request {
 	
 	@Override
 	public void processOnMiddleware() {
-		
+		try {
+			QueueDAO.getQueueDAO().deleteQueue(queue_id);
+		} catch (DeleteQueueException e) {
+			setException(e);
+		}
 	}
 
 	@Override
-	public void processOnClient() {
-		
+	public void processOnClient() throws ASLException {
+		if (!getException().carriesError()) {
+			System.out.println("Queue " + queue_id + " delete successfully");
+		} else {
+			throw getException();
+		}
 	}
-
-	
-	
 	
 }
