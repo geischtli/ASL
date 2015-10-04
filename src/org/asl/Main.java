@@ -31,7 +31,7 @@ public class Main {
 		for (int i = 0; i < numClients; i++) {
 			try {
 				threadpool.submit(new Client(port, i+1, numMessagesPerClient));
-			} catch (IOException e) {
+			} catch (Exception e) {
 				System.out.println("Problem with client creation " + e.getMessage());
 				e.printStackTrace();
 			}
