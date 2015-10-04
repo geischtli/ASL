@@ -42,7 +42,6 @@ public class Client implements Runnable {
 
 	@Override
 	public void run() {
-		System.out.println("Got " + requestList.size() + " jobs to do");
 		for (Request req : requestList) {
 			while (lockCount == 0) {
 				try {
@@ -53,6 +52,8 @@ public class Client implements Runnable {
 				}
 			}
 			lockCount--;
+			// TODO: Put requests in a queue and do a while-request-has loop and put setup of requests aftter handshakemessage
+			// also put lock into a single class and try to prevent sleep to happen
 			System.out.println("decrease lock count to: " + lockCount);
 			System.out.println("got new request");
 			try {
