@@ -1,8 +1,11 @@
 package org.asl.client;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
+import java.net.SocketOptions;
+import java.net.StandardSocketOptions;
 import java.nio.ByteBuffer;
 import java.nio.channels.AsynchronousSocketChannel;
 import java.nio.channels.CompletionHandler;
@@ -47,7 +50,7 @@ public class Client implements Runnable {
 						RequestType.GET_REGISTERED_CLIENTS,
 						RequestType.SEND_MESSAGE
 						},
-				20
+				200
 				);
 	}
 
@@ -68,32 +71,36 @@ public class Client implements Runnable {
 					@Override
 					public void completed(Void result, Object attachment) {
 						
-						ByteBuffer outbuf = ByteBuffer.wrap(SerializingUtilities.objectToByteArray(req));
+						ByteBuffer outbuf = SerializingUtilities.packRequest(req);
+						
 						sc.write(outbuf, 0L, new CompletionHandler<Integer, Long>() {
 			                
 							@Override
 							public void completed(final Integer result, final Long attachment) {
-								System.out.println("Client wrote " + result + " bytes");
 		                    	ByteBuffer inbuf = ByteBuffer.allocate(10240);
 		                    	sc.read(inbuf, null, new CompletionHandler<Integer, Object>() {
 		
 									@Override
 									public void completed(Integer result, Object attachment) {
 										inbuf.flip();
-										Request m = (Request)SerializingUtilities.byteArrayToObject(inbuf.array());
-										//System.out.println("Client received: " + m.getClass());
+										Request m;
 										try {
-											m.processOnClient();
-										} catch (ASLException e) {
-											System.out.println("Reading message failed with type: " + m.getException().getClass());
-											System.out.println("And reason: " + m.getException().getMessage());
-										}
-										try {
-											sc.close();
-										} catch (IOException e) {
+											m = (Request)SerializingUtilities.byteArrayToObject(inbuf.array());
+											try {
+												m.processOnClient();
+											} catch (ASLException e) {
+												System.out.println("Reading message failed with type: " + m.getException().getClass());
+												System.out.println("And reason: " + m.getException().getMessage());
+											}
+											try {
+												sc.close();
+											} catch (IOException e) {
+												e.printStackTrace();
+											}
+											lock.release();
+										} catch (Exception e) {
 											e.printStackTrace();
 										}
-										lock.release();
 									}
 		
 									@Override
@@ -127,6 +134,7 @@ public class Client implements Runnable {
 				e.printStackTrace();
 			}
 		}
+		System.out.println("Client " + ClientInfo.getClientId() + " is done");
 	}
 	
 }

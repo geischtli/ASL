@@ -49,12 +49,12 @@ public class GetQueuesWithMessagesForClientRequest extends Request {
 	@Override
 	public void processOnClient() throws ASLException {
 		if (!getException().carriesError()) {
-			System.out.println("Successfully got queues " + queues.size() + " with waiting messages for client");
+			//System.out.println("Successfully got queues " + queues.size() + " with waiting messages for client");
 			if (queues.size() > 0) {
-				System.out.print("Queues are: " );
-				for (int i = 0; i < queues.size(); i++) {
+				//System.out.print("Queues are: " );
+				/*for (int i = 0; i < queues.size(); i++) {
 					System.out.print(queues.get(i) + " ");
-				}
+				}*/
 				// set a random queue of the ones we get to next reading target
 				ClientInfo.setReadQueueId(queues.get(new Random().nextInt(queues.size())));
 			}

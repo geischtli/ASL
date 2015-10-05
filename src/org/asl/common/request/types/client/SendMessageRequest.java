@@ -49,7 +49,7 @@ public class SendMessageRequest extends Request {
 	@Override
 	public void processOnClient() throws ASLException {
 		if (!getException().carriesError()) {
-			System.out.println("Message successfully sent");
+			//System.out.println("Message successfully sent");
 		} else {
 			throw getException();
 		}
