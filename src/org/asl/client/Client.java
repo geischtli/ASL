@@ -31,23 +31,34 @@ public class Client implements Runnable {
 	}
 	
 	public void gatherRequests() {
-		requestList.add(RequestType.HANDSHAKE);
-		requestList.add(RequestType.CREATE_QUEUE);
-		requestList.add(RequestType.GET_REGISTERED_CLIENTS);
-		requestList.add(RequestType.SEND_MESSAGE);
+		RequestBuilder.addRequestTypes(
+				requestList,
+				new RequestType[]{
+						RequestType.HANDSHAKE,
+						RequestType.CREATE_QUEUE,
+						},
+				1
+				);
+		RequestBuilder.addRequestTypes(
+				requestList,
+				new RequestType[]{
+						RequestType.GET_REGISTERED_CLIENTS,
+						RequestType.SEND_MESSAGE
+						},
+				100
+				);
 	}
 
 	@Override
 	public void run() {
 		for (RequestType reqType : requestList) {
 			try {
+				// get lock, such that not 2 connects to the same socket happen
 				lock.acquire();
 			} catch (InterruptedException e1) {
 				e1.printStackTrace();
 			}
 			Request req = RequestBuilder.getRequest(reqType);
-			// also put lock into a single class and try to prevent sleep to happen
-			System.out.println("got new request");
 			try {
 				this.sc = AsynchronousSocketChannel.open();
 				sc.connect(new InetSocketAddress(InetAddress.getLoopbackAddress(), port), null, new CompletionHandler<Void, Object>() {
@@ -67,7 +78,7 @@ public class Client implements Runnable {
 									public void completed(Integer result, Object attachment) {
 										inbuf.flip();
 										Request m = (Request)SerializingUtilities.byteArrayToObject(inbuf.array());
-										System.out.println("Client received: " + m.getClass());
+										//System.out.println("Client received: " + m.getClass());
 										try {
 											m.processOnClient();
 										} catch (ASLException e) {
@@ -109,51 +120,10 @@ public class Client implements Runnable {
 					}
 					
 				});
-				System.out.println("conn finished");
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}
 	}
 	
-	/*@Override
-	public void run() {
-		try (Socket socket = new Socket(InetAddress.getLoopbackAddress(), port)){
-			Message msg = MessageBuilder.newHandshakeMessage();
-			msg.processOnClient();
-			ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
-			out.writeObject(msg);
-			out.flush();
-			ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
-			System.out.println("passed input stream");
-			Message ret = (Message) in.readObject();
-			System.out.println(ret.content);
-		} catch (IOException | ClassNotFoundException e) {
-			System.out.println("Client problem " + e.getMessage());
-			e.printStackTrace();
-		}
-	}*/
-	
-	/*@Override
-	public void run() {
-		for (int i = 0; i < numMessages; i++) {
-			try {
-				socket = new Socket(InetAddress.getLoopbackAddress(), port);
-			} catch (IOException e1) {
-				e1.printStackTrace();
-			}
-			Message msg = MessageBuilder.newHandshakeMessage();
-			ObjectOutputStream out;
-			try {
-				out = new ObjectOutputStream(socket.getOutputStream());
-				out.writeObject(msg);
-				out.flush();
-				socket.close();
-			} catch (IOException e) {
-				System.out.println("Client problem " + e.getMessage());
-				e.printStackTrace();
-			}
-		}
-		System.out.println("Client " + id + " completed run");
-	}*/
 }

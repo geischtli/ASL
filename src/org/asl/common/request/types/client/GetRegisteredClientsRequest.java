@@ -47,7 +47,7 @@ public class GetRegisteredClientsRequest extends Request {
 				}
 				// set a random client as receiver of next message
 				int nextReceiver = new Random().nextInt(clients.size());
-				System.out.println("Next receiver: " + nextReceiver + 1);
+				System.out.println("Next receiver: " + (nextReceiver + 1));
 				ClientInfo.setSendReceiverId(clients.get(nextReceiver));
 			}
 		} else {
