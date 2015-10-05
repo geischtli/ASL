@@ -1,8 +1,9 @@
 package org.asl.common.request.types.exceptions;
 
-@SuppressWarnings("serial")
 public class ReadMessageFromSenderException extends ASLException {
 
+	private static final long serialVersionUID = 408L;
+	
 	public ReadMessageFromSenderException() {
 		super();
 	}

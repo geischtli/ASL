@@ -6,9 +6,10 @@ import org.asl.common.request.types.exceptions.RegisterMiddlewareException;
 import org.asl.middleware.MiddlewareInfo;
 import org.asl.middleware.database.dao.impl.MiddlewareDAO;
 
-@SuppressWarnings("serial")
 public class RegisterMiddlewareRequest extends Request {
 
+	private static final long serialVersionUID = 111L;
+	
 	@Override
 	public void processOnMiddleware() {
 		try {

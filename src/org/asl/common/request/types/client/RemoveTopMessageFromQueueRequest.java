@@ -10,6 +10,7 @@ import org.asl.middleware.database.model.Message;
 @SuppressWarnings("serial")
 public class RemoveTopMessageFromQueueRequest extends Request {
 
+	private static final long serialVersionUID = 109L;
 	private int receiver;
 	private int queue;
 	private Message message; 

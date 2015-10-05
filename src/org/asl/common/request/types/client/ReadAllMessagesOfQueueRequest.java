@@ -11,6 +11,7 @@ import org.asl.middleware.database.model.Message;
 @SuppressWarnings("serial")
 public class ReadAllMessagesOfQueueRequest extends Request {
 
+	private static final long serialVersionUID = 107L;
 	private int queue;
 	private int receiver;
 	private List<Message> messages;

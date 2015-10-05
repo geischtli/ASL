@@ -9,6 +9,7 @@ import org.asl.middleware.database.model.Message;
 @SuppressWarnings("serial")
 public class ReadMessageFromSenderRequest extends Request {
 	
+	private static final long serialVersionUID = 108L;
 	private int sender;
 	private int receiver;
 	private Message message;

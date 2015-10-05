@@ -9,6 +9,7 @@ import org.asl.middleware.database.dao.impl.ClientDAO;
 @SuppressWarnings("serial")
 public class HandshakeRequest extends Request {
 	
+	private static final long serialVersionUID = 106L;
 	private int client_id;
 	
 	public HandshakeRequest() {

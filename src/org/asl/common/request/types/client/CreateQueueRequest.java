@@ -9,6 +9,7 @@ import org.asl.middleware.database.dao.impl.QueueDAO;
 @SuppressWarnings("serial")
 public class CreateQueueRequest extends Request {
 
+	private static final long serialVersionUID = 102L;
 	private int queue_id;
 	private int creator_id;
 	

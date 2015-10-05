@@ -12,6 +12,7 @@ import org.asl.middleware.database.dao.impl.QueueDAO;
 @SuppressWarnings("serial")
 public class GetQueuesWithMessagesForClientRequest extends Request {
 
+	private static final long serialVersionUID = 104L;
 	private int receiver;
 	private List<Integer> queues;
 	

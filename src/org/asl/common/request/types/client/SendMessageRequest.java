@@ -1,14 +1,13 @@
 package org.asl.common.request.types.client;
 
-import org.asl.client.ClientInfo;
 import org.asl.common.request.Request;
 import org.asl.common.request.types.exceptions.ASLException;
 import org.asl.common.request.types.exceptions.SendMessageException;
 import org.asl.middleware.database.dao.impl.MessageDAO;
 
-@SuppressWarnings("serial")
 public class SendMessageRequest extends Request {
 	
+	private static final long serialVersionUID = 110L;
 	private final int sender;
 	private final int receiver;
 	private final int queue;

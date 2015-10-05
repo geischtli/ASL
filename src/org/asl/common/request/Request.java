@@ -11,9 +11,9 @@ import org.asl.common.request.types.exceptions.ASLException;
  * extend this class and are used to carry the specialized messages.
  * @author Sandro
  */
-@SuppressWarnings("serial")
 public abstract class Request implements Serializable {
 	
+	private static final long serialVersionUID = 101L;
 	protected ASLException exception;
 	
 	public ASLException getException() {

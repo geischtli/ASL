@@ -1,8 +1,9 @@
 package org.asl.common.request.types.exceptions;
 
-@SuppressWarnings("serial")
 public class HandshakeException extends ASLException {
 
+	private static final long serialVersionUID = 406L;
+	
 	public HandshakeException() {
 		super();
 	}

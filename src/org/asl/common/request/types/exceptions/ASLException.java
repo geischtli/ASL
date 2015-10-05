@@ -2,9 +2,9 @@ package org.asl.common.request.types.exceptions;
 
 import java.io.Serializable;
 
-@SuppressWarnings("serial")
 public class ASLException extends Exception implements Serializable {
 
+	private static final long serialVersionUID = 401L;
 	protected boolean carriesError;
 	
 	public ASLException() {

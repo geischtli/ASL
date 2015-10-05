@@ -1,8 +1,9 @@
 package org.asl.common.request.types.exceptions;
 
-@SuppressWarnings("serial")
 public class ReadAllMessagesOfQueueException extends ASLException {
 
+	private static final long serialVersionUID = 407L;
+	
 	public ReadAllMessagesOfQueueException() {
 		super();
 	}

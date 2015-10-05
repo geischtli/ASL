@@ -1,8 +1,9 @@
 package org.asl.common.request.types.exceptions;
 
-@SuppressWarnings("serial")
 public class SendMessageException extends ASLException {
 
+	private static final long serialVersionUID = 411L;
+	
 	public SendMessageException() {
 		super();
 	}

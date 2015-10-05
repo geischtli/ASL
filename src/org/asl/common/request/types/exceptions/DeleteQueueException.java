@@ -1,8 +1,9 @@
 package org.asl.common.request.types.exceptions;
 
-@SuppressWarnings("serial")
 public class DeleteQueueException extends ASLException {
 
+	private static final long serialVersionUID = 403L;
+	
 	public DeleteQueueException() {
 		super();
 	}

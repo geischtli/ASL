@@ -12,6 +12,7 @@ import org.asl.middleware.database.dao.impl.ClientDAO;
 @SuppressWarnings("serial")
 public class GetRegisteredClientsRequest extends Request {
 
+	private static final long serialVersionUID = 105L;
 	private List<Integer> clients;
 	
 	public GetRegisteredClientsRequest() {

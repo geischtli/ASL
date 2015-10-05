@@ -1,8 +1,9 @@
 package org.asl.common.request.types.exceptions;
 
-@SuppressWarnings("serial")
 public class CreateQueueException extends ASLException {
 
+	private static final long serialVersionUID = 402L;
+	
 	public CreateQueueException() {
 		super();
 	}

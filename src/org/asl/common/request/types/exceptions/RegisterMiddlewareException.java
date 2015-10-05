@@ -1,8 +1,9 @@
 package org.asl.common.request.types.exceptions;
 
-@SuppressWarnings("serial")
 public class RegisterMiddlewareException extends ASLException {
 
+	private static final long serialVersionUID = 409L;
+	
 	public RegisterMiddlewareException() {
 		super();
 	}
