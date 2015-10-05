@@ -7,7 +7,6 @@ import org.asl.common.request.types.exceptions.RemoveTopMessageFromQueueExceptio
 import org.asl.middleware.database.dao.impl.QueueDAO;
 import org.asl.middleware.database.model.Message;
 
-@SuppressWarnings("serial")
 public class RemoveTopMessageFromQueueRequest extends Request {
 
 	private static final long serialVersionUID = 109L;

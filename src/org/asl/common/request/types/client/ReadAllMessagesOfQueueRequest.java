@@ -8,7 +8,6 @@ import org.asl.common.request.types.exceptions.ReadAllMessagesOfQueueException;
 import org.asl.middleware.database.dao.impl.QueueDAO;
 import org.asl.middleware.database.model.Message;
 
-@SuppressWarnings("serial")
 public class ReadAllMessagesOfQueueRequest extends Request {
 
 	private static final long serialVersionUID = 107L;

@@ -6,7 +6,6 @@ import org.asl.common.request.types.exceptions.ASLException;
 import org.asl.common.request.types.exceptions.DeleteQueueException;
 import org.asl.middleware.database.dao.impl.QueueDAO;
 
-@SuppressWarnings("serial")
 public class DeleteQueueRequest extends Request {
 
 	private static final long serialVersionUID = 103L;

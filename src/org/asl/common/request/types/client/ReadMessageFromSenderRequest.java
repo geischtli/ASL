@@ -6,7 +6,6 @@ import org.asl.common.request.types.exceptions.ReadMessageFromSenderException;
 import org.asl.middleware.database.dao.impl.ClientDAO;
 import org.asl.middleware.database.model.Message;
 
-@SuppressWarnings("serial")
 public class ReadMessageFromSenderRequest extends Request {
 	
 	private static final long serialVersionUID = 108L;

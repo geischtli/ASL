@@ -9,7 +9,6 @@ import org.asl.common.request.types.exceptions.ASLException;
 import org.asl.common.request.types.exceptions.GetQueuesWithMessagesForClientException;
 import org.asl.middleware.database.dao.impl.QueueDAO;
 
-@SuppressWarnings("serial")
 public class GetQueuesWithMessagesForClientRequest extends Request {
 
 	private static final long serialVersionUID = 104L;

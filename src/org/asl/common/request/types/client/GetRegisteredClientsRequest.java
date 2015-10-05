@@ -9,7 +9,6 @@ import org.asl.common.request.types.exceptions.ASLException;
 import org.asl.common.request.types.exceptions.GetRegisteredClientsException;
 import org.asl.middleware.database.dao.impl.ClientDAO;
 
-@SuppressWarnings("serial")
 public class GetRegisteredClientsRequest extends Request {
 
 	private static final long serialVersionUID = 105L;

@@ -14,6 +14,8 @@ public class SerializingUtilities {
 		try {
 			obout = new ObjectOutputStream(bout);
 			obout.writeObject(o);
+			obout.flush();
+			System.out.println(bout.toString());
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -22,6 +24,7 @@ public class SerializingUtilities {
 	
 	public static Object byteArrayToObject(byte[] bytes) {
 		ByteArrayInputStream is = new ByteArrayInputStream(bytes);
+		System.out.println(is.toString());
 		try {
 			ObjectInputStream ois = new ObjectInputStream(is);
 			return ois.readObject();

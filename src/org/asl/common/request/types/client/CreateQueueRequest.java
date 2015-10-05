@@ -6,7 +6,6 @@ import org.asl.common.request.types.exceptions.ASLException;
 import org.asl.common.request.types.exceptions.CreateQueueException;
 import org.asl.middleware.database.dao.impl.QueueDAO;
 
-@SuppressWarnings("serial")
 public class CreateQueueRequest extends Request {
 
 	private static final long serialVersionUID = 102L;

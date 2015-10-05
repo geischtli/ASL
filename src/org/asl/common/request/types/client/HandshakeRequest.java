@@ -6,7 +6,6 @@ import org.asl.common.request.types.exceptions.ASLException;
 import org.asl.common.request.types.exceptions.HandshakeException;
 import org.asl.middleware.database.dao.impl.ClientDAO;
 
-@SuppressWarnings("serial")
 public class HandshakeRequest extends Request {
 	
 	private static final long serialVersionUID = 106L;

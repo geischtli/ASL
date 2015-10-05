@@ -45,7 +45,7 @@ public class Client implements Runnable {
 						RequestType.GET_REGISTERED_CLIENTS,
 						RequestType.SEND_MESSAGE
 						},
-				100
+				20
 				);
 	}
 
