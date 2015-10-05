@@ -1,17 +1,13 @@
 package org.asl.middleware;
 
 import java.io.IOException;
-import java.net.StandardSocketOptions;
 import java.nio.ByteBuffer;
 import java.nio.channels.AsynchronousSocketChannel;
 import java.nio.channels.CompletionHandler;
 import java.sql.SQLException;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Future;
 
 import org.asl.common.request.Request;
 import org.asl.common.request.serialize.SerializingUtilities;
-import org.asl.middleware.clientsession.ClientSession;
 
 public class Middleware extends AbstractMiddleware {
 	
@@ -32,16 +28,11 @@ public class Middleware extends AbstractMiddleware {
 					@Override
 					public void completed(Integer len, ByteBuffer buf) {
 						SerializingUtilities.unpackLength(inbuf);
-						Request req = null;
-						while (true) {
-							if (SerializingUtilities.allBytesRead(len)) {
-								req = SerializingUtilities.unpackRequest(inbuf, len);
-								break;
-							} else {
-								int forcedBytesRead = SerializingUtilities.forceRead(inbuf, sc);
-								len += forcedBytesRead;
-							}
+						while (!SerializingUtilities.allBytesRead(len)) {
+							int forcedBytesRead = SerializingUtilities.forceRead(inbuf, sc);
+							len += forcedBytesRead;
 						}
+						Request req = SerializingUtilities.unpackRequest(inbuf, len);
 						req.processOnMiddleware();
 						ByteBuffer outbuf = ByteBuffer.wrap(SerializingUtilities.objectToByteArray(req));
 						sc.write(outbuf);

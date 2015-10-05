@@ -1,19 +1,14 @@
 package org.asl.client;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
-import java.net.SocketOptions;
-import java.net.StandardSocketOptions;
 import java.nio.ByteBuffer;
 import java.nio.channels.AsynchronousSocketChannel;
 import java.nio.channels.CompletionHandler;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Semaphore;
-
-import javax.swing.plaf.synth.SynthSplitPaneUI;
 
 import org.asl.common.request.Request;
 import org.asl.common.request.Request.RequestType;
@@ -70,9 +65,7 @@ public class Client implements Runnable {
 		
 					@Override
 					public void completed(Void result, Object attachment) {
-						
 						ByteBuffer outbuf = SerializingUtilities.packRequest(req);
-						
 						sc.write(outbuf, 0L, new CompletionHandler<Integer, Long>() {
 			                
 							@Override
@@ -83,14 +76,14 @@ public class Client implements Runnable {
 									@Override
 									public void completed(Integer result, Object attachment) {
 										inbuf.flip();
-										Request m;
+										Request ansReq;
 										try {
-											m = (Request)SerializingUtilities.byteArrayToObject(inbuf.array());
+											ansReq = (Request)SerializingUtilities.byteArrayToObject(inbuf.array());
 											try {
-												m.processOnClient();
+												ansReq.processOnClient();
 											} catch (ASLException e) {
-												System.out.println("Reading message failed with type: " + m.getException().getClass());
-												System.out.println("And reason: " + m.getException().getMessage());
+												System.out.println("Reading message failed with type: " + ansReq.getException().getClass());
+												System.out.println("And reason: " + ansReq.getException().getMessage());
 											}
 											try {
 												sc.close();
@@ -128,7 +121,6 @@ public class Client implements Runnable {
 						exc.printStackTrace();
 						System.out.println("In client: Connect failed");
 					}
-					
 				});
 			} catch (Exception e) {
 				e.printStackTrace();
