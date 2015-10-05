@@ -22,7 +22,7 @@ public class Middleware extends AbstractMiddleware {
 
 			@Override
 			public void completed(AsynchronousSocketChannel ssc, Object att) {
-				System.out.println("accepted connection");
+				//System.out.println("accepted connection");
 				serverChannel.accept(null, this);
 				ClientSession session = new ClientSession(ssc, -1); //TODO: fix client_id = -1 -> send from client.
 				ByteBuffer inbuf = ByteBuffer.allocate(10240);
@@ -31,6 +31,7 @@ public class Middleware extends AbstractMiddleware {
 					@Override
 					public void completed(Integer len, ClientSession cs) {
 						//boolean ret = cs.handleInput(buf, len);
+						System.out.println("Middleware read " + len + " bytes");
 						Request req = (Request)SerializingUtilities.byteArrayToObject(inbuf.array());
 						req.processOnMiddleware();
 						

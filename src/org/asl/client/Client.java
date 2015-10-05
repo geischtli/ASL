@@ -10,6 +10,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Semaphore;
 
+import javax.swing.plaf.synth.SynthSplitPaneUI;
+
 import org.asl.common.request.Request;
 import org.asl.common.request.Request.RequestType;
 import org.asl.common.request.builder.RequestBuilder;
@@ -71,6 +73,7 @@ public class Client implements Runnable {
 			                
 							@Override
 							public void completed(final Integer result, final Long attachment) {
+								System.out.println("Client wrote " + result + " bytes");
 		                    	ByteBuffer inbuf = ByteBuffer.allocate(10240);
 		                    	sc.read(inbuf, null, new CompletionHandler<Integer, Object>() {
 		
