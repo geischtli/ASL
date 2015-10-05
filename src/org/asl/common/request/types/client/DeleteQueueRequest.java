@@ -1,5 +1,6 @@
 package org.asl.common.request.types.client;
 
+import org.asl.client.ClientInfo;
 import org.asl.common.request.Request;
 import org.asl.common.request.types.exceptions.ASLException;
 import org.asl.common.request.types.exceptions.DeleteQueueException;
@@ -35,6 +36,9 @@ public class DeleteQueueRequest extends Request {
 	public void processOnClient() throws ASLException {
 		if (!getException().carriesError()) {
 			System.out.println("Queue " + queue_id + " delete successfully");
+			ClientInfo.setDeleteQueueId(0);
+			ClientInfo.setReadQueueId(0);
+			ClientInfo.setSendQueueId(0);
 		} else {
 			throw getException();
 		}

@@ -1,5 +1,6 @@
 package org.asl.common.request.types.client;
 
+import org.asl.client.ClientInfo;
 import org.asl.common.request.Request;
 import org.asl.common.request.types.exceptions.ASLException;
 import org.asl.common.request.types.exceptions.RemoveTopMessageFromQueueException;
@@ -57,6 +58,8 @@ public class RemoveTopMessageFromQueueRequest extends Request {
 	public void processOnClient() throws ASLException {
 		if (!getException().carriesError()) {
 			System.out.println("Client received message with content: " + message.getContent());
+			// we don't know if this was the last message of the queue, we have to ask again for a list of queues
+			ClientInfo.setReadQueueId(0);
 		} else {
 			throw getException();
 		}

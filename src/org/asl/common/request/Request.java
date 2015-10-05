@@ -4,8 +4,6 @@ import java.io.Serializable;
 
 import org.asl.common.request.types.MessageType;
 import org.asl.common.request.types.exceptions.ASLException;
-import org.asl.common.request.types.exceptions.CreateQueueException;
-import org.asl.middleware.database.SqlHandler;
 
 /**
  * The abstract Message class gives a default behavior for all
@@ -26,7 +24,18 @@ public abstract class Request implements Serializable {
 		this.exception = e;
 	}
 	
-	
+	public enum RequestType {
+		CREATE_QUEUE,
+		DELETE_QUEUE,
+		GET_QUEUES_WITH_MESSAGES_FOR_CLIENT,
+		GET_REGISTERED_CLIENTS,
+		HANDSHAKE,
+		READ_ALL_MESSAGES_OF_QUEUE,
+		READ_MESSAGE_FROM_SENDER,
+		REMOVE_TOP_MESSAGE_FROM_QUEUE,
+		SEND_MESSAGE,
+		REGISTER_MIDDLEWARE
+	}
 	
 	
 	

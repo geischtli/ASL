@@ -4,7 +4,10 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
+import org.asl.common.request.types.exceptions.GetRegisteredClientsException;
 import org.asl.common.request.types.exceptions.HandshakeException;
 import org.asl.common.request.types.exceptions.ReadMessageFromSenderException;
 import org.asl.middleware.MiddlewareInfo;
@@ -55,6 +58,22 @@ public class ClientDAO implements IClientDAO {
 			}
 		} catch (SQLException e) {
 			throw new ReadMessageFromSenderException(e);
+		}
+	}
+	
+	@Override
+	public List<Integer> getRegisteredClients() throws GetRegisteredClientsException {
+		try (Connection conn = ASLDatabase.getNewConnection()) {
+			PreparedStatement getRegisteredClients = conn.prepareStatement(ClientTable.GET_REGISTERED_CLIENTS_STRING);
+			ResultSet rs = getRegisteredClients.executeQuery();
+			conn.commit();
+			List<Integer> clients = new ArrayList<Integer>();
+			while (rs.next()) {
+				clients.add(rs.getInt(1));
+			}
+			return clients;
+		} catch (SQLException e) {
+			throw new GetRegisteredClientsException(e);
 		}
 	}
 

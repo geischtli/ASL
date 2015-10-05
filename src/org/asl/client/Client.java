@@ -8,8 +8,10 @@ import java.nio.channels.AsynchronousSocketChannel;
 import java.nio.channels.CompletionHandler;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Semaphore;
 
 import org.asl.common.request.Request;
+import org.asl.common.request.Request.RequestType;
 import org.asl.common.request.builder.RequestBuilder;
 import org.asl.common.request.serialize.SerializingUtilities;
 import org.asl.common.request.types.exceptions.ASLException;
@@ -18,43 +20,33 @@ public class Client implements Runnable {
 
 	private final int port;
 	private AsynchronousSocketChannel sc;
-	private List<Request> requestList;
-	private int lockCount;
+	private List<RequestType> requestList;
+	private Semaphore lock;
 	
 	public Client(int port, int id, int numMessages) throws IOException {
 		this.port = port;
-		this.requestList = new ArrayList<Request>();
-		this.lockCount = 1;
+		this.requestList = new ArrayList<RequestType>();
+		this.lock = new Semaphore(1, true);
 		gatherRequests();
 	}
 	
 	public void gatherRequests() {
-		requestList.add(RequestBuilder.newHandshakeRequest());
-		requestList.add(RequestBuilder.newCreateQueueRequest(1));
-		requestList.add(RequestBuilder.newSendMessageRequest(
-				1,
-				1,
-				1,
-				"This is my first message"
-			)
-		);
+		requestList.add(RequestType.HANDSHAKE);
+		requestList.add(RequestType.CREATE_QUEUE);
+		requestList.add(RequestType.GET_REGISTERED_CLIENTS);
+		requestList.add(RequestType.SEND_MESSAGE);
 	}
 
 	@Override
 	public void run() {
-		for (Request req : requestList) {
-			while (lockCount == 0) {
-				try {
-					System.out.println("i wait");
-					Thread.sleep(1000);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
+		for (RequestType reqType : requestList) {
+			try {
+				lock.acquire();
+			} catch (InterruptedException e1) {
+				e1.printStackTrace();
 			}
-			lockCount--;
-			// TODO: Put requests in a queue and do a while-request-has loop and put setup of requests aftter handshakemessage
+			Request req = RequestBuilder.getRequest(reqType);
 			// also put lock into a single class and try to prevent sleep to happen
-			System.out.println("decrease lock count to: " + lockCount);
 			System.out.println("got new request");
 			try {
 				this.sc = AsynchronousSocketChannel.open();
@@ -62,13 +54,6 @@ public class Client implements Runnable {
 		
 					@Override
 					public void completed(Void result, Object attachment) {
-						//Request req = RequestBuilder.newCreateQueueRequest(1);
-						//Request req = RequestBuilder.newHandshakeRequest();
-						//Request req = RequestBuilder.newSendMessageRequest(1, 2, 1, "this is a test content");
-						//Request req = RequestBuilder.newReadAllMessagesOfQueueRequest(1, 1);
-						//Request req = RequestBuilder.newReadMessageFromSenderRequest(1, 1);
-						//Request req = RequestBuilder.newGetQueuesWithMessagesForClientRequest(1);
-						System.out.println("increased lock to: " + lockCount);
 						
 						ByteBuffer outbuf = ByteBuffer.wrap(SerializingUtilities.objectToByteArray(req));
 						sc.write(outbuf, 0L, new CompletionHandler<Integer, Long>() {
@@ -94,7 +79,7 @@ public class Client implements Runnable {
 										} catch (IOException e) {
 											e.printStackTrace();
 										}
-										lockCount++;
+										lock.release();
 									}
 		
 									@Override

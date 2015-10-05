@@ -122,5 +122,10 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+CREATE OR REPLACE FUNCTION get_registered_clients()
+	RETURNS SETOF INTEGER AS $$
+	SELECT ID FROM CLIENT;
+$$ LANGUAGE sql STABLE;
+
 -- create the index, for explanations see in thougths on index.txt
 CREATE INDEX msg_rcv_q_idx ON MESSAGE (RECEIVER, QUEUE);

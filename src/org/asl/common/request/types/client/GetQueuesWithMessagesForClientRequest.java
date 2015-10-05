@@ -1,7 +1,9 @@
 package org.asl.common.request.types.client;
 
 import java.util.List;
+import java.util.Random;
 
+import org.asl.client.ClientInfo;
 import org.asl.common.request.Request;
 import org.asl.common.request.types.exceptions.ASLException;
 import org.asl.common.request.types.exceptions.GetQueuesWithMessagesForClientException;
@@ -53,6 +55,8 @@ public class GetQueuesWithMessagesForClientRequest extends Request {
 				for (int i = 0; i < queues.size(); i++) {
 					System.out.print(queues.get(i) + " ");
 				}
+				// set a random queue of the ones we get to next reading target
+				ClientInfo.setReadQueueId(queues.get(new Random().nextInt(queues.size())));
 			}
 		} else {
 			throw getException();

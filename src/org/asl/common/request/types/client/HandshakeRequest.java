@@ -11,8 +11,8 @@ public class HandshakeRequest extends Request {
 	
 	private int client_id;
 	
-	public HandshakeRequest(int client_id) {
-		this.client_id = client_id;
+	public HandshakeRequest() {
+		this.client_id = 0;
 		this.exception = new HandshakeException();
 	}
 	

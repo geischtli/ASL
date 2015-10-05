@@ -45,8 +45,10 @@ public class CreateQueueRequest extends Request {
 	@Override
 	public void processOnClient() throws ASLException {
 		if (!getException().carriesError()) {
-			ClientInfo.setQueueId(queue_id);
-			System.out.println("Queue created with id: " + ClientInfo.getQueueId());
+			ClientInfo.setDeleteQueueId(queue_id);
+			ClientInfo.setSendQueueId(queue_id);
+			ClientInfo.setReadQueueId(queue_id);
+			System.out.println("Queue created with id: " + ClientInfo.getDeleteQueueId());
 		} else {
 			throw getException();
 		}
