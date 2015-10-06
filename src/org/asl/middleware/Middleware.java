@@ -11,8 +11,8 @@ import org.asl.common.request.serialize.SerializingUtilities;
 
 public class Middleware extends AbstractMiddleware {
 	
-	public Middleware(int port, boolean initDB) throws IOException, SQLException {
-		super(port, initDB);
+	public Middleware(int port) throws IOException, SQLException {
+		super(port);
 	}
 	
 	@Override

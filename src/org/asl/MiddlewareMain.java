@@ -12,7 +12,7 @@ public class MiddlewareMain {
 	private static final int sleepSeconds = 120;
 	
 	public static void main(String[] args) throws SQLException, IOException, InterruptedException {
-		AbstractMiddleware mw = new Middleware(port, true);
+		AbstractMiddleware mw = new Middleware(port);
 		System.out.println("Started server");
 		mw.accept();
 		Thread.sleep(sleepSeconds * 1000);

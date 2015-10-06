@@ -23,7 +23,7 @@ public class Client implements Runnable {
 	private List<RequestType> requestList;
 	private Semaphore lock;
 	
-	public Client(int port, int id, int numMessages) throws IOException {
+	public Client(int port) throws IOException {
 		this.port = port;
 		this.requestList = new ArrayList<RequestType>();
 		this.lock = new Semaphore(1, true);
@@ -76,9 +76,8 @@ public class Client implements Runnable {
 									@Override
 									public void completed(Integer result, Object attachment) {
 										inbuf.flip();
-										Request ansReq;
 										try {
-											ansReq = (Request)SerializingUtilities.byteArrayToObject(inbuf.array());
+											Request ansReq = (Request)SerializingUtilities.byteArrayToObject(inbuf.array());
 											try {
 												ansReq.processOnClient();
 											} catch (ASLException e) {
@@ -111,7 +110,7 @@ public class Client implements Runnable {
 							
 			                @Override
 			                public void failed(Throwable exc, Long att) {
-			                	System.out.println("failed in writing");
+			                	System.out.println("In client: Write failed");
 			                }
 						});
 					}

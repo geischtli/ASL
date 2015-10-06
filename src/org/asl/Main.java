@@ -15,7 +15,7 @@ public class Main {
 	private static final int port = 9090;
 	
 	public static void main(String[] args) throws IOException, SQLException {
-		AbstractMiddleware mw = new Middleware(port, false);
+		AbstractMiddleware mw = new Middleware(port);
 		System.out.println("Started server");
 		mw.accept();
 		ExecutorService threadpool = new ThreadPoolExecutor(
@@ -26,11 +26,10 @@ public class Main {
 				new ArrayBlockingQueue<Runnable>(64),
 				new ThreadPoolExecutor.CallerRunsPolicy()
 				);
-		int numClients = 1;
-		int numMessagesPerClient = 1;
+		int numClients = 10;
 		for (int i = 0; i < numClients; i++) {
 			try {
-				threadpool.submit(new Client(port, i+1, numMessagesPerClient));
+				threadpool.submit(new Client(port));
 			} catch (Exception e) {
 				System.out.println("Problem with client creation " + e.getMessage());
 				e.printStackTrace();

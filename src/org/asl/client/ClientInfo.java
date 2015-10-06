@@ -11,8 +11,6 @@ public class ClientInfo {
 	private static int readFromSenderId;
 	private static int sendReceiverId;
 	
-	private static String sendContentText;
-	
 	public static int getClientId() {
 		return clientId;
 	}
@@ -62,11 +60,7 @@ public class ClientInfo {
 	}
 	
 	public static String getSendContentText() {
-		return sendContentText;
-	}
-	
-	public static void setSendContentText(String sendContentText) {
-		ClientInfo.sendContentText = sendContentText;
+		return "This is a message from Client " + ClientInfo.clientId;
 	}
 	
 }
