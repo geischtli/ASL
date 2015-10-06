@@ -1,7 +1,6 @@
 package org.asl.middleware.database.dao;
 
 import org.asl.common.request.types.exceptions.SendMessageException;
-import org.asl.middleware.database.model.Message;
 
 public interface IMessageDAO {
 	

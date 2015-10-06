@@ -17,7 +17,7 @@ public abstract class AbstractMiddleware {
 	public AbstractMiddleware(int port, boolean initDB) throws IOException, SQLException {
 		this.serverChannel = AsynchronousServerSocketChannel.open();
 		this.serverChannel.bind(new InetSocketAddress(port));
-		this.db = ASLDatabase.getDatabase(initDB, 200);
+		this.db = ASLDatabase.getDatabase(initDB, 200, 10);
 		this.lock = new Object();
 		// Register this Middleware instance on the database (i.e. get an id into MiddlewareInfo)
 		RequestBuilder.getRequest(RequestType.REGISTER_MIDDLEWARE).processOnMiddleware();
