@@ -24,7 +24,6 @@ public class ASLDatabase {
 				ASLDatabase.props,
 				1
 			);
-		ASLDatabase.props.setProperty("password", "postgres");
 	}
 	
 	public static ASLDatabase getDatabase(boolean initDB, int contentLength, int maxConnectionsToDB) throws SQLException {
