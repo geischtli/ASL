@@ -7,6 +7,8 @@ import java.nio.channels.AsynchronousServerSocketChannel;
 import java.sql.SQLException;
 import java.util.Properties;
 
+import org.asl.common.propertyparser.PropertyKey;
+import org.asl.common.propertyparser.PropertyParser;
 import org.asl.common.request.Request.RequestType;
 import org.asl.common.request.builder.RequestBuilder;
 import org.asl.middleware.database.config.ASLDatabase;
@@ -27,12 +29,8 @@ public abstract class AbstractMiddleware {
 		// Register this Middleware instance on the database (i.e. get an id into MiddlewareInfo)
 		RequestBuilder.getRequest(RequestType.REGISTER_MIDDLEWARE).processOnMiddleware();
 		
-		Properties prop = new Properties();
-	    FileInputStream fis =
-	      new FileInputStream("configMiddleware.xml");
-	    prop.loadFromXML(fis);
-	    prop.list(System.out);
-	    System.out.println("done");
+		// TODO: go on...
+		int numasync = Integer.valueOf(PropertyParser.create("configMiddleware.xml").parse().getProperty(PropertyKey.NUMASYNCCONNECTIONPOOLTHREADS));
 	}
 	
 	public abstract void accept();
