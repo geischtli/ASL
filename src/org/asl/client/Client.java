@@ -10,11 +10,16 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Semaphore;
 
+import org.asl.common.propertyparser.PropertyKey;
+import org.asl.common.propertyparser.PropertyParser;
 import org.asl.common.request.Request;
 import org.asl.common.request.Request.RequestType;
 import org.asl.common.request.builder.RequestBuilder;
 import org.asl.common.request.serialize.SerializingUtilities;
 import org.asl.common.request.types.exceptions.ASLException;
+import org.asl.common.socket.SocketHelper;
+import org.asl.common.socket.SocketLocation;
+import org.asl.common.socket.SocketOperation;
 
 public class Client implements Runnable {
 
@@ -22,11 +27,18 @@ public class Client implements Runnable {
 	private AsynchronousSocketChannel sc;
 	private List<RequestType> requestList;
 	private Semaphore lock;
+	private PropertyParser propParser;
+	private static int INITIAL_BUFSIZE;
+	private SerializingUtilities serUtil;
+	
 	
 	public Client(int port) throws IOException {
 		this.port = port;
 		this.requestList = new ArrayList<RequestType>();
 		this.lock = new Semaphore(1, true);
+		this.propParser = PropertyParser.create("config_common.xml").parse();
+		Client.INITIAL_BUFSIZE = Integer.valueOf(propParser.getProperty(PropertyKey.INITIAL_BUFSIZE));
+		this.serUtil = SerializingUtilities.create();
 		gatherRequests();
 	}
 	
@@ -65,61 +77,65 @@ public class Client implements Runnable {
 		
 					@Override
 					public void completed(Void result, Object attachment) {
-						ByteBuffer outbuf = SerializingUtilities.packRequest(req);
-						sc.write(outbuf, 0L, new CompletionHandler<Integer, Long>() {
+						ByteBuffer outbuf = serUtil.packRequest(req);
+						sc.write(outbuf, null, new CompletionHandler<Integer, Object>() {
 			                
 							@Override
-							public void completed(final Integer result, final Long attachment) {
-		                    	ByteBuffer inbuf = ByteBuffer.allocate(10240);
+							public void completed(Integer writtenBytes, final Object attachment) {
+								serUtil.forceFurtherWriteIfNeeded(outbuf, writtenBytes, sc);
+		                    	ByteBuffer inbuf = ByteBuffer.allocate(Client.INITIAL_BUFSIZE);
 		                    	sc.read(inbuf, null, new CompletionHandler<Integer, Object>() {
 		
 									@Override
-									public void completed(Integer result, Object attachment) {
-										inbuf.flip();
+									public void completed(Integer readBytes, Object attachment) {
+										ByteBuffer fullInbuf = serUtil.forceFurtherReadIfNeeded(inbuf, readBytes, sc);
+										Request ansReq = serUtil.unpackRequest(fullInbuf);
 										try {
-											Request ansReq = (Request)SerializingUtilities.byteArrayToObject(inbuf.array());
-											try {
-												ansReq.processOnClient();
-											} catch (ASLException e) {
-												System.out.println("Reading message failed with type: " + ansReq.getException().getClass());
-												System.out.println("And reason: " + ansReq.getException().getMessage());
-											}
-											try {
-												sc.close();
-											} catch (IOException e) {
-												e.printStackTrace();
-											}
-											lock.release();
-										} catch (Exception e) {
-											e.printStackTrace();
+											ansReq.processOnClient();
+										} catch (ASLException e) {
+											System.out.println("Reading message failed with type: " + ansReq.getException().getClass());
+											System.out.println("And reason: " + ansReq.getException().getMessage());
 										}
+										SocketHelper.closeSocket(sc);
+										lock.release();
 									}
 		
 									@Override
-									public void failed(Throwable exc, Object attachment) {
-										System.out.println("In client: Read failed");
-										try {
-											sc.close();
-										} catch (IOException e) {
-											e.printStackTrace();
-										}
+									public void failed(Throwable se, Object attachment) {
+										SocketHelper.closeSocketAfterException(
+												SocketLocation.CLIENT,
+												SocketOperation.READ,
+												se,
+												sc
+											);
 									}
 		                    		
 		                    	});
 							}
 							
 			                @Override
-			                public void failed(Throwable exc, Long att) {
-			                	System.out.println("In client: Write failed");
+			                public void failed(Throwable se, Object att) {
+			                	SocketHelper.closeSocketAfterException(
+										SocketLocation.CLIENT,
+										SocketOperation.WRITE,
+										se,
+										sc
+									);
 			                }
+			                
 						});
 					}
 		
 					@Override
-					public void failed(Throwable exc, Object attachment) {
-						exc.printStackTrace();
-						System.out.println("In client: Connect failed");
+					public void failed(Throwable se, Object attachment) {
+						SocketHelper.closeSocketAfterException(
+								SocketLocation.CLIENT,
+								SocketOperation.CONNECT,
+								se,
+								sc
+							);
 					}
+					
 				});
 			} catch (Exception e) {
 				e.printStackTrace();

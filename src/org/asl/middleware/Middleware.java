@@ -7,7 +7,9 @@ import java.nio.channels.CompletionHandler;
 import java.sql.SQLException;
 
 import org.asl.common.request.Request;
-import org.asl.common.request.serialize.SerializingUtilities;
+import org.asl.common.socket.SocketHelper;
+import org.asl.common.socket.SocketLocation;
+import org.asl.common.socket.SocketOperation;
 
 public class Middleware extends AbstractMiddleware {
 	
@@ -22,44 +24,56 @@ public class Middleware extends AbstractMiddleware {
 			@Override
 			public void completed(AsynchronousSocketChannel sc, Object att) {
 				serverChannel.accept(null, this);
-				ByteBuffer inbuf = ByteBuffer.allocate(10240);
+				ByteBuffer inbuf = ByteBuffer.allocate(AbstractMiddleware.INITIAL_BUFSIZE);
 				sc.read(inbuf, inbuf, new CompletionHandler<Integer, ByteBuffer>() {
 					
 					@Override
-					public void completed(Integer len, ByteBuffer buf) {
-						SerializingUtilities.unpackLength(inbuf);
-						while (!SerializingUtilities.allBytesRead(len)) {
-							int forcedBytesRead = SerializingUtilities.forceRead(inbuf, sc);
-							len += forcedBytesRead;
-						}
-						Request req = SerializingUtilities.unpackRequest(inbuf, len);
+					public void completed(Integer readBytes, ByteBuffer buf) {
+						ByteBuffer fullInbuf = serUtil.forceFurtherReadIfNeeded(inbuf, readBytes, sc);
+						Request req = serUtil.unpackRequest(fullInbuf);
 						req.processOnMiddleware();
-						ByteBuffer outbuf = ByteBuffer.wrap(SerializingUtilities.objectToByteArray(req));
-						sc.write(outbuf);
-						try {
-							sc.close();
-						} catch (IOException e) {
-							e.printStackTrace();
-						}
+						
+						ByteBuffer outbuf = serUtil.packRequest(req);
+						sc.write(outbuf, null, new CompletionHandler<Integer, Object>() {
+
+							@Override
+							public void completed(Integer writtenBytes, Object attachment) {
+								serUtil.forceFurtherWriteIfNeeded(outbuf, writtenBytes, sc);
+								SocketHelper.closeSocket(sc);
+							}
+
+							@Override
+							public void failed(Throwable se, Object attachment) {
+								SocketHelper.closeSocketAfterException(
+										SocketLocation.MIDDLEWARE,
+										SocketOperation.WRITE,
+										se,
+										sc
+									);
+							}
+							
+						});
 					}
 
 					@Override
-					public void failed(Throwable exc, ByteBuffer buf) {
-						System.out.println("Reading problem: " + exc.getMessage());
-						exc.printStackTrace();
-						try {
-							sc.close();
-						} catch (IOException e) {
-							e.printStackTrace();
-						}
+					public void failed(Throwable se, ByteBuffer buf) {
+						SocketHelper.closeSocketAfterException(
+								SocketLocation.MIDDLEWARE,
+								SocketOperation.READ,
+								se,
+								sc
+							);
 					}
 				});
 			}
 			
 			@Override
-			public void failed(Throwable exc, Object attachment) {
-				System.out.println("Accepting problem: " + exc);
-				exc.printStackTrace();
+			public void failed(Throwable se, Object attachment) {
+				SocketHelper.closeSocketAfterException(
+						SocketLocation.MIDDLEWARE,
+						SocketOperation.ACCEPT,
+						se
+					);
 			}
 		});
 	}

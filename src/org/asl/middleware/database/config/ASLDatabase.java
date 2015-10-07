@@ -13,7 +13,7 @@ public class ASLDatabase {
 	private static Properties props;
 	private static ConnectionPool connectionPool;
 	
-	public ASLDatabase(int contentLength, int maxConnectionsToDB) throws SQLException {
+	public ASLDatabase(int maxConnectionsToDB) throws SQLException {
 		ASLDatabase.url = "jdbc:postgresql://localhost/mydb";
 		ASLDatabase.props = new Properties();
 		ASLDatabase.props.setProperty("user", "postgres");
@@ -26,9 +26,8 @@ public class ASLDatabase {
 			);
 	}
 	
-	public static ASLDatabase getDatabase(int contentLength, int maxConnectionsToDB) throws SQLException {
+	public static ASLDatabase getDatabase(int maxConnectionsToDB) throws SQLException {
 		return new ASLDatabase(
-				contentLength,
 				maxConnectionsToDB
 			);
 	}
