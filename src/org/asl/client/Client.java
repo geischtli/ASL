@@ -9,12 +9,14 @@ import java.nio.channels.CompletionHandler;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Semaphore;
+import java.util.concurrent.TimeUnit;
 
 import org.asl.common.propertyparser.PropertyKey;
 import org.asl.common.propertyparser.PropertyParser;
 import org.asl.common.request.Request;
 import org.asl.common.request.Request.RequestType;
 import org.asl.common.request.builder.RequestBuilder;
+import org.asl.common.request.serialize.ByteBufferWrapper;
 import org.asl.common.request.serialize.SerializingUtilities;
 import org.asl.common.request.types.exceptions.ASLException;
 import org.asl.common.socket.SocketHelper;
@@ -63,83 +65,82 @@ public class Client implements Runnable {
 
 	@Override
 	public void run() {
+		int count = 0;
 		for (RequestType reqType : requestList) {
 			try {
 				// get lock, such that not 2 connects to the same socket happen
-				lock.acquire();
+				lock.tryAcquire(1, TimeUnit.SECONDS);
+				count++;
 			} catch (InterruptedException e1) {
+				System.out.println("Failed in semaphore tryAcquire with 1 second");
 				e1.printStackTrace();
 			}
 			Request req = RequestBuilder.getRequest(reqType);
-			try {
-				this.sc = AsynchronousSocketChannel.open();
-				sc.connect(new InetSocketAddress(InetAddress.getLoopbackAddress(), port), null, new CompletionHandler<Void, Object>() {
-		
-					@Override
-					public void completed(Void result, Object attachment) {
-						ByteBuffer outbuf = serUtil.packRequest(req);
-						sc.write(outbuf, null, new CompletionHandler<Integer, Object>() {
-			                
-							@Override
-							public void completed(Integer writtenBytes, final Object attachment) {
-								serUtil.forceFurtherWriteIfNeeded(outbuf, writtenBytes, sc);
-		                    	ByteBuffer inbuf = ByteBuffer.allocate(Client.INITIAL_BUFSIZE);
-		                    	sc.read(inbuf, null, new CompletionHandler<Integer, Object>() {
-		
-									@Override
-									public void completed(Integer readBytes, Object attachment) {
-										ByteBuffer fullInbuf = serUtil.forceFurtherReadIfNeeded(inbuf, readBytes, sc);
-										Request ansReq = serUtil.unpackRequest(fullInbuf);
-										try {
-											ansReq.processOnClient();
-										} catch (ASLException e) {
-											System.out.println("Reading message failed with type: " + ansReq.getException().getClass());
-											System.out.println("And reason: " + ansReq.getException().getMessage());
-										}
-										SocketHelper.closeSocket(sc);
-										lock.release();
+			sc = SocketHelper.openSocket();
+			sc.connect(new InetSocketAddress(InetAddress.getLoopbackAddress(), port), null, new CompletionHandler<Void, Object>() {
+	
+				@Override
+				public void completed(Void result, Object attachment) {
+					ByteBufferWrapper outbufWrap = serUtil.packRequest(req);
+					sc.write(outbufWrap.getBuf(), outbufWrap.getBytes(), new CompletionHandler<Integer, Integer>() {
+		                
+						@Override
+						public void completed(Integer writtenBytes, Integer expectedWriteBytes) {
+							serUtil.forceFurtherWriteIfNeeded(outbufWrap.getBuf(), writtenBytes, expectedWriteBytes, sc);
+	                    	ByteBuffer inbuf = ByteBuffer.allocate(Client.INITIAL_BUFSIZE);
+	                    	sc.read(inbuf, null, new CompletionHandler<Integer, Object>() {
+	
+								@Override
+								public void completed(Integer readBytes, Object attachment) {
+									ByteBufferWrapper fullInbufWrap = serUtil.forceFurtherReadIfNeeded(inbuf, readBytes, sc);
+									Request ansReq = serUtil.unpackRequest(fullInbufWrap.getBuf(), fullInbufWrap.getBytes());
+									try {
+										ansReq.processOnClient();
+									} catch (ASLException e) {
+										System.out.println("Reading message failed with type: " + ansReq.getException().getClass());
+										System.out.println("And reason: " + ansReq.getException().getMessage());
 									}
-		
-									@Override
-									public void failed(Throwable se, Object attachment) {
-										SocketHelper.closeSocketAfterException(
-												SocketLocation.CLIENT,
-												SocketOperation.READ,
-												se,
-												sc
-											);
-									}
-		                    		
-		                    	});
-							}
-							
-			                @Override
-			                public void failed(Throwable se, Object att) {
-			                	SocketHelper.closeSocketAfterException(
-										SocketLocation.CLIENT,
-										SocketOperation.WRITE,
-										se,
-										sc
-									);
-			                }
-			                
-						});
-					}
-		
-					@Override
-					public void failed(Throwable se, Object attachment) {
-						SocketHelper.closeSocketAfterException(
-								SocketLocation.CLIENT,
-								SocketOperation.CONNECT,
-								se,
-								sc
-							);
-					}
-					
-				});
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
+									SocketHelper.closeSocket(sc);
+									lock.release();
+								}
+	
+								@Override
+								public void failed(Throwable se, Object attachment) {
+									SocketHelper.closeSocketAfterException(
+											SocketLocation.CLIENT,
+											SocketOperation.READ,
+											se,
+											sc
+										);
+								}
+	                    		
+	                    	});
+						}
+						
+		                @Override
+		                public void failed(Throwable se, Integer expectedWriteBytes) {
+		                	SocketHelper.closeSocketAfterException(
+									SocketLocation.CLIENT,
+									SocketOperation.WRITE,
+									se,
+									sc
+								);
+		                }
+		                
+					});
+				}
+	
+				@Override
+				public void failed(Throwable se, Object attachment) {
+					SocketHelper.closeSocketAfterException(
+							SocketLocation.CLIENT,
+							SocketOperation.CONNECT,
+							se,
+							sc
+						);
+				}
+				
+			});
 		}
 		System.out.println("Client " + ClientInfo.getClientId() + " is done");
 	}

@@ -5,6 +5,16 @@ import java.nio.channels.AsynchronousSocketChannel;
 
 public class SocketHelper {
 
+	public static AsynchronousSocketChannel openSocket() {
+		try {
+			return AsynchronousSocketChannel.open();
+		} catch (Exception e) {
+			System.out.println("Fail occured in open socket");
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
 	public static void closeSocket(AsynchronousSocketChannel sc) {
 		try {
 			sc.close();

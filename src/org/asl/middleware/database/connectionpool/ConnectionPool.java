@@ -19,7 +19,7 @@ public class ConnectionPool {
 	
 	public ConnectionPool(int numConnections, String url, Properties props, int numAsyncThreads) {
 		this.numConnections = numConnections;
-		this.connectionPool = new LinkedBlockingQueue<ConnectionWrapper>();
+		this.connectionPool = new LinkedBlockingQueue<ConnectionWrapper>(numConnections);
 		this.url = url;
 		this.props = props;
 		this.asyncExecutor = Executors.newFixedThreadPool(numAsyncThreads);
@@ -42,6 +42,11 @@ public class ConnectionPool {
 				
 				@Override
 				public ConnectionWrapper call() throws Exception {
+					if (connectionPool.size() == 0) {
+						System.out.println("I have to wait for a connection");
+					} else {
+						//System.out.println("There are " + connectionPool.size() + " connections available");
+					}
 					return connectionPool.take();
 				}
 				
@@ -50,6 +55,10 @@ public class ConnectionPool {
 	}
 	
 	public void releaseConnection(ConnectionWrapper connectionWrapper) {
-		connectionPool.add(connectionWrapper);
+		try {
+			connectionPool.put(connectionWrapper);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 	}
 }

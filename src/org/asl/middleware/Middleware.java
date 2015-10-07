@@ -7,6 +7,7 @@ import java.nio.channels.CompletionHandler;
 import java.sql.SQLException;
 
 import org.asl.common.request.Request;
+import org.asl.common.request.serialize.ByteBufferWrapper;
 import org.asl.common.socket.SocketHelper;
 import org.asl.common.socket.SocketLocation;
 import org.asl.common.socket.SocketOperation;
@@ -25,25 +26,25 @@ public class Middleware extends AbstractMiddleware {
 			public void completed(AsynchronousSocketChannel sc, Object att) {
 				serverChannel.accept(null, this);
 				ByteBuffer inbuf = ByteBuffer.allocate(AbstractMiddleware.INITIAL_BUFSIZE);
-				sc.read(inbuf, inbuf, new CompletionHandler<Integer, ByteBuffer>() {
+				sc.read(inbuf, null, new CompletionHandler<Integer, Object>() {
 					
 					@Override
-					public void completed(Integer readBytes, ByteBuffer buf) {
-						ByteBuffer fullInbuf = serUtil.forceFurtherReadIfNeeded(inbuf, readBytes, sc);
-						Request req = serUtil.unpackRequest(fullInbuf);
+					public void completed(Integer readBytes, Object attachment) {
+						ByteBufferWrapper fullInbufWrap = serUtil.forceFurtherReadIfNeeded(inbuf, readBytes, sc);
+						Request req = serUtil.unpackRequest(fullInbufWrap.getBuf(), fullInbufWrap.getBytes());
 						req.processOnMiddleware();
 						
-						ByteBuffer outbuf = serUtil.packRequest(req);
-						sc.write(outbuf, null, new CompletionHandler<Integer, Object>() {
+						ByteBufferWrapper outbufWrap = serUtil.packRequest(req);
+						sc.write(outbufWrap.getBuf(), outbufWrap.getBytes(), new CompletionHandler<Integer, Integer>() {
 
 							@Override
-							public void completed(Integer writtenBytes, Object attachment) {
-								serUtil.forceFurtherWriteIfNeeded(outbuf, writtenBytes, sc);
+							public void completed(Integer writtenBytes, Integer expectedWriteBytes) {
+								serUtil.forceFurtherWriteIfNeeded(outbufWrap.getBuf(), writtenBytes, expectedWriteBytes, sc);
 								SocketHelper.closeSocket(sc);
 							}
 
 							@Override
-							public void failed(Throwable se, Object attachment) {
+							public void failed(Throwable se, Integer expectedWriteBytes) {
 								SocketHelper.closeSocketAfterException(
 										SocketLocation.MIDDLEWARE,
 										SocketOperation.WRITE,
@@ -56,7 +57,7 @@ public class Middleware extends AbstractMiddleware {
 					}
 
 					@Override
-					public void failed(Throwable se, ByteBuffer buf) {
+					public void failed(Throwable se, Object attachment) {
 						SocketHelper.closeSocketAfterException(
 								SocketLocation.MIDDLEWARE,
 								SocketOperation.READ,
