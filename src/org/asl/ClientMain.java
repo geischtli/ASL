@@ -10,6 +10,6 @@ public class ClientMain {
 	public static void main(String[] args) throws IOException, InterruptedException {
 		Thread t = new Thread(new Client(port));
 		t.start();
-		Thread.sleep(1000*120);
+		Thread.sleep(1000*600);
 	}
 }

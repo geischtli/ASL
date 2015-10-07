@@ -9,7 +9,6 @@ import org.asl.common.propertyparser.PropertyKey;
 import org.asl.common.propertyparser.PropertyParser;
 import org.asl.common.request.Request.RequestType;
 import org.asl.common.request.builder.RequestBuilder;
-import org.asl.common.request.serialize.SerializingUtilities;
 import org.asl.middleware.database.config.ASLDatabase;
 
 public abstract class AbstractMiddleware {
@@ -17,7 +16,6 @@ public abstract class AbstractMiddleware {
 	protected PropertyParser propParser;
 	protected final ASLDatabase db;
 	protected static int INITIAL_BUFSIZE;
-	protected SerializingUtilities serUtil;
 	
 	public AbstractMiddleware(int port) throws IOException, SQLException {
 		this.serverChannel = AsynchronousServerSocketChannel.open();
@@ -26,7 +24,6 @@ public abstract class AbstractMiddleware {
 		this.db = ASLDatabase.getDatabase(
 				Integer.valueOf(propParser.getProperty(PropertyKey.MAX_CONNECTIONS_TO_DB))
 			);
-		this.serUtil = SerializingUtilities.create();
 		AbstractMiddleware.INITIAL_BUFSIZE = Integer.valueOf(propParser.getProperty(PropertyKey.INITIAL_BUFSIZE));
 		RequestBuilder.getRequest(RequestType.REGISTER_MIDDLEWARE).processOnMiddleware();
 	}

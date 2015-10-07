@@ -8,6 +8,7 @@ import java.sql.SQLException;
 
 import org.asl.common.request.Request;
 import org.asl.common.request.serialize.ByteBufferWrapper;
+import org.asl.common.request.serialize.SerializingUtilities;
 import org.asl.common.socket.SocketHelper;
 import org.asl.common.socket.SocketLocation;
 import org.asl.common.socket.SocketOperation;
@@ -30,16 +31,16 @@ public class Middleware extends AbstractMiddleware {
 					
 					@Override
 					public void completed(Integer readBytes, Object attachment) {
-						ByteBufferWrapper fullInbufWrap = serUtil.forceFurtherReadIfNeeded(inbuf, readBytes, sc);
-						Request req = serUtil.unpackRequest(fullInbufWrap.getBuf(), fullInbufWrap.getBytes());
+						ByteBufferWrapper fullInbufWrap = SerializingUtilities.forceFurtherReadIfNeeded(inbuf, readBytes, sc);
+						Request req = SerializingUtilities.unpackRequest(fullInbufWrap.getBuf(), fullInbufWrap.getBytes());
 						req.processOnMiddleware();
 						
-						ByteBufferWrapper outbufWrap = serUtil.packRequest(req);
+						ByteBufferWrapper outbufWrap = SerializingUtilities.packRequest(req);
 						sc.write(outbufWrap.getBuf(), outbufWrap.getBytes(), new CompletionHandler<Integer, Integer>() {
 
 							@Override
 							public void completed(Integer writtenBytes, Integer expectedWriteBytes) {
-								serUtil.forceFurtherWriteIfNeeded(outbufWrap.getBuf(), writtenBytes, expectedWriteBytes, sc);
+								SerializingUtilities.forceFurtherWriteIfNeeded(outbufWrap.getBuf(), writtenBytes, expectedWriteBytes, sc);
 								SocketHelper.closeSocket(sc);
 							}
 

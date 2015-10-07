@@ -10,8 +10,6 @@ import java.nio.channels.AsynchronousSocketChannel;
 import java.util.Arrays;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
 
 import org.asl.common.request.Request;
 
@@ -21,7 +19,7 @@ public class SerializingUtilities {
 		return new SerializingUtilities();
 	}
 	
-	public byte[] objectToByteArray(Object o) {
+	public static byte[] objectToByteArray(Object o) {
 		ByteArrayOutputStream bout = new ByteArrayOutputStream();
 		ObjectOutputStream obout;
 		try {
@@ -34,7 +32,7 @@ public class SerializingUtilities {
 		return bout.toByteArray();
 	}
 	
-	public Object byteArrayToObject(byte[] bytes) {
+	public static Object byteArrayToObject(byte[] bytes) {
 		ByteArrayInputStream is = new ByteArrayInputStream(bytes);
 		try {
 			ObjectInputStream ois = new ObjectInputStream(is);
@@ -45,7 +43,7 @@ public class SerializingUtilities {
 		return null;
 	}
 	
-	public ByteBufferWrapper packRequest(Request req) {
+	public static ByteBufferWrapper packRequest(Request req) {
 		byte[] data = objectToByteArray(req);
 		int len = data.length;
 		byte[] lenData = ByteBuffer.allocate(4).putInt(len).array();
@@ -60,25 +58,24 @@ public class SerializingUtilities {
 		return ByteBufferWrapper.create(buf, buf.array().length);
 	}
 	
-	public int unpackLength(ByteBuffer inbuf) {
+	public static int unpackLength(ByteBuffer inbuf) {
 		byte[] lengthField = Arrays.copyOfRange(inbuf.array(), 0, 4);
 		return ByteBuffer.wrap(lengthField).getInt();
 	}
 	
-	public boolean allBytesRead(int expectedReadBytes, int readBytes) {
+	public static boolean allBytesRead(int expectedReadBytes, int readBytes) {
 		return expectedReadBytes + 4 == readBytes;
 	}
 	
-	public boolean allBytesWritten(int expectedWriteBytes, int writtenBytes) {
+	public static boolean allBytesWritten(int expectedWriteBytes, int writtenBytes) {
 		return expectedWriteBytes == writtenBytes;
 	}
 	
-	public Request unpackRequest(ByteBuffer inbuf, int readBytes) {
+	public static Request unpackRequest(ByteBuffer inbuf, int readBytes) {
 		return (Request)byteArrayToObject(Arrays.copyOfRange(inbuf.array(), 4, readBytes));
 	}
 	
-	public int forceRead(ByteBuffer inbuf, AsynchronousSocketChannel sc) {
-		int currpos = inbuf.position();
+	public static int forceRead(ByteBuffer inbuf, AsynchronousSocketChannel sc) {
 		Future<Integer> f = sc.read(inbuf);
 		try {
 			//System.out.println("im forced to read again...");
@@ -89,7 +86,7 @@ public class SerializingUtilities {
 		return 0;
 	}
 	
-	public int forceWrite(ByteBuffer outbuf, AsynchronousSocketChannel sc) {
+	public static int forceWrite(ByteBuffer outbuf, AsynchronousSocketChannel sc) {
 		Future<Integer> f = sc.write(outbuf);
 		try {
 			return f.get();
@@ -99,7 +96,7 @@ public class SerializingUtilities {
 		return 0;
 	}
 	
-	public ByteBufferWrapper forceFurtherReadIfNeeded(ByteBuffer inbuf, int readBytes, AsynchronousSocketChannel sc) {
+	public static ByteBufferWrapper forceFurtherReadIfNeeded(ByteBuffer inbuf, int readBytes, AsynchronousSocketChannel sc) {
 		int expectedReadBytes = unpackLength(inbuf);
 		while (!allBytesRead(expectedReadBytes, readBytes)) {
 			int forcedBytesRead = forceRead(inbuf, sc);
@@ -110,7 +107,7 @@ public class SerializingUtilities {
 		return ByteBufferWrapper.create(inbuf, readBytes);
 	}
 	
-	public void forceFurtherWriteIfNeeded(ByteBuffer outbuf, int writtenBytes, int expectedWriteBytes, AsynchronousSocketChannel sc) {
+	public static void forceFurtherWriteIfNeeded(ByteBuffer outbuf, int writtenBytes, int expectedWriteBytes, AsynchronousSocketChannel sc) {
 		while (!allBytesWritten(expectedWriteBytes, writtenBytes)) {
 			int forcedWrittenBytes = forceWrite(outbuf, sc);
 			//System.out.println("force write done");

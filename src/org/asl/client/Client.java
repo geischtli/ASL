@@ -31,8 +31,6 @@ public class Client implements Runnable {
 	private Semaphore lock;
 	private PropertyParser propParser;
 	private static int INITIAL_BUFSIZE;
-	private SerializingUtilities serUtil;
-	
 	
 	public Client(int port) throws IOException {
 		this.port = port;
@@ -40,7 +38,6 @@ public class Client implements Runnable {
 		this.lock = new Semaphore(1, true);
 		this.propParser = PropertyParser.create("config_common.xml").parse();
 		Client.INITIAL_BUFSIZE = Integer.valueOf(propParser.getProperty(PropertyKey.INITIAL_BUFSIZE));
-		this.serUtil = SerializingUtilities.create();
 		gatherRequests();
 	}
 	
@@ -65,12 +62,10 @@ public class Client implements Runnable {
 
 	@Override
 	public void run() {
-		int count = 0;
 		for (RequestType reqType : requestList) {
 			try {
 				// get lock, such that not 2 connects to the same socket happen
 				lock.tryAcquire(1, TimeUnit.SECONDS);
-				count++;
 			} catch (InterruptedException e1) {
 				System.out.println("Failed in semaphore tryAcquire with 1 second");
 				e1.printStackTrace();
@@ -81,19 +76,19 @@ public class Client implements Runnable {
 	
 				@Override
 				public void completed(Void result, Object attachment) {
-					ByteBufferWrapper outbufWrap = serUtil.packRequest(req);
+					ByteBufferWrapper outbufWrap = SerializingUtilities.packRequest(req);
 					sc.write(outbufWrap.getBuf(), outbufWrap.getBytes(), new CompletionHandler<Integer, Integer>() {
 		                
 						@Override
 						public void completed(Integer writtenBytes, Integer expectedWriteBytes) {
-							serUtil.forceFurtherWriteIfNeeded(outbufWrap.getBuf(), writtenBytes, expectedWriteBytes, sc);
+							SerializingUtilities.forceFurtherWriteIfNeeded(outbufWrap.getBuf(), writtenBytes, expectedWriteBytes, sc);
 	                    	ByteBuffer inbuf = ByteBuffer.allocate(Client.INITIAL_BUFSIZE);
 	                    	sc.read(inbuf, null, new CompletionHandler<Integer, Object>() {
 	
 								@Override
 								public void completed(Integer readBytes, Object attachment) {
-									ByteBufferWrapper fullInbufWrap = serUtil.forceFurtherReadIfNeeded(inbuf, readBytes, sc);
-									Request ansReq = serUtil.unpackRequest(fullInbufWrap.getBuf(), fullInbufWrap.getBytes());
+									ByteBufferWrapper fullInbufWrap = SerializingUtilities.forceFurtherReadIfNeeded(inbuf, readBytes, sc);
+									Request ansReq = SerializingUtilities.unpackRequest(fullInbufWrap.getBuf(), fullInbufWrap.getBytes());
 									try {
 										ansReq.processOnClient();
 									} catch (ASLException e) {
