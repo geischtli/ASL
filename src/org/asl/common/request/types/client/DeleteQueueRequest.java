@@ -33,12 +33,12 @@ public class DeleteQueueRequest extends Request {
 	}
 
 	@Override
-	public void processOnClient() throws ASLException {
+	public void processOnClient(ClientInfo ci) throws ASLException {
 		if (!getException().carriesError()) {
 			System.out.println("Queue " + queue_id + " delete successfully");
-			ClientInfo.setDeleteQueueId(0);
-			ClientInfo.setReadQueueId(0);
-			ClientInfo.setSendQueueId(0);
+			ci.setDeleteQueueId(0);
+			ci.setReadQueueId(0);
+			ci.setSendQueueId(0);
 		} else {
 			throw getException();
 		}

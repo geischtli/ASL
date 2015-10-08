@@ -1,5 +1,6 @@
 package org.asl.common.request.types.middleware;
 
+import org.asl.client.ClientInfo;
 import org.asl.common.request.Request;
 import org.asl.common.request.types.exceptions.ASLException;
 import org.asl.common.request.types.exceptions.RegisterMiddlewareException;
@@ -21,7 +22,7 @@ public class RegisterMiddlewareRequest extends Request {
 	}
 
 	@Override
-	public void processOnClient() throws ASLException {
+	public void processOnClient(ClientInfo ci) throws ASLException {
 		// will never be handled on client side
 	}
 

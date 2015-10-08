@@ -37,7 +37,7 @@ public class GetRegisteredClientsRequest extends Request {
 	}
 	
 	@Override
-	public void processOnClient() throws ASLException {
+	public void processOnClient(ClientInfo ci) throws ASLException {
 		if (!getException().carriesError()) {
 			//System.out.println("Successfully found " + clients.size() + " clients");
 			if (clients.size() > 0) {
@@ -48,7 +48,7 @@ public class GetRegisteredClientsRequest extends Request {
 				// set a random client as receiver of next message
 				int nextReceiver = new Random().nextInt(clients.size());
 				//System.out.println("Next receiver: " + (nextReceiver + 1));
-				ClientInfo.setSendReceiverId(clients.get(nextReceiver));
+				ci.setSendReceiverId(clients.get(nextReceiver));
 			}
 		} else {
 			throw getException();

@@ -47,7 +47,7 @@ public class GetQueuesWithMessagesForClientRequest extends Request {
 	}
 
 	@Override
-	public void processOnClient() throws ASLException {
+	public void processOnClient(ClientInfo ci) throws ASLException {
 		if (!getException().carriesError()) {
 			//System.out.println("Successfully got queues " + queues.size() + " with waiting messages for client");
 			if (queues.size() > 0) {
@@ -56,7 +56,7 @@ public class GetQueuesWithMessagesForClientRequest extends Request {
 					System.out.print(queues.get(i) + " ");
 				}*/
 				// set a random queue of the ones we get to next reading target
-				ClientInfo.setReadQueueId(queues.get(new Random().nextInt(queues.size())));
+				ci.setReadQueueId(queues.get(new Random().nextInt(queues.size())));
 			}
 		} else {
 			throw getException();

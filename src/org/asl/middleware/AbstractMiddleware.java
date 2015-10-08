@@ -25,7 +25,7 @@ public abstract class AbstractMiddleware {
 				Integer.valueOf(propParser.getProperty(PropertyKey.MAX_CONNECTIONS_TO_DB))
 			);
 		AbstractMiddleware.INITIAL_BUFSIZE = Integer.valueOf(propParser.getProperty(PropertyKey.INITIAL_BUFSIZE));
-		RequestBuilder.getRequest(RequestType.REGISTER_MIDDLEWARE).processOnMiddleware();
+		RequestBuilder.getRequest(RequestType.REGISTER_MIDDLEWARE, null).processOnMiddleware();
 	}
 	
 	public abstract void accept();

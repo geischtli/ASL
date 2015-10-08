@@ -34,10 +34,10 @@ public class HandshakeRequest extends Request {
 	}
 
 	@Override
-	public void processOnClient() throws ASLException {
+	public void processOnClient(ClientInfo ci) throws ASLException {
 		if (!getException().carriesError()) {
-			ClientInfo.setClientId(client_id);
-			System.out.println("Client got ID " + ClientInfo.getClientId());
+			ci.setClientId(client_id);
+			System.out.println("Client got ID " + ci.getClientId());
 		} else {
 			throw getException();
 		}

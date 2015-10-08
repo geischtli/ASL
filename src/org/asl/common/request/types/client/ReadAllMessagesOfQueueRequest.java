@@ -2,6 +2,7 @@ package org.asl.common.request.types.client;
 
 import java.util.List;
 
+import org.asl.client.ClientInfo;
 import org.asl.common.request.Request;
 import org.asl.common.request.types.exceptions.ASLException;
 import org.asl.common.request.types.exceptions.ReadAllMessagesOfQueueException;
@@ -56,7 +57,7 @@ public class ReadAllMessagesOfQueueRequest extends Request {
 	}
 
 	@Override
-	public void processOnClient() throws ASLException {
+	public void processOnClient(ClientInfo ci) throws ASLException {
 		if (!getException().carriesError()) {
 			System.out.println("Successfully read " + messages.size() + " messages");
 			/*System.out.println("Messages:");

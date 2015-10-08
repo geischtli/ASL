@@ -1,5 +1,6 @@
 package org.asl.common.request.types.client;
 
+import org.asl.client.ClientInfo;
 import org.asl.common.request.Request;
 import org.asl.common.request.types.exceptions.ASLException;
 import org.asl.common.request.types.exceptions.SendMessageException;
@@ -47,7 +48,7 @@ public class SendMessageRequest extends Request {
 	}
 
 	@Override
-	public void processOnClient() throws ASLException {
+	public void processOnClient(ClientInfo ci) throws ASLException {
 		if (!getException().carriesError()) {
 			//System.out.println("Message successfully sent");
 		} else {

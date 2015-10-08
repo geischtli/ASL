@@ -31,6 +31,7 @@ public class Client implements Runnable {
 	private Semaphore lock;
 	private PropertyParser propParser;
 	private static int INITIAL_BUFSIZE;
+	private ClientInfo ci;
 	
 	public Client(int port) throws IOException {
 		this.port = port;
@@ -38,6 +39,7 @@ public class Client implements Runnable {
 		this.lock = new Semaphore(1, true);
 		this.propParser = PropertyParser.create("config_common.xml").parse();
 		Client.INITIAL_BUFSIZE = Integer.valueOf(propParser.getProperty(PropertyKey.INITIAL_BUFSIZE));
+		ci = ClientInfo.create();
 		gatherRequests();
 	}
 	
@@ -70,7 +72,7 @@ public class Client implements Runnable {
 				System.out.println("Failed in semaphore tryAcquire with 1 second");
 				e1.printStackTrace();
 			}
-			Request req = RequestBuilder.getRequest(reqType);
+			Request req = RequestBuilder.getRequest(reqType, ci);
 			sc = SocketHelper.openSocket();
 			sc.connect(new InetSocketAddress(InetAddress.getLoopbackAddress(), port), null, new CompletionHandler<Void, Object>() {
 	
@@ -90,7 +92,7 @@ public class Client implements Runnable {
 									ByteBufferWrapper fullInbufWrap = SerializingUtilities.forceFurtherReadIfNeeded(inbuf, readBytes, sc);
 									Request ansReq = SerializingUtilities.unpackRequest(fullInbufWrap.getBuf(), fullInbufWrap.getBytes());
 									try {
-										ansReq.processOnClient();
+										ansReq.processOnClient(ci);
 									} catch (ASLException e) {
 										System.out.println("Reading message failed with type: " + ansReq.getException().getClass());
 										System.out.println("And reason: " + ansReq.getException().getMessage());
@@ -137,7 +139,7 @@ public class Client implements Runnable {
 				
 			});
 		}
-		System.out.println("Client " + ClientInfo.getClientId() + " is done");
+		System.out.println("Client " + ci.getClientId() + " is done");
 	}
 	
 }

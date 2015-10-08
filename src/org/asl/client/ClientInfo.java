@@ -2,65 +2,78 @@ package org.asl.client;
 
 public class ClientInfo {
 	
-	private static int clientId;
+	private int clientId;
 	
-	private static int deleteQueueId;
-	private static int readQueueId;
-	private static int sendQueueId;
+	private int deleteQueueId;
+	private int readQueueId;
+	private int sendQueueId;
 	
-	private static int readFromSenderId;
-	private static int sendReceiverId;
+	private int readFromSenderId;
+	private int sendReceiverId;
 	
-	public static int getClientId() {
+	public ClientInfo() {
+		this.clientId = 0;
+		this.deleteQueueId = 0;
+		this.readFromSenderId = 0;
+		this.sendQueueId = 0;
+		this.readFromSenderId = 0;
+		this.sendReceiverId = 0;
+	}
+	
+	public static ClientInfo create() {
+		return new ClientInfo();
+	}
+	
+	public int getClientId() {
 		return clientId;
 	}
 	
-	public static void setClientId(int clientId) {
-		ClientInfo.clientId = clientId;
+	public void setClientId(int clientId) {
+		this.clientId = clientId;
 	}
 	
-	public static int getDeleteQueueId() {
+	public int getDeleteQueueId() {
 		return deleteQueueId;
 	}
 	
-	public static void setDeleteQueueId(int deleteQueueId) {
-		ClientInfo.deleteQueueId = deleteQueueId;
+	public void setDeleteQueueId(int deleteQueueId) {
+		this.deleteQueueId = deleteQueueId;
 	}
 	
-	public static int getReadQueueId() {
+	public int getReadQueueId() {
 		return readQueueId;
 	}
 	
-	public static void setReadQueueId(int readQueueId) {
-		ClientInfo.readQueueId = readQueueId;
+	public void setReadQueueId(int readQueueId) {
+		this.readQueueId = readQueueId;
 	}
 	
-	public static int getReadFromSenderId() {
+	public int getReadFromSenderId() {
 		return readFromSenderId;
 	}
 	
-	public static void setReadFromSenderId(int readFromSenderId) {
-		ClientInfo.readFromSenderId = readFromSenderId;
+	public void setReadFromSenderId(int readFromSenderId) {
+		this.readFromSenderId = readFromSenderId;
 	}
 	
-	public static int getSendReceiverId() {
+	public int getSendReceiverId() {
 		return sendReceiverId;
 	}
 	
-	public static void setSendReceiverId(int sendReceiverId) {
-		ClientInfo.sendReceiverId = sendReceiverId;
+	public void setSendReceiverId(int sendReceiverId) {
+		this.sendReceiverId = sendReceiverId;
 	}
 	
-	public static int getSendQueueId() {
+	public int getSendQueueId() {
 		return sendQueueId;
 	}
 	
-	public static void setSendQueueId(int sendQueueId) {
-		ClientInfo.sendQueueId = sendQueueId;
+	public void setSendQueueId(int sendQueueId) {
+		this.sendQueueId = sendQueueId;
 	}
 	
-	public static String getSendContentText() {
-		return "This is a message from Client " + ClientInfo.clientId;
+	public String getSendContentText() {
+		return "This is a message from Client " + this.clientId;
 	}
 	
 }

@@ -2,6 +2,7 @@ package org.asl.common.request;
 
 import java.io.Serializable;
 
+import org.asl.client.ClientInfo;
 import org.asl.common.request.types.exceptions.ASLException;
 
 /**
@@ -37,5 +38,5 @@ public abstract class Request implements Serializable {
 	}
 	
 	public abstract void processOnMiddleware();
-	public abstract void processOnClient() throws ASLException;
+	public abstract void processOnClient(ClientInfo ci) throws ASLException;
 }

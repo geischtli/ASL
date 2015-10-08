@@ -1,5 +1,6 @@
 package org.asl.common.request.types.client;
 
+import org.asl.client.ClientInfo;
 import org.asl.common.request.Request;
 import org.asl.common.request.types.exceptions.ASLException;
 import org.asl.common.request.types.exceptions.ReadMessageFromSenderException;
@@ -54,7 +55,7 @@ public class ReadMessageFromSenderRequest extends Request {
 	}
 	
 	@Override
-	public void processOnClient() throws ASLException {
+	public void processOnClient(ClientInfo ci) throws ASLException {
 		if (!getException().carriesError()) {
 			System.out.println("System successfully received " + (message != null ? 1 : 0) + " messages");
 		} else {
