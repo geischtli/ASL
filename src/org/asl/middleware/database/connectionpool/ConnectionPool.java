@@ -42,11 +42,6 @@ public class ConnectionPool {
 				
 				@Override
 				public ConnectionWrapper call() throws Exception {
-					if (connectionPool.size() == 0) {
-						System.out.println("I have to wait for a connection");
-					} else {
-						//System.out.println("There are " + connectionPool.size() + " connections available");
-					}
 					return connectionPool.take();
 				}
 				

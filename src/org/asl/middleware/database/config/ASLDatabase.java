@@ -1,7 +1,5 @@
 package org.asl.middleware.database.config;
 
-import java.io.PrintWriter;
-import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Properties;
 import java.util.concurrent.Future;

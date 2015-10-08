@@ -82,13 +82,13 @@ public class MiddlewareTiming {
 	
 	public void printAllValues() {
 		System.out.println(
-				acceptedClient + "/" +
-				readRequest + "/" +
-				processedRead + "/" +
-				gotConnection + "/" +
-				executedQuery + "/" +
-				packedRequest + "/" +
-				wroteAnswer
+				(acceptedClient-acceptedClient)/1000000 + "/" +
+				(readRequest-acceptedClient)/1000000 + "/" +
+				(processedRead-readRequest)/1000000 + "/" +
+				(gotConnection-processedRead)/1000000 + "/" +
+				(executedQuery-gotConnection)/1000000 + "/" +
+				(packedRequest-executedQuery)/1000000 + "/" +
+				(wroteAnswer-packedRequest)/1000000
 			);
 	}
 	

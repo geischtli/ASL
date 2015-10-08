@@ -20,13 +20,13 @@ public class Main {
 		mw.accept();
 		ExecutorService threadpool = new ThreadPoolExecutor(
 				8,
-				8,
+				64,
 				0,
 				TimeUnit.MILLISECONDS,
 				new ArrayBlockingQueue<Runnable>(64),
 				new ThreadPoolExecutor.CallerRunsPolicy()
 				);
-		int numClients = 1;
+		int numClients = 5000;
 		for (int i = 0; i < numClients; i++) {
 			try {
 				threadpool.submit(new Client(port));

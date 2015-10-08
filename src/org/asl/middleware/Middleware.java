@@ -34,9 +34,11 @@ public class Middleware extends AbstractMiddleware {
 					@Override
 					public void completed(Integer readBytes, Object attachment) {
 						ByteBufferWrapper fullInbufWrap = SerializingUtilities.forceFurtherReadIfNeeded(inbuf, readBytes, sc);
+						
 						timer.click(MiddlewareTimings.READ_REQUEST, requestId);
 						Request req = SerializingUtilities.unpackRequest(fullInbufWrap.getBuf(), fullInbufWrap.getBytes());
 						timer.click(MiddlewareTimings.PROCESSED_READ, requestId);
+						
 						req.processOnMiddleware(timer, requestId);
 						
 						ByteBufferWrapper outbufWrap = SerializingUtilities.packRequest(req);
