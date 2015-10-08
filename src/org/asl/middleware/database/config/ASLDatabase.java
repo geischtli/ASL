@@ -1,5 +1,7 @@
 package org.asl.middleware.database.config;
 
+import java.io.PrintWriter;
+import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Properties;
 import java.util.concurrent.Future;
@@ -24,6 +26,7 @@ public class ASLDatabase {
 				ASLDatabase.props,
 				1
 			);
+		//DriverManager.setLogWriter(new PrintWriter(System.out));
 	}
 	
 	public static ASLDatabase getDatabase(int maxConnectionsToDB) throws SQLException {

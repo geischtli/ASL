@@ -9,6 +9,7 @@ import org.asl.common.propertyparser.PropertyKey;
 import org.asl.common.propertyparser.PropertyParser;
 import org.asl.common.request.Request.RequestType;
 import org.asl.common.request.builder.RequestBuilder;
+import org.asl.common.timer.middleware.MiddlewareTimer;
 import org.asl.middleware.database.config.ASLDatabase;
 
 public abstract class AbstractMiddleware {
@@ -16,7 +17,8 @@ public abstract class AbstractMiddleware {
 	protected PropertyParser propParser;
 	protected final ASLDatabase db;
 	protected static int INITIAL_BUFSIZE;
-	protected int requestCounter;
+	protected int requestId;
+	protected MiddlewareTimer timer;
 	
 	public AbstractMiddleware(int port) throws IOException, SQLException {
 		this.serverChannel = AsynchronousServerSocketChannel.open();
@@ -26,9 +28,10 @@ public abstract class AbstractMiddleware {
 				Integer.valueOf(propParser.getProperty(PropertyKey.MAX_CONNECTIONS_TO_DB))
 			);
 		AbstractMiddleware.INITIAL_BUFSIZE = Integer.valueOf(propParser.getProperty(PropertyKey.INITIAL_BUFSIZE));
-		this.requestCounter = 0;
+		this.requestId = -1;
+		this.timer = MiddlewareTimer.create();
 		
-		RequestBuilder.getRequest(RequestType.REGISTER_MIDDLEWARE, null).processOnMiddleware();
+		RequestBuilder.getRequest(RequestType.REGISTER_MIDDLEWARE, null).processOnMiddleware(null, 0);
 	}
 	
 	public abstract void accept();

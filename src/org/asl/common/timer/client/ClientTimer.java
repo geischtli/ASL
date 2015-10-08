@@ -31,12 +31,15 @@ public class ClientTimer {
 	public int getNumRequests() {
 		return numRequests;
 	}
+	
 	public void setNumRequests(int numRequests) {
 		this.numRequests = numRequests;
 	}
+	
 	public List<ClientTiming> getTimings() {
 		return timings;
 	}
+	
 	public void setTimings(List<ClientTiming> timings) {
 		this.timings = timings;
 	}
@@ -72,5 +75,6 @@ public class ClientTimer {
 			System.out.println(t.getTotalTimeNanos() + " ns");
 		}
 	}
+
 	
 }

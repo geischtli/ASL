@@ -4,6 +4,7 @@ import org.asl.client.ClientInfo;
 import org.asl.common.request.Request;
 import org.asl.common.request.types.exceptions.ASLException;
 import org.asl.common.request.types.exceptions.DeleteQueueException;
+import org.asl.common.timer.middleware.MiddlewareTimer;
 import org.asl.middleware.database.dao.impl.QueueDAO;
 
 public class DeleteQueueRequest extends Request {
@@ -24,9 +25,9 @@ public class DeleteQueueRequest extends Request {
 	}
 	
 	@Override
-	public void processOnMiddleware() {
+	public void processOnMiddleware(MiddlewareTimer timer, int reqCount) {
 		try {
-			QueueDAO.getQueueDAO().deleteQueue(queue_id);
+			QueueDAO.getQueueDAO().deleteQueue(queue_id, timer, reqCount);
 		} catch (DeleteQueueException e) {
 			setException(e);
 		}

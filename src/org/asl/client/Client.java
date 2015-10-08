@@ -148,7 +148,7 @@ public class Client implements Runnable {
 				
 			});
 		}
-		timer.printTotalTimePerRequest();
+		//timer.printTotalTimePerRequest();
 		System.out.println("Client " + ci.getClientId() + " is done");
 	}
 	

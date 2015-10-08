@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 import org.asl.client.ClientInfo;
 import org.asl.common.request.types.exceptions.ASLException;
+import org.asl.common.timer.middleware.MiddlewareTimer;
 
 /**
  * The abstract Message class gives a default behavior for all
@@ -37,6 +38,6 @@ public abstract class Request implements Serializable {
 		REGISTER_MIDDLEWARE
 	}
 	
-	public abstract void processOnMiddleware();
+	public abstract void processOnMiddleware(MiddlewareTimer timer, int reqCount);
 	public abstract void processOnClient(ClientInfo ci) throws ASLException;
 }

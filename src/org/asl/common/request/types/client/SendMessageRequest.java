@@ -4,6 +4,7 @@ import org.asl.client.ClientInfo;
 import org.asl.common.request.Request;
 import org.asl.common.request.types.exceptions.ASLException;
 import org.asl.common.request.types.exceptions.SendMessageException;
+import org.asl.common.timer.middleware.MiddlewareTimer;
 import org.asl.middleware.database.dao.impl.MessageDAO;
 
 public class SendMessageRequest extends Request {
@@ -39,9 +40,9 @@ public class SendMessageRequest extends Request {
 	}
 	
 	@Override
-	public void processOnMiddleware() {
+	public void processOnMiddleware(MiddlewareTimer timer, int reqCount) {
 		try {
-			MessageDAO.getMessageDAO().sendMessage(sender, receiver, queue, content);
+			MessageDAO.getMessageDAO().sendMessage(sender, receiver, queue, content, timer, reqCount);
 		} catch (SendMessageException e) {
 			setException(e);
 		}

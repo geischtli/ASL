@@ -7,6 +7,7 @@ import org.asl.client.ClientInfo;
 import org.asl.common.request.Request;
 import org.asl.common.request.types.exceptions.ASLException;
 import org.asl.common.request.types.exceptions.GetRegisteredClientsException;
+import org.asl.common.timer.middleware.MiddlewareTimer;
 import org.asl.middleware.database.dao.impl.ClientDAO;
 
 public class GetRegisteredClientsRequest extends Request {
@@ -28,9 +29,9 @@ public class GetRegisteredClientsRequest extends Request {
 	}
 	
 	@Override
-	public void processOnMiddleware() {
+	public void processOnMiddleware(MiddlewareTimer timer, int reqCount) {
 		try {
-			setClients(ClientDAO.getClientDAO().getRegisteredClients());
+			setClients(ClientDAO.getClientDAO().getRegisteredClients(timer, reqCount));
 		} catch (GetRegisteredClientsException e) {
 			setException(e);
 		}
