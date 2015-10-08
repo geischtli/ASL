@@ -16,6 +16,7 @@ public abstract class AbstractMiddleware {
 	protected PropertyParser propParser;
 	protected final ASLDatabase db;
 	protected static int INITIAL_BUFSIZE;
+	protected int requestCounter;
 	
 	public AbstractMiddleware(int port) throws IOException, SQLException {
 		this.serverChannel = AsynchronousServerSocketChannel.open();
@@ -25,6 +26,8 @@ public abstract class AbstractMiddleware {
 				Integer.valueOf(propParser.getProperty(PropertyKey.MAX_CONNECTIONS_TO_DB))
 			);
 		AbstractMiddleware.INITIAL_BUFSIZE = Integer.valueOf(propParser.getProperty(PropertyKey.INITIAL_BUFSIZE));
+		this.requestCounter = 0;
+		
 		RequestBuilder.getRequest(RequestType.REGISTER_MIDDLEWARE, null).processOnMiddleware();
 	}
 	

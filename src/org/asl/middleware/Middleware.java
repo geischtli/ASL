@@ -21,11 +21,13 @@ public class Middleware extends AbstractMiddleware {
 	
 	@Override
 	public void accept() {
-		serverChannel.accept(null, new CompletionHandler<AsynchronousSocketChannel, Object>() {
+		serverChannel.accept(++requestCounter, new CompletionHandler<AsynchronousSocketChannel, Integer>() {
 
 			@Override
-			public void completed(AsynchronousSocketChannel sc, Object att) {
-				serverChannel.accept(null, this);
+			public void completed(AsynchronousSocketChannel sc, Integer reqCounter) {
+				//System.out.println("RC = " + reqCounter);
+				//serverChannel.accept(null, this);
+				accept();
 				ByteBuffer inbuf = ByteBuffer.allocate(AbstractMiddleware.INITIAL_BUFSIZE);
 				sc.read(inbuf, null, new CompletionHandler<Integer, Object>() {
 					
@@ -70,7 +72,7 @@ public class Middleware extends AbstractMiddleware {
 			}
 			
 			@Override
-			public void failed(Throwable se, Object attachment) {
+			public void failed(Throwable se, Integer reqCounter) {
 				SocketHelper.closeSocketAfterException(
 						SocketLocation.MIDDLEWARE,
 						SocketOperation.ACCEPT,
