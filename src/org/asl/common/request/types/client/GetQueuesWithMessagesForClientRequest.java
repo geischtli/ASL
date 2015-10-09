@@ -7,7 +7,7 @@ import org.asl.client.ClientInfo;
 import org.asl.common.request.Request;
 import org.asl.common.request.types.exceptions.ASLException;
 import org.asl.common.request.types.exceptions.GetQueuesWithMessagesForClientException;
-import org.asl.common.timer.middleware.MiddlewareTimer;
+import org.asl.common.timing.middleware.MiddlewareTimer;
 import org.asl.middleware.database.dao.impl.QueueDAO;
 
 public class GetQueuesWithMessagesForClientRequest extends Request {

@@ -4,7 +4,7 @@ import org.asl.client.ClientInfo;
 import org.asl.common.request.Request;
 import org.asl.common.request.types.exceptions.ASLException;
 import org.asl.common.request.types.exceptions.ReadMessageFromSenderException;
-import org.asl.common.timer.middleware.MiddlewareTimer;
+import org.asl.common.timing.middleware.MiddlewareTimer;
 import org.asl.middleware.database.dao.impl.ClientDAO;
 import org.asl.middleware.database.model.Message;
 

@@ -1,7 +1,7 @@
 package org.asl.middleware.database.dao;
 
 import org.asl.common.request.types.exceptions.SendMessageException;
-import org.asl.common.timer.middleware.MiddlewareTimer;
+import org.asl.common.timing.middleware.MiddlewareTimer;
 
 public interface IMessageDAO {
 	

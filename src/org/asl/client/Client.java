@@ -22,8 +22,8 @@ import org.asl.common.request.types.exceptions.ASLException;
 import org.asl.common.socket.SocketHelper;
 import org.asl.common.socket.SocketLocation;
 import org.asl.common.socket.SocketOperation;
-import org.asl.common.timer.client.ClientTimer;
-import org.asl.common.timer.client.ClientTimings;
+import org.asl.common.timing.client.ClientTimer;
+import org.asl.common.timing.client.ClientTimings;
 
 public class Client implements Runnable {
 

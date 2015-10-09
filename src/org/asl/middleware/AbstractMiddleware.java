@@ -9,7 +9,7 @@ import org.asl.common.propertyparser.PropertyKey;
 import org.asl.common.propertyparser.PropertyParser;
 import org.asl.common.request.Request.RequestType;
 import org.asl.common.request.builder.RequestBuilder;
-import org.asl.common.timer.middleware.MiddlewareTimer;
+import org.asl.common.timing.middleware.MiddlewareTimer;
 import org.asl.middleware.database.config.ASLDatabase;
 
 public abstract class AbstractMiddleware {

@@ -1,4 +1,4 @@
-package org.asl.common.timer.middleware;
+package org.asl.common.timing.middleware;
 
 public enum MiddlewareTimings {
 	ACCEPTED_CLIENT,

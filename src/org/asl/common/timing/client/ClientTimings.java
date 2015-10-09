@@ -1,4 +1,4 @@
-package org.asl.common.timer.client;
+package org.asl.common.timing.client;
 
 public enum ClientTimings {
 	START_REQUEST,

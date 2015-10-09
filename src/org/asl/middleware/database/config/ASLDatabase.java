@@ -24,7 +24,6 @@ public class ASLDatabase {
 				ASLDatabase.props,
 				1
 			);
-		//DriverManager.setLogWriter(new PrintWriter(System.out));
 	}
 	
 	public static ASLDatabase getDatabase(int maxConnectionsToDB) throws SQLException {

@@ -7,7 +7,7 @@ import java.sql.SQLException;
 import java.util.concurrent.ExecutionException;
 
 import org.asl.common.request.types.exceptions.RegisterMiddlewareException;
-import org.asl.common.timer.middleware.MiddlewareTimer;
+import org.asl.common.timing.middleware.MiddlewareTimer;
 import org.asl.middleware.database.config.ASLDatabase;
 import org.asl.middleware.database.connectionpool.ConnectionWrapper;
 import org.asl.middleware.database.dao.IMiddlewareDAO;

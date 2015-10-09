@@ -7,7 +7,7 @@ import org.asl.common.request.types.exceptions.DeleteQueueException;
 import org.asl.common.request.types.exceptions.GetQueuesWithMessagesForClientException;
 import org.asl.common.request.types.exceptions.ReadAllMessagesOfQueueException;
 import org.asl.common.request.types.exceptions.RemoveTopMessageFromQueueException;
-import org.asl.common.timer.middleware.MiddlewareTimer;
+import org.asl.common.timing.middleware.MiddlewareTimer;
 import org.asl.middleware.database.model.Message;
 
 public interface IQueueDAO {

@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 import org.asl.client.ClientInfo;
 import org.asl.common.request.types.exceptions.ASLException;
-import org.asl.common.timer.middleware.MiddlewareTimer;
+import org.asl.common.timing.middleware.MiddlewareTimer;
 
 /**
  * The abstract Message class gives a default behavior for all

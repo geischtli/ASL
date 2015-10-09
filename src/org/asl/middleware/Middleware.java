@@ -12,7 +12,7 @@ import org.asl.common.request.serialize.SerializingUtilities;
 import org.asl.common.socket.SocketHelper;
 import org.asl.common.socket.SocketLocation;
 import org.asl.common.socket.SocketOperation;
-import org.asl.common.timer.middleware.MiddlewareTimings;
+import org.asl.common.timing.middleware.MiddlewareTimings;
 
 public class Middleware extends AbstractMiddleware {
 	
