@@ -108,7 +108,6 @@ public class Client implements Runnable {
 										System.out.println("Reading message failed with type: " + ansReq.getException().getClass());
 										System.out.println("And reason: " + ansReq.getException().getMessage());
 									}
-									//timer.click(ClientTimings.PROCESSED_ANSWER);
 									SocketHelper.closeSocket(sc);
 									lock.release();
 								}

@@ -68,7 +68,6 @@ public class Middleware extends AbstractMiddleware {
 							public void completed(Integer writtenBytes, Integer expectedWriteBytes) {
 								SerializingUtilities.forceFurtherWriteIfNeeded(outbufWrap.getBuf(), writtenBytes, expectedWriteBytes, sc);
 //								timer.click(MiddlewareTimings.WROTE_ANSWER, requestId);
-								//timer.printSingleRequestTimings(requestId);
 								SocketHelper.closeSocket(sc);
 							}
 

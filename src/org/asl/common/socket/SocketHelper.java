@@ -20,6 +20,8 @@ public class SocketHelper {
 	
 	public static void closeSocket(AsynchronousSocketChannel sc) {
 		try {
+			sc.shutdownOutput();
+			sc.shutdownInput();
 			sc.close();
 		} catch (IOException e) {
 			e.printStackTrace();

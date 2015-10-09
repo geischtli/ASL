@@ -2,6 +2,7 @@ package org.asl.middleware;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
+import java.net.StandardSocketOptions;
 import java.nio.channels.AsynchronousServerSocketChannel;
 import java.sql.SQLException;
 
@@ -25,6 +26,7 @@ public abstract class AbstractMiddleware {
 	public AbstractMiddleware(int port) throws IOException, SQLException {
 		this.serverChannel = AsynchronousServerSocketChannel.open();
 		this.serverChannel.bind(new InetSocketAddress(port));
+		this.serverChannel.setOption(StandardSocketOptions.SO_REUSEADDR, true);
 		this.propParser = PropertyParser.create("config_common.xml").parse();
 		this.db = ASLDatabase.getDatabase(
 				Integer.valueOf(propParser.getProperty(PropertyKey.MAX_CONNECTIONS_TO_DB))
