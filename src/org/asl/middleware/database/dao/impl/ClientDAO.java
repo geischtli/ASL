@@ -11,8 +11,7 @@ import java.util.concurrent.ExecutionException;
 import org.asl.common.request.types.exceptions.GetRegisteredClientsException;
 import org.asl.common.request.types.exceptions.HandshakeException;
 import org.asl.common.request.types.exceptions.ReadMessageFromSenderException;
-import org.asl.common.timing.middleware.MiddlewareTimer;
-import org.asl.common.timing.middleware.MiddlewareTimings;
+import org.asl.common.timing.ASLTimer;
 import org.asl.middleware.MiddlewareInfo;
 import org.asl.middleware.database.config.ASLDatabase;
 import org.asl.middleware.database.connectionpool.ConnectionWrapper;
@@ -27,14 +26,14 @@ public class ClientDAO implements IClientDAO {
 	}
 	
 	@Override
-	public int registerClient(MiddlewareTimer timer, int requestId) throws HandshakeException {
+	public int registerClient(ASLTimer timer, int requestId) throws HandshakeException {
 		try (ConnectionWrapper conn = ASLDatabase.getNewConnection().get()) {
 			PreparedStatement registerClient = conn.get().prepareStatement(ClientTable.REGISTER_CLIENT_STRING);
 			registerClient.setInt(1, MiddlewareInfo.getMiddlewareId());
-			timer.click(MiddlewareTimings.GOT_CONNECTION, requestId);
+//			timer.click(ASLTimer.GOT_CONNECTION, requestId);
 			ResultSet rs = registerClient.executeQuery();
 			conn.get().commit();
-			timer.click(MiddlewareTimings.EXECUTED_QUERY, requestId);
+//			timer.click(ASLTimer.EXECUTED_QUERY, requestId);
 			rs.next();
 			return rs.getInt(1);
 		} catch (SQLException | IOException | InterruptedException | ExecutionException e) {
@@ -43,15 +42,15 @@ public class ClientDAO implements IClientDAO {
 	}
 
 	@Override
-	public Message readMessageFromSender(int sender, int receiver, MiddlewareTimer timer, int requestId) throws ReadMessageFromSenderException {
+	public Message readMessageFromSender(int sender, int receiver, ASLTimer timer, int requestId) throws ReadMessageFromSenderException {
 		try (ConnectionWrapper conn = ASLDatabase.getNewConnection().get()) {
 			PreparedStatement readMessageFromSender = conn.get().prepareStatement(ClientTable.READ_MESSAGE_FROM_SENDER);
 			readMessageFromSender.setInt(1, sender);
 			readMessageFromSender.setInt(2, receiver);
-			timer.click(MiddlewareTimings.GOT_CONNECTION, requestId);
+//			timer.click(MiddlewareTimings.GOT_CONNECTION, requestId);
 			ResultSet rs = readMessageFromSender.executeQuery();
 			conn.get().commit();
-			timer.click(MiddlewareTimings.EXECUTED_QUERY, requestId);
+//			timer.click(MiddlewareTimings.EXECUTED_QUERY, requestId);
 			// returns either 0 or 1 message
 			if (rs.next()) {
 				return new Message(
@@ -70,13 +69,13 @@ public class ClientDAO implements IClientDAO {
 	}
 	
 	@Override
-	public List<Integer> getRegisteredClients(MiddlewareTimer timer, int requestId) throws GetRegisteredClientsException {
+	public List<Integer> getRegisteredClients(ASLTimer timer, int requestId) throws GetRegisteredClientsException {
 		try (ConnectionWrapper conn = ASLDatabase.getNewConnection().get()) {
 			PreparedStatement getRegisteredClients = conn.get().prepareStatement(ClientTable.GET_REGISTERED_CLIENTS_STRING);
-			timer.click(MiddlewareTimings.GOT_CONNECTION, requestId);
+//			timer.click(MiddlewareTimings.GOT_CONNECTION, requestId);
 			ResultSet rs = getRegisteredClients.executeQuery();
 			conn.get().commit();
-			timer.click(MiddlewareTimings.EXECUTED_QUERY, requestId);
+//			timer.click(MiddlewareTimings.EXECUTED_QUERY, requestId);
 			List<Integer> clients = new ArrayList<Integer>();
 			while (rs.next()) {
 				clients.add(rs.getInt(1));

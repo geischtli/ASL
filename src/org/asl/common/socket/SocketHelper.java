@@ -1,13 +1,16 @@
 package org.asl.common.socket;
 
 import java.io.IOException;
+import java.net.StandardSocketOptions;
 import java.nio.channels.AsynchronousSocketChannel;
 
 public class SocketHelper {
 
 	public static AsynchronousSocketChannel openSocket() {
 		try {
-			return AsynchronousSocketChannel.open();
+			AsynchronousSocketChannel sc = AsynchronousSocketChannel.open();
+			sc.setOption(StandardSocketOptions.SO_REUSEADDR, true);
+			return sc;
 		} catch (Exception e) {
 			System.out.println("Fail occured in open socket");
 			e.printStackTrace();

@@ -4,7 +4,7 @@ import org.asl.client.ClientInfo;
 import org.asl.common.request.Request;
 import org.asl.common.request.types.exceptions.ASLException;
 import org.asl.common.request.types.exceptions.CreateQueueException;
-import org.asl.common.timing.middleware.MiddlewareTimer;
+import org.asl.common.timing.ASLTimer;
 import org.asl.middleware.database.dao.impl.QueueDAO;
 
 public class CreateQueueRequest extends Request {
@@ -35,7 +35,7 @@ public class CreateQueueRequest extends Request {
 	}
 	
 	@Override
-	public void processOnMiddleware(MiddlewareTimer timer, int reqCount) {
+	public void processOnMiddleware(ASLTimer timer, int reqCount) {
 		try {
 			setQueueId(QueueDAO.getQueueDAO().createQueue(creator_id, timer, reqCount));
 		} catch (CreateQueueException e) {

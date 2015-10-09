@@ -4,7 +4,7 @@ import org.asl.client.ClientInfo;
 import org.asl.common.request.Request;
 import org.asl.common.request.types.exceptions.ASLException;
 import org.asl.common.request.types.exceptions.RegisterMiddlewareException;
-import org.asl.common.timing.middleware.MiddlewareTimer;
+import org.asl.common.timing.ASLTimer;
 import org.asl.middleware.MiddlewareInfo;
 import org.asl.middleware.database.dao.impl.MiddlewareDAO;
 
@@ -13,7 +13,7 @@ public class RegisterMiddlewareRequest extends Request {
 	private static final long serialVersionUID = 111L;
 	
 	@Override
-	public void processOnMiddleware(MiddlewareTimer timer, int requestId) {
+	public void processOnMiddleware(ASLTimer timer, int requestId) {
 		try {
 			// ignore timing on this one, because it is anyway only called once and would need
 			// extra handling in code, so we take "bad" way instead of correct but costly one.

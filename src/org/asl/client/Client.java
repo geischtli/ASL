@@ -9,7 +9,6 @@ import java.nio.channels.CompletionHandler;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Semaphore;
-import java.util.concurrent.TimeUnit;
 
 import org.asl.common.propertyparser.PropertyKey;
 import org.asl.common.propertyparser.PropertyParser;
@@ -22,8 +21,7 @@ import org.asl.common.request.types.exceptions.ASLException;
 import org.asl.common.socket.SocketHelper;
 import org.asl.common.socket.SocketLocation;
 import org.asl.common.socket.SocketOperation;
-import org.asl.common.timing.client.ClientTimer;
-import org.asl.common.timing.client.ClientTimings;
+import org.asl.common.timing.ASLTimer;
 
 public class Client implements Runnable {
 
@@ -34,7 +32,7 @@ public class Client implements Runnable {
 	private PropertyParser propParser;
 	private static int INITIAL_BUFSIZE;
 	private ClientInfo ci;
-	private ClientTimer timer;
+	private ASLTimer timer; 
 	
 	public Client(int port) throws IOException {
 		this.port = port;
@@ -43,7 +41,7 @@ public class Client implements Runnable {
 		this.propParser = PropertyParser.create("config_common.xml").parse();
 		Client.INITIAL_BUFSIZE = Integer.valueOf(propParser.getProperty(PropertyKey.INITIAL_BUFSIZE));
 		this.ci = ClientInfo.create();
-		this.timer = ClientTimer.create();
+		this.timer = ASLTimer.create();
 		gatherRequests();
 	}
 	
@@ -52,7 +50,7 @@ public class Client implements Runnable {
 				requestList,
 				new RequestType[]{
 						RequestType.HANDSHAKE,
-						RequestType.CREATE_QUEUE,
+						RequestType.CREATE_QUEUE
 						},
 				1
 				);
@@ -68,16 +66,16 @@ public class Client implements Runnable {
 
 	@Override
 	public void run() {
-		timer.setup(requestList.size());
 		for (RequestType reqType : requestList) {
 			try {
 				// get lock, such that not 2 connects to the same socket happen
-				lock.tryAcquire(1, TimeUnit.SECONDS);
+				//lock.tryAcquire(1, TimeUnit.SECONDS);
+				lock.acquire();
 			} catch (InterruptedException e1) {
 				System.out.println("Failed in semaphore tryAcquire with 1 second");
 				e1.printStackTrace();
 			}
-			timer.click(ClientTimings.START_REQUEST);
+			//timer.click(ClientTimings.START_REQUEST);
 			Request req = RequestBuilder.getRequest(reqType, ci);
 			sc = SocketHelper.openSocket();
 			sc.connect(new InetSocketAddress(InetAddress.getLoopbackAddress(), port), null, new CompletionHandler<Void, Object>() {
@@ -90,14 +88,14 @@ public class Client implements Runnable {
 						@Override
 						public void completed(Integer writtenBytes, Integer expectedWriteBytes) {
 							SerializingUtilities.forceFurtherWriteIfNeeded(outbufWrap.getBuf(), writtenBytes, expectedWriteBytes, sc);
-							timer.click(ClientTimings.SENT_REQUEST);
+							//timer.click(ClientTimings.SENT_REQUEST);
 	                    	ByteBuffer inbuf = ByteBuffer.allocate(Client.INITIAL_BUFSIZE);
 	                    	sc.read(inbuf, null, new CompletionHandler<Integer, Object>() {
 	
 								@Override
 								public void completed(Integer readBytes, Object attachment) {
 									ByteBufferWrapper fullInbufWrap = SerializingUtilities.forceFurtherReadIfNeeded(inbuf, readBytes, sc);
-									timer.click(ClientTimings.READ_ANSWER);
+									//timer.click(ClientTimings.READ_ANSWER);
 									Request ansReq = SerializingUtilities.unpackRequest(fullInbufWrap.getBuf(), fullInbufWrap.getBytes());
 									try {
 										ansReq.processOnClient(ci);
@@ -105,7 +103,7 @@ public class Client implements Runnable {
 										System.out.println("Reading message failed with type: " + ansReq.getException().getClass());
 										System.out.println("And reason: " + ansReq.getException().getMessage());
 									}
-									timer.click(ClientTimings.PROCESSED_ANSWER);
+									//timer.click(ClientTimings.PROCESSED_ANSWER);
 									SocketHelper.closeSocket(sc);
 									lock.release();
 								}

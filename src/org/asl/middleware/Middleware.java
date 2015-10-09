@@ -1,6 +1,7 @@
 package org.asl.middleware;
 
 import java.io.IOException;
+import java.net.StandardSocketOptions;
 import java.nio.ByteBuffer;
 import java.nio.channels.AsynchronousSocketChannel;
 import java.nio.channels.CompletionHandler;
@@ -12,7 +13,6 @@ import org.asl.common.request.serialize.SerializingUtilities;
 import org.asl.common.socket.SocketHelper;
 import org.asl.common.socket.SocketLocation;
 import org.asl.common.socket.SocketOperation;
-import org.asl.common.timing.middleware.MiddlewareTimings;
 
 public class Middleware extends AbstractMiddleware {
 	
@@ -39,8 +39,14 @@ public class Middleware extends AbstractMiddleware {
 
 			@Override
 			public void completed(AsynchronousSocketChannel sc, Integer requestId) {
-				timer.click(MiddlewareTimings.ACCEPTED_CLIENT, requestId);
-				accept();
+				try {
+					sc.setOption(StandardSocketOptions.SO_REUSEADDR, true);
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+//				timer.click(MiddlewareTimings.ACCEPTED_CLIENT, requestId);
+				//accept();
+				serverChannel.accept(requestId, this);
 				ByteBuffer inbuf = ByteBuffer.allocate(AbstractMiddleware.INITIAL_BUFSIZE);
 				sc.read(inbuf, null, new CompletionHandler<Integer, Object>() {
 					
@@ -48,20 +54,20 @@ public class Middleware extends AbstractMiddleware {
 					public void completed(Integer readBytes, Object attachment) {
 						ByteBufferWrapper fullInbufWrap = SerializingUtilities.forceFurtherReadIfNeeded(inbuf, readBytes, sc);
 						
-						timer.click(MiddlewareTimings.READ_REQUEST, requestId);
+//						timer.click(MiddlewareTimings.READ_REQUEST, requestId);
 						Request req = SerializingUtilities.unpackRequest(fullInbufWrap.getBuf(), fullInbufWrap.getBytes());
-						timer.click(MiddlewareTimings.PROCESSED_READ, requestId);
+//						timer.click(MiddlewareTimings.PROCESSED_READ, requestId);
 						
 						req.processOnMiddleware(timer, requestId);
 						
 						ByteBufferWrapper outbufWrap = SerializingUtilities.packRequest(req);
-						timer.click(MiddlewareTimings.PACKED_REQUEST, requestId);
+//						timer.click(MiddlewareTimings.PACKED_REQUEST, requestId);
 						sc.write(outbufWrap.getBuf(), outbufWrap.getBytes(), new CompletionHandler<Integer, Integer>() {
 
 							@Override
 							public void completed(Integer writtenBytes, Integer expectedWriteBytes) {
 								SerializingUtilities.forceFurtherWriteIfNeeded(outbufWrap.getBuf(), writtenBytes, expectedWriteBytes, sc);
-								timer.click(MiddlewareTimings.WROTE_ANSWER, requestId);
+//								timer.click(MiddlewareTimings.WROTE_ANSWER, requestId);
 								//timer.printSingleRequestTimings(requestId);
 								SocketHelper.closeSocket(sc);
 							}

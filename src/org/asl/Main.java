@@ -15,18 +15,19 @@ public class Main {
 	private static final int port = 9090;
 	
 	public static void main(String[] args) throws IOException, SQLException {
+		String ret = System.setProperty("Log4jContextSelector ", "org.apache.logging.log4j.core.async.AsyncLoggerContextSelector");
 		AbstractMiddleware mw = new Middleware(port);
-		System.out.println("Started server");
 		mw.accept();
+		System.out.println("Started server");
 		ExecutorService threadpool = new ThreadPoolExecutor(
 				8,
-				64,
+				8,
 				0,
 				TimeUnit.MILLISECONDS,
 				new ArrayBlockingQueue<Runnable>(64),
 				new ThreadPoolExecutor.CallerRunsPolicy()
 				);
-		int numClients = 10;
+		int numClients = 1000;
 		for (int i = 0; i < numClients; i++) {
 			try {
 				threadpool.submit(new Client(port));
