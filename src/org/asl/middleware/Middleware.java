@@ -18,6 +18,19 @@ public class Middleware extends AbstractMiddleware {
 	
 	public Middleware(int port) throws IOException, SQLException {
 		super(port);
+		int id = 313;
+		String s = "wololo";
+		long t = clock.takeTime(st -> pid -> heavyMethod(st, pid), s, id);
+		System.out.println("This took " + t + " ns");
+	}
+	
+	public void heavyMethod(String s, int id) {
+		System.out.println("im in method and print string = " + s + " and id = " + id);
+		try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	@Override

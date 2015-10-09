@@ -26,7 +26,7 @@ public class Main {
 				new ArrayBlockingQueue<Runnable>(64),
 				new ThreadPoolExecutor.CallerRunsPolicy()
 				);
-		int numClients = 5000;
+		int numClients = 10;
 		for (int i = 0; i < numClients; i++) {
 			try {
 				threadpool.submit(new Client(port));

@@ -9,6 +9,7 @@ import org.asl.common.propertyparser.PropertyKey;
 import org.asl.common.propertyparser.PropertyParser;
 import org.asl.common.request.Request.RequestType;
 import org.asl.common.request.builder.RequestBuilder;
+import org.asl.common.timing.Timer;
 import org.asl.common.timing.middleware.MiddlewareTimer;
 import org.asl.middleware.database.config.ASLDatabase;
 
@@ -19,6 +20,7 @@ public abstract class AbstractMiddleware {
 	protected static int INITIAL_BUFSIZE;
 	protected int requestId;
 	protected MiddlewareTimer timer;
+	protected Timer clock;
 	
 	public AbstractMiddleware(int port) throws IOException, SQLException {
 		this.serverChannel = AsynchronousServerSocketChannel.open();
@@ -30,6 +32,7 @@ public abstract class AbstractMiddleware {
 		AbstractMiddleware.INITIAL_BUFSIZE = Integer.valueOf(propParser.getProperty(PropertyKey.INITIAL_BUFSIZE));
 		this.requestId = -1;
 		this.timer = MiddlewareTimer.create();
+		this.clock = new Timer();
 		
 		RequestBuilder.getRequest(RequestType.REGISTER_MIDDLEWARE, null).processOnMiddleware(null, 0);
 	}
