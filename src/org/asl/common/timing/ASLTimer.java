@@ -5,19 +5,18 @@ import org.apache.logging.log4j.LogManager;
 
 public class ASLTimer {
 
-	private final Logger Logger = LogManager.getLogger(ASLTimer.class.getName());
+	private final Logger logger;
 	
 	public ASLTimer() {
-//		Configurator.initialize(null, "log_properties_client.xml");
-		Logger.info("testing log4j2 with disruptor");
+		logger = LogManager.getLogger(ASLTimer.class.getName());
 	}
 	
 	public static ASLTimer create() {
 		return new ASLTimer();
 	}
 	
-	public void click(Timing timing) {
-		//logger.info("clicked");
+	public void click(Timing timing, int clientId, int requestId) {
+		logger.info("C:" + clientId + ",R:" + requestId + ",L:" + timing + ",T:" + System.nanoTime());
 	}
 	
 }

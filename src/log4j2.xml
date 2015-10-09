@@ -7,7 +7,7 @@
 <configuration status="INFO">
   <appenders>
     <!-- Async Loggers will auto-flush in batches, so switch off immediateFlush. -->
-    <RandomAccessFile name="RandomAccessFile" fileName="logs/test.log" immediateFlush="false" append="false"> 
+    <RandomAccessFile name="RandomAccessFile" fileName="logs/timings.log" immediateFlush="false" append="false"> 
       <PatternLayout>
         <pattern>%d %p %c{1.} [%t] %m %ex%n</pattern>
       </PatternLayout>

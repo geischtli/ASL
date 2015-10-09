@@ -22,6 +22,7 @@ import org.asl.common.socket.SocketHelper;
 import org.asl.common.socket.SocketLocation;
 import org.asl.common.socket.SocketOperation;
 import org.asl.common.timing.ASLTimer;
+import org.asl.common.timing.Timing;
 
 public class Client implements Runnable {
 
@@ -42,6 +43,7 @@ public class Client implements Runnable {
 		Client.INITIAL_BUFSIZE = Integer.valueOf(propParser.getProperty(PropertyKey.INITIAL_BUFSIZE));
 		this.ci = ClientInfo.create();
 		this.timer = ASLTimer.create();
+		//this.sc = SocketHelper.openSocket();
 		gatherRequests();
 	}
 	
@@ -75,8 +77,11 @@ public class Client implements Runnable {
 				System.out.println("Failed in semaphore tryAcquire with 1 second");
 				e1.printStackTrace();
 			}
-			//timer.click(ClientTimings.START_REQUEST);
+			//timer.click(Timing.START_REQUEST);
 			Request req = RequestBuilder.getRequest(reqType, ci);
+			//if (sc.isOpen()) {
+				//System.err.println("im open");
+			//}
 			sc = SocketHelper.openSocket();
 			sc.connect(new InetSocketAddress(InetAddress.getLoopbackAddress(), port), null, new CompletionHandler<Void, Object>() {
 	
@@ -148,6 +153,7 @@ public class Client implements Runnable {
 		}
 		//timer.printTotalTimePerRequest();
 		System.out.println("Client " + ci.getClientId() + " is done");
+		//SocketHelper.closeSocket(sc);
 	}
 	
 }
