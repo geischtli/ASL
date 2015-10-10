@@ -34,12 +34,13 @@ public class AcceptCompletionHandler<V, A> implements CompletionHandler<Asynchro
 	
 	@Override
 	public void completed(AsynchronousSocketChannel sc, Integer attachment) {
-		watchDog.addConnection(new ConnectionTimeWrapper(sc, System.nanoTime()));
+		ConnectionTimeWrapper c = new ConnectionTimeWrapper(sc, System.currentTimeMillis());
+		watchDog.addConnection(c);
 		//timer.click(MiddlewareTimings.ACCEPTED_CLIENT, requestId);
 		//accept();
 		serverChannel.accept(++requestId, this);
 		ByteBuffer inbuf = ByteBuffer.allocate(AbstractMiddleware.INITIAL_BUFSIZE);
-		sc.read(inbuf, null, ReadCompletionHandler.create(sc, inbuf, timer, requestId));
+		sc.read(inbuf, c, ReadCompletionHandler.create(sc, inbuf, timer, requestId));
 	}
 
 	@Override

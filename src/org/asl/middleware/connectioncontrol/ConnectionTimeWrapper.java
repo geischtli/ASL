@@ -17,7 +17,7 @@ public class ConnectionTimeWrapper {
 	}
 
 	public void reset() {
-		lastActivity = System.nanoTime();
+		lastActivity = System.currentTimeMillis();
 	}
 	
 	public long getLastActivity() {

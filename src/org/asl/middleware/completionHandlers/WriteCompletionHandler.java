@@ -9,37 +9,36 @@ import org.asl.common.request.serialize.SerializingUtilities;
 import org.asl.common.socket.SocketHelper;
 import org.asl.common.socket.SocketLocation;
 import org.asl.common.socket.SocketOperation;
+import org.asl.middleware.connectioncontrol.ConnectionTimeWrapper;
 
-public class WriteCompletionHandler<V, A> implements CompletionHandler<Integer, ReadCompletionHandler<Integer, Object>>{
+public class WriteCompletionHandler implements CompletionHandler<Integer, ConnectionTimeWrapper>{
 
 	private AsynchronousSocketChannel sc;
 	private ByteBufferWrapper outbufWrap;
 	private ByteBuffer inbuf;
-	private ReadCompletionHandler<Integer, Object> readHandler;
 	
-	public WriteCompletionHandler(AsynchronousSocketChannel sc, ByteBufferWrapper outbufWrap,
-			ByteBuffer inbuf, ReadCompletionHandler<Integer, Object> readHandler) {
+	public WriteCompletionHandler(AsynchronousSocketChannel sc, ByteBufferWrapper outbufWrap, ByteBuffer inbuf) {
 		this.sc = sc;
 		this.outbufWrap = outbufWrap;
 		this.inbuf = inbuf;
-		this.readHandler = readHandler;
 	}
 	
-	public static WriteCompletionHandler<Integer, ReadCompletionHandler<Integer, Object>> create(
-			AsynchronousSocketChannel sc, ByteBufferWrapper outbufWrap, ByteBuffer inbuf, ReadCompletionHandler<Integer, Object> readHandler) {
-		return new WriteCompletionHandler<Integer, ReadCompletionHandler<Integer, Object>>(sc, outbufWrap, inbuf, readHandler);
+	public static WriteCompletionHandler create(
+			AsynchronousSocketChannel sc, ByteBufferWrapper outbufWrap, ByteBuffer inbuf) {
+		return new WriteCompletionHandler(sc, outbufWrap, inbuf);
 	}
 	
 	@Override
-	public void completed(Integer writtenBytes, ReadCompletionHandler<Integer, Object> attachment) {
+	public void completed(Integer writtenBytes, ConnectionTimeWrapper connTimeWrapper) {
 		SerializingUtilities.forceFurtherWriteIfNeeded(outbufWrap.getBuf(), writtenBytes, outbufWrap.getBytes(), sc);
 //		timer.click(MiddlewareTimings.WROTE_ANSWER, requestId);
 		inbuf.flip();
-		sc.read(inbuf, null, readHandler);
+		sc.read(inbuf, connTimeWrapper, ReadCompletionHandler.create(sc, inbuf, null, 313));
+		connTimeWrapper.reset();
 	}
 
 	@Override
-	public void failed(Throwable se, ReadCompletionHandler<Integer, Object> attachment) {
+	public void failed(Throwable se, ConnectionTimeWrapper connTimeWrapper) {
 		SocketHelper.closeSocketAfterException(
 				SocketLocation.MIDDLEWARE,
 				SocketOperation.WRITE,

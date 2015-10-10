@@ -11,8 +11,9 @@ import org.asl.common.socket.SocketHelper;
 import org.asl.common.socket.SocketLocation;
 import org.asl.common.socket.SocketOperation;
 import org.asl.common.timing.ASLTimer;
+import org.asl.middleware.connectioncontrol.ConnectionTimeWrapper;
 
-public class ReadCompletionHandler<V, A> implements CompletionHandler<Integer, Object> {
+public class ReadCompletionHandler implements CompletionHandler<Integer, ConnectionTimeWrapper> {
 
 	private AsynchronousSocketChannel sc;
 	private ByteBuffer inbuf;
@@ -26,12 +27,13 @@ public class ReadCompletionHandler<V, A> implements CompletionHandler<Integer, O
 		this.requestId = requestId;
 	}
 	
-	public static ReadCompletionHandler<Integer, Object> create(AsynchronousSocketChannel sc, ByteBuffer inbuf, ASLTimer timer, int requestId) {
-		return new ReadCompletionHandler<Integer, Object>(sc, inbuf, timer, requestId);
+	public static ReadCompletionHandler create(AsynchronousSocketChannel sc, ByteBuffer inbuf, ASLTimer timer, int requestId) {
+		return new ReadCompletionHandler(sc, inbuf, timer, requestId);
 	}
 	
 	@Override
-	public void completed(Integer readBytes, Object attachment) {
+	public void completed(Integer readBytes, ConnectionTimeWrapper connTimeWrapper) {
+		connTimeWrapper.reset();
 		ByteBufferWrapper fullInbufWrap = SerializingUtilities.forceFurtherReadIfNeeded(inbuf, (int)readBytes, sc);
 		
 //		timer.click(MiddlewareTimings.READ_REQUEST, requestId);
@@ -45,13 +47,13 @@ public class ReadCompletionHandler<V, A> implements CompletionHandler<Integer, O
 		
 		sc.write(
 				outbufWrap.getBuf(),
-				null,
-				WriteCompletionHandler.create(sc, outbufWrap, inbuf, (ReadCompletionHandler<Integer, Object>) this)
+				connTimeWrapper,
+				WriteCompletionHandler.create(sc, outbufWrap, inbuf)
 			);
 	}
 
 	@Override
-	public void failed(Throwable se, Object attachment) {
+	public void failed(Throwable se, ConnectionTimeWrapper connTimeWrapper) {
 		SocketHelper.closeSocketAfterException(
 				SocketLocation.MIDDLEWARE,
 				SocketOperation.READ,

@@ -2,18 +2,18 @@ package org.asl.middleware.connectioncontrol;
 
 import java.io.IOException;
 import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.TimerTask;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
 
 public class WatchDog extends TimerTask {
 
-	private List<ConnectionTimeWrapper> connections;
-	private long maxActivityDiffNano;
+	private BlockingQueue<ConnectionTimeWrapper> connections;
+	private long maxActivityDiffMillis;
 	
 	public WatchDog(long maxActivityDiffSec) {
-		this.connections = new LinkedList<ConnectionTimeWrapper>();
-		this.maxActivityDiffNano = maxActivityDiffSec*1000000000L;
+		this.connections = new LinkedBlockingQueue<ConnectionTimeWrapper>();
+		this.maxActivityDiffMillis = maxActivityDiffSec*1000L;
 	}
 	
 	public static WatchDog create(int maxActivityDiffSec) {
@@ -27,6 +27,7 @@ public class WatchDog extends TimerTask {
 	public void closeConnection(ConnectionTimeWrapper c) {
 		try {
 			c.getSocketChannel().close();
+			System.out.println("closed conn");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -34,10 +35,10 @@ public class WatchDog extends TimerTask {
 	
 	@Override
 	public void run() {
-		//System.out.println("Dog barks");
+		System.out.println("Dog barks");
 		for (Iterator<ConnectionTimeWrapper> it = connections.iterator(); it.hasNext();) {
 			ConnectionTimeWrapper c = it.next();
-			if ((System.nanoTime() - c.getLastActivity()) > maxActivityDiffNano) {
+			if ((System.currentTimeMillis() - c.getLastActivity()) > maxActivityDiffMillis) {
 				closeConnection(c);
 				it.remove();
 			}
