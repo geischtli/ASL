@@ -52,7 +52,7 @@ public class Client implements Runnable {
 				requestList,
 				new RequestType[]{
 						RequestType.HANDSHAKE,
-						RequestType.CREATE_QUEUE
+						//RequestType.CREATE_QUEUE
 						},
 				1
 				);
@@ -62,21 +62,21 @@ public class Client implements Runnable {
 						RequestType.GET_REGISTERED_CLIENTS,
 						RequestType.SEND_MESSAGE
 						},
-				100
+				0
 				);
 	}
 
 	@Override
 	public void run() {
 		for (RequestType reqType : requestList) {
-			try {
+			/*try {
 				// get lock, such that not 2 connects to the same socket happen
 				//lock.tryAcquire(1, TimeUnit.SECONDS);
 				lock.acquire();
 			} catch (InterruptedException e1) {
 				System.out.println("Failed in semaphore tryAcquire with 1 second");
 				e1.printStackTrace();
-			}
+			}*/
 			//timer.click(Timing.START_REQUEST);
 			Request req = RequestBuilder.getRequest(reqType, ci);
 			//if (sc.isOpen()) {
@@ -108,7 +108,8 @@ public class Client implements Runnable {
 										System.out.println("Reading message failed with type: " + ansReq.getException().getClass());
 										System.out.println("And reason: " + ansReq.getException().getMessage());
 									}
-									SocketHelper.closeSocket(sc);
+									//SocketHelper.closeSocket(sc);
+									//System.out.println("Client closed");
 									lock.release();
 								}
 	

@@ -1,52 +1,31 @@
 package org.asl.middleware;
 
 import java.io.IOException;
-import java.net.StandardSocketOptions;
-import java.nio.ByteBuffer;
-import java.nio.channels.AsynchronousSocketChannel;
-import java.nio.channels.CompletionHandler;
 import java.sql.SQLException;
 
-import org.asl.common.request.Request;
-import org.asl.common.request.serialize.ByteBufferWrapper;
-import org.asl.common.request.serialize.SerializingUtilities;
-import org.asl.common.socket.SocketHelper;
-import org.asl.common.socket.SocketLocation;
-import org.asl.common.socket.SocketOperation;
+import org.asl.middleware.completionHandlers.AcceptCompletionHandler;
 
 public class Middleware extends AbstractMiddleware {
 	
 	public Middleware(int port) throws IOException, SQLException {
 		super(port);
-		int id = 313;
-		String s = "wololo";
-		long t = clock.takeTime(st -> pid -> heavyMethod(st, pid), s, id);
-		System.out.println("This took " + t + " ns");
-	}
-	
-	public void heavyMethod(String s, int id) {
-		System.out.println("im in method and print string = " + s + " and id = " + id);
-		try {
-			Thread.sleep(1000);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
 	}
 	
 	@Override
+	public void accept() {
+		serverChannel.accept(null, AcceptCompletionHandler.create(serverChannel, watchDog, timer, requestId));
+	}
+	
+	/*@Override
 	public void accept() {
 		serverChannel.accept(++requestId, new CompletionHandler<AsynchronousSocketChannel, Integer>() {
 
 			@Override
 			public void completed(AsynchronousSocketChannel sc, Integer requestId) {
-				try {
-					sc.setOption(StandardSocketOptions.SO_REUSEADDR, true);
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
+				watchDog.addConnection(new ConnectionTimeWrapper(sc, System.nanoTime()));
 //				timer.click(MiddlewareTimings.ACCEPTED_CLIENT, requestId);
 				//accept();
-				serverChannel.accept(requestId, this);
+				//serverChannel.accept(requestId, this);
 				ByteBuffer inbuf = ByteBuffer.allocate(AbstractMiddleware.INITIAL_BUFSIZE);
 				sc.read(inbuf, null, new CompletionHandler<Integer, Object>() {
 					
@@ -62,17 +41,18 @@ public class Middleware extends AbstractMiddleware {
 						
 						ByteBufferWrapper outbufWrap = SerializingUtilities.packRequest(req);
 //						timer.click(MiddlewareTimings.PACKED_REQUEST, requestId);
-						sc.write(outbufWrap.getBuf(), outbufWrap.getBytes(), new CompletionHandler<Integer, Integer>() {
+						sc.write(outbufWrap.getBuf(), this, new CompletionHandler<Integer, CompletionHandler<Integer, Object>>() {
 
 							@Override
-							public void completed(Integer writtenBytes, Integer expectedWriteBytes) {
-								SerializingUtilities.forceFurtherWriteIfNeeded(outbufWrap.getBuf(), writtenBytes, expectedWriteBytes, sc);
+							public void completed(Integer writtenBytes, CompletionHandler<Integer, Object> readHandler) {
+								SerializingUtilities.forceFurtherWriteIfNeeded(outbufWrap.getBuf(), writtenBytes, outbufWrap.getBytes(), sc);
 //								timer.click(MiddlewareTimings.WROTE_ANSWER, requestId);
-								SocketHelper.closeSocket(sc);
+								inbuf.flip();
+								sc.read(inbuf, null, readHandler);
 							}
-
+							
 							@Override
-							public void failed(Throwable se, Integer expectedWriteBytes) {
+							public void failed(Throwable se, CompletionHandler<Integer, Object> readHandler) {
 								SocketHelper.closeSocketAfterException(
 										SocketLocation.MIDDLEWARE,
 										SocketOperation.WRITE,
@@ -105,5 +85,5 @@ public class Middleware extends AbstractMiddleware {
 					);
 			}
 		});
-	}
+	}*/
 }

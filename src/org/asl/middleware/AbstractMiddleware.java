@@ -11,17 +11,20 @@ import org.asl.common.propertyparser.PropertyParser;
 import org.asl.common.request.Request.RequestType;
 import org.asl.common.request.builder.RequestBuilder;
 import org.asl.common.timing.ASLTimer;
-import org.asl.common.timing.Timer;
+import java.util.Timer;
+import org.asl.middleware.connectioncontrol.WatchDog;
 import org.asl.middleware.database.config.ASLDatabase;
 
 public abstract class AbstractMiddleware {
 	protected final AsynchronousServerSocketChannel serverChannel;
 	protected PropertyParser propParser;
 	protected final ASLDatabase db;
-	protected static int INITIAL_BUFSIZE;
+	public static int INITIAL_BUFSIZE;
 	protected int requestId;
-	protected Timer clock;
+	//protected Timer clock;
 	protected ASLTimer timer;
+	protected WatchDog watchDog;
+	protected Timer watchDogTimer;
 	
 	public AbstractMiddleware(int port) throws IOException, SQLException {
 		this.serverChannel = AsynchronousServerSocketChannel.open();
@@ -33,8 +36,11 @@ public abstract class AbstractMiddleware {
 			);
 		AbstractMiddleware.INITIAL_BUFSIZE = Integer.valueOf(propParser.getProperty(PropertyKey.INITIAL_BUFSIZE));
 		this.requestId = -1;
-		this.clock = new Timer();
+		//this.clock = new Timer();
 		this.timer = new ASLTimer();
+		this.watchDog = WatchDog.create(10);
+		this.watchDogTimer = new Timer();
+		this.watchDogTimer.scheduleAtFixedRate(this.watchDog, 0, 5000);
 		
 		RequestBuilder.getRequest(RequestType.REGISTER_MIDDLEWARE, null).processOnMiddleware(null, 0);
 	}

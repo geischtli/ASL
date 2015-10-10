@@ -8,7 +8,7 @@ printf "\n\n"
 printf "*** ASL MAIN SCRIPT ***\n"
 printf "Start the middleware instances\n"
 
-for ((i=1; i<=$NUM_MIDDLEWARES; i++))
+for (( i = 0; i <= 1; i++ )) 
 do
 	ant -f antBuildMiddleware.xml &
 done
@@ -16,7 +16,7 @@ done
 sleep 5
 
 printf "\n\nStart client instances\n"
-for ((i=1; i<=$NUM_CLIENTS; i++))
+for (( i = 0; i <= 1; i++ )) 
 do
 	ant -f antBuildClient.xml &
 done

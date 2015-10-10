@@ -2,6 +2,11 @@ package org.asl;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -13,8 +18,17 @@ import org.asl.middleware.Middleware;
 
 public class Main {
 	private static final int port = 9090;
-	
+	static int p = 0;
 	public static void main(String[] args) throws IOException, SQLException {
+		/*Timer t = new Timer();
+		
+		t.scheduleAtFixedRate(new TimerTask() {
+			
+			@Override
+			public void run() {
+				System.out.println("timer rang at " + ++p);
+			}
+		}, 3000, 5000);*/
 		AbstractMiddleware mw = new Middleware(port);
 		mw.accept();
 		System.out.println("Started server");
@@ -26,7 +40,7 @@ public class Main {
 				new ArrayBlockingQueue<Runnable>(64),
 				new ThreadPoolExecutor.CallerRunsPolicy()
 				);
-		int numClients = 100;
+		int numClients = 1;
 		for (int i = 0; i < numClients; i++) {
 			try {
 				threadpool.submit(new Client(port));
