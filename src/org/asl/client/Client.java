@@ -21,8 +21,10 @@ import org.asl.common.request.types.exceptions.ASLException;
 import org.asl.common.socket.SocketHelper;
 import org.asl.common.socket.SocketLocation;
 import org.asl.common.socket.SocketOperation;
-import org.asl.common.timing.ASLTimer;
+import org.asl.common.timing.TimeLogger;
 import org.asl.common.timing.Timing;
+
+import javafx.scene.layout.GridPane;
 
 public class Client implements Runnable {
 
@@ -33,7 +35,7 @@ public class Client implements Runnable {
 	private PropertyParser propParser;
 	private static int INITIAL_BUFSIZE;
 	private ClientInfo ci;
-	private ASLTimer timer; 
+	private TimeLogger timer;
 	
 	public Client(int port) throws IOException {
 		this.port = port;
@@ -42,7 +44,7 @@ public class Client implements Runnable {
 		this.propParser = PropertyParser.create("config_common.xml").parse();
 		Client.INITIAL_BUFSIZE = Integer.valueOf(propParser.getProperty(PropertyKey.INITIAL_BUFSIZE));
 		this.ci = ClientInfo.create();
-		this.timer = ASLTimer.create();
+		this.timer = TimeLogger.create();
 		//this.sc = SocketHelper.openSocket();
 		gatherRequests();
 	}

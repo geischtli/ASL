@@ -7,7 +7,7 @@ import java.sql.SQLException;
 import java.util.concurrent.ExecutionException;
 
 import org.asl.common.request.types.exceptions.RegisterMiddlewareException;
-import org.asl.common.timing.ASLTimer;
+import org.asl.common.timing.TimeLogger;
 import org.asl.middleware.database.config.ASLDatabase;
 import org.asl.middleware.database.connectionpool.ConnectionWrapper;
 import org.asl.middleware.database.dao.IMiddlewareDAO;
@@ -20,7 +20,7 @@ public class MiddlewareDAO implements IMiddlewareDAO {
 	}
 	
 	@Override
-	public int registerMiddleware(ASLTimer timer, int requestId) throws RegisterMiddlewareException {
+	public int registerMiddleware(TimeLogger timer, int requestId) throws RegisterMiddlewareException {
 		try (ConnectionWrapper conn = ASLDatabase.getNewConnection().get()) {
 			PreparedStatement register_middleware = conn.get().prepareStatement(MiddlewareSequence.REGISTER_MIDDLEWARE_STRING);
 			//timer.click(MiddlewareTimings.GOT_CONNECTION, requestId);

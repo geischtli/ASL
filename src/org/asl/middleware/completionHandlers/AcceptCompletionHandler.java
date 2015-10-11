@@ -8,7 +8,7 @@ import java.nio.channels.CompletionHandler;
 import org.asl.common.socket.SocketHelper;
 import org.asl.common.socket.SocketLocation;
 import org.asl.common.socket.SocketOperation;
-import org.asl.common.timing.ASLTimer;
+import org.asl.common.timing.TimeLogger;
 import org.asl.middleware.AbstractMiddleware;
 import org.asl.middleware.connectioncontrol.ConnectionTimeWrapper;
 import org.asl.middleware.connectioncontrol.WatchDog;
@@ -17,10 +17,10 @@ public class AcceptCompletionHandler<V, A> implements CompletionHandler<Asynchro
 
 	private AsynchronousServerSocketChannel serverChannel;
 	private WatchDog watchDog;
-	private ASLTimer timer;
+	private TimeLogger timer;
 	private int requestId;
 	
-	public AcceptCompletionHandler(AsynchronousServerSocketChannel serverChannel, WatchDog watchDog, ASLTimer timer, int requestId) {
+	public AcceptCompletionHandler(AsynchronousServerSocketChannel serverChannel, WatchDog watchDog, TimeLogger timer, int requestId) {
 		this.serverChannel = serverChannel;
 		this.watchDog = watchDog;
 		this.timer = timer;
@@ -28,7 +28,7 @@ public class AcceptCompletionHandler<V, A> implements CompletionHandler<Asynchro
 	}
 	
 	public static AcceptCompletionHandler<AsynchronousSocketChannel, Integer> create(
-			AsynchronousServerSocketChannel serverChannel, WatchDog watchDog, ASLTimer timer, int requestId) {
+			AsynchronousServerSocketChannel serverChannel, WatchDog watchDog, TimeLogger timer, int requestId) {
 		return new AcceptCompletionHandler<AsynchronousSocketChannel, Integer>(serverChannel, watchDog, timer, requestId);
 	}
 	

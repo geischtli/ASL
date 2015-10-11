@@ -10,7 +10,7 @@ import org.asl.common.propertyparser.PropertyKey;
 import org.asl.common.propertyparser.PropertyParser;
 import org.asl.common.request.Request.RequestType;
 import org.asl.common.request.builder.RequestBuilder;
-import org.asl.common.timing.ASLTimer;
+import org.asl.common.timing.TimeLogger;
 import java.util.Timer;
 import org.asl.middleware.connectioncontrol.WatchDog;
 import org.asl.middleware.database.config.ASLDatabase;
@@ -22,7 +22,7 @@ public abstract class AbstractMiddleware {
 	public static int INITIAL_BUFSIZE;
 	protected int requestId;
 	//protected Timer clock;
-	protected ASLTimer timer;
+	protected TimeLogger timer;
 	protected WatchDog watchDog;
 	protected Timer watchDogTimer;
 	
@@ -37,7 +37,7 @@ public abstract class AbstractMiddleware {
 		AbstractMiddleware.INITIAL_BUFSIZE = Integer.valueOf(propParser.getProperty(PropertyKey.INITIAL_BUFSIZE));
 		this.requestId = -1;
 		//this.clock = new Timer();
-		this.timer = new ASLTimer();
+		this.timer = new TimeLogger();
 		this.watchDog = WatchDog.create(10);
 		this.watchDogTimer = new Timer();
 		this.watchDogTimer.scheduleAtFixedRate(this.watchDog, 0, 5000);

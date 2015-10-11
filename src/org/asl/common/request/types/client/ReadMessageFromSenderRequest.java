@@ -4,7 +4,7 @@ import org.asl.client.ClientInfo;
 import org.asl.common.request.Request;
 import org.asl.common.request.types.exceptions.ASLException;
 import org.asl.common.request.types.exceptions.ReadMessageFromSenderException;
-import org.asl.common.timing.ASLTimer;
+import org.asl.common.timing.TimeLogger;
 import org.asl.middleware.database.dao.impl.ClientDAO;
 import org.asl.middleware.database.model.Message;
 
@@ -47,7 +47,7 @@ public class ReadMessageFromSenderRequest extends Request {
 	}
 	
 	@Override
-	public void processOnMiddleware(ASLTimer timer, int reqCount) {
+	public void processOnMiddleware(TimeLogger timer, int reqCount) {
 		try {
 			setMessage(ClientDAO.getClientDAO().readMessageFromSender(sender, receiver, timer, reqCount));
 		} catch (ReadMessageFromSenderException e) {

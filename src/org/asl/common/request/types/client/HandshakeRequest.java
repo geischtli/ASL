@@ -4,7 +4,7 @@ import org.asl.client.ClientInfo;
 import org.asl.common.request.Request;
 import org.asl.common.request.types.exceptions.ASLException;
 import org.asl.common.request.types.exceptions.HandshakeException;
-import org.asl.common.timing.ASLTimer;
+import org.asl.common.timing.TimeLogger;
 import org.asl.middleware.database.dao.impl.ClientDAO;
 
 public class HandshakeRequest extends Request {
@@ -26,7 +26,7 @@ public class HandshakeRequest extends Request {
 	}
 
 	@Override
-	public void processOnMiddleware(ASLTimer timer, int reqCount) {
+	public void processOnMiddleware(TimeLogger timer, int reqCount) {
 		try {
 			setClientId(ClientDAO.getClientDAO().registerClient(timer, reqCount));
 		} catch (HandshakeException e) {

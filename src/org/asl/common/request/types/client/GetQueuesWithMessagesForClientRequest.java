@@ -7,7 +7,7 @@ import org.asl.client.ClientInfo;
 import org.asl.common.request.Request;
 import org.asl.common.request.types.exceptions.ASLException;
 import org.asl.common.request.types.exceptions.GetQueuesWithMessagesForClientException;
-import org.asl.common.timing.ASLTimer;
+import org.asl.common.timing.TimeLogger;
 import org.asl.middleware.database.dao.impl.QueueDAO;
 
 public class GetQueuesWithMessagesForClientRequest extends Request {
@@ -39,7 +39,7 @@ public class GetQueuesWithMessagesForClientRequest extends Request {
 	}
 	
 	@Override
-	public void processOnMiddleware(ASLTimer timer, int reqCount) {
+	public void processOnMiddleware(TimeLogger timer, int reqCount) {
 		try {
 			setQueues(QueueDAO.getQueueDAO().getQueuesWithMessagesForClient(receiver, timer, reqCount));
 		} catch (GetQueuesWithMessagesForClientException e) {
