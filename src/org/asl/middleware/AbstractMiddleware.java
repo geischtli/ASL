@@ -38,7 +38,7 @@ public abstract class AbstractMiddleware {
 		this.requestId = -1;
 		//this.clock = new Timer();
 		this.timer = new TimeLogger();
-		this.watchDog = WatchDog.create(10);
+		this.watchDog = WatchDog.create(5);
 		this.watchDogTimer = new Timer();
 		this.watchDogTimer.scheduleAtFixedRate(this.watchDog, 0, 5000);
 		

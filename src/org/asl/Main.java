@@ -13,6 +13,7 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 import org.asl.client.Client;
+import org.asl.client.VirtualClient;
 import org.asl.client.management.AdminClient;
 import org.asl.client.management.MyAnimator;
 import org.asl.common.request.Request;
@@ -49,13 +50,13 @@ public class Main {
 				new ArrayBlockingQueue<Runnable>(64),
 				new ThreadPoolExecutor.CallerRunsPolicy()
 				);
-		int numClients = 1;
+		int numClients = 10;
 		
 		checkManagement(args, threadpool);
 		
 		for (int i = 0; i < numClients; i++) {
 			try {
-				threadpool.submit(new Client(port));
+				threadpool.submit(new VirtualClient(port));
 			} catch (Exception e) {
 				System.out.println("Problem with client creation " + e.getMessage());
 				e.printStackTrace();

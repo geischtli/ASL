@@ -8,9 +8,7 @@ public class SocketHelper {
 
 	public static AsynchronousSocketChannel openSocket() {
 		try {
-			AsynchronousSocketChannel sc = AsynchronousSocketChannel.open();
-			sc.setOption(StandardSocketOptions.SO_REUSEADDR, true);
-			return sc;
+			return AsynchronousSocketChannel.open();
 		} catch (Exception e) {
 			System.out.println("Fail occured in open socket");
 			e.printStackTrace();

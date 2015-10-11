@@ -40,7 +40,7 @@ public class AcceptCompletionHandler<V, A> implements CompletionHandler<Asynchro
 		//accept();
 		serverChannel.accept(++requestId, this);
 		ByteBuffer inbuf = ByteBuffer.allocate(AbstractMiddleware.INITIAL_BUFSIZE);
-		sc.read(inbuf, c, ReadCompletionHandler.create(sc, inbuf, timer, requestId));
+		sc.read(inbuf, c, MiddlewareReadCompletionHandler.create(sc, inbuf, timer, requestId));
 	}
 
 	@Override

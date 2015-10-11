@@ -13,28 +13,34 @@ import org.asl.common.socket.SocketOperation;
 import org.asl.common.timing.TimeLogger;
 import org.asl.middleware.connectioncontrol.ConnectionTimeWrapper;
 
-public class ReadCompletionHandler implements CompletionHandler<Integer, ConnectionTimeWrapper> {
+public class MiddlewareReadCompletionHandler implements CompletionHandler<Integer, ConnectionTimeWrapper> {
 
 	private AsynchronousSocketChannel sc;
 	private ByteBuffer inbuf;
 	private TimeLogger timer;
 	private int requestId;
 	
-	public ReadCompletionHandler(AsynchronousSocketChannel sc, ByteBuffer inbuf, TimeLogger timer, int requestId) {
+	public MiddlewareReadCompletionHandler(AsynchronousSocketChannel sc, ByteBuffer inbuf, TimeLogger timer, int requestId) {
 		this.sc = sc;
 		this.inbuf = inbuf;
 		this.timer = timer;
 		this.requestId = requestId;
 	}
 	
-	public static ReadCompletionHandler create(AsynchronousSocketChannel sc, ByteBuffer inbuf, TimeLogger timer, int requestId) {
-		return new ReadCompletionHandler(sc, inbuf, timer, requestId);
+	public static MiddlewareReadCompletionHandler create(AsynchronousSocketChannel sc, ByteBuffer inbuf, TimeLogger timer, int requestId) {
+		return new MiddlewareReadCompletionHandler(sc, inbuf, timer, requestId);
 	}
 	
 	@Override
 	public void completed(Integer readBytes, ConnectionTimeWrapper connTimeWrapper) {
 		connTimeWrapper.reset();
+		//System.out.println("middleware read " + readBytes + " bytes");
 		ByteBufferWrapper fullInbufWrap = SerializingUtilities.forceFurtherReadIfNeeded(inbuf, (int)readBytes, sc);
+		
+		if (fullInbufWrap == null || readBytes == -1) {
+			System.out.println("Got null buffer or read -1 bytes, i return");
+			return;
+		}
 		
 //		timer.click(MiddlewareTimings.READ_REQUEST, requestId);
 		Request req = SerializingUtilities.unpackRequest(fullInbufWrap.getBuf(), fullInbufWrap.getBytes());
@@ -48,7 +54,7 @@ public class ReadCompletionHandler implements CompletionHandler<Integer, Connect
 		sc.write(
 				outbufWrap.getBuf(),
 				connTimeWrapper,
-				WriteCompletionHandler.create(sc, outbufWrap, inbuf)
+				MiddlewareWriteCompletionHandler.create(sc, outbufWrap)
 			);
 	}
 

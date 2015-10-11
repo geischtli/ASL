@@ -27,7 +27,7 @@ public class WatchDog extends TimerTask {
 	public void closeConnection(ConnectionTimeWrapper c) {
 		try {
 			c.getSocketChannel().close();
-			System.out.println("closed conn");
+			System.out.println("watchdog removed a connection");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -43,6 +43,7 @@ public class WatchDog extends TimerTask {
 				it.remove();
 			}
 		}
+		System.out.println("Current connection count = " + connections.size());
 	}
 
 }

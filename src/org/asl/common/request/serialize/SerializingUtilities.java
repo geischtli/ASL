@@ -81,9 +81,11 @@ public class SerializingUtilities {
 			//System.out.println("im forced to read again...");
 			return f.get();
 		} catch (InterruptedException | ExecutionException e) {
-			e.printStackTrace();
+			//e.printStackTrace();
+			System.out.println("Catched a " + e.getCause());
 		}
-		return 0;
+		System.err.println("forceRead returned -1");
+		return -1;
 	}
 	
 	public static int forceWrite(ByteBuffer outbuf, AsynchronousSocketChannel sc) {
@@ -100,7 +102,9 @@ public class SerializingUtilities {
 		int expectedReadBytes = unpackLength(inbuf);
 		while (!allBytesRead(expectedReadBytes, readBytes)) {
 			int forcedBytesRead = forceRead(inbuf, sc);
-			//System.out.println("force read done");
+			if (forcedBytesRead == -1) {
+				return null;
+			}
 			readBytes += forcedBytesRead;
 		}
 		inbuf.flip();
@@ -110,7 +114,6 @@ public class SerializingUtilities {
 	public static void forceFurtherWriteIfNeeded(ByteBuffer outbuf, int writtenBytes, int expectedWriteBytes, AsynchronousSocketChannel sc) {
 		while (!allBytesWritten(expectedWriteBytes, writtenBytes)) {
 			int forcedWrittenBytes = forceWrite(outbuf, sc);
-			//System.out.println("force write done");
 			writtenBytes += forcedWrittenBytes;
 		}
 	}

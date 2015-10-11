@@ -13,17 +13,17 @@ import org.asl.common.timing.TimeLogger;
 
 public abstract class AbstractClient implements Runnable {
 
-	protected final int port;
+	public static int port;
 	protected AsynchronousSocketChannel sc;
 	protected  List<RequestType> requestList;
 	protected Semaphore lock;
 	protected PropertyParser propParser;
-	protected static int INITIAL_BUFSIZE;
+	public static int INITIAL_BUFSIZE;
 	protected ClientInfo ci;
 	protected TimeLogger timeLogger;
 	
 	public AbstractClient() {
-		this.port = -1;
+		AbstractClient.port = -1;
 		this.sc = null;
 		this.requestList = null;
 		this.lock = null;
@@ -34,7 +34,7 @@ public abstract class AbstractClient implements Runnable {
 	}
 	
 	public AbstractClient(int port) throws IOException {
-		this.port = port;
+		AbstractClient.port = port;
 		this.requestList = new ArrayList<RequestType>();
 		this.lock = new Semaphore(1, true);
 		this.propParser = PropertyParser.create("config_common.xml").parse();
