@@ -6,6 +6,8 @@ import java.util.List;
 import org.asl.client.ClientInfo;
 import org.asl.common.request.Request;
 import org.asl.common.request.Request.RequestType;
+import org.asl.common.request.types.admin.GetNumberOfMessagesRequest;
+import org.asl.common.request.types.admin.GetRegisteredQueuesRequest;
 import org.asl.common.request.types.client.CreateQueueRequest;
 import org.asl.common.request.types.client.DeleteQueueRequest;
 import org.asl.common.request.types.client.GetQueuesWithMessagesForClientRequest;
@@ -75,6 +77,10 @@ public class RequestBuilder {
 						);
 			case REGISTER_MIDDLEWARE:
 				return new RegisterMiddlewareRequest();
+			case GET_REGISTERED_QUEUES:
+				return new GetRegisteredQueuesRequest();
+			case GET_NUMBER_OF_MESSAGES:
+				return new GetNumberOfMessagesRequest();
 			default:
 				System.out.println("No request type found for " + type.toString());
 				return null;

@@ -1,5 +1,6 @@
 package org.asl.common.request.types.client;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -50,14 +51,12 @@ public class GetQueuesWithMessagesForClientRequest extends Request {
 	@Override
 	public void processOnClient(ClientInfo ci) throws ASLException {
 		if (!getException().carriesError()) {
-			//System.out.println("Successfully got queues " + queues.size() + " with waiting messages for client");
 			if (queues.size() > 0) {
-				//System.out.print("Queues are: " );
-				/*for (int i = 0; i < queues.size(); i++) {
-					System.out.print(queues.get(i) + " ");
-				}*/
+				ci.setQueuesOnline(queues);
 				// set a random queue of the ones we get to next reading target
 				ci.setReadQueueId(queues.get(new Random().nextInt(queues.size())));
+			} else if (queues.size() == 0) {
+				ci.setQueuesOnline(new ArrayList<Integer>());
 			}
 		} else {
 			throw getException();

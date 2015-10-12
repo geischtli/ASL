@@ -35,7 +35,9 @@ public abstract class Request implements Serializable {
 		READ_MESSAGE_FROM_SENDER,
 		REMOVE_TOP_MESSAGE_FROM_QUEUE,
 		SEND_MESSAGE,
-		REGISTER_MIDDLEWARE
+		REGISTER_MIDDLEWARE,
+		GET_NUMBER_OF_MESSAGES,
+		GET_REGISTERED_QUEUES,
 	}
 	
 	public abstract void processOnMiddleware(TimeLogger timer, int reqCount);

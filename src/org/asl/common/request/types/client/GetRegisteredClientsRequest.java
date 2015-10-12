@@ -1,5 +1,6 @@
 package org.asl.common.request.types.client;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -40,16 +41,14 @@ public class GetRegisteredClientsRequest extends Request {
 	@Override
 	public void processOnClient(ClientInfo ci) throws ASLException {
 		if (!getException().carriesError()) {
-			//System.out.println("Successfully found " + clients.size() + " clients");
 			if (clients.size() > 0) {
-				/*System.out.print("Clients are: ");
-				for (int i = 0; i < clients.size(); i++) {
-					System.out.print(clients.get(i) + " ");
-				}*/
+				ci.setClientsOnline(clients);
 				// set a random client as receiver of next message
 				int nextReceiver = new Random().nextInt(clients.size());
 				//System.out.println("Next receiver: " + (nextReceiver + 1));
 				ci.setSendReceiverId(clients.get(nextReceiver));
+			} else if (clients.size() == 0) {
+				ci.setClientsOnline(new ArrayList<Integer>());
 			}
 		} else {
 			throw getException();

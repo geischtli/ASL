@@ -1,5 +1,7 @@
 package org.asl.client;
 
+import java.util.List;
+
 public class ClientInfo {
 	
 	private int clientId;
@@ -7,17 +9,24 @@ public class ClientInfo {
 	private int deleteQueueId;
 	private int readQueueId;
 	private int sendQueueId;
+	private List<Integer> clientsOnline;
+	private List<Integer> queuesOnline;
 	
 	private int readFromSenderId;
 	private int sendReceiverId;
+	
+	private int numberOfMessages;
 	
 	public ClientInfo() {
 		this.clientId = 0;
 		this.deleteQueueId = 0;
 		this.readFromSenderId = 0;
 		this.sendQueueId = 0;
+		this.clientsOnline = null;
+		this.queuesOnline = null;
 		this.readFromSenderId = 0;
 		this.sendReceiverId = 0;
+		this.numberOfMessages = -1;
 	}
 	
 	public static ClientInfo create() {
@@ -74,6 +83,30 @@ public class ClientInfo {
 	
 	public String getSendContentText() {
 		return "This is a message from Client " + this.clientId;
+	}
+
+	public int getNumberOfMessages() {
+		return numberOfMessages;
+	}
+
+	public void setNumberOfMessages(int numberOfMessages) {
+		this.numberOfMessages = numberOfMessages;
+	}
+
+	public List<Integer> getClientsOnline() {
+		return clientsOnline;
+	}
+
+	public void setClientsOnline(List<Integer> clientsOnline) {
+		this.clientsOnline = clientsOnline;
+	}
+
+	public List<Integer> getQueuesOnline() {
+		return queuesOnline;
+	}
+
+	public void setQueuesOnline(List<Integer> queuesOnline) {
+		this.queuesOnline = queuesOnline;
 	}
 	
 }

@@ -2,7 +2,7 @@ package org.asl.client.management;
 
 import java.io.IOException;
 
-import org.asl.common.request.Request;
+import org.asl.common.request.Request.RequestType;
 
 import javafx.application.Application;
 import javafx.beans.value.ChangeListener;
@@ -14,17 +14,26 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 
 public class MyAnimator extends Application {
-	private final AdminClient adminConsole;
+	private AdminClient adminConsole;
 	private GridPane root;
 	private Scene scene;
 	
 
 	public MyAnimator() throws IOException {
-		adminConsole = new AdminClient(313);
+		this.adminConsole = null;
+		this.root = null;
+		this.scene = null;
+	}
+
+	@Override
+	public void init() throws IOException {
+		Parameters p = getParameters();
+		adminConsole = new AdminClient(Integer.parseInt(p.getRaw().get(0)));
 		createMyConsole();
 	}
 	
@@ -37,14 +46,14 @@ public class MyAnimator extends Application {
 	private void createMyConsole() {
 		root = new GridPane();
 		scene = new Scene(root, 1000,500);
-		root.add(new Label("Sandy isch es gaggimoggeli"),0, 0);
-		ObservableList<Request> requestlis = adminConsole.getPossibleRequests();
+		root.add(new Label("Request: "), 0, 0);
+		ObservableList<RequestType> requestlis = adminConsole.getPossibleRequests();
 		
-		ComboBox<Request> requestsChoice = new ComboBox<Request>(requestlis);
-		requestsChoice.valueProperty().addListener(new ChangeListener<Request>() {
+		ComboBox<RequestType> requestsChoice = new ComboBox<RequestType>(requestlis);
+		requestsChoice.valueProperty().addListener(new ChangeListener<RequestType>() {
 
 			@Override
-			public void changed(ObservableValue<? extends Request> observable, Request old, Request request) {
+			public void changed(ObservableValue<? extends RequestType> observable, RequestType old, RequestType request) {
 				System.out.println("Dropdown Changed");
 				System.out.println("Mby change look and feel of guy ?");
 				
@@ -59,10 +68,50 @@ public class MyAnimator extends Application {
 						adminConsole.executeRequest(request);
 					}
 				});
-				root.add(requestExecutor,5, 0);
+				root.add(requestExecutor, 1, 1);
 			}
 		});
-		root.add(requestsChoice, 0, 1);
+		root.add(requestsChoice, 1, 0);
+		
+		Button updateClientsButton = new Button("Update Clients");
+		updateClientsButton.setOnAction(new EventHandler<ActionEvent>() {
+
+			@Override
+			public void handle(ActionEvent event) {
+				ObservableList<Integer> clients = adminConsole.executeRequest(RequestType.GET_REGISTERED_CLIENTS);
+				System.out.println(clients.size() + " clients are online");
+				ComboBox<Integer> clientsOnline = new ComboBox<Integer>(clients);
+				root.add(clientsOnline, 4, 0);
+			}
+		});
+		root.add(updateClientsButton, 3, 0);
+		
+		Button updateQueuesButton = new Button("Update Queues");
+		updateQueuesButton.setOnAction(new EventHandler<ActionEvent>() {
+
+			@Override
+			public void handle(ActionEvent event) {
+				ObservableList<Integer> queues = adminConsole.executeRequest(RequestType.GET_REGISTERED_QUEUES);
+				System.out.println(queues.size() + " queues are online");
+				ComboBox<Integer> queuesOnline = new ComboBox<Integer>(queues);
+				root.add(queuesOnline, 4, 1);
+			}
+		});
+		root.add(updateQueuesButton, 3, 1);
+		
+		TextField numMessagesText = new TextField();
+		root.add(numMessagesText, 4, 2);
+		
+		Button updateMessageCountButton = new Button("Update Message count");
+		updateMessageCountButton.setOnAction(new EventHandler<ActionEvent>() {
+
+			@Override
+			public void handle(ActionEvent event) {
+				ObservableList<Integer> numMessages = adminConsole.executeRequest(RequestType.GET_NUMBER_OF_MESSAGES);
+				numMessagesText.setText(numMessages.get(0).toString());
+			}
+		});
+		root.add(updateMessageCountButton, 3, 2);
 	}
 	
 }

@@ -11,4 +11,6 @@ public class QueueTable {
 	public static String READ_ALL_MESSAGES_STRING = "SELECT * FROM  read_all_messages_of_queue(?, ?);";
 	
 	public static String GET_QUEUES_FOR_CLIENT_STRING = "SELECT * FROM get_queues_for_client(?);";
+	
+	public static String GET_REGISTERED_QUEUES_STRING = "SELECT * FROM get_registered_queues();";
 }

@@ -127,5 +127,15 @@ CREATE OR REPLACE FUNCTION get_registered_clients()
 	SELECT ID FROM CLIENT;
 $$ LANGUAGE sql STABLE;
 
+CREATE OR REPLACE FUNCTION get_number_of_messages()
+	RETURNS INTEGER AS $$
+	SELECT ID FROM MESSAGE ORDER BY ID DESC LIMIT 1;
+$$ LANGUAGE sql STABLE;
+
+CREATE OR REPLACE FUNCTION get_registered_queues()
+	RETURNS SETOF INTEGER AS $$
+	SELECT ID FROM QUEUE;
+$$ LANGUAGE sql STABLE;
+
 -- create the index, for explanations see in thougths on index.txt
 CREATE INDEX msg_rcv_q_idx ON MESSAGE (RECEIVER, QUEUE);

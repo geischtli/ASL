@@ -2,7 +2,7 @@ package org.asl.common.request.types.exceptions;
 
 public class CreateQueueException extends ASLException {
 
-	private static final long serialVersionUID = 402L;
+	private static final long serialVersionUID = 412L;
 	
 	public CreateQueueException() {
 		super();

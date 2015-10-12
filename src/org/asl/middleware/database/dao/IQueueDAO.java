@@ -5,6 +5,7 @@ import java.util.List;
 import org.asl.common.request.types.exceptions.CreateQueueException;
 import org.asl.common.request.types.exceptions.DeleteQueueException;
 import org.asl.common.request.types.exceptions.GetQueuesWithMessagesForClientException;
+import org.asl.common.request.types.exceptions.GetRegisteredQueuesException;
 import org.asl.common.request.types.exceptions.ReadAllMessagesOfQueueException;
 import org.asl.common.request.types.exceptions.RemoveTopMessageFromQueueException;
 import org.asl.common.timing.TimeLogger;
@@ -17,4 +18,5 @@ public interface IQueueDAO {
 	public Message removeTopMessageFromQueue(int receiver, int queue, TimeLogger timer, int requestId) throws RemoveTopMessageFromQueueException;
 	public List<Message> readAllMessagesOfQueue(int receiver, int queue, TimeLogger timer, int requestId) throws ReadAllMessagesOfQueueException;
 	public List<Integer> getQueuesWithMessagesForClient(int receiver, TimeLogger timer, int requestId) throws GetQueuesWithMessagesForClientException;
+	public List<Integer> getRegisteredQueues() throws GetRegisteredQueuesException;
 }

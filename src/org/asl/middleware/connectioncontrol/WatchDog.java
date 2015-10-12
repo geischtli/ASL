@@ -35,7 +35,7 @@ public class WatchDog extends TimerTask {
 	
 	@Override
 	public void run() {
-		System.out.println("Dog barks");
+		//System.out.println("Dog barks");
 		for (Iterator<ConnectionTimeWrapper> it = connections.iterator(); it.hasNext();) {
 			ConnectionTimeWrapper c = it.next();
 			if ((System.currentTimeMillis() - c.getLastActivity()) > maxActivityDiffMillis) {
@@ -43,7 +43,7 @@ public class WatchDog extends TimerTask {
 				it.remove();
 			}
 		}
-		System.out.println("Current connection count = " + connections.size());
+		//System.out.println("Current connection count = " + connections.size());
 	}
 
 }

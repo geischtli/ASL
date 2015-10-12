@@ -2,37 +2,17 @@ package org.asl;
 
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
-import org.asl.client.Client;
 import org.asl.client.VirtualClient;
-import org.asl.client.management.AdminClient;
 import org.asl.client.management.MyAnimator;
-import org.asl.common.request.Request;
-import org.asl.common.request.types.client.CreateQueueRequest;
-import org.asl.common.request.types.client.DeleteQueueRequest;
-import org.asl.common.request.types.client.SendMessageRequest;
 import org.asl.middleware.AbstractMiddleware;
 import org.asl.middleware.Middleware;
 
 import javafx.application.Application;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.scene.Scene;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Pane;
 
 public class Main {
 	private static final int port = 9090;
@@ -50,9 +30,9 @@ public class Main {
 				new ArrayBlockingQueue<Runnable>(64),
 				new ThreadPoolExecutor.CallerRunsPolicy()
 				);
-		int numClients = 1;
+		int numClients = 0;
 		
-		checkManagement(args, threadpool);
+		checkManagement(args, threadpool, port);
 		
 		for (int i = 0; i < numClients; i++) {
 			try {
@@ -73,10 +53,11 @@ public class Main {
 		}
 	}
 	
-	private static void checkManagement(String[] args, ExecutorService threadpool) {
+	private static void checkManagement(String[] args, ExecutorService threadpool, int port) {
 		for (String s : args){
 			if (s.equals("admin")) {
-				Application.launch(MyAnimator.class, args);
+				String[] portArg = {String.valueOf(port)};
+				Application.launch(MyAnimator.class, portArg);
 			}
 		}
 	}

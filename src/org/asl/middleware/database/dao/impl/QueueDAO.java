@@ -11,6 +11,7 @@ import java.util.concurrent.ExecutionException;
 import org.asl.common.request.types.exceptions.CreateQueueException;
 import org.asl.common.request.types.exceptions.DeleteQueueException;
 import org.asl.common.request.types.exceptions.GetQueuesWithMessagesForClientException;
+import org.asl.common.request.types.exceptions.GetRegisteredQueuesException;
 import org.asl.common.request.types.exceptions.ReadAllMessagesOfQueueException;
 import org.asl.common.request.types.exceptions.RemoveTopMessageFromQueueException;
 import org.asl.common.timing.TimeLogger;
@@ -124,6 +125,24 @@ public class QueueDAO implements IQueueDAO {
 			return queues;
 		} catch (SQLException | IOException | InterruptedException | ExecutionException e) {
 			throw new GetQueuesWithMessagesForClientException(e);
+		}
+	}
+
+	@Override
+	public List<Integer> getRegisteredQueues() throws GetRegisteredQueuesException {
+		try (ConnectionWrapper conn = ASLDatabase.getNewConnection().get()) {
+			PreparedStatement getRegisteredQueues = conn.get().prepareStatement(QueueTable.GET_REGISTERED_QUEUES_STRING);
+//			timer.click(MiddlewareTimings.GOT_CONNECTION, requestId);
+			ResultSet rs = getRegisteredQueues.executeQuery();
+			conn.get().commit();
+//			timer.click(MiddlewareTimings.EXECUTED_QUERY, requestId);
+			List<Integer> queues = new ArrayList<Integer>();
+			while (rs.next()) {
+				queues.add(rs.getInt(1));
+			}
+			return queues;
+		} catch (SQLException | IOException | InterruptedException | ExecutionException e) {
+			throw new GetRegisteredQueuesException(e);
 		}
 	}
 	
