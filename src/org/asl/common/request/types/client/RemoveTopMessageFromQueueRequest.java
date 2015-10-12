@@ -4,7 +4,6 @@ import org.asl.client.ClientInfo;
 import org.asl.common.request.Request;
 import org.asl.common.request.types.exceptions.ASLException;
 import org.asl.common.request.types.exceptions.RemoveTopMessageFromQueueException;
-import org.asl.common.timing.TimeLogger;
 import org.asl.middleware.database.dao.impl.QueueDAO;
 import org.asl.middleware.database.model.Message;
 
@@ -15,7 +14,8 @@ public class RemoveTopMessageFromQueueRequest extends Request {
 	private int queue;
 	private Message message; 
 	
-	public RemoveTopMessageFromQueueRequest(int receiver, int queue) {
+	public RemoveTopMessageFromQueueRequest(int receiver, int queue, int clientId, int requestId) {
+		super(clientId, requestId);
 		this.receiver = receiver;
 		this.queue = queue;
 		this.message = null;
@@ -47,9 +47,9 @@ public class RemoveTopMessageFromQueueRequest extends Request {
 	}
 	
 	@Override
-	public void processOnMiddleware(TimeLogger timer, int reqCount) {
+	public void processOnMiddleware() {
 		try {
-			setMessage(QueueDAO.getQueueDAO().removeTopMessageFromQueue(receiver, queue, timer, reqCount));
+			setMessage(QueueDAO.getQueueDAO().removeTopMessageFromQueue(receiver, queue, clientId, requestId));
 		} catch (RemoveTopMessageFromQueueException e) {
 			setException(e);
 		}

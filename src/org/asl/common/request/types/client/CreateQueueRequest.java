@@ -4,40 +4,40 @@ import org.asl.client.ClientInfo;
 import org.asl.common.request.Request;
 import org.asl.common.request.types.exceptions.ASLException;
 import org.asl.common.request.types.exceptions.CreateQueueException;
-import org.asl.common.timing.TimeLogger;
 import org.asl.middleware.database.dao.impl.QueueDAO;
 
 public class CreateQueueRequest extends Request {
 
 	private static final long serialVersionUID = 102L;
-	private int queue_id;
-	private int creator_id;
+	private int queueId;
+	private int creatorId;
 	
-	public CreateQueueRequest(int creator_id) {
-		this.creator_id = creator_id;
+	public CreateQueueRequest(int creatorId, int requestId) {
+		super(creatorId, requestId);
+		this.creatorId = creatorId;
 		this.exception = new CreateQueueException();
 	}
 
 	public int getQueueId() {
-		return queue_id;
+		return queueId;
 	}
 
 	public void setQueueId(int queue_id) {
-		this.queue_id = queue_id;
+		this.queueId = queue_id;
 	}
 	
 	public int getCreatorId() {
-		return creator_id;
+		return creatorId;
 	}
 
 	public void setCreatorId(int creator_id) {
-		this.creator_id = creator_id;
+		this.creatorId = creator_id;
 	}
 	
 	@Override
-	public void processOnMiddleware(TimeLogger timer, int reqCount) {
+	public void processOnMiddleware() {
 		try {
-			setQueueId(QueueDAO.getQueueDAO().createQueue(creator_id, timer, reqCount));
+			setQueueId(QueueDAO.getQueueDAO().createQueue(creatorId, requestId));
 		} catch (CreateQueueException e) {
 			setException(e);
 		}
@@ -46,9 +46,9 @@ public class CreateQueueRequest extends Request {
 	@Override
 	public void processOnClient(ClientInfo ci) throws ASLException {
 		if (!getException().carriesError()) {
-			ci.setDeleteQueueId(queue_id);
-			ci.setSendQueueId(queue_id);
-			ci.setReadQueueId(queue_id);
+			ci.setDeleteQueueId(queueId);
+			ci.setSendQueueId(queueId);
+			ci.setReadQueueId(queueId);
 			System.out.println("Queue created with id: " + ci.getDeleteQueueId());
 		} else {
 			throw getException();

@@ -13,6 +13,8 @@ import org.asl.common.request.serialize.SerializingUtilities;
 import org.asl.common.socket.SocketHelper;
 import org.asl.common.socket.SocketLocation;
 import org.asl.common.socket.SocketOperation;
+import org.asl.common.timing.TimeLogger;
+import org.asl.common.timing.Timing;
 
 public class ClientWriteCompletionHandler implements CompletionHandler<Integer, Integer> {
 
@@ -31,13 +33,14 @@ public class ClientWriteCompletionHandler implements CompletionHandler<Integer, 
 	}
 	
 	public static ClientWriteCompletionHandler create(AsynchronousSocketChannel sc, ByteBufferWrapper outbufWrap, ClientInfo ci, List<RequestType> requestList, int requestId) {
+		TimeLogger.click(Timing.CLIENT_START_WRITE, ci.getClientId(), requestId);
 		return new ClientWriteCompletionHandler(sc, outbufWrap, ci, requestList, requestId);
 	}
 	
 	@Override
 	public void completed(Integer writtenBytes, Integer expectedWriteBytes) {
 		SerializingUtilities.forceFurtherWriteIfNeeded(outbufWrap.getBuf(), writtenBytes, expectedWriteBytes, sc);
-		//timer.click(ClientTimings.SENT_REQUEST);
+		TimeLogger.click(Timing.CLIENT_END_WRITE, ci.getClientId(), requestId);
     	ByteBuffer inbuf = ByteBuffer.allocate(AbstractClient.INITIAL_BUFSIZE);
     	sc.read(inbuf, null, ClientReadCompletionHandler.create(sc, ci, inbuf, requestList, requestId));
 	}

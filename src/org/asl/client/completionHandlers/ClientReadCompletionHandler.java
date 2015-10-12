@@ -18,6 +18,8 @@ import org.asl.common.request.types.exceptions.ASLException;
 import org.asl.common.socket.SocketHelper;
 import org.asl.common.socket.SocketLocation;
 import org.asl.common.socket.SocketOperation;
+import org.asl.common.timing.TimeLogger;
+import org.asl.common.timing.Timing;
 
 public class ClientReadCompletionHandler implements CompletionHandler<Integer, Object> {
 
@@ -36,18 +38,20 @@ public class ClientReadCompletionHandler implements CompletionHandler<Integer, O
 	}
 	
 	public static ClientReadCompletionHandler create(AsynchronousSocketChannel sc, ClientInfo ci, ByteBuffer inbuf, List<RequestType> requestList, int requestId) {
+		TimeLogger.click(Timing.CLIENT_START_READ, ci.getClientId(), requestId);
 		return new ClientReadCompletionHandler(sc, ci, inbuf, requestList, requestId);
 	}
 	
 	@Override
 	public void completed(Integer readBytes, Object attachment) {
 		ByteBufferWrapper fullInbufWrap = SerializingUtilities.forceFurtherReadIfNeeded(inbuf, readBytes, sc);
+		TimeLogger.click(Timing.CLIENT_END_READ, ci.getClientId(), requestId);
 		
 		if (fullInbufWrap == null || readBytes == -1) {
 			return;
 		}
-		
-		//timer.click(ClientTimings.READ_ANSWER);
+
+		TimeLogger.click(Timing.CLIENT_START_POSTPROCESSING, ci.getClientId(), requestId);
 		Request ansReq = SerializingUtilities.unpackRequest(fullInbufWrap.getBuf(), fullInbufWrap.getBytes());
 		try {
 			ansReq.processOnClient(ci);
@@ -55,6 +59,7 @@ public class ClientReadCompletionHandler implements CompletionHandler<Integer, O
 			System.out.println("Reading message failed with type: " + ansReq.getException().getClass());
 			System.out.println("And reason: " + ansReq.getException().getMessage());
 		}
+		TimeLogger.click(Timing.CLIENT_END_POSTPROCESSING, ci.getClientId(), requestId);
 		if (++requestId < requestList.size()) {
 			if (sc.isOpen()) {
 				ByteBufferWrapper outbufWrap = SerializingUtilities.packRequest(RequestBuilder.getRequest(requestList.get(requestId), ci));

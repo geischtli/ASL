@@ -1,89 +1,48 @@
 package org.asl.middleware;
 
 import java.io.IOException;
+import java.net.InetSocketAddress;
+import java.net.StandardSocketOptions;
+import java.nio.channels.AsynchronousServerSocketChannel;
 import java.sql.SQLException;
+import java.util.Timer;
 
+import org.asl.common.propertyparser.PropertyKey;
+import org.asl.common.propertyparser.PropertyParser;
+import org.asl.common.request.builder.RequestBuilder;
 import org.asl.middleware.completionHandlers.AcceptCompletionHandler;
+import org.asl.middleware.connectioncontrol.WatchDog;
+import org.asl.middleware.database.config.ASLDatabase;
 
-public class Middleware extends AbstractMiddleware {
+public class Middleware {
+	
+	protected final AsynchronousServerSocketChannel serverChannel;
+	protected PropertyParser propParser;
+	protected final ASLDatabase db;
+	public static int INITIAL_BUFSIZE;
+	protected int requestId;
+	protected WatchDog watchDog;
+	protected Timer watchDogTimer;
 	
 	public Middleware(int port) throws IOException, SQLException {
-		super(port);
+		this.serverChannel = AsynchronousServerSocketChannel.open();
+		this.serverChannel.bind(new InetSocketAddress(port));
+		this.serverChannel.setOption(StandardSocketOptions.SO_REUSEADDR, true);
+		this.propParser = PropertyParser.create("config_common.xml").parse();
+		this.db = ASLDatabase.getDatabase(
+				Integer.valueOf(propParser.getProperty(PropertyKey.MAX_CONNECTIONS_TO_DB))
+			);
+		Middleware.INITIAL_BUFSIZE = Integer.valueOf(propParser.getProperty(PropertyKey.INITIAL_BUFSIZE));
+		this.requestId = -1;
+		this.watchDog = WatchDog.create(5);
+		this.watchDogTimer = new Timer();
+		this.watchDogTimer.scheduleAtFixedRate(this.watchDog, 0, 5000);
+		
+		RequestBuilder.getRegisterMiddlewareRequest().processOnMiddleware();
 	}
 	
-	@Override
 	public void accept() {
-		serverChannel.accept(null, AcceptCompletionHandler.create(serverChannel, watchDog, timer, requestId));
+		serverChannel.accept(null, AcceptCompletionHandler.create(serverChannel, watchDog, requestId));
 	}
 	
-	/*@Override
-	public void accept() {
-		serverChannel.accept(++requestId, new CompletionHandler<AsynchronousSocketChannel, Integer>() {
-
-			@Override
-			public void completed(AsynchronousSocketChannel sc, Integer requestId) {
-				watchDog.addConnection(new ConnectionTimeWrapper(sc, System.nanoTime()));
-//				timer.click(MiddlewareTimings.ACCEPTED_CLIENT, requestId);
-				//accept();
-				//serverChannel.accept(requestId, this);
-				ByteBuffer inbuf = ByteBuffer.allocate(AbstractMiddleware.INITIAL_BUFSIZE);
-				sc.read(inbuf, null, new CompletionHandler<Integer, Object>() {
-					
-					@Override
-					public void completed(Integer readBytes, Object attachment) {
-						ByteBufferWrapper fullInbufWrap = SerializingUtilities.forceFurtherReadIfNeeded(inbuf, readBytes, sc);
-						
-//						timer.click(MiddlewareTimings.READ_REQUEST, requestId);
-						Request req = SerializingUtilities.unpackRequest(fullInbufWrap.getBuf(), fullInbufWrap.getBytes());
-//						timer.click(MiddlewareTimings.PROCESSED_READ, requestId);
-						
-						req.processOnMiddleware(timer, requestId);
-						
-						ByteBufferWrapper outbufWrap = SerializingUtilities.packRequest(req);
-//						timer.click(MiddlewareTimings.PACKED_REQUEST, requestId);
-						sc.write(outbufWrap.getBuf(), this, new CompletionHandler<Integer, CompletionHandler<Integer, Object>>() {
-
-							@Override
-							public void completed(Integer writtenBytes, CompletionHandler<Integer, Object> readHandler) {
-								SerializingUtilities.forceFurtherWriteIfNeeded(outbufWrap.getBuf(), writtenBytes, outbufWrap.getBytes(), sc);
-//								timer.click(MiddlewareTimings.WROTE_ANSWER, requestId);
-								inbuf.flip();
-								sc.read(inbuf, null, readHandler);
-							}
-							
-							@Override
-							public void failed(Throwable se, CompletionHandler<Integer, Object> readHandler) {
-								SocketHelper.closeSocketAfterException(
-										SocketLocation.MIDDLEWARE,
-										SocketOperation.WRITE,
-										se,
-										sc
-									);
-							}
-							
-						});
-					}
-
-					@Override
-					public void failed(Throwable se, Object attachment) {
-						SocketHelper.closeSocketAfterException(
-								SocketLocation.MIDDLEWARE,
-								SocketOperation.READ,
-								se,
-								sc
-							);
-					}
-				});
-			}
-			
-			@Override
-			public void failed(Throwable se, Integer reqCounter) {
-				SocketHelper.closeSocketAfterException(
-						SocketLocation.MIDDLEWARE,
-						SocketOperation.ACCEPT,
-						se
-					);
-			}
-		});
-	}*/
 }

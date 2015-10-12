@@ -15,7 +15,8 @@ public class SendMessageRequest extends Request {
 	private final int queue;
 	private final String content;
 	
-	public SendMessageRequest(int sender, int receiver, int queue, String content) {
+	public SendMessageRequest(int sender, int receiver, int queue, String content, int requestId) {
+		super(sender, requestId);
 		this.sender = sender;
 		this.receiver = receiver;
 		this.queue = queue;
@@ -40,9 +41,9 @@ public class SendMessageRequest extends Request {
 	}
 	
 	@Override
-	public void processOnMiddleware(TimeLogger timer, int reqCount) {
+	public void processOnMiddleware() {
 		try {
-			MessageDAO.getMessageDAO().sendMessage(sender, receiver, queue, content, timer, reqCount);
+			MessageDAO.getMessageDAO().sendMessage(sender, receiver, queue, content, requestId);
 		} catch (SendMessageException e) {
 			setException(e);
 		}

@@ -8,7 +8,6 @@ import org.asl.client.ClientInfo;
 import org.asl.common.request.Request;
 import org.asl.common.request.types.exceptions.ASLException;
 import org.asl.common.request.types.exceptions.GetRegisteredClientsException;
-import org.asl.common.timing.TimeLogger;
 import org.asl.middleware.database.dao.impl.ClientDAO;
 
 public class GetRegisteredClientsRequest extends Request {
@@ -16,7 +15,8 @@ public class GetRegisteredClientsRequest extends Request {
 	private static final long serialVersionUID = 105L;
 	private List<Integer> clients;
 	
-	public GetRegisteredClientsRequest() {
+	public GetRegisteredClientsRequest(int clientId, int requestId) {
+		super(clientId, requestId);
 		this.clients = null;
 		this.exception = new GetRegisteredClientsException();
 	}
@@ -30,9 +30,9 @@ public class GetRegisteredClientsRequest extends Request {
 	}
 	
 	@Override
-	public void processOnMiddleware(TimeLogger timer, int reqCount) {
+	public void processOnMiddleware() {
 		try {
-			setClients(ClientDAO.getClientDAO().getRegisteredClients(timer, reqCount));
+			setClients(ClientDAO.getClientDAO().getRegisteredClients(clientId, requestId));
 		} catch (GetRegisteredClientsException e) {
 			setException(e);
 		}

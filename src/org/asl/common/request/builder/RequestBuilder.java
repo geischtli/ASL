@@ -35,52 +35,79 @@ public class RequestBuilder {
 		return requestList;
 	}
 	
+	public static Request getRegisterMiddlewareRequest() {
+		return new RegisterMiddlewareRequest();
+	}
+	
 	public static Request getRequest(RequestType type, ClientInfo ci) {
+		int clientId = ci.getClientId();
+		int requestId = ci.incrementThenGetRequestId();
 		switch (type) {
 			case CREATE_QUEUE:
 				return new CreateQueueRequest(
-						ci.getClientId()
+						clientId,
+						requestId
 						);
 			case DELETE_QUEUE:
 				return new DeleteQueueRequest(
-						ci.getDeleteQueueId()
+						ci.getDeleteQueueId(),
+						ci.getClientId(),
+						requestId
 						);
 			case GET_QUEUES_WITH_MESSAGES_FOR_CLIENT:
 				return new GetQueuesWithMessagesForClientRequest(
-						ci.getClientId()
+						clientId,
+						clientId,
+						requestId
 						);
 			case GET_REGISTERED_CLIENTS:
-				return new GetRegisteredClientsRequest();
+				return new GetRegisteredClientsRequest(
+						clientId,
+						requestId
+						);
 			case HANDSHAKE:
-				return new HandshakeRequest();
+				return new HandshakeRequest(
+						clientId,
+						requestId
+						);
 			case READ_ALL_MESSAGES_OF_QUEUE:
 				return new ReadAllMessagesOfQueueRequest(
-						ci.getClientId(),
-						ci.getReadQueueId()
+						clientId,
+						clientId,
+						clientId,
+						requestId
 						);
 			case READ_MESSAGE_FROM_SENDER:
 				return new ReadMessageFromSenderRequest(
 						ci.getReadFromSenderId(),
-						ci.getClientId()
+						clientId,
+						requestId
 						);
 			case REMOVE_TOP_MESSAGE_FROM_QUEUE:
 				return new RemoveTopMessageFromQueueRequest(
-						ci.getClientId(),
-						ci.getReadQueueId()
+						clientId,
+						ci.getReadQueueId(),
+						clientId,
+						requestId
 						);
 			case SEND_MESSAGE:
 				return new SendMessageRequest(
-						ci.getClientId(),
+						clientId,
 						ci.getSendReceiverId(),
 						ci.getSendQueueId(),
-						ci.getSendContentText()
+						ci.getSendContentText(),
+						requestId
 						);
-			case REGISTER_MIDDLEWARE:
-				return new RegisterMiddlewareRequest();
 			case GET_REGISTERED_QUEUES:
-				return new GetRegisteredQueuesRequest();
+				return new GetRegisteredQueuesRequest(
+						clientId,
+						requestId
+						);
 			case GET_NUMBER_OF_MESSAGES:
-				return new GetNumberOfMessagesRequest();
+				return new GetNumberOfMessagesRequest(
+						clientId,
+						requestId
+						);
 			default:
 				System.out.println("No request type found for " + type.toString());
 				return null;
@@ -88,43 +115,5 @@ public class RequestBuilder {
 		
 	}
 	
-	/*
-	public static HandshakeRequest newHandshakeRequest() {
-		return new HandshakeRequest(-1);
-	}
-	
-	public static CreateQueueRequest newCreateQueueRequest(int creator_client) {
-		return new CreateQueueRequest(creator_client);
-	}
-	
-	public static DeleteQueueRequest newDeleteQueueRequest(int queue) {
-		return new DeleteQueueRequest(queue);
-	}
-	
-	public static GetRegisteredClientsRequest new GetRegisteredClientsRequest()
-	
-	public static SendMessageRequest newSendMessageRequest(int sender, int receiver, int queue, String content) {
-		return new SendMessageRequest(sender, receiver, queue, content);
-	}
-	
-	public static RegisterMiddlewareRequest newRegisterMiddlewareRequest() {
-		return new RegisterMiddlewareRequest();
-	}
-	
-	public static RemoveTopMessageFromQueueRequest newRemoveTopMessageFromQueueRequest(int receiver, int queue) {
-		return new RemoveTopMessageFromQueueRequest(receiver, queue);
-	}
-	
-	public static ReadAllMessagesOfQueueRequest newReadAllMessagesOfQueueRequest(int receiver, int queue) {
-		return new ReadAllMessagesOfQueueRequest(receiver, queue);
-	}
-	
-	public static ReadMessageFromSenderRequest newReadMessageFromSenderRequest(int sender, int receiver) {
-		return new ReadMessageFromSenderRequest(sender, receiver);
-	}
-	
-	public static GetQueuesWithMessagesForClientRequest newGetQueuesWithMessagesForClientRequest(int receiver) {
-		return new GetQueuesWithMessagesForClientRequest(receiver);
-	}*/
 }
 

@@ -4,7 +4,6 @@ import java.io.Serializable;
 
 import org.asl.client.ClientInfo;
 import org.asl.common.request.types.exceptions.ASLException;
-import org.asl.common.timing.TimeLogger;
 
 /**
  * The abstract Message class gives a default behavior for all
@@ -15,7 +14,18 @@ import org.asl.common.timing.TimeLogger;
 public abstract class Request implements Serializable {
 	
 	private static final long serialVersionUID = 101L;
+	
 	protected ASLException exception;
+	// the 2 following fields provide a GLOBALLY UNIQUE request id tuple
+	protected int clientId;
+	protected int requestId;
+	
+	public Request() {}
+	
+	public Request(int clientId, int requestId) {
+		this.clientId = clientId;
+		this.requestId = requestId;
+	}
 	
 	public ASLException getException() {
 		return exception;
@@ -23,6 +33,22 @@ public abstract class Request implements Serializable {
 
 	protected void setException(ASLException e) {
 		this.exception = e;
+	}
+
+	public int getClientId() {
+		return clientId;
+	}
+	
+	public void setClientId(int clientId) {
+		this.clientId = clientId;
+	}
+	
+	public int getRequestId() {
+		return requestId;
+	}
+	
+	public void setRequestId(int requestId) {
+		this.requestId = requestId;
 	}
 	
 	public enum RequestType {
@@ -40,6 +66,6 @@ public abstract class Request implements Serializable {
 		GET_REGISTERED_QUEUES,
 	}
 	
-	public abstract void processOnMiddleware(TimeLogger timer, int reqCount);
+	public abstract void processOnMiddleware();
 	public abstract void processOnClient(ClientInfo ci) throws ASLException;
 }

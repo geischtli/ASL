@@ -5,5 +5,5 @@ import org.asl.common.timing.TimeLogger;
 
 public interface IMiddlewareDAO {
 	
-	public int registerMiddleware(TimeLogger timer, int requestId) throws RegisterMiddlewareException;
+	public int registerMiddleware() throws RegisterMiddlewareException;
 }

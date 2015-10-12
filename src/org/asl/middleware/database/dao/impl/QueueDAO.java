@@ -14,7 +14,6 @@ import org.asl.common.request.types.exceptions.GetQueuesWithMessagesForClientExc
 import org.asl.common.request.types.exceptions.GetRegisteredQueuesException;
 import org.asl.common.request.types.exceptions.ReadAllMessagesOfQueueException;
 import org.asl.common.request.types.exceptions.RemoveTopMessageFromQueueException;
-import org.asl.common.timing.TimeLogger;
 import org.asl.middleware.database.config.ASLDatabase;
 import org.asl.middleware.database.connectionpool.ConnectionWrapper;
 import org.asl.middleware.database.dao.IQueueDAO;
@@ -28,10 +27,10 @@ public class QueueDAO implements IQueueDAO {
 	}
 	
 	@Override
-	public int createQueue(int creator_id, TimeLogger timer, int requestId) throws CreateQueueException {
+	public int createQueue(int creatorId, int requestId) throws CreateQueueException {
 		try (ConnectionWrapper conn = ASLDatabase.getNewConnection().get()) {
 			PreparedStatement create_queue = conn.get().prepareStatement(QueueTable.CREATE_QUEUE_STRING);
-			create_queue.setInt(1, creator_id);
+			create_queue.setInt(1, creatorId);
 //			timer.click(TimeLogger.GOT_CONNECTION, requestId);
 			ResultSet rs = create_queue.executeQuery();
 			conn.get().commit();
@@ -44,10 +43,10 @@ public class QueueDAO implements IQueueDAO {
 	}
 	
 	@Override
-	public int deleteQueue(int queue_id, TimeLogger timer, int requestId) throws DeleteQueueException {
+	public int deleteQueue(int queueId, int clientId, int requestId) throws DeleteQueueException {
 		try (ConnectionWrapper conn = ASLDatabase.getNewConnection().get()) {
 			PreparedStatement deleteQueue = conn.get().prepareStatement(QueueTable.DELETE_QUEUE_STRING);
-			deleteQueue.setInt(1, queue_id);
+			deleteQueue.setInt(1, queueId);
 //			timer.click(MiddlewareTimings.GOT_CONNECTION, requestId);
 			ResultSet rs = deleteQueue.executeQuery();
 			conn.get().commit();
@@ -60,7 +59,7 @@ public class QueueDAO implements IQueueDAO {
 	}
 	
 	@Override
-	public Message removeTopMessageFromQueue(int receiver, int queue, TimeLogger timer, int requestId) throws RemoveTopMessageFromQueueException {
+	public Message removeTopMessageFromQueue(int receiver, int queue, int clientId, int requestId) throws RemoveTopMessageFromQueueException {
 		try (ConnectionWrapper conn = ASLDatabase.getNewConnection().get()) {
 			PreparedStatement getMessage = conn.get().prepareStatement(QueueTable.REMOVE_TOP_MESSAGE_STRING);
 			getMessage.setInt(1, receiver);
@@ -83,7 +82,7 @@ public class QueueDAO implements IQueueDAO {
 	}
 
 	@Override
-	public List<Message> readAllMessagesOfQueue(int receiver, int queue, TimeLogger timer, int requestId) throws ReadAllMessagesOfQueueException {
+	public List<Message> readAllMessagesOfQueue(int receiver, int queue,  int clientId, int requestId) throws ReadAllMessagesOfQueueException {
 		try (ConnectionWrapper conn = ASLDatabase.getNewConnection().get()) {
 			PreparedStatement getMessages = conn.get().prepareStatement(QueueTable.READ_ALL_MESSAGES_STRING);
 			getMessages.setInt(1, receiver);
@@ -110,7 +109,7 @@ public class QueueDAO implements IQueueDAO {
 	}
 
 	@Override
-	public List<Integer> getQueuesWithMessagesForClient(int receiver, TimeLogger timer, int requestId) throws GetQueuesWithMessagesForClientException {
+	public List<Integer> getQueuesWithMessagesForClient(int receiver, int clientId, int requestId) throws GetQueuesWithMessagesForClientException {
 		try (ConnectionWrapper conn = ASLDatabase.getNewConnection().get()) {
 			PreparedStatement getQueuesForClient = conn.get().prepareStatement(QueueTable.GET_QUEUES_FOR_CLIENT_STRING);
 			getQueuesForClient.setInt(1, receiver);
@@ -129,7 +128,7 @@ public class QueueDAO implements IQueueDAO {
 	}
 
 	@Override
-	public List<Integer> getRegisteredQueues() throws GetRegisteredQueuesException {
+	public List<Integer> getRegisteredQueues(int clientId, int requestId) throws GetRegisteredQueuesException {
 		try (ConnectionWrapper conn = ASLDatabase.getNewConnection().get()) {
 			PreparedStatement getRegisteredQueues = conn.get().prepareStatement(QueueTable.GET_REGISTERED_QUEUES_STRING);
 //			timer.click(MiddlewareTimings.GOT_CONNECTION, requestId);

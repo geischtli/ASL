@@ -9,7 +9,6 @@ import java.util.concurrent.TimeUnit;
 
 import org.asl.client.VirtualClient;
 import org.asl.client.management.ASLAnimator;
-import org.asl.middleware.AbstractMiddleware;
 import org.asl.middleware.Middleware;
 
 import javafx.application.Application;
@@ -18,7 +17,7 @@ public class Main {
 	private static final int port = 9090;
 	static int p = 0;
 	public static void main(String[] args) throws IOException, SQLException {
-		AbstractMiddleware mw = new Middleware(port);
+		Middleware mw = new Middleware(port);
 		mw.accept();
 		System.out.println("Started server");
 		
@@ -42,7 +41,6 @@ public class Main {
 				e.printStackTrace();
 			}
 		}
-		//threadpool.shutdown();
 		try {
 			if (!threadpool.awaitTermination(600, TimeUnit.SECONDS)) {
 				System.out.println("Force threadpool to shutdown");

@@ -1,4 +1,4 @@
-package org.asl.middleware;
+/*package org.asl.middleware;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -46,4 +46,4 @@ public abstract class AbstractMiddleware {
 	}
 	
 	public abstract void accept();
-}
+}*/

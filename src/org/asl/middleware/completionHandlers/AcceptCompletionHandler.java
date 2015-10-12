@@ -9,7 +9,7 @@ import org.asl.common.socket.SocketHelper;
 import org.asl.common.socket.SocketLocation;
 import org.asl.common.socket.SocketOperation;
 import org.asl.common.timing.TimeLogger;
-import org.asl.middleware.AbstractMiddleware;
+import org.asl.middleware.Middleware;
 import org.asl.middleware.connectioncontrol.ConnectionTimeWrapper;
 import org.asl.middleware.connectioncontrol.WatchDog;
 
@@ -17,19 +17,17 @@ public class AcceptCompletionHandler<V, A> implements CompletionHandler<Asynchro
 
 	private AsynchronousServerSocketChannel serverChannel;
 	private WatchDog watchDog;
-	private TimeLogger timer;
 	private int requestId;
 	
-	public AcceptCompletionHandler(AsynchronousServerSocketChannel serverChannel, WatchDog watchDog, TimeLogger timer, int requestId) {
+	public AcceptCompletionHandler(AsynchronousServerSocketChannel serverChannel, WatchDog watchDog, int requestId) {
 		this.serverChannel = serverChannel;
 		this.watchDog = watchDog;
-		this.timer = timer;
 		this.requestId = requestId;
 	}
 	
 	public static AcceptCompletionHandler<AsynchronousSocketChannel, Integer> create(
-			AsynchronousServerSocketChannel serverChannel, WatchDog watchDog, TimeLogger timer, int requestId) {
-		return new AcceptCompletionHandler<AsynchronousSocketChannel, Integer>(serverChannel, watchDog, timer, requestId);
+			AsynchronousServerSocketChannel serverChannel, WatchDog watchDog, int requestId) {
+		return new AcceptCompletionHandler<AsynchronousSocketChannel, Integer>(serverChannel, watchDog, requestId);
 	}
 	
 	@Override
@@ -39,8 +37,8 @@ public class AcceptCompletionHandler<V, A> implements CompletionHandler<Asynchro
 		//timer.click(MiddlewareTimings.ACCEPTED_CLIENT, requestId);
 		//accept();
 		serverChannel.accept(++requestId, this);
-		ByteBuffer inbuf = ByteBuffer.allocate(AbstractMiddleware.INITIAL_BUFSIZE);
-		sc.read(inbuf, c, MiddlewareReadCompletionHandler.create(sc, inbuf, timer, requestId));
+		ByteBuffer inbuf = ByteBuffer.allocate(Middleware.INITIAL_BUFSIZE);
+		sc.read(inbuf, c, MiddlewareReadCompletionHandler.create(sc, inbuf , requestId));
 	}
 
 	@Override

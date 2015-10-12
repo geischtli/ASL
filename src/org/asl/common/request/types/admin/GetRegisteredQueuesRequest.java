@@ -7,7 +7,6 @@ import org.asl.client.ClientInfo;
 import org.asl.common.request.Request;
 import org.asl.common.request.types.exceptions.ASLException;
 import org.asl.common.request.types.exceptions.GetRegisteredQueuesException;
-import org.asl.common.timing.TimeLogger;
 import org.asl.middleware.database.dao.impl.QueueDAO;
 
 public class GetRegisteredQueuesRequest extends Request {
@@ -15,7 +14,8 @@ public class GetRegisteredQueuesRequest extends Request {
 	private static final long serialVersionUID = 113L;
 	private List<Integer> queues;
 	
-	public GetRegisteredQueuesRequest() {
+	public GetRegisteredQueuesRequest(int clientId, int requestId) {
+		super(clientId, requestId);
 		this.setQueues(null);
 		this.exception = new GetRegisteredQueuesException();
 	}
@@ -29,10 +29,9 @@ public class GetRegisteredQueuesRequest extends Request {
 	}
 	
 	@Override
-	public void processOnMiddleware(TimeLogger timer, int reqCount) {
+	public void processOnMiddleware() {
 		try {
-			System.out.println("in proc on mw");
-			setQueues(QueueDAO.getQueueDAO().getRegisteredQueues());
+			setQueues(QueueDAO.getQueueDAO().getRegisteredQueues(clientId, requestId));
 		} catch (GetRegisteredQueuesException e) {
 			setException(e);
 		}
@@ -40,7 +39,6 @@ public class GetRegisteredQueuesRequest extends Request {
 
 	@Override
 	public void processOnClient(ClientInfo ci) throws ASLException {
-		System.out.println("in proc on client");
 		if (!getException().carriesError()) {
 			if (queues.size() > 0) {
 				ci.setQueuesOnline(queues);

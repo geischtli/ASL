@@ -1,6 +1,7 @@
 package org.asl.client;
 
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class ClientInfo {
 	
@@ -11,11 +12,10 @@ public class ClientInfo {
 	private int sendQueueId;
 	private List<Integer> clientsOnline;
 	private List<Integer> queuesOnline;
-	
 	private int readFromSenderId;
 	private int sendReceiverId;
-	
 	private int numberOfMessages;
+	private AtomicInteger requestId; // counter for globally unique request id tuple
 	
 	public ClientInfo() {
 		this.clientId = 0;
@@ -27,6 +27,7 @@ public class ClientInfo {
 		this.readFromSenderId = 0;
 		this.sendReceiverId = 0;
 		this.numberOfMessages = -1;
+		this.requestId.set(0);
 	}
 	
 	public static ClientInfo create() {
@@ -107,6 +108,10 @@ public class ClientInfo {
 
 	public void setQueuesOnline(List<Integer> queuesOnline) {
 		this.queuesOnline = queuesOnline;
+	}
+	
+	public int incrementThenGetRequestId() {
+		return requestId.incrementAndGet();
 	}
 	
 }

@@ -4,7 +4,6 @@ import org.asl.client.ClientInfo;
 import org.asl.common.request.Request;
 import org.asl.common.request.types.exceptions.ASLException;
 import org.asl.common.request.types.exceptions.GetNumberOfMessagesException;
-import org.asl.common.timing.TimeLogger;
 import org.asl.middleware.database.dao.impl.MessageDAO;
 
 public class GetNumberOfMessagesRequest extends Request {
@@ -12,7 +11,8 @@ public class GetNumberOfMessagesRequest extends Request {
 	private static final long serialVersionUID = 112L;
 	private int numberOfMessages;
 	
-	public GetNumberOfMessagesRequest() {
+	public GetNumberOfMessagesRequest(int clientId, int requestId) {
+		super(clientId, requestId);
 		this.numberOfMessages = -1;
 		this.exception = new GetNumberOfMessagesException();
 	}
@@ -26,9 +26,9 @@ public class GetNumberOfMessagesRequest extends Request {
 	}
 	
 	@Override
-	public void processOnMiddleware(TimeLogger timer, int reqCount) {
+	public void processOnMiddleware() {
 		try {
-			setNumberOfMessages(MessageDAO.getMessageDAO().getNumberOfMessages());
+			setNumberOfMessages(MessageDAO.getMessageDAO().getNumberOfMessages(clientId, requestId));
 		} catch (GetNumberOfMessagesException e) {
 			setException(e);
 		}

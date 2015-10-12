@@ -4,31 +4,31 @@ import org.asl.client.ClientInfo;
 import org.asl.common.request.Request;
 import org.asl.common.request.types.exceptions.ASLException;
 import org.asl.common.request.types.exceptions.HandshakeException;
-import org.asl.common.timing.TimeLogger;
 import org.asl.middleware.database.dao.impl.ClientDAO;
 
 public class HandshakeRequest extends Request {
 	
 	private static final long serialVersionUID = 106L;
-	private int client_id;
+	private int clientIdReturnedFromDB;
 	
-	public HandshakeRequest() {
-		this.client_id = 0;
+	public HandshakeRequest(int clientId, int requestId) {
+		super(clientId, requestId);
+		this.clientIdReturnedFromDB = 0;
 		this.exception = new HandshakeException();
 	}
 	
-	public int getClientId() {
-		return client_id;
+	public int getClientIdReturnedFromDB() {
+		return clientIdReturnedFromDB;
 	}
 
-	public void setClientId(int client_id) {
-		this.client_id = client_id;
+	public void setClientIdReturnedFromDB(int clientIdReturnedFromDB) {
+		this.clientIdReturnedFromDB = clientIdReturnedFromDB;
 	}
 
 	@Override
-	public void processOnMiddleware(TimeLogger timer, int reqCount) {
+	public void processOnMiddleware() {
 		try {
-			setClientId(ClientDAO.getClientDAO().registerClient(timer, reqCount));
+			setClientIdReturnedFromDB(ClientDAO.getClientDAO().registerClient(clientId, requestId));
 		} catch (HandshakeException e) {
 			setException(e);
 		}
@@ -37,7 +37,7 @@ public class HandshakeRequest extends Request {
 	@Override
 	public void processOnClient(ClientInfo ci) throws ASLException {
 		if (!getException().carriesError()) {
-			ci.setClientId(client_id);
+			ci.setClientId(clientIdReturnedFromDB);
 			System.out.println("Client got ID " + ci.getClientId());
 		} else {
 			throw getException();

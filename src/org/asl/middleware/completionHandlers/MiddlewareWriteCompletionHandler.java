@@ -9,7 +9,7 @@ import org.asl.common.request.serialize.SerializingUtilities;
 import org.asl.common.socket.SocketHelper;
 import org.asl.common.socket.SocketLocation;
 import org.asl.common.socket.SocketOperation;
-import org.asl.middleware.AbstractMiddleware;
+import org.asl.middleware.Middleware;
 import org.asl.middleware.connectioncontrol.ConnectionTimeWrapper;
 
 public class MiddlewareWriteCompletionHandler implements CompletionHandler<Integer, ConnectionTimeWrapper>{
@@ -31,8 +31,8 @@ public class MiddlewareWriteCompletionHandler implements CompletionHandler<Integ
 	public void completed(Integer writtenBytes, ConnectionTimeWrapper connTimeWrapper) {
 		SerializingUtilities.forceFurtherWriteIfNeeded(outbufWrap.getBuf(), writtenBytes, outbufWrap.getBytes(), sc);
 //		timer.click(MiddlewareTimings.WROTE_ANSWER, requestId);
-		ByteBuffer inbuf = ByteBuffer.allocate(AbstractMiddleware.INITIAL_BUFSIZE);
-		sc.read(inbuf, connTimeWrapper, MiddlewareReadCompletionHandler.create(sc, inbuf, null, 313));
+		ByteBuffer inbuf = ByteBuffer.allocate(Middleware.INITIAL_BUFSIZE);
+		sc.read(inbuf, connTimeWrapper, MiddlewareReadCompletionHandler.create(sc, inbuf, 313));
 		connTimeWrapper.reset();
 	}
 

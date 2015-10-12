@@ -17,18 +17,16 @@ public class MiddlewareReadCompletionHandler implements CompletionHandler<Intege
 
 	private AsynchronousSocketChannel sc;
 	private ByteBuffer inbuf;
-	private TimeLogger timer;
 	private int requestId;
 	
-	public MiddlewareReadCompletionHandler(AsynchronousSocketChannel sc, ByteBuffer inbuf, TimeLogger timer, int requestId) {
+	public MiddlewareReadCompletionHandler(AsynchronousSocketChannel sc, ByteBuffer inbuf, int requestId) {
 		this.sc = sc;
 		this.inbuf = inbuf;
-		this.timer = timer;
 		this.requestId = requestId;
 	}
 	
-	public static MiddlewareReadCompletionHandler create(AsynchronousSocketChannel sc, ByteBuffer inbuf, TimeLogger timer, int requestId) {
-		return new MiddlewareReadCompletionHandler(sc, inbuf, timer, requestId);
+	public static MiddlewareReadCompletionHandler create(AsynchronousSocketChannel sc, ByteBuffer inbuf, int requestId) {
+		return new MiddlewareReadCompletionHandler(sc, inbuf, requestId);
 	}
 	
 	@Override
@@ -46,7 +44,7 @@ public class MiddlewareReadCompletionHandler implements CompletionHandler<Intege
 		Request req = SerializingUtilities.unpackRequest(fullInbufWrap.getBuf(), fullInbufWrap.getBytes());
 //		timer.click(MiddlewareTimings.PROCESSED_READ, requestId);
 		
-		req.processOnMiddleware(timer, requestId);
+		req.processOnMiddleware();
 		
 		ByteBufferWrapper outbufWrap = SerializingUtilities.packRequest(req);
 //		timer.click(MiddlewareTimings.PACKED_REQUEST, requestId);

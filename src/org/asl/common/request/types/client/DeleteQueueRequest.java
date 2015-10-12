@@ -4,30 +4,30 @@ import org.asl.client.ClientInfo;
 import org.asl.common.request.Request;
 import org.asl.common.request.types.exceptions.ASLException;
 import org.asl.common.request.types.exceptions.DeleteQueueException;
-import org.asl.common.timing.TimeLogger;
 import org.asl.middleware.database.dao.impl.QueueDAO;
 
 public class DeleteQueueRequest extends Request {
 
 	private static final long serialVersionUID = 103L;
-	private int queue_id;
+	private int queueId;
 	
-	public DeleteQueueRequest(int queue_id) {
-		this.queue_id = queue_id;
+	public DeleteQueueRequest(int queueId, int clientId, int requestId) {
+		super(clientId, requestId);
+		this.queueId = queueId;
 	}
 	
 	public int getQueueId() {
-		return queue_id;
+		return queueId;
 	}
 
 	public void setQueueId(int queue_id) {
-		this.queue_id = queue_id;
+		this.queueId = queue_id;
 	}
 	
 	@Override
-	public void processOnMiddleware(TimeLogger timer, int reqCount) {
+	public void processOnMiddleware() {
 		try {
-			QueueDAO.getQueueDAO().deleteQueue(queue_id, timer, reqCount);
+			QueueDAO.getQueueDAO().deleteQueue(queueId, clientId, requestId);
 		} catch (DeleteQueueException e) {
 			setException(e);
 		}
@@ -36,7 +36,7 @@ public class DeleteQueueRequest extends Request {
 	@Override
 	public void processOnClient(ClientInfo ci) throws ASLException {
 		if (!getException().carriesError()) {
-			System.out.println("Queue " + queue_id + " delete successfully");
+			System.out.println("Queue " + queueId + " delete successfully");
 			ci.setDeleteQueueId(0);
 			ci.setReadQueueId(0);
 			ci.setSendQueueId(0);

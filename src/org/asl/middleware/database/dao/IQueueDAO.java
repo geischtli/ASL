@@ -8,15 +8,14 @@ import org.asl.common.request.types.exceptions.GetQueuesWithMessagesForClientExc
 import org.asl.common.request.types.exceptions.GetRegisteredQueuesException;
 import org.asl.common.request.types.exceptions.ReadAllMessagesOfQueueException;
 import org.asl.common.request.types.exceptions.RemoveTopMessageFromQueueException;
-import org.asl.common.timing.TimeLogger;
 import org.asl.middleware.database.model.Message;
 
 public interface IQueueDAO {
 
-	public int createQueue(int creator_id, TimeLogger timer, int reqCount) throws CreateQueueException;
-	public int deleteQueue(int queue_id, TimeLogger timer, int requestId) throws DeleteQueueException;
-	public Message removeTopMessageFromQueue(int receiver, int queue, TimeLogger timer, int requestId) throws RemoveTopMessageFromQueueException;
-	public List<Message> readAllMessagesOfQueue(int receiver, int queue, TimeLogger timer, int requestId) throws ReadAllMessagesOfQueueException;
-	public List<Integer> getQueuesWithMessagesForClient(int receiver, TimeLogger timer, int requestId) throws GetQueuesWithMessagesForClientException;
-	public List<Integer> getRegisteredQueues() throws GetRegisteredQueuesException;
+	public int createQueue(int creator_id, int reqCount) throws CreateQueueException;
+	public int deleteQueue(int queueId, int clientId, int requestId) throws DeleteQueueException;
+	public Message removeTopMessageFromQueue(int receiver, int queue, int clientId, int requestId) throws RemoveTopMessageFromQueueException;
+	public List<Message> readAllMessagesOfQueue(int receiver, int queue,  int clientId, int requestId) throws ReadAllMessagesOfQueueException;
+	public List<Integer> getQueuesWithMessagesForClient(int receiver, int clientId, int requestId) throws GetQueuesWithMessagesForClientException;
+	public List<Integer> getRegisteredQueues(int clientId, int requestId) throws GetRegisteredQueuesException;
 }

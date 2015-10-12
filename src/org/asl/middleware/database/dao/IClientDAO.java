@@ -10,7 +10,7 @@ import org.asl.middleware.database.model.Message;
 
 public interface IClientDAO {
 	
-	public int registerClient(TimeLogger timer, int requestId) throws HandshakeException;
-	public Message readMessageFromSender(int sender, int receiver, TimeLogger timer, int requestId) throws ReadMessageFromSenderException;
-	public List<Integer> getRegisteredClients(TimeLogger timer, int requestId) throws GetRegisteredClientsException;
+	public int registerClient(int clientId, int requestId) throws HandshakeException;
+	public Message readMessageFromSender(int sender, int receiver, int clientId, int requestId) throws ReadMessageFromSenderException;
+	public List<Integer> getRegisteredClients(int clientId, int requestId) throws GetRegisteredClientsException;
 }

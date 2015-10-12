@@ -21,7 +21,7 @@ public class MessageDAO implements IMessageDAO {
 	}
 	
 	@Override
-	public void sendMessage(int sender, int receiver, int queue, String content, TimeLogger timer, int requestId) throws SendMessageException {
+	public void sendMessage(int sender, int receiver, int queue, String content, int requestId) throws SendMessageException {
 		try (ConnectionWrapper conn = ASLDatabase.getNewConnection().get()) {
 			PreparedStatement sendMessage = conn.get().prepareStatement(MessageTable.SEND_MESSAGE_STRING);
 			sendMessage.setInt(1, sender);
@@ -38,7 +38,7 @@ public class MessageDAO implements IMessageDAO {
 	}
 	
 	@Override
-	public int getNumberOfMessages() throws GetNumberOfMessagesException {
+	public int getNumberOfMessages(int clientId, int requestId) throws GetNumberOfMessagesException {
 		try (ConnectionWrapper conn = ASLDatabase.getNewConnection().get()) {
 			PreparedStatement getNumberOfMessages = conn.get().prepareStatement(MessageTable.GET_NUMBER_OF_MESSAGES_STRING);
 //			timer.click(TimeLogger.GOT_CONNECTION, requestId);
