@@ -49,7 +49,7 @@ public class ASLAnimator extends Application {
 	
 	private void createMyConsole() {
 		root = new GridPane();
-		scene = new Scene(root, 1000,500);
+		scene = new Scene(root, 600, 150);
 		root.add(new Label("Request: "), 0, 0);
 		root.add(new Label("Sender: "), 0, 1);
 		root.add(new Label("Receiver: "), 0, 2);
@@ -65,7 +65,7 @@ public class ASLAnimator extends Application {
 			@Override
 			public void changed(ObservableValue<? extends RequestType> observable, RequestType old, RequestType request) {
 				
-				Button requestExecutor = new Button("Execute specified request");
+				Button requestExecutor = new Button("Execute request");
 				requestExecutor.setOnAction(new EventHandler<ActionEvent>() {
 					
 					@Override
