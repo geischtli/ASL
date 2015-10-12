@@ -11,4 +11,8 @@ public class TimeLogger {
 		logger.info("C:" + clientId + ",R:" + requestId + ",L:" + timing + ",T:" + System.nanoTime());
 	}
 	
+	public static void setClick(Timing timing, long time, int clientId, int requestId) {
+		logger.info("C:" + clientId + ",R:" + requestId + ",L:" + timing + ",T:" + time);
+	}
+	
 }

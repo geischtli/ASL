@@ -8,10 +8,10 @@ import java.util.concurrent.ExecutionException;
 
 import org.asl.common.request.types.exceptions.GetNumberOfMessagesException;
 import org.asl.common.request.types.exceptions.SendMessageException;
-import org.asl.common.timing.TimeLogger;
 import org.asl.middleware.database.config.ASLDatabase;
 import org.asl.middleware.database.connectionpool.ConnectionWrapper;
 import org.asl.middleware.database.dao.IMessageDAO;
+import org.asl.middleware.database.dao.common.CommonDAO;
 import org.asl.middleware.database.model.MessageTable;
 
 public class MessageDAO implements IMessageDAO {
@@ -28,10 +28,7 @@ public class MessageDAO implements IMessageDAO {
 			sendMessage.setInt(2, receiver);
 			sendMessage.setInt(3, queue);
 			sendMessage.setString(4, content);
-//			timer.click(TimeLogger.GOT_CONNECTION, requestId);
-			sendMessage.execute();
-			conn.get().commit();
-//			timer.click(TimeLogger.EXECUTED_QUERY, requestId);
+			ResultSet rs = CommonDAO.executeQuery(conn.get(), sendMessage, sender, requestId);
 		} catch (SQLException | IOException | InterruptedException | ExecutionException e) {
 			throw new SendMessageException(e);
 		}
@@ -41,10 +38,7 @@ public class MessageDAO implements IMessageDAO {
 	public int getNumberOfMessages(int clientId, int requestId) throws GetNumberOfMessagesException {
 		try (ConnectionWrapper conn = ASLDatabase.getNewConnection().get()) {
 			PreparedStatement getNumberOfMessages = conn.get().prepareStatement(MessageTable.GET_NUMBER_OF_MESSAGES_STRING);
-//			timer.click(TimeLogger.GOT_CONNECTION, requestId);
-			ResultSet rs = getNumberOfMessages.executeQuery();
-			conn.get().commit();
-//			timer.click(TimeLogger.EXECUTED_QUERY, requestId);
+			ResultSet rs = CommonDAO.executeQuery(conn.get(), getNumberOfMessages, clientId, requestId);
 			rs.next();
 			return rs.getInt(1);
 		} catch (SQLException | IOException | InterruptedException | ExecutionException e) {

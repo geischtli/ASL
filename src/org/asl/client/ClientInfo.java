@@ -27,7 +27,7 @@ public class ClientInfo {
 		this.readFromSenderId = 0;
 		this.sendReceiverId = 0;
 		this.numberOfMessages = -1;
-		this.requestId.set(0);
+		this.requestId = new AtomicInteger(0);
 	}
 	
 	public static ClientInfo create() {
@@ -108,6 +108,10 @@ public class ClientInfo {
 
 	public void setQueuesOnline(List<Integer> queuesOnline) {
 		this.queuesOnline = queuesOnline;
+	}
+	
+	public int getRequestId() {
+		return requestId.get();
 	}
 	
 	public int incrementThenGetRequestId() {

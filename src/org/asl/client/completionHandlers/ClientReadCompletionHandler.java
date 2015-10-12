@@ -38,20 +38,20 @@ public class ClientReadCompletionHandler implements CompletionHandler<Integer, O
 	}
 	
 	public static ClientReadCompletionHandler create(AsynchronousSocketChannel sc, ClientInfo ci, ByteBuffer inbuf, List<RequestType> requestList, int requestId) {
-		TimeLogger.click(Timing.CLIENT_START_READ, ci.getClientId(), requestId);
+		TimeLogger.click(Timing.CLIENT_START_READ, ci.getClientId(), ci.getRequestId());
 		return new ClientReadCompletionHandler(sc, ci, inbuf, requestList, requestId);
 	}
 	
 	@Override
 	public void completed(Integer readBytes, Object attachment) {
 		ByteBufferWrapper fullInbufWrap = SerializingUtilities.forceFurtherReadIfNeeded(inbuf, readBytes, sc);
-		TimeLogger.click(Timing.CLIENT_END_READ, ci.getClientId(), requestId);
+		TimeLogger.click(Timing.CLIENT_END_READ, ci.getClientId(), ci.getRequestId());
 		
 		if (fullInbufWrap == null || readBytes == -1) {
 			return;
 		}
 
-		TimeLogger.click(Timing.CLIENT_START_POSTPROCESSING, ci.getClientId(), requestId);
+		TimeLogger.click(Timing.CLIENT_START_POSTPROCESSING, ci.getClientId(), ci.getRequestId());
 		Request ansReq = SerializingUtilities.unpackRequest(fullInbufWrap.getBuf(), fullInbufWrap.getBytes());
 		try {
 			ansReq.processOnClient(ci);
@@ -59,10 +59,10 @@ public class ClientReadCompletionHandler implements CompletionHandler<Integer, O
 			System.out.println("Reading message failed with type: " + ansReq.getException().getClass());
 			System.out.println("And reason: " + ansReq.getException().getMessage());
 		}
-		TimeLogger.click(Timing.CLIENT_END_POSTPROCESSING, ci.getClientId(), requestId);
-		if (++requestId < requestList.size()) {
+		TimeLogger.click(Timing.CLIENT_END_POSTPROCESSING, ci.getClientId(), ci.getRequestId());
+		if (ci.getRequestId() + 1 < requestList.size()) {
 			if (sc.isOpen()) {
-				ByteBufferWrapper outbufWrap = SerializingUtilities.packRequest(RequestBuilder.getRequest(requestList.get(requestId), ci));
+				ByteBufferWrapper outbufWrap = SerializingUtilities.packRequest(RequestBuilder.getRequest(requestList.get(ci.getRequestId()), ci));
 				sc.write(outbufWrap.getBuf(), outbufWrap.getBytes(), ClientWriteCompletionHandler.create(sc, outbufWrap, ci, requestList, requestId));
 			} else {
 				sc.connect(new InetSocketAddress(InetAddress.getLoopbackAddress(), AbstractClient.port), null,

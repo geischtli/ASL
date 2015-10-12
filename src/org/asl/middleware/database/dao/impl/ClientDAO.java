@@ -15,6 +15,7 @@ import org.asl.middleware.MiddlewareInfo;
 import org.asl.middleware.database.config.ASLDatabase;
 import org.asl.middleware.database.connectionpool.ConnectionWrapper;
 import org.asl.middleware.database.dao.IClientDAO;
+import org.asl.middleware.database.dao.common.CommonDAO;
 import org.asl.middleware.database.model.ClientTable;
 import org.asl.middleware.database.model.Message;
 
@@ -29,10 +30,7 @@ public class ClientDAO implements IClientDAO {
 		try (ConnectionWrapper conn = ASLDatabase.getNewConnection().get()) {
 			PreparedStatement registerClient = conn.get().prepareStatement(ClientTable.REGISTER_CLIENT_STRING);
 			registerClient.setInt(1, MiddlewareInfo.getMiddlewareId());
-//			timer.click(TimeLogger.GOT_CONNECTION, requestId);
-			ResultSet rs = registerClient.executeQuery();
-			conn.get().commit();
-//			timer.click(TimeLogger.EXECUTED_QUERY, requestId);
+			ResultSet rs = CommonDAO.executeQuery(conn.get(), registerClient, clientId, requestId);
 			rs.next();
 			return rs.getInt(1);
 		} catch (SQLException | IOException | InterruptedException | ExecutionException e) {
@@ -46,10 +44,7 @@ public class ClientDAO implements IClientDAO {
 			PreparedStatement readMessageFromSender = conn.get().prepareStatement(ClientTable.READ_MESSAGE_FROM_SENDER);
 			readMessageFromSender.setInt(1, sender);
 			readMessageFromSender.setInt(2, receiver);
-//			timer.click(MiddlewareTimings.GOT_CONNECTION, requestId);
-			ResultSet rs = readMessageFromSender.executeQuery();
-			conn.get().commit();
-//			timer.click(MiddlewareTimings.EXECUTED_QUERY, requestId);
+			ResultSet rs = CommonDAO.executeQuery(conn.get(), readMessageFromSender, clientId, requestId);
 			// returns either 0 or 1 message
 			if (rs.next()) {
 				return new Message(
@@ -71,10 +66,7 @@ public class ClientDAO implements IClientDAO {
 	public List<Integer> getRegisteredClients(int clientId, int requestId) throws GetRegisteredClientsException {
 		try (ConnectionWrapper conn = ASLDatabase.getNewConnection().get()) {
 			PreparedStatement getRegisteredClients = conn.get().prepareStatement(ClientTable.GET_REGISTERED_CLIENTS_STRING);
-//			timer.click(MiddlewareTimings.GOT_CONNECTION, requestId);
-			ResultSet rs = getRegisteredClients.executeQuery();
-			conn.get().commit();
-//			timer.click(MiddlewareTimings.EXECUTED_QUERY, requestId);
+			ResultSet rs = CommonDAO.executeQuery(conn.get(), getRegisteredClients, clientId, requestId);
 			List<Integer> clients = new ArrayList<Integer>();
 			while (rs.next()) {
 				clients.add(rs.getInt(1));

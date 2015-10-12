@@ -10,6 +10,7 @@ import org.asl.common.request.types.exceptions.RegisterMiddlewareException;
 import org.asl.middleware.database.config.ASLDatabase;
 import org.asl.middleware.database.connectionpool.ConnectionWrapper;
 import org.asl.middleware.database.dao.IMiddlewareDAO;
+import org.asl.middleware.database.dao.common.CommonDAO;
 import org.asl.middleware.database.model.MiddlewareSequence;
 
 public class MiddlewareDAO implements IMiddlewareDAO {
@@ -21,11 +22,8 @@ public class MiddlewareDAO implements IMiddlewareDAO {
 	@Override
 	public int registerMiddleware() throws RegisterMiddlewareException {
 		try (ConnectionWrapper conn = ASLDatabase.getNewConnection().get()) {
-			PreparedStatement register_middleware = conn.get().prepareStatement(MiddlewareSequence.REGISTER_MIDDLEWARE_STRING);
-			//timer.click(MiddlewareTimings.GOT_CONNECTION, requestId);
-			ResultSet rs = register_middleware.executeQuery();
-			conn.get().commit();
-			//timer.click(MiddlewareTimings.EXECUTED_QUERY, requestId);
+			PreparedStatement registerMiddleware = conn.get().prepareStatement(MiddlewareSequence.REGISTER_MIDDLEWARE_STRING);
+			ResultSet rs = CommonDAO.executeQuery(conn.get(), registerMiddleware, -2, -1);
 			rs.next();
 			return rs.getInt(1);
 		} catch (SQLException | IOException | InterruptedException | ExecutionException e) {

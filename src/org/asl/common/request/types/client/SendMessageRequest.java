@@ -4,7 +4,6 @@ import org.asl.client.ClientInfo;
 import org.asl.common.request.Request;
 import org.asl.common.request.types.exceptions.ASLException;
 import org.asl.common.request.types.exceptions.SendMessageException;
-import org.asl.common.timing.TimeLogger;
 import org.asl.middleware.database.dao.impl.MessageDAO;
 
 public class SendMessageRequest extends Request {

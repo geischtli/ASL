@@ -33,14 +33,14 @@ public class ClientWriteCompletionHandler implements CompletionHandler<Integer, 
 	}
 	
 	public static ClientWriteCompletionHandler create(AsynchronousSocketChannel sc, ByteBufferWrapper outbufWrap, ClientInfo ci, List<RequestType> requestList, int requestId) {
-		TimeLogger.click(Timing.CLIENT_START_WRITE, ci.getClientId(), requestId);
+		TimeLogger.click(Timing.CLIENT_START_WRITE, ci.getClientId(), ci.getRequestId());
 		return new ClientWriteCompletionHandler(sc, outbufWrap, ci, requestList, requestId);
 	}
 	
 	@Override
 	public void completed(Integer writtenBytes, Integer expectedWriteBytes) {
 		SerializingUtilities.forceFurtherWriteIfNeeded(outbufWrap.getBuf(), writtenBytes, expectedWriteBytes, sc);
-		TimeLogger.click(Timing.CLIENT_END_WRITE, ci.getClientId(), requestId);
+		TimeLogger.click(Timing.CLIENT_END_WRITE, ci.getClientId(), ci.getRequestId());
     	ByteBuffer inbuf = ByteBuffer.allocate(AbstractClient.INITIAL_BUFSIZE);
     	sc.read(inbuf, null, ClientReadCompletionHandler.create(sc, ci, inbuf, requestList, requestId));
 	}

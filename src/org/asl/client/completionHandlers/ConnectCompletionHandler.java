@@ -30,14 +30,14 @@ public class ConnectCompletionHandler implements CompletionHandler<Void, Object>
 	}
 	
 	public static ConnectCompletionHandler create(ClientInfo ci, AsynchronousSocketChannel sc, List<RequestType> requestList, int requestId) {
-		TimeLogger.click(Timing.CLIENT_START_CONNECT, ci.getClientId(), requestId);
-		return new ConnectCompletionHandler(ci, sc, requestList, requestId);
+		TimeLogger.click(Timing.CLIENT_START_CONNECT, ci.getClientId(), ci.getRequestId());
+		return new ConnectCompletionHandler(ci, sc, requestList, ci.getRequestId());
 	}
 	
 	@Override
 	public void completed(Void result, Object attachment) {
-		TimeLogger.click(Timing.CLIENT_END_CONNECT, ci.getClientId(), requestId);
-		ByteBufferWrapper outbufWrap = SerializingUtilities.packRequest(RequestBuilder.getRequest(requestList.get(requestId), ci));
+		TimeLogger.click(Timing.CLIENT_END_CONNECT, ci.getClientId(), ci.getRequestId());
+		ByteBufferWrapper outbufWrap = SerializingUtilities.packRequest(RequestBuilder.getRequest(requestList.get(ci.getRequestId()), ci));
 		sc.write(outbufWrap.getBuf(), outbufWrap.getBytes(), ClientWriteCompletionHandler.create(sc, outbufWrap, ci, requestList, requestId));
 	}
 

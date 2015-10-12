@@ -31,7 +31,7 @@ public class VirtualClient extends AbstractClient {
 						RequestType.GET_REGISTERED_CLIENTS,
 						RequestType.SEND_MESSAGE
 						},
-				200
+				1
 				);
 	}
 	

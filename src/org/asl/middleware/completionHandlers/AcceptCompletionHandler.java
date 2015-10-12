@@ -8,7 +8,6 @@ import java.nio.channels.CompletionHandler;
 import org.asl.common.socket.SocketHelper;
 import org.asl.common.socket.SocketLocation;
 import org.asl.common.socket.SocketOperation;
-import org.asl.common.timing.TimeLogger;
 import org.asl.middleware.Middleware;
 import org.asl.middleware.connectioncontrol.ConnectionTimeWrapper;
 import org.asl.middleware.connectioncontrol.WatchDog;
@@ -34,11 +33,10 @@ public class AcceptCompletionHandler<V, A> implements CompletionHandler<Asynchro
 	public void completed(AsynchronousSocketChannel sc, Integer attachment) {
 		ConnectionTimeWrapper c = new ConnectionTimeWrapper(sc, System.currentTimeMillis());
 		watchDog.addConnection(c);
-		//timer.click(MiddlewareTimings.ACCEPTED_CLIENT, requestId);
-		//accept();
 		serverChannel.accept(++requestId, this);
 		ByteBuffer inbuf = ByteBuffer.allocate(Middleware.INITIAL_BUFSIZE);
-		sc.read(inbuf, c, MiddlewareReadCompletionHandler.create(sc, inbuf , requestId));
+		long MIDDLEWARE_START_READ = System.nanoTime();
+		sc.read(inbuf, c, MiddlewareReadCompletionHandler.create(sc, inbuf, MIDDLEWARE_START_READ, requestId));
 	}
 
 	@Override

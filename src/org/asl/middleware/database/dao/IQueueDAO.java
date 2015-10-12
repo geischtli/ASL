@@ -18,4 +18,5 @@ public interface IQueueDAO {
 	public List<Message> readAllMessagesOfQueue(int receiver, int queue,  int clientId, int requestId) throws ReadAllMessagesOfQueueException;
 	public List<Integer> getQueuesWithMessagesForClient(int receiver, int clientId, int requestId) throws GetQueuesWithMessagesForClientException;
 	public List<Integer> getRegisteredQueues(int clientId, int requestId) throws GetRegisteredQueuesException;
+	
 }
