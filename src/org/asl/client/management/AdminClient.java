@@ -39,8 +39,18 @@ public class AdminClient extends AbstractClient implements Runnable {
 		return requestlis;
 	}
 
-	public ObservableList<Integer> executeRequest(RequestType request) {
+	public ObservableList<Integer> executeRequest(RequestType request, int sender, int receiver, int queue, String context) {
 		requestList.set(0, request);
+		switch (request) {
+			case SEND_MESSAGE:
+				ci.setClientId(sender);
+				ci.setSendReceiverId(receiver);
+				ci.setSendQueueId(queue);
+				ci.setSendContext(context);
+				break;
+			default:
+				break;
+		}
 		run();
 		try {
 			AdminClient.semaphore.acquire();
@@ -55,7 +65,7 @@ public class AdminClient extends AbstractClient implements Runnable {
 			case GET_NUMBER_OF_MESSAGES:
 				return FXCollections.observableArrayList(ci.getNumberOfMessages());
 			default:
-				System.err.println("UNKNOWN REQUEST TYPE IN ADMINCLIENT");	
+				break;
 			}
 		return null;
 	}

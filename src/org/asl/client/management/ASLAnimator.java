@@ -22,7 +22,11 @@ public class ASLAnimator extends Application {
 	private AdminClient adminConsole;
 	private GridPane root;
 	private Scene scene;
-	
+	private ComboBox<Integer> senderClient;
+	private ComboBox<Integer> receiverClient;
+	private ComboBox<Integer> queuesOnline;
+	private TextField numMessagesText;
+	private TextField content;
 
 	public ASLAnimator() throws IOException {
 		this.adminConsole = null;
@@ -47,6 +51,12 @@ public class ASLAnimator extends Application {
 		root = new GridPane();
 		scene = new Scene(root, 1000,500);
 		root.add(new Label("Request: "), 0, 0);
+		root.add(new Label("Sender: "), 0, 1);
+		root.add(new Label("Receiver: "), 0, 2);
+		root.add(new Label("Queue: "), 0, 3);
+		root.add(new Label("Content: "), 0, 4);
+		content = new TextField();
+		root.add(content, 1, 4);
 		ObservableList<RequestType> requestlis = adminConsole.getPossibleRequests();
 		
 		ComboBox<RequestType> requestsChoice = new ComboBox<RequestType>(requestlis);
@@ -60,11 +70,16 @@ public class ASLAnimator extends Application {
 					
 					@Override
 					public void handle(ActionEvent event) {
-						adminConsole.executeRequest(request);
+						adminConsole.executeRequest(request,
+								senderClient.getValue(),
+								receiverClient.getValue(),
+								queuesOnline.getValue(),
+								content.getText()
+							);
 					}
 					
 				});
-				root.add(requestExecutor, 1, 1);
+				root.add(requestExecutor, 1, 5);
 			}
 		});
 		root.add(requestsChoice, 1, 0);
@@ -74,11 +89,14 @@ public class ASLAnimator extends Application {
 
 			@Override
 			public void handle(ActionEvent event) {
-				ObservableList<Integer> clients = adminConsole.executeRequest(RequestType.GET_REGISTERED_CLIENTS);
+				ObservableList<Integer> clients = adminConsole.executeRequest(RequestType.GET_REGISTERED_CLIENTS, 0, 0, 0, "");
 				System.out.println(clients.size() + " clients are online");
-				ComboBox<Integer> clientsOnline = new ComboBox<Integer>(clients);
-				root.add(clientsOnline, 4, 0);
+				senderClient = new ComboBox<Integer>(clients);
+				root.add(senderClient, 1, 1);
+				receiverClient = new ComboBox<Integer>(clients);
+				root.add(receiverClient, 1, 2);
 			}
+			
 		});
 		root.add(updateClientsButton, 3, 0);
 		
@@ -87,15 +105,16 @@ public class ASLAnimator extends Application {
 
 			@Override
 			public void handle(ActionEvent event) {
-				ObservableList<Integer> queues = adminConsole.executeRequest(RequestType.GET_REGISTERED_QUEUES);
+				ObservableList<Integer> queues = adminConsole.executeRequest(RequestType.GET_REGISTERED_QUEUES, 0, 0, 0, "");
 				System.out.println(queues.size() + " queues are online");
-				ComboBox<Integer> queuesOnline = new ComboBox<Integer>(queues);
-				root.add(queuesOnline, 4, 1);
+				queuesOnline = new ComboBox<Integer>(queues);
+				root.add(queuesOnline, 1, 3);
 			}
+			
 		});
 		root.add(updateQueuesButton, 3, 1);
 		
-		TextField numMessagesText = new TextField();
+		numMessagesText = new TextField();
 		root.add(numMessagesText, 4, 2);
 		
 		Button updateMessageCountButton = new Button("Update Message count");
@@ -103,9 +122,10 @@ public class ASLAnimator extends Application {
 
 			@Override
 			public void handle(ActionEvent event) {
-				ObservableList<Integer> numMessages = adminConsole.executeRequest(RequestType.GET_NUMBER_OF_MESSAGES);
+				ObservableList<Integer> numMessages = adminConsole.executeRequest(RequestType.GET_NUMBER_OF_MESSAGES, 0, 0, 0, "");
 				numMessagesText.setText(numMessages.get(0).toString());
 			}
+			
 		});
 		root.add(updateMessageCountButton, 3, 2);
 	}

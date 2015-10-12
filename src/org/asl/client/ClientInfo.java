@@ -15,6 +15,7 @@ public class ClientInfo {
 	private int readFromSenderId;
 	private int sendReceiverId;
 	private int numberOfMessages;
+	private String sendContext;
 	private AtomicInteger requestId; // counter for globally unique request id tuple
 	
 	public ClientInfo() {
@@ -27,6 +28,7 @@ public class ClientInfo {
 		this.readFromSenderId = 0;
 		this.sendReceiverId = 0;
 		this.numberOfMessages = -1;
+		this.sendContext = "";
 		this.requestId = new AtomicInteger(0);
 	}
 	
@@ -116,6 +118,14 @@ public class ClientInfo {
 	
 	public int incrementThenGetRequestId() {
 		return requestId.incrementAndGet();
+	}
+
+	public String getSendContext() {
+		return sendContext;
+	}
+
+	public void setSendContext(String sendContext) {
+		this.sendContext = sendContext;
 	}
 	
 }
