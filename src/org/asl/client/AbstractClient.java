@@ -40,7 +40,6 @@ public abstract class AbstractClient implements Runnable {
 		this.propParser = PropertyParser.create("config_common.xml").parse();
 		AbstractClient.INITIAL_BUFSIZE = Integer.valueOf(propParser.getProperty(PropertyKey.INITIAL_BUFSIZE));
 		this.ci = ClientInfo.create();
-		this.timeLogger = TimeLogger.create();
 	}
 	
 }

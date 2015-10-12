@@ -8,7 +8,7 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 import org.asl.client.VirtualClient;
-import org.asl.client.management.MyAnimator;
+import org.asl.client.management.ASLAnimator;
 import org.asl.middleware.AbstractMiddleware;
 import org.asl.middleware.Middleware;
 
@@ -57,7 +57,7 @@ public class Main {
 		for (String s : args){
 			if (s.equals("admin")) {
 				String[] portArg = {String.valueOf(port)};
-				Application.launch(MyAnimator.class, portArg);
+				Application.launch(ASLAnimator.class, portArg);
 			}
 		}
 	}

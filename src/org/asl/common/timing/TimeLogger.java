@@ -5,17 +5,9 @@ import org.apache.logging.log4j.LogManager;
 
 public class TimeLogger {
 
-	private final Logger logger;
+	private static Logger logger = LogManager.getLogger(TimeLogger.class.getName());
 	
-	public TimeLogger() {
-		logger = LogManager.getLogger(TimeLogger.class.getName());
-	}
-	
-	public static TimeLogger create() {
-		return new TimeLogger();
-	}
-	
-	public void click(Timing timing, int clientId, int requestId) {
+	public static void click(Timing timing, int clientId, int requestId) {
 		logger.info("C:" + clientId + ",R:" + requestId + ",L:" + timing + ",T:" + System.nanoTime());
 	}
 	

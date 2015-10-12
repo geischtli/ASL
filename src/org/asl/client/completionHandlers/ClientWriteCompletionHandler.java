@@ -7,7 +7,6 @@ import java.util.List;
 
 import org.asl.client.AbstractClient;
 import org.asl.client.ClientInfo;
-import org.asl.common.request.Request;
 import org.asl.common.request.Request.RequestType;
 import org.asl.common.request.serialize.ByteBufferWrapper;
 import org.asl.common.request.serialize.SerializingUtilities;

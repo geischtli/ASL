@@ -3,14 +3,10 @@ package org.asl.client.management;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
-import java.util.List;
 
 import org.asl.client.AbstractClient;
 import org.asl.client.completionHandlers.ConnectCompletionHandler;
-import org.asl.common.request.Request;
 import org.asl.common.request.Request.RequestType;
-import org.asl.common.request.types.client.CreateQueueRequest;
-import org.asl.common.request.types.client.DeleteQueueRequest;
 import org.asl.common.socket.SocketHelper;
 
 import javafx.collections.FXCollections;
@@ -57,6 +53,8 @@ public class AdminClient extends AbstractClient implements Runnable {
 				return FXCollections.observableArrayList(ci.getQueuesOnline());
 			case GET_NUMBER_OF_MESSAGES:
 				return FXCollections.observableArrayList(ci.getNumberOfMessages());
+			default:
+				System.out.println("Unknown REQUEST TYPE IN ADMINCLIENT");	
 			}
 		return null;
 	}

@@ -18,13 +18,13 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 
-public class MyAnimator extends Application {
+public class ASLAnimator extends Application {
 	private AdminClient adminConsole;
 	private GridPane root;
 	private Scene scene;
 	
 
-	public MyAnimator() throws IOException {
+	public ASLAnimator() throws IOException {
 		this.adminConsole = null;
 		this.root = null;
 		this.scene = null;
