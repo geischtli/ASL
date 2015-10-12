@@ -1,4 +1,4 @@
-package org.asl.client.management.adminCompletionHandlers;
+package org.asl.client.management.completionHandlers;
 
 import java.nio.channels.AsynchronousSocketChannel;
 import java.nio.channels.CompletionHandler;

@@ -6,7 +6,7 @@ import java.net.InetSocketAddress;
 import java.util.concurrent.Semaphore;
 
 import org.asl.client.AbstractClient;
-import org.asl.client.management.adminCompletionHandlers.AdminConnectCompletionHandler;
+import org.asl.client.management.completionHandlers.AdminConnectCompletionHandler;
 import org.asl.common.request.Request.RequestType;
 import org.asl.common.socket.SocketHelper;
 
