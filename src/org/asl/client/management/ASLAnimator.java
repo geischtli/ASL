@@ -54,19 +54,15 @@ public class ASLAnimator extends Application {
 
 			@Override
 			public void changed(ObservableValue<? extends RequestType> observable, RequestType old, RequestType request) {
-				System.out.println("Dropdown Changed");
-				System.out.println("Mby change look and feel of guy ?");
 				
-				Button requestExecutor = new Button("Hit me to exec Request");
+				Button requestExecutor = new Button("Execute specified request");
 				requestExecutor.setOnAction(new EventHandler<ActionEvent>() {
 					
 					@Override
 					public void handle(ActionEvent event) {
-						System.out.println("Send actual request");
-						System.out.println("I should actually send: " + request.getClass().toString());
-						System.out.println("but instead i send this gay everythign shitty fuck mongo arschloch nothing");
 						adminConsole.executeRequest(request);
 					}
+					
 				});
 				root.add(requestExecutor, 1, 1);
 			}

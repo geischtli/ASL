@@ -15,11 +15,11 @@ import javafx.collections.ObservableList;
 
 public class AdminClient extends AbstractClient implements Runnable {
 		
-
 	public static Semaphore semaphore = new Semaphore(0);
 	
 	public AdminClient(int port) throws IOException {
 		super(port);
+		this.requestList.add(RequestType.CREATE_QUEUE);
 	}
 
 
@@ -39,9 +39,8 @@ public class AdminClient extends AbstractClient implements Runnable {
 		return requestlis;
 	}
 
-
 	public ObservableList<Integer> executeRequest(RequestType request) {
-		requestList.add(0, request);
+		requestList.set(0, request);
 		run();
 		try {
 			AdminClient.semaphore.acquire();
@@ -56,7 +55,7 @@ public class AdminClient extends AbstractClient implements Runnable {
 			case GET_NUMBER_OF_MESSAGES:
 				return FXCollections.observableArrayList(ci.getNumberOfMessages());
 			default:
-				System.out.println("Unknown REQUEST TYPE IN ADMINCLIENT");	
+				System.err.println("UNKNOWN REQUEST TYPE IN ADMINCLIENT");	
 			}
 		return null;
 	}
