@@ -35,7 +35,6 @@ public class MiddlewareReadCompletionHandler implements CompletionHandler<Intege
 	@Override
 	public void completed(Integer readBytes, ConnectionTimeWrapper connTimeWrapper) {
 		connTimeWrapper.reset();
-		//System.out.println("middleware read " + readBytes + " bytes");
 		ByteBufferWrapper fullInbufWrap = SerializingUtilities.forceFurtherReadIfNeeded(inbuf, (int)readBytes, sc);
 		long MIDDLEWARE_END_READ = System.nanoTime();
 		

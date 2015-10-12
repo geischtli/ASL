@@ -41,6 +41,7 @@ public class GetRegisteredQueuesRequest extends Request {
 	public void processOnClient(ClientInfo ci) throws ASLException {
 		if (!getException().carriesError()) {
 			if (queues.size() > 0) {
+				System.out.println("Queues are " + (queues == null ? "null" : "not null"));
 				ci.setQueuesOnline(queues);
 			} else {
 				ci.setQueuesOnline(new ArrayList<Integer>());

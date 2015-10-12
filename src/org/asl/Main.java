@@ -29,7 +29,7 @@ public class Main {
 				new ArrayBlockingQueue<Runnable>(64),
 				new ThreadPoolExecutor.CallerRunsPolicy()
 				);
-		int numClients = 1;
+		int numClients = 0;
 		
 		checkManagement(args, threadpool, port);
 		

@@ -3,9 +3,10 @@ package org.asl.client.management;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
+import java.util.concurrent.Semaphore;
 
 import org.asl.client.AbstractClient;
-import org.asl.client.completionHandlers.ConnectCompletionHandler;
+import org.asl.client.management.adminCompletionHandlers.AdminConnectCompletionHandler;
 import org.asl.common.request.Request.RequestType;
 import org.asl.common.socket.SocketHelper;
 
@@ -15,6 +16,8 @@ import javafx.collections.ObservableList;
 public class AdminClient extends AbstractClient implements Runnable {
 		
 
+	public static Semaphore semaphore = new Semaphore(0);
+	
 	public AdminClient(int port) throws IOException {
 		super(port);
 	}
@@ -41,11 +44,10 @@ public class AdminClient extends AbstractClient implements Runnable {
 		requestList.add(0, request);
 		run();
 		try {
-			Thread.sleep(1000);
+			AdminClient.semaphore.acquire();
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-		
 		switch (request) {
 			case GET_REGISTERED_CLIENTS:
 				return FXCollections.observableArrayList(ci.getClientsOnline());
@@ -59,12 +61,12 @@ public class AdminClient extends AbstractClient implements Runnable {
 		return null;
 	}
 
-
 	@Override
 	public void run() {
+		System.out.println("I run " + requestList.get(0).toString());
 		sc = SocketHelper.openSocket();
 		sc.connect(new InetSocketAddress(InetAddress.getLoopbackAddress(), AbstractClient.port), null,
-				ConnectCompletionHandler.create(ci, sc, requestList, 0)
+				AdminConnectCompletionHandler.create(ci, sc, requestList, 0)
 			);
 	}
 	

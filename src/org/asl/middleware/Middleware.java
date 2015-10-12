@@ -34,7 +34,7 @@ public class Middleware {
 			);
 		Middleware.INITIAL_BUFSIZE = Integer.valueOf(propParser.getProperty(PropertyKey.INITIAL_BUFSIZE));
 		this.requestId = -1;
-		this.watchDog = WatchDog.create(5);
+		this.watchDog = WatchDog.create(500);
 		this.watchDogTimer = new Timer();
 		this.watchDogTimer.scheduleAtFixedRate(this.watchDog, 0, 5000);
 		
