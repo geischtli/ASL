@@ -1,4 +1,4 @@
-package org.asl.common.request.types.admin;
+package org.asl.common.request.types.client;
 
 import org.asl.client.ClientInfo;
 import org.asl.common.request.Request;

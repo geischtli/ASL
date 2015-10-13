@@ -29,9 +29,10 @@ public class VirtualClient extends AbstractClient {
 				requestList,
 				new RequestType[]{
 						RequestType.GET_REGISTERED_CLIENTS,
+						RequestType.GET_REGISTERED_QUEUES,
 						RequestType.SEND_MESSAGE
 						},
-				1
+				200
 				);
 	}
 	
