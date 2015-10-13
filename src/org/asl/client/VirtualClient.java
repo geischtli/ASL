@@ -19,7 +19,7 @@ public class VirtualClient extends AbstractClient {
 	public void gatherRequests() {
 		RequestBuilder.addRequestTypes(
 				requestList,
-				new RequestType[]{
+				new RequestType[] {
 						RequestType.HANDSHAKE,
 						RequestType.CREATE_QUEUE
 						},
@@ -27,7 +27,7 @@ public class VirtualClient extends AbstractClient {
 				);
 		RequestBuilder.addRequestTypes(
 				requestList,
-				new RequestType[]{
+				new RequestType[] {
 						RequestType.GET_REGISTERED_CLIENTS,
 						RequestType.GET_REGISTERED_QUEUES,
 						RequestType.SEND_MESSAGE
