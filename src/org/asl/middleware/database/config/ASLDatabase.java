@@ -14,7 +14,7 @@ public class ASLDatabase {
 	private static ConnectionPool connectionPool;
 	
 	public ASLDatabase(int maxConnectionsToDB) throws SQLException {
-		ASLDatabase.url = "jdbc:postgresql://localhost/mydb";
+		ASLDatabase.url = "jdbc:postgresql://localhost:5432/mydb";
 		ASLDatabase.props = new Properties();
 		ASLDatabase.props.setProperty("user", "postgres");
 		ASLDatabase.props.setProperty("password", "postgres");

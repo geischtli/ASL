@@ -63,7 +63,7 @@ public class ASLAnimator extends Application {
 		requestsChoice.valueProperty().addListener(new ChangeListener<RequestType>() {
 
 			@Override
-			public void changed(ObservableValue<? extends RequestType> observable, RequestType old, RequestType request) {
+			public void changed(ObservableValue<? extends RequestType> observable, RequestType old, final RequestType request) {
 				
 				Button requestExecutor = new Button("Execute request");
 				requestExecutor.setOnAction(new EventHandler<ActionEvent>() {

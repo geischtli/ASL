@@ -62,6 +62,7 @@ public class ClientReadCompletionHandler implements CompletionHandler<Integer, O
 		TimeLogger.click(Timing.CLIENT_END_POSTPROCESSING, ci.getClientId(), ci.getRequestId());
 		if (ci.getRequestId() + 1 < requestList.size()) {
 			if (sc.isOpen()) {
+				ci.incrementRequestId();
 				ByteBufferWrapper outbufWrap = SerializingUtilities.packRequest(RequestBuilder.getRequest(requestList.get(ci.getRequestId()), ci));
 				sc.write(outbufWrap.getBuf(), outbufWrap.getBytes(), ClientWriteCompletionHandler.create(sc, outbufWrap, ci, requestList, requestId));
 			} else {

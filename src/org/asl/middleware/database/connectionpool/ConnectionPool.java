@@ -27,6 +27,13 @@ public class ConnectionPool {
 	}
 	
 	private void initPool() {
+		try {
+		    Class.forName("org.postgresql.Driver");
+		} 
+		catch (ClassNotFoundException e) {
+			System.out.println("DIDNT FOUND DRIVER");
+		    e.printStackTrace();
+		}
 		for (int i = 0; i < numConnections; i++) {
 			try {
 				connectionPool.add(ConnectionFactory.create(this, DriverManager.getConnection(url, props)));

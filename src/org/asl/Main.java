@@ -14,7 +14,7 @@ import org.asl.middleware.Middleware;
 import javafx.application.Application;
 
 public class Main {
-	private static final int port = 9191;
+	private static final int port = 9090;
 	static int p = 0;
 	public static void main(String[] args) throws IOException, SQLException {
 		Middleware mw = new Middleware(port);

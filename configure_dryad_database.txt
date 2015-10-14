@@ -1,0 +1,13 @@
+how to config the db on dryad:
+
+sanhuber@dryad10:/mnt/local/sanhuber/postgres/bin$ ./pg_ctl start -D /mnt/local/sanhuber/postgres/db
+server starting
+
+on other putty client:
+
+sanhuber@dryad10:/mnt/local/sanhuber/postgres/bin$ ./createuser --interactive postgres
+Shall the new role be a superuser? (y/n) y
+
+sanhuber@dryad10:/mnt/local/sanhuber/postgres/bin$ ./createdb mydb -U postgres -w
+sanhuber@dryad10:/mnt/local/sanhuber/postgres/bin$ ./psql -d mydb -U postgres
+mydb=# \q

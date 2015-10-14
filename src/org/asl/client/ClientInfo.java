@@ -116,8 +116,8 @@ public class ClientInfo {
 		return requestId.get();
 	}
 	
-	public int incrementThenGetRequestId() {
-		return requestId.incrementAndGet();
+	public void incrementRequestId() {
+		requestId.incrementAndGet();
 	}
 
 	public String getSendContext() {

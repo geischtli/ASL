@@ -41,7 +41,7 @@ public class RequestBuilder {
 	
 	public static Request getRequest(RequestType type, ClientInfo ci) {
 		int clientId = ci.getClientId();
-		int requestId = ci.incrementThenGetRequestId();
+		int requestId = ci.getRequestId();
 		switch (type) {
 			case CREATE_QUEUE:
 				return new CreateQueueRequest(

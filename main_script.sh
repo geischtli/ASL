@@ -8,17 +8,17 @@ printf "\n\n"
 printf "*** ASL MAIN SCRIPT ***\n"
 printf "Start the middleware instances\n"
 
-for (( i = 0; i < 1; i++ )) 
-do
+#for (( i = 0; i < 1; i++ )) 
+#do
 	ant -f antBuildMiddleware.xml &
-done
+#done
 
-sleep 5
+sleep 10
 
 printf "\n\nStart client instances\n"
-for (( i = 0; i < 1; i++ )) 
-do
+#for (( i = 0; i < 1; i++ )) 
+#do
 	ant -f antBuildClient.xml &
-done
+#done
 
 printf "\n\n"
