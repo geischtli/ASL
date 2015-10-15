@@ -20,31 +20,33 @@ public class ASLDatabase {
 	private String dbName;
 	private String user;
 	private String password;
+	private int maxConnectionToDB;
+	private int numAsyncPoolThreads;
 	
-	public ASLDatabase(int maxConnectionsToDB) throws SQLException {
+	public ASLDatabase() throws SQLException {
 		propParser = PropertyParser.create("config_common.xml").parse();
 		dbIp = propParser.getProperty(PropertyKey.DATABASE_IP);
 		dbPort = propParser.getProperty(PropertyKey.DATABASE_PORT);
 		dbName = propParser.getProperty(PropertyKey.DATABASE_NAME);
 		user = propParser.getProperty(PropertyKey.USER);
 		password = propParser.getProperty(PropertyKey.PASSWORD);
+		maxConnectionToDB = Integer.valueOf(propParser.getProperty(PropertyKey.MAX_CONNECTIONS_TO_DB));
+		numAsyncPoolThreads = Integer.valueOf(propParser.getProperty(PropertyKey.NUM_ASYNC_CONNECTION_POOL_THREADS));
 		
 		ASLDatabase.url = "jdbc:postgresql://" + dbIp + ":" + dbPort + "/" + dbName;
 		ASLDatabase.props = new Properties();
 		ASLDatabase.props.setProperty("user", user);
 		ASLDatabase.props.setProperty("password", password);
 		ASLDatabase.connectionPool = new ConnectionPool(
-				maxConnectionsToDB,
+				maxConnectionToDB,
 				ASLDatabase.url,
 				ASLDatabase.props,
-				1
+				numAsyncPoolThreads
 			);
 	}
 	
-	public static ASLDatabase getDatabase(int maxConnectionsToDB) throws SQLException {
-		return new ASLDatabase(
-				maxConnectionsToDB
-			);
+	public static ASLDatabase getDatabase() throws SQLException {
+		return new ASLDatabase();
 	}
 	
 	public static Future<ConnectionWrapper> getNewConnection() throws SQLException {

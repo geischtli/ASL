@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Parse the number of clients to be launched
-while getopts "n:p:i:" opt; do
+while getopts "n:" opt; do
   case $opt in
     n)
 		NUMCLIENTS=$OPTARG

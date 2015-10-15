@@ -29,9 +29,7 @@ public class Middleware {
 		this.serverChannel.bind(new InetSocketAddress(port));
 		this.serverChannel.setOption(StandardSocketOptions.SO_REUSEADDR, true);
 		this.propParser = PropertyParser.create("config_common.xml").parse();
-		this.db = ASLDatabase.getDatabase(
-				Integer.valueOf(propParser.getProperty(PropertyKey.MAX_CONNECTIONS_TO_DB))
-			);
+		this.db = ASLDatabase.getDatabase();
 		Middleware.INITIAL_BUFSIZE = Integer.valueOf(propParser.getProperty(PropertyKey.INITIAL_BUFSIZE));
 		this.requestId = -1;
 		this.watchDog = WatchDog.create(500);

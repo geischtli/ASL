@@ -18,7 +18,6 @@ import javafx.application.Application;
 public class Main {
 
 	private static String mwIp;
-	private static String dbIp;
 	private static int mwPort;
 	private static PropertyParser propParser;
 	
@@ -70,6 +69,5 @@ public class Main {
 			}
 		}
 	}
-
 
 }

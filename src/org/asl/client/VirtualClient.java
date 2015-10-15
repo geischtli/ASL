@@ -40,7 +40,6 @@ public class VirtualClient extends AbstractClient {
 	@Override
 	public void run() {
 		sc = SocketHelper.openSocket();
-		//sc.connect(new InetSocketAddress(InetAddress.getLoopbackAddress(), AbstractClient.port), null,
 		try {
 			sc.connect(new InetSocketAddress(InetAddress.getByName(AbstractClient.ip), AbstractClient.port), null,
 					ConnectCompletionHandler.create(ci, sc, requestList, 0)
