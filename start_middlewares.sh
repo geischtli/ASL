@@ -15,7 +15,6 @@ printf "\n"
 
 COUNTER=0
 while [  $COUNTER -lt $NUMMIDDLEWARES ]; do
-	#ant -f antBuildMiddleware.xml &
-	echo ant got called
+	ant -f antBuildMiddleware.xml &
 	COUNTER=`expr $COUNTER + 1`
 done

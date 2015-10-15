@@ -15,7 +15,6 @@ printf "\n"
 
 COUNTER=0
 while [  $COUNTER -lt $NUMCLIENTS ]; do
-	#ant -f antBuildClient.xml &
-	echo called ant build client
+	ant -f antBuildClient.xml &
 	COUNTER=`expr $COUNTER + 1`
 done
