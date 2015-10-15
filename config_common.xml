@@ -2,7 +2,12 @@
 <!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
 <properties>
 	<entry key="USER">postgres</entry>
-	<entry key="PASSWORD">postgres</entry>
+	<entry key="PASSWORD"></entry>
+	<entry key="MIDDLEWARE_IP">10.111.1.51</entry>
+	<entry key="MIDDLEWARE_PORT">9090</entry>
+	<entry key="DATABASE_IP">10.111.1.52</entry>
+	<entry key="DATABASE_PORT">5432</entry>
+	<entry key="DATABASE_NAME">mydb</entry>
 	<entry key="NUM_ASYNC_CONNECTION_POOL_THREADS">1</entry>
 	<entry key="CONTENT_LENGTH">200</entry>
 	<entry key="MAX_CONNECTIONS_TO_DB">10</entry>

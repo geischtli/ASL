@@ -3,6 +3,7 @@ package org.asl.client;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
+import java.net.UnknownHostException;
 
 import org.asl.client.completionHandlers.ConnectCompletionHandler;
 import org.asl.common.request.Request.RequestType;
@@ -11,8 +12,8 @@ import org.asl.common.socket.SocketHelper;
 
 public class VirtualClient extends AbstractClient {
 
-	public VirtualClient(int port) throws IOException {
-		super(port);
+	public VirtualClient(int port, String ip) throws IOException {
+		super(port, ip);
 		gatherRequests();
 	}
 	
@@ -39,9 +40,14 @@ public class VirtualClient extends AbstractClient {
 	@Override
 	public void run() {
 		sc = SocketHelper.openSocket();
-		sc.connect(new InetSocketAddress(InetAddress.getLoopbackAddress(), AbstractClient.port), null,
-				ConnectCompletionHandler.create(ci, sc, requestList, 0)
-			);
+		//sc.connect(new InetSocketAddress(InetAddress.getLoopbackAddress(), AbstractClient.port), null,
+		try {
+			sc.connect(new InetSocketAddress(InetAddress.getByName(AbstractClient.ip), AbstractClient.port), null,
+					ConnectCompletionHandler.create(ci, sc, requestList, 0)
+				);
+		} catch (UnknownHostException e) {
+			e.printStackTrace();
+		}
 	}
 	
 }

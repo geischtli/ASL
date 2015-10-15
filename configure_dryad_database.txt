@@ -1,3 +1,6 @@
+configure pg_hba:
+host  all      all   10.111.1.50/32     trust with ip as dryad ifconfig eth0 inet address
+
 how to config the db on dryad:
 
 sanhuber@dryad10:/mnt/local/sanhuber/postgres/bin$ ./pg_ctl start -D /mnt/local/sanhuber/postgres/db

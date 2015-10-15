@@ -14,6 +14,7 @@ import org.asl.common.timing.TimeLogger;
 public abstract class AbstractClient implements Runnable {
 
 	public static int port;
+	public static String ip;
 	protected AsynchronousSocketChannel sc;
 	protected  List<RequestType> requestList;
 	protected Semaphore lock;
@@ -24,6 +25,7 @@ public abstract class AbstractClient implements Runnable {
 	
 	public AbstractClient() {
 		AbstractClient.port = -1;
+		AbstractClient.ip = "";
 		this.sc = null;
 		this.requestList = null;
 		this.lock = null;
@@ -33,8 +35,9 @@ public abstract class AbstractClient implements Runnable {
 		this.timeLogger = null;
 	}
 	
-	public AbstractClient(int port) throws IOException {
+	public AbstractClient(int port, String ip) throws IOException {
 		AbstractClient.port = port;
+		AbstractClient.ip = ip;
 		this.requestList = new ArrayList<RequestType>();
 		this.lock = new Semaphore(1, true);
 		this.propParser = PropertyParser.create("config_common.xml").parse();

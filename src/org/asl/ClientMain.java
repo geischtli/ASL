@@ -3,12 +3,21 @@ package org.asl;
 import java.io.IOException;
 
 import org.asl.client.VirtualClient;
+import org.asl.common.propertyparser.PropertyKey;
+import org.asl.common.propertyparser.PropertyParser;
 
 public class ClientMain {
-	private final static int port = 9090;
+
+	private static String mwIp;
+	private static int mwPort;
+	private static PropertyParser propParser;
 	
 	public static void main(String[] args) throws IOException, InterruptedException {
-		Thread t = new Thread(new VirtualClient(port));
+		propParser = PropertyParser.create("config_common.xml").parse();
+		mwIp = propParser.getProperty(PropertyKey.MIDDLEWARE_IP);
+		mwPort = Integer.parseInt(propParser.getProperty(PropertyKey.MIDDLEWARE_PORT));
+
+		Thread t = new Thread(new VirtualClient(mwPort, mwIp));
 		t.start();
 		Thread.sleep(1000*600);
 	}

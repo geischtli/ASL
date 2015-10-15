@@ -9,15 +9,26 @@ import java.util.concurrent.TimeUnit;
 
 import org.asl.client.VirtualClient;
 import org.asl.client.management.ASLAnimator;
+import org.asl.common.propertyparser.PropertyKey;
+import org.asl.common.propertyparser.PropertyParser;
 import org.asl.middleware.Middleware;
 
 import javafx.application.Application;
 
 public class Main {
-	private static final int port = 9090;
-	static int p = 0;
+
+	private static String mwIp;
+	private static String dbIp;
+	private static int mwPort;
+	private static PropertyParser propParser;
+	
 	public static void main(String[] args) throws IOException, SQLException {
-		Middleware mw = new Middleware(port);
+		propParser = PropertyParser.create("config_common.xml").parse();
+
+		mwIp = propParser.getProperty(PropertyKey.MIDDLEWARE_IP);
+		mwPort = Integer.parseInt(propParser.getProperty(PropertyKey.MIDDLEWARE_PORT));		
+		
+		Middleware mw = new Middleware(mwPort);
 		mw.accept();
 		System.out.println("Started server");
 		
@@ -31,11 +42,11 @@ public class Main {
 				);
 		int numClients = 1;
 		
-		checkManagement(args, threadpool, port);
+		checkManagement(args, threadpool, mwPort, mwIp);
 		
 		for (int i = 0; i < numClients; i++) {
 			try {
-				threadpool.submit(new VirtualClient(port));
+				threadpool.submit(new VirtualClient(mwPort, mwIp));
 			} catch (Exception e) {
 				System.out.println("Problem with client creation " + e.getMessage());
 				e.printStackTrace();
@@ -51,10 +62,10 @@ public class Main {
 		}
 	}
 	
-	private static void checkManagement(String[] args, ExecutorService threadpool, int port) {
+	private static void checkManagement(String[] args, ExecutorService threadpool, int port, String ip) {
 		for (String s : args){
 			if (s.equals("admin")) {
-				String[] portArg = {String.valueOf(port)};
+				String[] portArg = {String.valueOf(port), ip};
 				Application.launch(ASLAnimator.class, portArg);
 			}
 		}

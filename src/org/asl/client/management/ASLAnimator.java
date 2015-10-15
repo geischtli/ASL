@@ -37,7 +37,7 @@ public class ASLAnimator extends Application {
 	@Override
 	public void init() throws IOException {
 		Parameters p = getParameters();
-		adminConsole = new AdminClient(Integer.parseInt(p.getRaw().get(0)));
+		adminConsole = new AdminClient(Integer.parseInt(p.getRaw().get(0)), p.getRaw().get(1));
 		createMyConsole();
 	}
 	

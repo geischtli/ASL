@@ -3,6 +3,7 @@ package org.asl.client.management;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
+import java.net.UnknownHostException;
 import java.util.concurrent.Semaphore;
 
 import org.asl.client.AbstractClient;
@@ -17,8 +18,8 @@ public class AdminClient extends AbstractClient implements Runnable {
 		
 	public static Semaphore semaphore = new Semaphore(0);
 	
-	public AdminClient(int port) throws IOException {
-		super(port);
+	public AdminClient(int port, String ip) throws IOException {
+		super(port, ip);
 		this.requestList.add(RequestType.CREATE_QUEUE);
 	}
 
@@ -74,9 +75,13 @@ public class AdminClient extends AbstractClient implements Runnable {
 	public void run() {
 		System.out.println("I run " + requestList.get(0).toString());
 		sc = SocketHelper.openSocket();
-		sc.connect(new InetSocketAddress(InetAddress.getLoopbackAddress(), AbstractClient.port), null,
-				AdminConnectCompletionHandler.create(ci, sc, requestList, 0)
-			);
+		try {
+			sc.connect(new InetSocketAddress(InetAddress.getByName(ip), AbstractClient.port), null,
+					AdminConnectCompletionHandler.create(ci, sc, requestList, 0)
+				);
+		} catch (UnknownHostException e) {
+			e.printStackTrace();
+		}
 	}
 	
 }
