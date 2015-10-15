@@ -15,6 +15,6 @@ printf "\n"
 
 COUNTER=0
 while [  $COUNTER -lt $NUMMIDDLEWARES ]; do
-	ant -f antBuildMiddlware.xml 
+	ant -f antBuildMiddleware.xml 
 	let COUNTER=COUNTER+1
 done
