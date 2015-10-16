@@ -12,7 +12,6 @@ import org.asl.common.request.serialize.SerializingUtilities;
 import org.asl.common.socket.SocketHelper;
 import org.asl.common.socket.SocketLocation;
 import org.asl.common.socket.SocketOperation;
-import org.asl.common.timing.TimeLogger;
 import org.asl.common.timing.Timing;
 
 public class AdminConnectCompletionHandler implements CompletionHandler<Void, Object> {

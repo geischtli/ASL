@@ -15,7 +15,6 @@ import org.asl.common.request.types.exceptions.ASLException;
 import org.asl.common.socket.SocketHelper;
 import org.asl.common.socket.SocketLocation;
 import org.asl.common.socket.SocketOperation;
-import org.asl.common.timing.TimeLogger;
 import org.asl.common.timing.Timing;
 
 public class AdminReadCompletionHandler implements CompletionHandler<Integer, Object> {
@@ -23,15 +22,11 @@ public class AdminReadCompletionHandler implements CompletionHandler<Integer, Ob
 	private AsynchronousSocketChannel sc;
 	private ClientInfo ci;
 	ByteBuffer inbuf;
-	private List<RequestType> requestList;
-	private int requestId;
 	
 	public AdminReadCompletionHandler(AsynchronousSocketChannel sc, ClientInfo ci, ByteBuffer inbuf, List<RequestType> requestList, int requestId) {
 		this.sc = sc;
 		this.ci = ci;
 		this.inbuf = inbuf;
-		this.requestList = requestList;
-		this.requestId = requestId;
 	}
 	
 	public static AdminReadCompletionHandler create(AsynchronousSocketChannel sc, ClientInfo ci, ByteBuffer inbuf, List<RequestType> requestList, int requestId) {

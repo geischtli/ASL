@@ -1,7 +1,6 @@
 package org.asl.common.socket;
 
 import java.io.IOException;
-import java.net.StandardSocketOptions;
 import java.nio.channels.AsynchronousSocketChannel;
 
 public class SocketHelper {
@@ -18,8 +17,6 @@ public class SocketHelper {
 	
 	public static void closeSocket(AsynchronousSocketChannel sc) {
 		try {
-			//sc.shutdownOutput();
-			//sc.shutdownInput();
 			sc.close();
 		} catch (IOException e) {
 			e.printStackTrace();

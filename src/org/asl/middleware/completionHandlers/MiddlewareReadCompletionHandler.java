@@ -10,7 +10,6 @@ import org.asl.common.request.serialize.SerializingUtilities;
 import org.asl.common.socket.SocketHelper;
 import org.asl.common.socket.SocketLocation;
 import org.asl.common.socket.SocketOperation;
-import org.asl.common.timing.TimeLogger;
 import org.asl.common.timing.Timing;
 import org.asl.middleware.MiddlewareInfo;
 import org.asl.middleware.connectioncontrol.ConnectionTimeWrapper;
@@ -19,7 +18,6 @@ public class MiddlewareReadCompletionHandler implements CompletionHandler<Intege
 
 	private AsynchronousSocketChannel sc;
 	private ByteBuffer inbuf;
-	private int requestId;
 	private long MIDDLEWARE_START_READ;
 	private MiddlewareInfo mi;
 	
@@ -29,7 +27,6 @@ public class MiddlewareReadCompletionHandler implements CompletionHandler<Intege
 		this.sc = sc;
 		this.inbuf = inbuf;
 		this.MIDDLEWARE_START_READ = MIDDLEWARE_START_READ;
-		this.requestId = requestId;
 	}
 	
 	public static MiddlewareReadCompletionHandler create(MiddlewareInfo mi, AsynchronousSocketChannel sc, ByteBuffer inbuf, int requestId) {

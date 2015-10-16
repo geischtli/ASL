@@ -9,7 +9,6 @@ import java.nio.channels.CompletionHandler;
 import org.asl.common.socket.SocketHelper;
 import org.asl.common.socket.SocketLocation;
 import org.asl.common.socket.SocketOperation;
-import org.asl.common.timing.Timing;
 import org.asl.middleware.Middleware;
 import org.asl.middleware.MiddlewareInfo;
 import org.asl.middleware.connectioncontrol.ConnectionTimeWrapper;
