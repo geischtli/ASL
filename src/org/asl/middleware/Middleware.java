@@ -16,13 +16,14 @@ import org.asl.middleware.database.config.ASLDatabase;
 
 public class Middleware {
 	
-	protected final AsynchronousServerSocketChannel serverChannel;
-	protected PropertyParser propParser;
-	protected final ASLDatabase db;
+	private final AsynchronousServerSocketChannel serverChannel;
+	private PropertyParser propParser;
+	private final ASLDatabase db;
 	public static int INITIAL_BUFSIZE;
-	protected int requestId;
-	protected WatchDog watchDog;
-	protected Timer watchDogTimer;
+	private int requestId;
+	private WatchDog watchDog;
+	private Timer watchDogTimer;
+	private MiddlewareInfo mi;
 	
 	public Middleware(int port) throws IOException, SQLException {
 		this.serverChannel = AsynchronousServerSocketChannel.open();
@@ -35,12 +36,13 @@ public class Middleware {
 		this.watchDog = WatchDog.create(500);
 		this.watchDogTimer = new Timer();
 		this.watchDogTimer.scheduleAtFixedRate(this.watchDog, 0, 5000);
+		this.mi = MiddlewareInfo.create();
 		
-		RequestBuilder.getRegisterMiddlewareRequest().processOnMiddleware();
+		RequestBuilder.getRegisterMiddlewareRequest().processOnMiddleware(mi);
 	}
 	
 	public void accept() {
-		serverChannel.accept(null, AcceptCompletionHandler.create(serverChannel, watchDog, requestId));
+		serverChannel.accept(null, AcceptCompletionHandler.create(mi, serverChannel, watchDog, requestId));
 	}
 	
 }

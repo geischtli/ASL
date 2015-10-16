@@ -12,6 +12,7 @@ import org.asl.common.socket.SocketLocation;
 import org.asl.common.socket.SocketOperation;
 import org.asl.common.timing.TimeLogger;
 import org.asl.common.timing.Timing;
+import org.asl.middleware.MiddlewareInfo;
 import org.asl.middleware.connectioncontrol.ConnectionTimeWrapper;
 
 public class MiddlewareReadCompletionHandler implements CompletionHandler<Integer, ConnectionTimeWrapper> {
@@ -20,16 +21,18 @@ public class MiddlewareReadCompletionHandler implements CompletionHandler<Intege
 	private ByteBuffer inbuf;
 	private int requestId;
 	private long MIDDLEWARE_START_READ;
+	private MiddlewareInfo mi;
 	
-	public MiddlewareReadCompletionHandler(AsynchronousSocketChannel sc, ByteBuffer inbuf, long MIDDLEWARE_START_READ, int requestId) {
+	public MiddlewareReadCompletionHandler(MiddlewareInfo mi, AsynchronousSocketChannel sc, ByteBuffer inbuf, long MIDDLEWARE_START_READ, int requestId) {
+		this.mi = mi;
 		this.sc = sc;
 		this.inbuf = inbuf;
 		this.MIDDLEWARE_START_READ = MIDDLEWARE_START_READ;
 		this.requestId = requestId;
 	}
 	
-	public static MiddlewareReadCompletionHandler create(AsynchronousSocketChannel sc, ByteBuffer inbuf, long MIDDLEWARE_START_READ, int requestId) {
-		return new MiddlewareReadCompletionHandler(sc, inbuf, MIDDLEWARE_START_READ, requestId);
+	public static MiddlewareReadCompletionHandler create(MiddlewareInfo mi, AsynchronousSocketChannel sc, ByteBuffer inbuf, long MIDDLEWARE_START_READ, int requestId) {
+		return new MiddlewareReadCompletionHandler(mi, sc, inbuf, MIDDLEWARE_START_READ, requestId);
 	}
 	
 	@Override
@@ -45,19 +48,19 @@ public class MiddlewareReadCompletionHandler implements CompletionHandler<Intege
 		
 		Request req = SerializingUtilities.unpackRequest(fullInbufWrap.getBuf(), fullInbufWrap.getBytes());
 		
-		TimeLogger.setClick(Timing.MIDDLEWARE_START_READ, MIDDLEWARE_START_READ, req.getClientId(), req.getRequestId());
-		TimeLogger.setClick(Timing.MIDDLEWARE_END_READ, MIDDLEWARE_END_READ, req.getClientId(), req.getRequestId());
+		mi.getMyTimeLogger().setClick(Timing.MIDDLEWARE_START_READ, MIDDLEWARE_START_READ, req.getClientId(), req.getRequestId());
+		mi.getMyTimeLogger().setClick(Timing.MIDDLEWARE_END_READ, MIDDLEWARE_END_READ, req.getClientId(), req.getRequestId());
 		
-		TimeLogger.click(Timing.MIDDLEWARE_START_PROCESSING, req.getClientId(), req.getRequestId());
-		req.processOnMiddleware();
-		TimeLogger.click(Timing.MIDDLEWARE_END_PROCESSING, req.getClientId(), req.getRequestId());
+		mi.getMyTimeLogger().click(Timing.MIDDLEWARE_START_PROCESSING, req.getClientId(), req.getRequestId());
+		req.processOnMiddleware(mi);
+		mi.getMyTimeLogger().click(Timing.MIDDLEWARE_END_PROCESSING, req.getClientId(), req.getRequestId());
 		
 		ByteBufferWrapper outbufWrap = SerializingUtilities.packRequest(req);
 		
 		sc.write(
 				outbufWrap.getBuf(),
 				connTimeWrapper,
-				MiddlewareWriteCompletionHandler.create(sc, outbufWrap)
+				MiddlewareWriteCompletionHandler.create(mi, sc, outbufWrap)
 			);
 	}
 

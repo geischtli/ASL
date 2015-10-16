@@ -14,6 +14,7 @@ import org.asl.common.request.types.exceptions.GetQueuesWithMessagesForClientExc
 import org.asl.common.request.types.exceptions.GetRegisteredQueuesException;
 import org.asl.common.request.types.exceptions.ReadAllMessagesOfQueueException;
 import org.asl.common.request.types.exceptions.RemoveTopMessageFromQueueException;
+import org.asl.middleware.MiddlewareInfo;
 import org.asl.middleware.database.config.ASLDatabase;
 import org.asl.middleware.database.connectionpool.ConnectionWrapper;
 import org.asl.middleware.database.dao.IQueueDAO;
@@ -28,11 +29,11 @@ public class QueueDAO implements IQueueDAO {
 	}
 	
 	@Override
-	public int createQueue(int creatorId, int requestId) throws CreateQueueException {
+	public int createQueue(int creatorId, int requestId, MiddlewareInfo mi) throws CreateQueueException {
 		try (ConnectionWrapper conn = ASLDatabase.getNewConnection().get()) {
 			PreparedStatement createQueue = conn.get().prepareStatement(QueueTable.CREATE_QUEUE_STRING);
 			createQueue.setInt(1, creatorId);
-			ResultSet rs = CommonDAO.executeQuery(conn.get(), createQueue, creatorId, requestId);
+			ResultSet rs = CommonDAO.executeQuery(conn.get(), createQueue, creatorId, requestId, mi);
 			rs.next();
 			return rs.getInt(1);
 		} catch (SQLException | IOException | InterruptedException | ExecutionException e) {
@@ -41,11 +42,11 @@ public class QueueDAO implements IQueueDAO {
 	}
 	
 	@Override
-	public int deleteQueue(int queueId, int clientId, int requestId) throws DeleteQueueException {
+	public int deleteQueue(int queueId, int clientId, int requestId, MiddlewareInfo mi) throws DeleteQueueException {
 		try (ConnectionWrapper conn = ASLDatabase.getNewConnection().get()) {
 			PreparedStatement deleteQueue = conn.get().prepareStatement(QueueTable.DELETE_QUEUE_STRING);
 			deleteQueue.setInt(1, queueId);
-			ResultSet rs = CommonDAO.executeQuery(conn.get(), deleteQueue, clientId, requestId);
+			ResultSet rs = CommonDAO.executeQuery(conn.get(), deleteQueue, clientId, requestId, mi);
 			rs.next();
 			return rs.getInt(1);
 		} catch (SQLException | IOException | InterruptedException | ExecutionException e) {
@@ -54,12 +55,12 @@ public class QueueDAO implements IQueueDAO {
 	}
 	
 	@Override
-	public Message removeTopMessageFromQueue(int receiver, int queue, int clientId, int requestId) throws RemoveTopMessageFromQueueException {
+	public Message removeTopMessageFromQueue(int receiver, int queue, int clientId, int requestId, MiddlewareInfo mi) throws RemoveTopMessageFromQueueException {
 		try (ConnectionWrapper conn = ASLDatabase.getNewConnection().get()) {
 			PreparedStatement getMessage = conn.get().prepareStatement(QueueTable.REMOVE_TOP_MESSAGE_STRING);
 			getMessage.setInt(1, receiver);
 			getMessage.setInt(2, queue);
-			ResultSet rs = CommonDAO.executeQuery(conn.get(), getMessage, clientId, requestId);
+			ResultSet rs = CommonDAO.executeQuery(conn.get(), getMessage, clientId, requestId, mi);
 			rs.next();
 			return new Message(
 					rs.getInt(1),
@@ -74,12 +75,12 @@ public class QueueDAO implements IQueueDAO {
 	}
 
 	@Override
-	public List<Message> readAllMessagesOfQueue(int receiver, int queue,  int clientId, int requestId) throws ReadAllMessagesOfQueueException {
+	public List<Message> readAllMessagesOfQueue(int receiver, int queue,  int clientId, int requestId, MiddlewareInfo mi) throws ReadAllMessagesOfQueueException {
 		try (ConnectionWrapper conn = ASLDatabase.getNewConnection().get()) {
 			PreparedStatement getMessages = conn.get().prepareStatement(QueueTable.READ_ALL_MESSAGES_STRING);
 			getMessages.setInt(1, receiver);
 			getMessages.setInt(2, queue);
-			ResultSet rs = CommonDAO.executeQuery(conn.get(), getMessages, clientId, requestId);
+			ResultSet rs = CommonDAO.executeQuery(conn.get(), getMessages, clientId, requestId, mi);
 			List<Message> messages = new ArrayList<Message>();
 			while(rs.next()) {
 				messages.add(new Message(
@@ -98,11 +99,11 @@ public class QueueDAO implements IQueueDAO {
 	}
 
 	@Override
-	public List<Integer> getQueuesWithMessagesForClient(int receiver, int clientId, int requestId) throws GetQueuesWithMessagesForClientException {
+	public List<Integer> getQueuesWithMessagesForClient(int receiver, int clientId, int requestId, MiddlewareInfo mi) throws GetQueuesWithMessagesForClientException {
 		try (ConnectionWrapper conn = ASLDatabase.getNewConnection().get()) {
 			PreparedStatement getQueuesForClient = conn.get().prepareStatement(QueueTable.GET_QUEUES_FOR_CLIENT_STRING);
 			getQueuesForClient.setInt(1, receiver);
-			ResultSet rs = CommonDAO.executeQuery(conn.get(), getQueuesForClient, clientId, requestId);
+			ResultSet rs = CommonDAO.executeQuery(conn.get(), getQueuesForClient, clientId, requestId, mi);
 			List<Integer> queues = new ArrayList<Integer>();
 			while (rs.next()) {
 				queues.add(rs.getInt(1));
@@ -114,10 +115,10 @@ public class QueueDAO implements IQueueDAO {
 	}
 
 	@Override
-	public List<Integer> getRegisteredQueues(int clientId, int requestId) throws GetRegisteredQueuesException {
+	public List<Integer> getRegisteredQueues(int clientId, int requestId, MiddlewareInfo mi) throws GetRegisteredQueuesException {
 		try (ConnectionWrapper conn = ASLDatabase.getNewConnection().get()) {
 			PreparedStatement getRegisteredQueues = conn.get().prepareStatement(QueueTable.GET_REGISTERED_QUEUES_STRING);
-			ResultSet rs = CommonDAO.executeQuery(conn.get(), getRegisteredQueues, clientId, requestId);
+			ResultSet rs = CommonDAO.executeQuery(conn.get(), getRegisteredQueues, clientId, requestId, mi);
 			List<Integer> queues = new ArrayList<Integer>();
 			while (rs.next()) {
 				queues.add(rs.getInt(1));

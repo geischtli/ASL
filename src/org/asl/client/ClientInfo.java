@@ -3,6 +3,8 @@ package org.asl.client;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import org.asl.common.timing.TimeLogger;
+
 public class ClientInfo {
 	
 	private int clientId;
@@ -17,6 +19,7 @@ public class ClientInfo {
 	private int numberOfMessages;
 	private String sendContext;
 	private AtomicInteger requestId; // counter for globally unique request id tuple
+	private TimeLogger myTimeLogger;
 	
 	public ClientInfo() {
 		this.clientId = 0;
@@ -30,6 +33,7 @@ public class ClientInfo {
 		this.numberOfMessages = -1;
 		this.sendContext = "";
 		this.requestId = new AtomicInteger(0);
+		this.myTimeLogger = null;
 	}
 	
 	public static ClientInfo create() {
@@ -126,6 +130,14 @@ public class ClientInfo {
 
 	public void setSendContext(String sendContext) {
 		this.sendContext = sendContext;
+	}
+	
+	public void initTimeLogger() {
+		myTimeLogger = new TimeLogger("CLIENT", getClientId());
+	}
+	
+	public TimeLogger getMyTimeLogger() {
+		return myTimeLogger;
 	}
 	
 }

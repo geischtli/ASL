@@ -4,6 +4,7 @@ import org.asl.client.ClientInfo;
 import org.asl.common.request.Request;
 import org.asl.common.request.types.exceptions.ASLException;
 import org.asl.common.request.types.exceptions.HandshakeException;
+import org.asl.middleware.MiddlewareInfo;
 import org.asl.middleware.database.dao.impl.ClientDAO;
 
 public class HandshakeRequest extends Request {
@@ -26,9 +27,9 @@ public class HandshakeRequest extends Request {
 	}
 
 	@Override
-	public void processOnMiddleware() {
+	public void processOnMiddleware(MiddlewareInfo mi) {
 		try {
-			setClientIdReturnedFromDB(ClientDAO.getClientDAO().registerClient(clientId, requestId));
+			setClientIdReturnedFromDB(ClientDAO.getClientDAO().registerClient(clientId, requestId, mi));
 		} catch (HandshakeException e) {
 			setException(e);
 		}
@@ -38,6 +39,7 @@ public class HandshakeRequest extends Request {
 	public void processOnClient(ClientInfo ci) throws ASLException {
 		if (!getException().carriesError()) {
 			ci.setClientId(clientIdReturnedFromDB);
+			ci.initTimeLogger();
 			System.out.println("Client got ID " + ci.getClientId());
 		} else {
 			throw getException();

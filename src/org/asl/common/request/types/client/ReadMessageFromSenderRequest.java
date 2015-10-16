@@ -4,6 +4,7 @@ import org.asl.client.ClientInfo;
 import org.asl.common.request.Request;
 import org.asl.common.request.types.exceptions.ASLException;
 import org.asl.common.request.types.exceptions.ReadMessageFromSenderException;
+import org.asl.middleware.MiddlewareInfo;
 import org.asl.middleware.database.dao.impl.ClientDAO;
 import org.asl.middleware.database.model.Message;
 
@@ -47,9 +48,9 @@ public class ReadMessageFromSenderRequest extends Request {
 	}
 	
 	@Override
-	public void processOnMiddleware() {
+	public void processOnMiddleware(MiddlewareInfo mi) {
 		try {
-			setMessage(ClientDAO.getClientDAO().readMessageFromSender(sender, receiver, clientId, requestId));
+			setMessage(ClientDAO.getClientDAO().readMessageFromSender(sender, receiver, clientId, requestId, mi));
 		} catch (ReadMessageFromSenderException e) {
 			setException(e);
 		}

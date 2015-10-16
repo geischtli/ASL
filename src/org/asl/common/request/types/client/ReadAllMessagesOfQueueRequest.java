@@ -6,6 +6,7 @@ import org.asl.client.ClientInfo;
 import org.asl.common.request.Request;
 import org.asl.common.request.types.exceptions.ASLException;
 import org.asl.common.request.types.exceptions.ReadAllMessagesOfQueueException;
+import org.asl.middleware.MiddlewareInfo;
 import org.asl.middleware.database.dao.impl.QueueDAO;
 import org.asl.middleware.database.model.Message;
 
@@ -49,9 +50,9 @@ public class ReadAllMessagesOfQueueRequest extends Request {
 	}
 	
 	@Override
-	public void processOnMiddleware() {
+	public void processOnMiddleware(MiddlewareInfo mi) {
 		try {
-			setMessages(QueueDAO.getQueueDAO().readAllMessagesOfQueue(receiver, queue, clientId, requestId));
+			setMessages(QueueDAO.getQueueDAO().readAllMessagesOfQueue(receiver, queue, clientId, requestId, mi));
 		} catch (ReadAllMessagesOfQueueException e) {
 			setException(e);
 		}

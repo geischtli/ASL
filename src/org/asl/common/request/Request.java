@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 import org.asl.client.ClientInfo;
 import org.asl.common.request.types.exceptions.ASLException;
+import org.asl.middleware.MiddlewareInfo;
 
 /**
  * The abstract Message class gives a default behavior for all
@@ -66,6 +67,6 @@ public abstract class Request implements Serializable {
 		GET_REGISTERED_QUEUES,
 	}
 	
-	public abstract void processOnMiddleware();
+	public abstract void processOnMiddleware(MiddlewareInfo mi);
 	public abstract void processOnClient(ClientInfo ci) throws ASLException;
 }

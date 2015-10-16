@@ -40,13 +40,14 @@ public class VirtualClient extends AbstractClient {
 	@Override
 	public void run() {
 		sc = SocketHelper.openSocket();
-		try {
-			sc.connect(new InetSocketAddress(InetAddress.getByName(AbstractClient.ip), AbstractClient.port), null,
+		//try {
+			//sc.connect(new InetSocketAddress(InetAddress.getByName(AbstractClient.ip), AbstractClient.port), null,
+			sc.connect(new InetSocketAddress(InetAddress.getLoopbackAddress(), AbstractClient.port), null,
 					ConnectCompletionHandler.create(ci, sc, requestList, 0)
 				);
-		} catch (UnknownHostException e) {
+		/*} catch (UnknownHostException e) {
 			e.printStackTrace();
-		}
+		}*/
 	}
 	
 }

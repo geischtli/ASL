@@ -1,14 +1,35 @@
 package org.asl.middleware;
 
+import org.asl.common.timing.TimeLogger;
+
 public class MiddlewareInfo {
 
-	private static int middleware_id;
+	private int middlewareId;
+	private TimeLogger myTimeLogger;
 	
-	public static int getMiddlewareId() {
-		return middleware_id;
+	public MiddlewareInfo() {
+		this.middlewareId = -1;
+		this.myTimeLogger = null;
 	}
 	
-	public static void setMiddlewareId(int middleware_id) {
-		MiddlewareInfo.middleware_id = middleware_id;
+	public static MiddlewareInfo create() {
+		return new MiddlewareInfo();
 	}
+	
+	public int getMiddlewareId() {
+		return middlewareId;
+	}
+	
+	public void setMiddlewareId(int middlewareId) {
+		this.middlewareId = middlewareId;
+	}
+	
+	public void initTimeLogger() {
+		myTimeLogger = new TimeLogger("MIDDLEWARE", getMiddlewareId());
+	}
+	
+	public TimeLogger getMyTimeLogger() {
+		return myTimeLogger;
+	}
+	
 }

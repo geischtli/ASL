@@ -8,6 +8,7 @@ import org.asl.client.ClientInfo;
 import org.asl.common.request.Request;
 import org.asl.common.request.types.exceptions.ASLException;
 import org.asl.common.request.types.exceptions.GetRegisteredQueuesException;
+import org.asl.middleware.MiddlewareInfo;
 import org.asl.middleware.database.dao.impl.QueueDAO;
 
 public class GetRegisteredQueuesRequest extends Request {
@@ -30,9 +31,9 @@ public class GetRegisteredQueuesRequest extends Request {
 	}
 	
 	@Override
-	public void processOnMiddleware() {
+	public void processOnMiddleware(MiddlewareInfo mi) {
 		try {
-			setQueues(QueueDAO.getQueueDAO().getRegisteredQueues(clientId, requestId));
+			setQueues(QueueDAO.getQueueDAO().getRegisteredQueues(clientId, requestId, mi));
 		} catch (GetRegisteredQueuesException e) {
 			setException(e);
 		}

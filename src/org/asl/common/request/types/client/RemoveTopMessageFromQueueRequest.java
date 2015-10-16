@@ -4,6 +4,7 @@ import org.asl.client.ClientInfo;
 import org.asl.common.request.Request;
 import org.asl.common.request.types.exceptions.ASLException;
 import org.asl.common.request.types.exceptions.RemoveTopMessageFromQueueException;
+import org.asl.middleware.MiddlewareInfo;
 import org.asl.middleware.database.dao.impl.QueueDAO;
 import org.asl.middleware.database.model.Message;
 
@@ -47,9 +48,9 @@ public class RemoveTopMessageFromQueueRequest extends Request {
 	}
 	
 	@Override
-	public void processOnMiddleware() {
+	public void processOnMiddleware(MiddlewareInfo mi) {
 		try {
-			setMessage(QueueDAO.getQueueDAO().removeTopMessageFromQueue(receiver, queue, clientId, requestId));
+			setMessage(QueueDAO.getQueueDAO().removeTopMessageFromQueue(receiver, queue, clientId, requestId, mi));
 		} catch (RemoveTopMessageFromQueueException e) {
 			setException(e);
 		}

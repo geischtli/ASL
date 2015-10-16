@@ -12,13 +12,13 @@ public class RegisterMiddlewareRequest extends Request {
 	private static final long serialVersionUID = 111L;
 	
 	@Override
-	public void processOnMiddleware() {
+	public void processOnMiddleware(MiddlewareInfo mi) {
 		try {
 			// ignore timing on this one, because it is anyway only called once and would need
 			// extra handling in code, so we take "bad" way instead of correct but costly one.
 			// so timer==null and requestId=0
-			MiddlewareInfo.setMiddlewareId(MiddlewareDAO.getMiddlewareDAO().registerMiddleware());
-			System.out.println("Middleware registered with ID " + MiddlewareInfo.getMiddlewareId());
+			mi.setMiddlewareId(MiddlewareDAO.getMiddlewareDAO().registerMiddleware(mi));
+			System.out.println("Middleware registered with ID " + mi.getMiddlewareId());
 		} catch (RegisterMiddlewareException e) {
 			e.printStackTrace();
 		}

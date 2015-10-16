@@ -33,7 +33,8 @@ public class ASLDatabase {
 		maxConnectionToDB = Integer.valueOf(propParser.getProperty(PropertyKey.MAX_CONNECTIONS_TO_DB));
 		numAsyncPoolThreads = Integer.valueOf(propParser.getProperty(PropertyKey.NUM_ASYNC_CONNECTION_POOL_THREADS));
 		
-		ASLDatabase.url = "jdbc:postgresql://" + dbIp + ":" + dbPort + "/" + dbName;
+		//ASLDatabase.url = "jdbc:postgresql://" + dbIp + ":" + dbPort + "/" + dbName;
+		ASLDatabase.url = "jdbc:postgresql://" + "localhost" + ":" + dbPort + "/" + dbName;
 		ASLDatabase.props = new Properties();
 		ASLDatabase.props.setProperty("user", user);
 		ASLDatabase.props.setProperty("password", password);

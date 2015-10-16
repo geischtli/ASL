@@ -4,6 +4,7 @@ import org.asl.client.ClientInfo;
 import org.asl.common.request.Request;
 import org.asl.common.request.types.exceptions.ASLException;
 import org.asl.common.request.types.exceptions.GetNumberOfMessagesException;
+import org.asl.middleware.MiddlewareInfo;
 import org.asl.middleware.database.dao.impl.MessageDAO;
 
 public class GetNumberOfMessagesRequest extends Request {
@@ -26,9 +27,9 @@ public class GetNumberOfMessagesRequest extends Request {
 	}
 	
 	@Override
-	public void processOnMiddleware() {
+	public void processOnMiddleware(MiddlewareInfo mi) {
 		try {
-			setNumberOfMessages(MessageDAO.getMessageDAO().getNumberOfMessages(clientId, requestId));
+			setNumberOfMessages(MessageDAO.getMessageDAO().getNumberOfMessages(clientId, requestId, mi));
 		} catch (GetNumberOfMessagesException e) {
 			setException(e);
 		}

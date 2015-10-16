@@ -30,13 +30,13 @@ public class AdminConnectCompletionHandler implements CompletionHandler<Void, Ob
 	}
 	
 	public static AdminConnectCompletionHandler create(ClientInfo ci, AsynchronousSocketChannel sc, List<RequestType> requestList, int requestId) {
-		TimeLogger.click(Timing.CLIENT_START_CONNECT, ci.getClientId(), ci.getRequestId());
+		ci.getMyTimeLogger().click(Timing.CLIENT_START_CONNECT, ci.getClientId(), ci.getRequestId());
 		return new AdminConnectCompletionHandler(ci, sc, requestList, ci.getRequestId());
 	}
 	
 	@Override
 	public void completed(Void result, Object attachment) {
-		TimeLogger.click(Timing.CLIENT_END_CONNECT, ci.getClientId(), ci.getRequestId());
+		ci.getMyTimeLogger().click(Timing.CLIENT_END_CONNECT, ci.getClientId(), ci.getRequestId());
 		ByteBufferWrapper outbufWrap = SerializingUtilities.packRequest(RequestBuilder.getRequest(requestList.get(0), ci));
 		sc.write(outbufWrap.getBuf(), outbufWrap.getBytes(), AdminWriteCompletionHandler.create(sc, outbufWrap, ci, requestList, requestId));
 	}

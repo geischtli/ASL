@@ -9,7 +9,6 @@ import java.util.concurrent.Semaphore;
 import org.asl.common.propertyparser.PropertyKey;
 import org.asl.common.propertyparser.PropertyParser;
 import org.asl.common.request.Request.RequestType;
-import org.asl.common.timing.TimeLogger;
 
 public abstract class AbstractClient implements Runnable {
 
@@ -21,7 +20,6 @@ public abstract class AbstractClient implements Runnable {
 	protected PropertyParser propParser;
 	public static int INITIAL_BUFSIZE;
 	protected ClientInfo ci;
-	protected TimeLogger timeLogger;
 	
 	public AbstractClient() {
 		AbstractClient.port = -1;
@@ -32,7 +30,6 @@ public abstract class AbstractClient implements Runnable {
 		this.propParser = null;
 		AbstractClient.INITIAL_BUFSIZE = -1;
 		this.ci = null;
-		this.timeLogger = null;
 	}
 	
 	public AbstractClient(int port, String ip) throws IOException {

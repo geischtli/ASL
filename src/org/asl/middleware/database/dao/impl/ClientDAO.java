@@ -26,11 +26,11 @@ public class ClientDAO implements IClientDAO {
 	}
 	
 	@Override
-	public int registerClient(int clientId, int requestId) throws HandshakeException {
+	public int registerClient(int clientId, int requestId, MiddlewareInfo mi) throws HandshakeException {
 		try (ConnectionWrapper conn = ASLDatabase.getNewConnection().get()) {
 			PreparedStatement registerClient = conn.get().prepareStatement(ClientTable.REGISTER_CLIENT_STRING);
-			registerClient.setInt(1, MiddlewareInfo.getMiddlewareId());
-			ResultSet rs = CommonDAO.executeQuery(conn.get(), registerClient, clientId, requestId);
+			registerClient.setInt(1, mi.getMiddlewareId());
+			ResultSet rs = CommonDAO.executeQuery(conn.get(), registerClient, clientId, requestId, mi);
 			rs.next();
 			return rs.getInt(1);
 		} catch (SQLException | IOException | InterruptedException | ExecutionException e) {
@@ -39,12 +39,12 @@ public class ClientDAO implements IClientDAO {
 	}
 
 	@Override
-	public Message readMessageFromSender(int sender, int receiver, int clientId, int requestId) throws ReadMessageFromSenderException {
+	public Message readMessageFromSender(int sender, int receiver, int clientId, int requestId, MiddlewareInfo mi) throws ReadMessageFromSenderException {
 		try (ConnectionWrapper conn = ASLDatabase.getNewConnection().get()) {
 			PreparedStatement readMessageFromSender = conn.get().prepareStatement(ClientTable.READ_MESSAGE_FROM_SENDER);
 			readMessageFromSender.setInt(1, sender);
 			readMessageFromSender.setInt(2, receiver);
-			ResultSet rs = CommonDAO.executeQuery(conn.get(), readMessageFromSender, clientId, requestId);
+			ResultSet rs = CommonDAO.executeQuery(conn.get(), readMessageFromSender, clientId, requestId, mi);
 			// returns either 0 or 1 message
 			if (rs.next()) {
 				return new Message(
@@ -63,10 +63,10 @@ public class ClientDAO implements IClientDAO {
 	}
 	
 	@Override
-	public List<Integer> getRegisteredClients(int clientId, int requestId) throws GetRegisteredClientsException {
+	public List<Integer> getRegisteredClients(int clientId, int requestId, MiddlewareInfo mi) throws GetRegisteredClientsException {
 		try (ConnectionWrapper conn = ASLDatabase.getNewConnection().get()) {
 			PreparedStatement getRegisteredClients = conn.get().prepareStatement(ClientTable.GET_REGISTERED_CLIENTS_STRING);
-			ResultSet rs = CommonDAO.executeQuery(conn.get(), getRegisteredClients, clientId, requestId);
+			ResultSet rs = CommonDAO.executeQuery(conn.get(), getRegisteredClients, clientId, requestId, mi);
 			List<Integer> clients = new ArrayList<Integer>();
 			while (rs.next()) {
 				clients.add(rs.getInt(1));
