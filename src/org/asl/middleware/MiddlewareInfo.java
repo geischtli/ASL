@@ -8,8 +8,8 @@ public class MiddlewareInfo {
 	private TimeLogger myTimeLogger;
 	
 	public MiddlewareInfo() {
-		this.middlewareId = -1;
-		this.myTimeLogger = null;
+		this.middlewareId = 0;
+		this.myTimeLogger = TimeLogger.create("MIDDLEWARE", this.middlewareId);
 	}
 	
 	public static MiddlewareInfo create() {
@@ -25,7 +25,7 @@ public class MiddlewareInfo {
 	}
 	
 	public void initTimeLogger() {
-		myTimeLogger = new TimeLogger("MIDDLEWARE", getMiddlewareId());
+		myTimeLogger = TimeLogger.create("MIDDLEWARE", getMiddlewareId());
 	}
 	
 	public TimeLogger getMyTimeLogger() {

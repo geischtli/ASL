@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.UnknownHostException;
+import java.util.concurrent.ExecutionException;
 
 import org.asl.client.completionHandlers.ConnectCompletionHandler;
 import org.asl.common.request.Request.RequestType;
@@ -33,7 +34,7 @@ public class VirtualClient extends AbstractClient {
 						RequestType.GET_REGISTERED_QUEUES,
 						RequestType.SEND_MESSAGE
 						},
-				200
+				1
 				);
 	}
 	

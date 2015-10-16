@@ -1,6 +1,7 @@
 package org.asl.middleware.completionHandlers;
 
 import java.nio.ByteBuffer;
+import java.nio.channels.AsynchronousCloseException;
 import java.nio.channels.AsynchronousServerSocketChannel;
 import java.nio.channels.AsynchronousSocketChannel;
 import java.nio.channels.CompletionHandler;
@@ -8,6 +9,7 @@ import java.nio.channels.CompletionHandler;
 import org.asl.common.socket.SocketHelper;
 import org.asl.common.socket.SocketLocation;
 import org.asl.common.socket.SocketOperation;
+import org.asl.common.timing.Timing;
 import org.asl.middleware.Middleware;
 import org.asl.middleware.MiddlewareInfo;
 import org.asl.middleware.connectioncontrol.ConnectionTimeWrapper;
@@ -38,17 +40,18 @@ public class AcceptCompletionHandler<V, A> implements CompletionHandler<Asynchro
 		watchDog.addConnection(c);
 		serverChannel.accept(++requestId, this);
 		ByteBuffer inbuf = ByteBuffer.allocate(Middleware.INITIAL_BUFSIZE);
-		long MIDDLEWARE_START_READ = System.nanoTime();
-		sc.read(inbuf, c, MiddlewareReadCompletionHandler.create(mi, sc, inbuf, MIDDLEWARE_START_READ, requestId));
+		sc.read(inbuf, c, MiddlewareReadCompletionHandler.create(mi, sc, inbuf, requestId));
 	}
 
 	@Override
 	public void failed(Throwable se, Integer attachment) {
-		SocketHelper.closeSocketAfterException(
-				SocketLocation.MIDDLEWARE,
-				SocketOperation.ACCEPT,
-				se
-			);
+		if (se.getClass() != AsynchronousCloseException.class || !Middleware.isShuttingDown) {
+			SocketHelper.closeSocketAfterException(
+					SocketLocation.MIDDLEWARE,
+					SocketOperation.ACCEPT,
+					se
+				);
+		}
 	}
 
 }

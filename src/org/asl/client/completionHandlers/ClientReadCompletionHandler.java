@@ -18,7 +18,6 @@ import org.asl.common.request.types.exceptions.ASLException;
 import org.asl.common.socket.SocketHelper;
 import org.asl.common.socket.SocketLocation;
 import org.asl.common.socket.SocketOperation;
-import org.asl.common.timing.TimeLogger;
 import org.asl.common.timing.Timing;
 
 public class ClientReadCompletionHandler implements CompletionHandler<Integer, Object> {
@@ -71,6 +70,7 @@ public class ClientReadCompletionHandler implements CompletionHandler<Integer, O
 					);
 			}
 		} else {
+			ci.getMyTimeLogger().stopMyTimeLogger();
 			SocketHelper.closeSocket(sc);
 			System.out.println("Client is done and closed socket");
 		}

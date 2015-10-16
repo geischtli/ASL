@@ -18,6 +18,7 @@ public class RegisterMiddlewareRequest extends Request {
 			// extra handling in code, so we take "bad" way instead of correct but costly one.
 			// so timer==null and requestId=0
 			mi.setMiddlewareId(MiddlewareDAO.getMiddlewareDAO().registerMiddleware(mi));
+			mi.initTimeLogger();
 			System.out.println("Middleware registered with ID " + mi.getMiddlewareId());
 		} catch (RegisterMiddlewareException e) {
 			e.printStackTrace();

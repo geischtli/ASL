@@ -1,55 +1,62 @@
 package org.asl.common.timing;
 
-import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.core.Layout;
-import org.apache.logging.log4j.core.appender.FileAppender;
-import org.apache.logging.log4j.core.layout.PatternLayout;
-
-import java.nio.charset.Charset;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 
 public class TimeLogger {
 
-	private Logger myLogger;
-	private FileAppender myAppender;
+	private BufferedWriter bw;
 	
 	public TimeLogger(String caller, int callerId) {
-		Layout<String> layout = PatternLayout.createLayout(
-				"%m %ex%n", // pattern
-				null, // config
-				null, // replace regex
-				Charset.forName("UTF-8"), // charset
-				true, // write exceptions
-				false,
-				caller + "LOG " + callerId + " START", // header
-				caller + "LOG " + callerId + " START" // footer
-			);
-		myAppender = FileAppender.createAppender(
-				caller.toLowerCase() + "_logs/client_" + callerId, // filename
-				"false", // append
-				"false", // locking
-				caller.toUpperCase() + "APPENDER " + callerId, // appender name
-				"true", // immediateFlush
-				"true", // log errors, else propagate to caller
-				"true", // bufferedIo
-				"8192", // bufferSize
-				layout, // layout
-				null, // filter
-				"false", // advertise
-				"", // advertiseURI
-				null // config
-			);
-		myLogger = org.apache.logging.log4j.LogManager.getLogger("Client" + callerId + "Logger");
-		org.apache.logging.log4j.core.Logger coreLogger = (org.apache.logging.log4j.core.Logger)myLogger;
-		coreLogger.addAppender(myAppender);
+		File file = new File(getFileLocation(caller, callerId));
+		try {
+			if (file.exists()) {
+				file.delete();
+				file.createNewFile();
+			}
+			FileWriter fw = new FileWriter(file.getAbsoluteFile());
+			bw = new BufferedWriter(fw);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
 	}
 	
+	public String getFileLocation(String caller, int callerId) {
+		return caller.toLowerCase() + "_logs/" + caller.toLowerCase() + "_" + callerId + ".log"; 
+	}
+	
+	public static TimeLogger create(String caller, int callerId) {
+		return new TimeLogger(caller, callerId);
+	}
 	
 	public void click(Timing timing, int clientId, int requestId) {
-		myLogger.info("C:" + clientId + ",R:" + requestId + ",L:" + timing + ",T:" + System.nanoTime());
+		try {
+			bw.write("C:" + clientId + ",R:" + requestId + ",L:" + timing + ",T:" + System.nanoTime());
+			bw.newLine();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public void setClick(Timing timing, long time, int clientId, int requestId) {
-		myLogger.info("C:" + clientId + ",R:" + requestId + ",L:" + timing + ",T:" + time);
+		try {
+			bw.write("C:" + clientId + ",R:" + requestId + ",L:" + timing + ",T:" + time + "\n");
+			bw.newLine();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void stopMyTimeLogger() {
+		try {
+			bw.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		System.out.println("Closed time appender successfully");
 	}
 	
 }

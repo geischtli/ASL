@@ -11,7 +11,6 @@ import org.asl.middleware.MiddlewareInfo;
 import org.asl.middleware.database.config.ASLDatabase;
 import org.asl.middleware.database.connectionpool.ConnectionWrapper;
 import org.asl.middleware.database.dao.IMiddlewareDAO;
-import org.asl.middleware.database.dao.common.CommonDAO;
 import org.asl.middleware.database.model.MiddlewareSequence;
 
 public class MiddlewareDAO implements IMiddlewareDAO {
@@ -24,7 +23,8 @@ public class MiddlewareDAO implements IMiddlewareDAO {
 	public int registerMiddleware(MiddlewareInfo mi) throws RegisterMiddlewareException {
 		try (ConnectionWrapper conn = ASLDatabase.getNewConnection().get()) {
 			PreparedStatement registerMiddleware = conn.get().prepareStatement(MiddlewareSequence.REGISTER_MIDDLEWARE_STRING);
-			ResultSet rs = CommonDAO.executeQuery(conn.get(), registerMiddleware, -2, -1, mi);
+			ResultSet rs = registerMiddleware.executeQuery();
+			conn.get().commit();
 			rs.next();
 			return rs.getInt(1);
 		} catch (SQLException | IOException | InterruptedException | ExecutionException e) {

@@ -51,8 +51,14 @@ public class Main {
 				e.printStackTrace();
 			}
 		}
+		
+		// wait for enter strike such that the middleware can safely close all its services
+		System.in.read();
+		System.out.println("Wait for shutdown command (ENTER) ...");
+		mw.shutdown();
+		
 		try {
-			if (!threadpool.awaitTermination(600, TimeUnit.SECONDS)) {
+			if (!threadpool.awaitTermination(0, TimeUnit.SECONDS)) {
 				System.out.println("Force threadpool to shutdown");
 				threadpool.shutdownNow();
 			}

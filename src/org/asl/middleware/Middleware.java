@@ -24,6 +24,7 @@ public class Middleware {
 	private WatchDog watchDog;
 	private Timer watchDogTimer;
 	private MiddlewareInfo mi;
+	public static boolean isShuttingDown;
 	
 	public Middleware(int port) throws IOException, SQLException {
 		this.serverChannel = AsynchronousServerSocketChannel.open();
@@ -37,12 +38,25 @@ public class Middleware {
 		this.watchDogTimer = new Timer();
 		this.watchDogTimer.scheduleAtFixedRate(this.watchDog, 0, 5000);
 		this.mi = MiddlewareInfo.create();
+		Middleware.isShuttingDown = false;
 		
 		RequestBuilder.getRegisterMiddlewareRequest().processOnMiddleware(mi);
 	}
 	
 	public void accept() {
 		serverChannel.accept(null, AcceptCompletionHandler.create(mi, serverChannel, watchDog, requestId));
+	}
+	
+	public void shutdown() {
+		System.out.println("Shutting down middleware");
+		Middleware.isShuttingDown = true;
+		mi.getMyTimeLogger().stopMyTimeLogger();
+		try {
+			serverChannel.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		System.out.println("Middleware successfully shut down");
 	}
 	
 }

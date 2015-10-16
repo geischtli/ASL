@@ -23,7 +23,8 @@ public class MiddlewareReadCompletionHandler implements CompletionHandler<Intege
 	private long MIDDLEWARE_START_READ;
 	private MiddlewareInfo mi;
 	
-	public MiddlewareReadCompletionHandler(MiddlewareInfo mi, AsynchronousSocketChannel sc, ByteBuffer inbuf, long MIDDLEWARE_START_READ, int requestId) {
+	public MiddlewareReadCompletionHandler(MiddlewareInfo mi,
+			AsynchronousSocketChannel sc, ByteBuffer inbuf, long MIDDLEWARE_START_READ, int requestId) {
 		this.mi = mi;
 		this.sc = sc;
 		this.inbuf = inbuf;
@@ -31,7 +32,8 @@ public class MiddlewareReadCompletionHandler implements CompletionHandler<Intege
 		this.requestId = requestId;
 	}
 	
-	public static MiddlewareReadCompletionHandler create(MiddlewareInfo mi, AsynchronousSocketChannel sc, ByteBuffer inbuf, long MIDDLEWARE_START_READ, int requestId) {
+	public static MiddlewareReadCompletionHandler create(MiddlewareInfo mi, AsynchronousSocketChannel sc, ByteBuffer inbuf, int requestId) {
+		long MIDDLEWARE_START_READ = System.nanoTime();
 		return new MiddlewareReadCompletionHandler(mi, sc, inbuf, MIDDLEWARE_START_READ, requestId);
 	}
 	

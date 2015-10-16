@@ -35,7 +35,7 @@ public class MiddlewareWriteCompletionHandler implements CompletionHandler<Integ
 		SerializingUtilities.forceFurtherWriteIfNeeded(outbufWrap.getBuf(), writtenBytes, outbufWrap.getBytes(), sc);
 //		timer.click(MiddlewareTimings.WROTE_ANSWER, requestId);
 		ByteBuffer inbuf = ByteBuffer.allocate(Middleware.INITIAL_BUFSIZE);
-		sc.read(inbuf, connTimeWrapper, MiddlewareReadCompletionHandler.create(mi, sc, inbuf, 313L, 0));
+		sc.read(inbuf, connTimeWrapper, MiddlewareReadCompletionHandler.create(mi, sc, inbuf, 0));
 		connTimeWrapper.reset();
 	}
 

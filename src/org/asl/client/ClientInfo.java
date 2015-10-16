@@ -33,7 +33,7 @@ public class ClientInfo {
 		this.numberOfMessages = -1;
 		this.sendContext = "";
 		this.requestId = new AtomicInteger(0);
-		this.myTimeLogger = null;
+		this.myTimeLogger = TimeLogger.create("CLIENT", this.clientId);
 	}
 	
 	public static ClientInfo create() {
@@ -133,7 +133,7 @@ public class ClientInfo {
 	}
 	
 	public void initTimeLogger() {
-		myTimeLogger = new TimeLogger("CLIENT", getClientId());
+		myTimeLogger = TimeLogger.create("CLIENT", getClientId());
 	}
 	
 	public TimeLogger getMyTimeLogger() {

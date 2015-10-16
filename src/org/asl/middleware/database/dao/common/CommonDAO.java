@@ -10,7 +10,8 @@ import org.asl.middleware.MiddlewareInfo;
 
 public class CommonDAO {
 
-	public static ResultSet executeQuery(Connection conn, PreparedStatement prepStmt, int clientId, int requestId, MiddlewareInfo mi) throws SQLException {
+	public static ResultSet executeQuery(Connection conn,
+			PreparedStatement prepStmt, int clientId, int requestId, MiddlewareInfo mi) throws SQLException {
 		mi.getMyTimeLogger().click(Timing.MIDDLEWARE_START_QUERY, clientId, requestId);
 		ResultSet rs = prepStmt.executeQuery();
 		mi.getMyTimeLogger().click(Timing.MIDDLEWARE_END_QUERY, clientId, requestId);
