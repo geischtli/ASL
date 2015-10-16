@@ -11,6 +11,7 @@ import org.asl.common.socket.SocketHelper;
 import org.asl.common.socket.SocketLocation;
 import org.asl.common.socket.SocketOperation;
 import org.asl.common.timing.Timing;
+import org.asl.middleware.Middleware;
 import org.asl.middleware.MiddlewareInfo;
 import org.asl.middleware.connectioncontrol.ConnectionTimeWrapper;
 
@@ -41,7 +42,8 @@ public class MiddlewareReadCompletionHandler implements CompletionHandler<Intege
 		long MIDDLEWARE_END_READ = System.nanoTime();
 		
 		if (fullInbufWrap == null || readBytes == -1) {
-			System.out.println("Got null buffer or read -1 bytes, i return");
+			//System.out.println("Got null buffer or read -1 bytes, i return");
+			System.out.println("Middleware sees client go. Totally " + Middleware.numClientsGone.incrementAndGet() + " clients gone.");
 			return;
 		}
 		
@@ -59,7 +61,7 @@ public class MiddlewareReadCompletionHandler implements CompletionHandler<Intege
 		sc.write(
 				outbufWrap.getBuf(),
 				connTimeWrapper,
-				MiddlewareWriteCompletionHandler.create(mi, sc, outbufWrap)
+				MiddlewareWriteCompletionHandler.create(mi, sc, outbufWrap, req.getClientId(), req.getRequestId())
 			);
 	}
 

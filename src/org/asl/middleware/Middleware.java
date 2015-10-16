@@ -6,6 +6,7 @@ import java.net.StandardSocketOptions;
 import java.nio.channels.AsynchronousServerSocketChannel;
 import java.sql.SQLException;
 import java.util.Timer;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import org.asl.common.propertyparser.PropertyKey;
 import org.asl.common.propertyparser.PropertyParser;
@@ -25,6 +26,7 @@ public class Middleware {
 	private Timer watchDogTimer;
 	private MiddlewareInfo mi;
 	public static boolean isShuttingDown;
+	public static AtomicInteger numClientsGone;
 	
 	public Middleware(int port) throws IOException, SQLException {
 		this.serverChannel = AsynchronousServerSocketChannel.open();
@@ -39,6 +41,7 @@ public class Middleware {
 		this.watchDogTimer.scheduleAtFixedRate(this.watchDog, 0, 5000);
 		this.mi = MiddlewareInfo.create();
 		Middleware.isShuttingDown = false;
+		Middleware.numClientsGone = new AtomicInteger(0);
 		
 		RequestBuilder.getRegisterMiddlewareRequest().processOnMiddleware(mi);
 	}

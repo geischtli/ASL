@@ -42,9 +42,10 @@ for i = 1:numFiles
 end
 
 % plot starting times in ms
-effectiveStartingTimes = zeros(numFiles-1, 1);
-for i = 1:numFiles
-    currData = cell2mat(data(i));
-    effectiveStartingTimes(i) = currData(1, 1)/1000000;
-end
-plot((1:numFiles), effectiveStartingTimes, 'o')
+%effectiveStartingTimes = zeros(numFiles-1, 1);
+%for i = 1:numFiles
+%    currData = cell2mat(data(i));
+%    effectiveStartingTimes(i) = currData(1, 1)/1000000;
+%end
+%plot((1:numFiles), effectiveStartingTimes, 'o')
+

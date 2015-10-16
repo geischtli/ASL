@@ -12,7 +12,6 @@ import org.asl.common.request.serialize.SerializingUtilities;
 import org.asl.common.socket.SocketHelper;
 import org.asl.common.socket.SocketLocation;
 import org.asl.common.socket.SocketOperation;
-import org.asl.common.timing.Timing;
 
 public class AdminConnectCompletionHandler implements CompletionHandler<Void, Object> {
 
@@ -29,13 +28,11 @@ public class AdminConnectCompletionHandler implements CompletionHandler<Void, Ob
 	}
 	
 	public static AdminConnectCompletionHandler create(ClientInfo ci, AsynchronousSocketChannel sc, List<RequestType> requestList, int requestId) {
-		ci.getMyTimeLogger().click(Timing.CLIENT_START_CONNECT, ci.getClientId(), ci.getRequestId());
 		return new AdminConnectCompletionHandler(ci, sc, requestList, ci.getRequestId());
 	}
 	
 	@Override
 	public void completed(Void result, Object attachment) {
-		ci.getMyTimeLogger().click(Timing.CLIENT_END_CONNECT, ci.getClientId(), ci.getRequestId());
 		ByteBufferWrapper outbufWrap = SerializingUtilities.packRequest(RequestBuilder.getRequest(requestList.get(0), ci));
 		sc.write(outbufWrap.getBuf(), outbufWrap.getBytes(), AdminWriteCompletionHandler.create(sc, outbufWrap, ci, requestList, requestId));
 	}
