@@ -9,7 +9,7 @@ public class TimeLogger {
 
 	private BufferedWriter bw;
 	
-	public TimeLogger(String caller, int callerId) {
+	public TimeLogger(String caller, int callerId, long startTime) {
 		File file = new File(getFileLocation(caller, callerId));
 		try {
 			if (file.exists()) {
@@ -18,7 +18,7 @@ public class TimeLogger {
 			}
 			FileWriter fw = new FileWriter(file.getAbsoluteFile());
 			bw = new BufferedWriter(fw);
-			bw.write(String.valueOf(System.nanoTime()));
+			bw.write(String.valueOf(startTime));
 			bw.newLine();
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -30,25 +30,20 @@ public class TimeLogger {
 		return "logs/" + caller.toLowerCase() + "_" + callerId + ".log";
 	}
 	
-	public static TimeLogger create(String caller, int callerId) {
-		return new TimeLogger(caller, callerId);
+	public static TimeLogger create(String caller, int callerId, long startTime) {
+		return new TimeLogger(caller, callerId, startTime);
 	}
 	
-	public void click(Timing timing, int clientId, int requestId) {
+	public void click(Timing timing, int clientId, int requestId, long callerStartTime) {
+			setClick(timing, System.nanoTime(), clientId, requestId, callerStartTime);
+	}
+	
+	public void setClick(Timing timing, long time, int clientId, int requestId, long callerStartTime) {
 		try {
-			synchronized(bw) { // make sure we write newline after each logging entry (only important in the middleware though)
-				bw.write(clientId + " " + requestId + " " + timing.ordinal() + " " + System.nanoTime());
+			synchronized(bw) {
+				bw.write(clientId + " " + requestId + " " + timing.ordinal() + " " + (time - callerStartTime)/1000000);
 				bw.newLine();
 			}
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-	
-	public void setClick(Timing timing, long time, int clientId, int requestId) {
-		try {
-			bw.write(clientId + " " + requestId + " " + timing.ordinal() + " " + time);
-			bw.newLine();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

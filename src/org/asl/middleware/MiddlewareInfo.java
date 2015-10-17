@@ -6,10 +6,11 @@ public class MiddlewareInfo {
 
 	private int middlewareId;
 	private TimeLogger myTimeLogger;
+	private long startTime;
 	
 	public MiddlewareInfo() {
 		this.middlewareId = 0;
-		this.myTimeLogger = TimeLogger.create("MIDDLEWARE", this.middlewareId);
+		this.myTimeLogger = TimeLogger.create("MIDDLEWARE", this.middlewareId, System.nanoTime());
 	}
 	
 	public static MiddlewareInfo create() {
@@ -25,11 +26,20 @@ public class MiddlewareInfo {
 	}
 	
 	public void initTimeLogger() {
-		myTimeLogger = TimeLogger.create("MIDDLEWARE", getMiddlewareId());
+		setStartTime(System.nanoTime());
+		myTimeLogger = TimeLogger.create("MIDDLEWARE", getMiddlewareId(), getStartTime()/1000000);
 	}
 	
 	public TimeLogger getMyTimeLogger() {
 		return myTimeLogger;
+	}
+
+	public long getStartTime() {
+		return startTime;
+	}
+
+	public void setStartTime(long startTime) {
+		this.startTime = startTime;
 	}
 	
 }

@@ -37,20 +37,20 @@ public class ClientReadCompletionHandler implements CompletionHandler<Integer, O
 	}
 	
 	public static ClientReadCompletionHandler create(AsynchronousSocketChannel sc, ClientInfo ci, ByteBuffer inbuf, List<RequestType> requestList, int requestId) {
-		ci.getMyTimeLogger().click(Timing.CLIENT_START_READ, ci.getClientId(), ci.getRequestId());
+		ci.getMyTimeLogger().click(Timing.CLIENT_START_READ, ci.getClientId(), ci.getRequestId(), ci.getStartTime());
 		return new ClientReadCompletionHandler(sc, ci, inbuf, requestList, requestId);
 	}
 	
 	@Override
 	public void completed(Integer readBytes, Object attachment) {
 		ByteBufferWrapper fullInbufWrap = SerializingUtilities.forceFurtherReadIfNeeded(inbuf, readBytes, sc);
-		ci.getMyTimeLogger().click(Timing.CLIENT_END_READ, ci.getClientId(), ci.getRequestId());
+		ci.getMyTimeLogger().click(Timing.CLIENT_END_READ, ci.getClientId(), ci.getRequestId(), ci.getStartTime());
 		
 		if (fullInbufWrap == null || readBytes == -1) {
 			return;
 		}
 
-		ci.getMyTimeLogger().click(Timing.CLIENT_START_POSTPROCESSING, ci.getClientId(), ci.getRequestId());
+		ci.getMyTimeLogger().click(Timing.CLIENT_START_POSTPROCESSING, ci.getClientId(), ci.getRequestId(), ci.getStartTime());
 		Request ansReq = SerializingUtilities.unpackRequest(fullInbufWrap.getBuf(), fullInbufWrap.getBytes());
 		try {
 			ansReq.processOnClient(ci);
@@ -58,7 +58,7 @@ public class ClientReadCompletionHandler implements CompletionHandler<Integer, O
 			System.out.println("Reading message failed with type: " + ansReq.getException().getClass());
 			System.out.println("And reason: " + ansReq.getException().getMessage());
 		}
-		ci.getMyTimeLogger().click(Timing.CLIENT_END_POSTPROCESSING, ci.getClientId(), ci.getRequestId());
+		ci.getMyTimeLogger().click(Timing.CLIENT_END_POSTPROCESSING, ci.getClientId(), ci.getRequestId(), ci.getStartTime());
 		if (ci.getRequestId() + 1 < requestList.size()) {
 			if (sc.isOpen()) {
 				ci.incrementRequestId();

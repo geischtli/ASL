@@ -33,14 +33,14 @@ public class MiddlewareWriteCompletionHandler implements CompletionHandler<Integ
 	
 	public static MiddlewareWriteCompletionHandler create(
 			MiddlewareInfo mi, AsynchronousSocketChannel sc, ByteBufferWrapper outbufWrap, int clientId, int requestId) {
-		mi.getMyTimeLogger().click(Timing.MIDDLEWARE_START_WRITE, clientId, requestId);
+		mi.getMyTimeLogger().click(Timing.MIDDLEWARE_START_WRITE, clientId, requestId, mi.getStartTime());
 		return new MiddlewareWriteCompletionHandler(mi, sc, outbufWrap, clientId, requestId);
 	}
 	
 	@Override
 	public void completed(Integer writtenBytes, ConnectionTimeWrapper connTimeWrapper) {
 		SerializingUtilities.forceFurtherWriteIfNeeded(outbufWrap.getBuf(), writtenBytes, outbufWrap.getBytes(), sc);
-		mi.getMyTimeLogger().click(Timing.MIDDLEWARE_END_WRITE, clientId, requestId);
+		mi.getMyTimeLogger().click(Timing.MIDDLEWARE_END_WRITE, clientId, requestId, mi.getStartTime());
 		ByteBuffer inbuf = ByteBuffer.allocate(Middleware.INITIAL_BUFSIZE);
 		sc.read(inbuf, connTimeWrapper, MiddlewareReadCompletionHandler.create(mi, sc, inbuf, 0));
 		connTimeWrapper.reset();
