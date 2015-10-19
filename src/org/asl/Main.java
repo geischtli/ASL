@@ -2,6 +2,10 @@ package org.asl;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -22,6 +26,16 @@ public class Main {
 	private static PropertyParser propParser;
 	
 	public static void main(String[] args) throws IOException, SQLException {
+		/*try {
+			SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			formatter.setLenient(false);
+			String time = "2015-10-19 10:32:50";
+			Date oldDate = formatter.parse(time);
+			long millis = oldDate.getTime();
+			System.out.println(millis);
+		} catch (ParseException e1) {
+			e1.printStackTrace();
+		}*/
 		propParser = PropertyParser.create("config_common.xml").parse();
 
 		mwIp = propParser.getProperty(PropertyKey.MIDDLEWARE_IP);
@@ -53,8 +67,8 @@ public class Main {
 		}
 		
 		// wait for enter strike such that the middleware can safely close all its services
-		System.in.read();
 		System.out.println("Wait for shutdown command (ENTER) ...");
+		System.in.read();
 		mw.shutdown();
 		
 		try {

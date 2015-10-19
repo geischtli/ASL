@@ -98,13 +98,15 @@ END;
 $$ LANGUAGE plpgsql;
 
 CREATE OR REPLACE FUNCTION send_message(sender_id INTEGER, receiver_id INTEGER, queue_id INTEGER, content TEXT)
-	RETURNS INTEGER AS $$
+	RETURNS TIMESTAMP AS $$
+DECLARE
+	current_time_stamp TIMESTAMP;
 BEGIN
-	INSERT INTO MESSAGE (SENDER, RECEIVER, QUEUE, CONTENT) VALUES (sender_id, receiver_id, queue_id, content);
+	INSERT INTO MESSAGE (SENDER, RECEIVER, QUEUE, CONTENT) VALUES (sender_id, receiver_id, queue_id, content) RETURNING ARRIVALTIME INTO current_time_stamp;
 	IF NOT FOUND THEN
-		RETURN -1;
+		RETURN NULL;
 	ELSE
-		RETURN 0;
+		RETURN current_time_stamp;
 	END IF;
 END;
 $$ LANGUAGE plpgsql;

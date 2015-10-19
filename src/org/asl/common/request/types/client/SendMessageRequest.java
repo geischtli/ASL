@@ -1,6 +1,9 @@
 package org.asl.common.request.types.client;
 
+import java.util.Date;
+
 import org.asl.client.ClientInfo;
+import org.asl.common.dateTuple.DateTriple;
 import org.asl.common.request.Request;
 import org.asl.common.request.types.exceptions.ASLException;
 import org.asl.common.request.types.exceptions.SendMessageException;
@@ -14,6 +17,9 @@ public class SendMessageRequest extends Request {
 	private final int receiver;
 	private final int queue;
 	private final String content;
+	private Date sendTime;
+	private Date arrivalTime;
+	private Date returnTime;
 	
 	public SendMessageRequest(int sender, int receiver, int queue, String content, int requestId) {
 		super(sender, requestId);
@@ -40,10 +46,37 @@ public class SendMessageRequest extends Request {
 		return content;
 	}
 	
+	public Date getArrivalTime() {
+		return arrivalTime;
+	}
+	
+	public void setArrivalTime(Date arrivalTime) {
+		this.arrivalTime = arrivalTime;
+	}
+	
+	public Date getReturnTime() {
+		return returnTime;
+	}
+
+	public void setReturnTime(Date returnTime) {
+		this.returnTime = returnTime;
+	}
+	
+	public Date getSendTime() {
+		return sendTime;
+	}
+	
+	public void setSendTime(Date sendTime) {
+		this.sendTime = sendTime;
+	}
+	
 	@Override
 	public void processOnMiddleware(MiddlewareInfo mi) {
 		try {
-			MessageDAO.getMessageDAO().sendMessage(sender, receiver, queue, content, requestId, mi);
+			DateTriple timings = MessageDAO.getMessageDAO().sendMessage(sender, receiver, queue, content, requestId, mi);
+			setSendTime(timings.sendTime);
+			setArrivalTime(timings.arrivalTime);
+			setReturnTime(timings.returnTime);
 		} catch (SendMessageException e) {
 			setException(e);
 		}

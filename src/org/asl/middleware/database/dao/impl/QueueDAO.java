@@ -67,7 +67,8 @@ public class QueueDAO implements IQueueDAO {
 					rs.getInt(2),
 					rs.getInt(3),
 					rs.getInt(4),
-					rs.getString(5)
+					rs.getString(5),
+					rs.getTimestamp(6)
 			);
 		} catch (SQLException | IOException | InterruptedException | ExecutionException e) {
 			throw new RemoveTopMessageFromQueueException(e);
@@ -88,7 +89,8 @@ public class QueueDAO implements IQueueDAO {
 						rs.getInt(2),
 						rs.getInt(3),
 						rs.getInt(4),
-						rs.getString(5)
+						rs.getString(5),
+						rs.getTimestamp(6)
 						)
 				);
 			}

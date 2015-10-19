@@ -52,7 +52,8 @@ public class ClientDAO implements IClientDAO {
 						rs.getInt(2),
 						rs.getInt(3),
 						rs.getInt(4),
-						rs.getString(5)
+						rs.getString(5),
+						rs.getTimestamp(6)
 				);
 			} else {
 				return null;

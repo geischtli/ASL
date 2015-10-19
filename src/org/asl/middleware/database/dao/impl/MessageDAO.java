@@ -4,8 +4,10 @@ import java.io.IOException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Date;
 import java.util.concurrent.ExecutionException;
 
+import org.asl.common.dateTuple.DateTriple;
 import org.asl.common.request.types.exceptions.GetNumberOfMessagesException;
 import org.asl.common.request.types.exceptions.SendMessageException;
 import org.asl.middleware.MiddlewareInfo;
@@ -22,14 +24,18 @@ public class MessageDAO implements IMessageDAO {
 	}
 	
 	@Override
-	public void sendMessage(int sender, int receiver, int queue, String content, int requestId, MiddlewareInfo mi) throws SendMessageException {
+	public DateTriple sendMessage(int sender, int receiver, int queue, String content, int requestId, MiddlewareInfo mi) throws SendMessageException {
 		try (ConnectionWrapper conn = ASLDatabase.getNewConnection().get()) {
 			PreparedStatement sendMessage = conn.get().prepareStatement(MessageTable.SEND_MESSAGE_STRING);
 			sendMessage.setInt(1, sender);
 			sendMessage.setInt(2, receiver);
 			sendMessage.setInt(3, queue);
 			sendMessage.setString(4, content);
+			Date sendTime = new Date();
 			ResultSet rs = CommonDAO.executeQuery(conn.get(), sendMessage, sender, requestId, mi);
+			Date returnTime = new Date();
+			rs.next();
+			return new DateTriple(sendTime, rs.getTimestamp(1), returnTime);
 		} catch (SQLException | IOException | InterruptedException | ExecutionException e) {
 			throw new SendMessageException(e);
 		}
