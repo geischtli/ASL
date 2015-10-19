@@ -1,6 +1,6 @@
 clear variables;
 
-basedir = 'C:\Users\Sandro\Documents\eclipse\ASL\logs\';
+basedir = '..\logs\';
 
 files = dir(strcat(basedir, '*.log'));
 
