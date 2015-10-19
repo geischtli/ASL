@@ -8,11 +8,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Stack;
 
-import javax.swing.plaf.synth.SynthSeparatorUI;
-
 public class DatabaseLogParser {
 
-	private static File file;
 	private static File modFile;
 	private static BufferedReader reader;
 	private static BufferedWriter writer;
