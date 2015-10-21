@@ -31,6 +31,10 @@ echo "database successfullly set up, continue to setup mydb"
 
 /home/ec2-user/postgres/bin/psql -U postgres -d mydb -f initDatabase.sql
 
+/home/ec2-user/postgres/bin/pg_ctl -D /home/ec2-user/postgres/db/ restart
+
+sleep 3
+echo "copy config files"
 cp pg_hba.conf /home/ec2-user/postgres/db
 cp postgresql.conf /home/ec2-user/postgres/db
 
