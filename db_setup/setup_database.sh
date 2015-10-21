@@ -43,7 +43,7 @@ cp /home/ec2-user/ASL/db_setup/postgresql.conf /home/ec2-user/postgres/db
 /home/ec2-user/postgres/bin/pg_ctl -D /home/ec2-user/postgres/db/ restart
 
 sleep 5
-printf "\n\nCOPY CONFIG FILES DONE"
+printf "\n\nCOPY CONFIG FILES DONE\n"
 
 # make sure our homebrew pg_ctl is executable with ./pg_ctl start/stop/restart/status
 chmod +x /home/ec2-user/ASL/pg_ctl.sh
