@@ -5,7 +5,7 @@
 	<entry key="PASSWORD"></entry>
 	<entry key="MIDDLEWARE_IP">172.31.12.173</entry>
 	<entry key="MIDDLEWARE_PORT">9090</entry>
-	<entry key="DATABASE_IP">172.31.11.144</entry>
+	<entry key="DATABASE_IP">52.28.82.112</entry>
 	<entry key="DATABASE_PORT">5432</entry>
 	<entry key="DATABASE_NAME">mydb</entry>
 	<entry key="NUM_ASYNC_CONNECTION_POOL_THREADS">1</entry>
