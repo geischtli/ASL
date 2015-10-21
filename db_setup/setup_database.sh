@@ -44,4 +44,8 @@ cp /home/ec2-user/ASL/db_setup/postgresql.conf /home/ec2-user/postgres/db
 
 sleep 5
 printf "\n\nCOPY CONFIG FILES DONE"
+
+# make sure our homebrew pg_ctl is executable with ./pg_ctl start/stop/restart/status
+chmod +x /home/ec2-user/ASL/pg_ctl.sh
+
 printf "FULL DATABASE SETUP COMPLETED. WE'RE READY TO GO!\n\n"
