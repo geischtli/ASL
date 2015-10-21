@@ -33,7 +33,6 @@ public class ConnectCompletionHandler implements CompletionHandler<Void, Object>
 	
 	@Override
 	public void completed(Void result, Object attachment) {
-		System.out.println("connection complete yai");
 		ByteBufferWrapper outbufWrap = SerializingUtilities.packRequest(RequestBuilder.getRequest(requestList.get(ci.getRequestId()), ci));
 		sc.write(outbufWrap.getBuf(), outbufWrap.getBytes(), ClientWriteCompletionHandler.create(sc, outbufWrap, ci, requestList, requestId));
 	}
