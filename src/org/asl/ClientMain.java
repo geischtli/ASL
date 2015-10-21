@@ -13,7 +13,7 @@ public class ClientMain {
 	private static PropertyParser propParser;
 	
 	public static void main(String[] args) throws IOException, InterruptedException {
-		propParser = PropertyParser.create("config_common.xml").parse();
+		propParser = PropertyParser.create("config/config_common.xml").parse();
 		mwIp = propParser.getProperty(PropertyKey.MIDDLEWARE_IP);
 		mwPort = Integer.parseInt(propParser.getProperty(PropertyKey.MIDDLEWARE_PORT));
 

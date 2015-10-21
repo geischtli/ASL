@@ -32,7 +32,7 @@ public class Middleware {
 		this.serverChannel = AsynchronousServerSocketChannel.open();
 		this.serverChannel.bind(new InetSocketAddress(port));
 		this.serverChannel.setOption(StandardSocketOptions.SO_REUSEADDR, true);
-		this.propParser = PropertyParser.create("config_common.xml").parse();
+		this.propParser = PropertyParser.create("config/config_common.xml").parse();
 		this.db = ASLDatabase.getDatabase();
 		Middleware.INITIAL_BUFSIZE = Integer.valueOf(propParser.getProperty(PropertyKey.INITIAL_BUFSIZE));
 		this.requestId = -1;

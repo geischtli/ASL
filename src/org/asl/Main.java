@@ -36,7 +36,7 @@ public class Main {
 		} catch (ParseException e1) {
 			e1.printStackTrace();
 		}*/
-		propParser = PropertyParser.create("config_common.xml").parse();
+		propParser = PropertyParser.create("config/config_common.xml").parse();
 
 		mwIp = propParser.getProperty(PropertyKey.MIDDLEWARE_IP);
 		mwPort = Integer.parseInt(propParser.getProperty(PropertyKey.MIDDLEWARE_PORT));		

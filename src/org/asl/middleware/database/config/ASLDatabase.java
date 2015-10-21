@@ -24,7 +24,7 @@ public class ASLDatabase {
 	private int numAsyncPoolThreads;
 	
 	public ASLDatabase() throws SQLException {
-		propParser = PropertyParser.create("config_common.xml").parse();
+		propParser = PropertyParser.create("config/config_common.xml").parse();
 		dbIp = propParser.getProperty(PropertyKey.DATABASE_IP);
 		dbPort = propParser.getProperty(PropertyKey.DATABASE_PORT);
 		dbName = propParser.getProperty(PropertyKey.DATABASE_NAME);

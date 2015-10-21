@@ -37,7 +37,7 @@ public abstract class AbstractClient implements Runnable {
 		AbstractClient.ip = ip;
 		this.requestList = new ArrayList<RequestType>();
 		this.lock = new Semaphore(1, true);
-		this.propParser = PropertyParser.create("config_common.xml").parse();
+		this.propParser = PropertyParser.create("config/config_common.xml").parse();
 		AbstractClient.INITIAL_BUFSIZE = Integer.valueOf(propParser.getProperty(PropertyKey.INITIAL_BUFSIZE));
 		this.ci = ClientInfo.create();
 	}
