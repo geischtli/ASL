@@ -22,20 +22,26 @@ LD_LIBRARY_PATH=/home/ec2-user/postgres/lib export LD_LIBRARY_PATH
 /home/ec2-user/postgres/bin/pg_ctl -D /home/ec2-user/postgres/db/ start
 
 # wait until the startup loggint text is shown then return to command line
-sleep 2
-echo "database successfullly set up, continue to setup mydb"
+sleep 5
+echo "\nDATABASE CLUSTER OK."
+echo "SETUP mydb...\n"
 
 /home/ec2-user/postgres/bin/createuser -s postgres
 
 /home/ec2-user/postgres/bin/createdb mydb -U postgres -w
 
-/home/ec2-user/postgres/bin/psql -U postgres -d mydb -f initDatabase.sql
+/home/ec2-user/postgres/bin/psql -U postgres -d mydb -f /home/ec2-user/ASL/db_setup/initDatabase.sql
 
 /home/ec2-user/postgres/bin/pg_ctl -D /home/ec2-user/postgres/db/ restart
 
-sleep 3
-echo "copy config files"
-cp /home/ec2-user/ASL/db_starter_package/pg_hba.conf /home/ec2-user/postgres/db
-cp /home/ec2-user/ASL/db_starter_package/postgresql.conf /home/ec2-user/postgres/db
+sleep 5
+echo "\nmydb OK"
+echo "COPY CONFIG FILES...\n"
+cp /home/ec2-user/ASL/db_setup/pg_hba.conf /home/ec2-user/postgres/db
+cp /home/ec2-user/ASL/db_setup/postgresql.conf /home/ec2-user/postgres/db
 
 /home/ec2-user/postgres/bin/pg_ctl -D /home/ec2-user/postgres/db/ restart
+
+sleep 5
+echo "\nCOPY CONFIG FILES DONE"
+echo "FULL DATABASE SETUP COMPLETED. WE'RE READY TO GO!\n"
