@@ -15,4 +15,4 @@ mv pg_hba.conf /home/ec2-user/postgres/db
 
 #scp postgresql.conf sanhuber@dryad12.ethz.ch:/mnt/local/sanhuber/postgres/db
 #rsync -avze 'ssh -i ../../../frankfurt_key.pem' postgresql.conf ec2-user@ec2-$IP.eu-central-1.compute.amazonaws.com:/home/ec2-user/postgres/db
-mv postgresql.conf ec2-user/postgres/db
+mv postgresql.conf /home/ec2-user/postgres/db
