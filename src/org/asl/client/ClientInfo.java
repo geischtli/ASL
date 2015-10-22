@@ -1,8 +1,11 @@
 package org.asl.client;
 
 import java.util.List;
+import java.util.Random;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import org.asl.common.propertyparser.PropertyKey;
+import org.asl.common.propertyparser.PropertyParser;
 import org.asl.common.timing.TimeLogger;
 
 public class ClientInfo {
@@ -21,6 +24,11 @@ public class ClientInfo {
 	private AtomicInteger requestId; // counter for globally unique request id tuple
 	private TimeLogger myTimeLogger;
 	private long startTimeNS;
+	private StringBuilder stringBuilder;
+	private char[] alphabet = "abcdefghijklmnopqrstuvwxyz".toCharArray();
+	private Random random;
+	private PropertyParser propParser;
+	private String content;
 	
 	public ClientInfo() {
 		this.clientId = 0;
@@ -36,6 +44,19 @@ public class ClientInfo {
 		this.requestId = new AtomicInteger(0);
 		this.myTimeLogger = TimeLogger.create("CLIENT", this.clientId, System.nanoTime());
 		this.startTimeNS = -1;
+		this.stringBuilder = new StringBuilder();
+		this.random = new Random();
+		this.propParser = PropertyParser.create("config/config_common.xml").parse();
+		this.content = "";
+		initMyContent();
+	}
+	
+	public void initMyContent() {
+		int contentLength = Integer.parseInt(propParser.getProperty(PropertyKey.CONTENT_LENGTH));
+		for (int i = 0; i < contentLength; i++) {
+			stringBuilder.append(alphabet[random.nextInt(alphabet.length)]);
+		}
+		this.content = stringBuilder.toString();
 	}
 	
 	public static ClientInfo create() {
@@ -91,7 +112,8 @@ public class ClientInfo {
 	}
 	
 	public String getSendContentText() {
-		return "This is a message from Client " + this.clientId;
+		//return "This is a message from Client " + this.clientId;
+		return content;
 	}
 
 	public int getNumberOfMessages() {
