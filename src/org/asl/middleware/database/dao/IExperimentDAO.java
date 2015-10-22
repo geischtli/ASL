@@ -5,6 +5,6 @@ import org.asl.middleware.MiddlewareInfo;
 
 public interface IExperimentDAO {
 
-	public void baselineDummy(MiddlewareInfo mi) throws BaselineDummyException;
+	public void baselineDummy(int clientId, int requestId, MiddlewareInfo mi) throws BaselineDummyException;
 	
 }

@@ -7,6 +7,7 @@ import org.asl.client.ClientInfo;
 import org.asl.common.request.Request;
 import org.asl.common.request.Request.RequestType;
 import org.asl.common.request.builder.RequestBuilder;
+import org.asl.common.request.types.exceptions.ASLException;
 import org.asl.common.timing.Timing;
 import org.asl.middleware.MiddlewareInfo;
 
@@ -67,16 +68,21 @@ public class DatabaseBaselineClient implements Runnable {
 	@Override
 	public void run() {
 		System.out.println("Client " + ci.getClientId() + " started");
-		ci.initTimeLogger();
+		mi.setMiddlewareId(ci.getClientId());
+		mi.initTimeLogger();
 		int requestListSize = requestList.size();
 		for (int i = 1; i <= requestListSize; i++) {
-			ci.getMyTimeLogger().click(Timing.EXPERIMENT_START_REQUEST, ci.getClientId(), ci.getRequestId(), ci.getStartTime());
 			Request req = RequestBuilder.getRequest(requestList.get(ci.getRequestId()), ci);
 			req.processOnMiddleware(mi);
-			ci.getMyTimeLogger().click(Timing.EXPERIMENT_END_REQUEST, ci.getClientId(), ci.getRequestId(), ci.getStartTime());
+			try {
+				req.processOnClient(ci);
+			} catch (ASLException e) {
+				e.printStackTrace();
+			}
 			ci.incrementRequestId();
 		}
-		ci.getMyTimeLogger().stopMyTimeLogger();
+		mi.getMyTimeLogger().writeEndTimeMS(System.nanoTime(), ci.getStartTimeNS());
+		mi.getMyTimeLogger().stopMyTimeLogger();
 		System.out.println("Client " + ci.getClientId() + " is done");
 	}
 	

@@ -58,4 +58,17 @@ public class TimeLogger {
 		System.out.println("Closed time appender successfully");
 	}
 	
+	public void writeEndTimeMS(long endTimeNS, long startTimeNS) {
+		try {
+			synchronized(bw) {
+				bw.write(String.valueOf(endTimeNS/1000000));
+				bw.newLine();
+				bw.write(String.valueOf(((endTimeNS/1000000) - (startTimeNS/1000000))));
+				bw.newLine();
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
 }

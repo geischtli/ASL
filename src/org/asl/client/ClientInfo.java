@@ -20,7 +20,7 @@ public class ClientInfo {
 	private String sendContext;
 	private AtomicInteger requestId; // counter for globally unique request id tuple
 	private TimeLogger myTimeLogger;
-	private long startTime;
+	private long startTimeNS;
 	
 	public ClientInfo() {
 		this.clientId = 0;
@@ -35,7 +35,7 @@ public class ClientInfo {
 		this.sendContext = "";
 		this.requestId = new AtomicInteger(0);
 		this.myTimeLogger = TimeLogger.create("CLIENT", this.clientId, System.nanoTime());
-		this.startTime = -1;
+		this.startTimeNS = -1;
 	}
 	
 	public static ClientInfo create() {
@@ -135,20 +135,20 @@ public class ClientInfo {
 	}
 	
 	public void initTimeLogger() {
-		setStartTime(System.nanoTime());
-		myTimeLogger = TimeLogger.create("CLIENT", getClientId(), getStartTime()/1000000);
+		setStartTimeNS(System.nanoTime());
+		myTimeLogger = TimeLogger.create("CLIENT", getClientId(), getStartTimeNS()/1000000);
 	}
 	
 	public TimeLogger getMyTimeLogger() {
 		return myTimeLogger;
 	}
 
-	public long getStartTime() {
-		return startTime;
+	public long getStartTimeNS() {
+		return startTimeNS;
 	}
 
-	public void setStartTime(long startTime) {
-		this.startTime = startTime;
+	public void setStartTimeNS(long startTimeNS) {
+		this.startTimeNS = startTimeNS;
 	}
 	
 }

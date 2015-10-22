@@ -32,14 +32,14 @@ public class AdminWriteCompletionHandler implements CompletionHandler<Integer, I
 	}
 	
 	public static AdminWriteCompletionHandler create(AsynchronousSocketChannel sc, ByteBufferWrapper outbufWrap, ClientInfo ci, List<RequestType> requestList, int requestId) {
-		ci.getMyTimeLogger().click(Timing.CLIENT_START_WRITE, ci.getClientId(), ci.getRequestId(), ci.getStartTime());
+		ci.getMyTimeLogger().click(Timing.CLIENT_START_WRITE, ci.getClientId(), ci.getRequestId(), ci.getStartTimeNS());
 		return new AdminWriteCompletionHandler(sc, outbufWrap, ci, requestList, requestId);
 	}
 	
 	@Override
 	public void completed(Integer writtenBytes, Integer expectedWriteBytes) {
 		SerializingUtilities.forceFurtherWriteIfNeeded(outbufWrap.getBuf(), writtenBytes, expectedWriteBytes, sc);
-		ci.getMyTimeLogger().click(Timing.CLIENT_END_WRITE, ci.getClientId(), ci.getRequestId(), ci.getStartTime());
+		ci.getMyTimeLogger().click(Timing.CLIENT_END_WRITE, ci.getClientId(), ci.getRequestId(), ci.getStartTimeNS());
     	ByteBuffer inbuf = ByteBuffer.allocate(AbstractClient.INITIAL_BUFSIZE);
     	sc.read(inbuf, null, AdminReadCompletionHandler.create(sc, ci, inbuf, requestList, requestId));
 	}

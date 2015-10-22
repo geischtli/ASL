@@ -22,8 +22,8 @@ public class DatabaseBaseline {
 		
 		//int numWorkers = Integer.parseInt(args[1]);
 		int numWorkers = 1;
-		int numRequests = 100;
-		boolean performDummyRequests = true;
+		int numRequests = 10000;
+		boolean performDummyRequests = false;
 		
 		System.out.println("NumDBConnections = " + numConnectionsToDB);
 		System.out.println("NumWorkerClients = " + numWorkers);

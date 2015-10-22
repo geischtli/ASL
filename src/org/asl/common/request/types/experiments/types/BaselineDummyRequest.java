@@ -11,14 +11,15 @@ public class BaselineDummyRequest extends Request {
 
 	private static final long serialVersionUID = 701L;
 
-	public BaselineDummyRequest() {
+	public BaselineDummyRequest(int clientId, int requestId) {
+		super(clientId, requestId);
 		this.exception = new BaselineDummyException();
 	}
 	
 	@Override
 	public void processOnMiddleware(MiddlewareInfo mi) {
 		try {
-			ExperimentDAO.getExperimentDAO().baselineDummy(mi);
+			ExperimentDAO.getExperimentDAO().baselineDummy(clientId, requestId, mi);
 		} catch (BaselineDummyException e) {
 			setException(e);
 		}

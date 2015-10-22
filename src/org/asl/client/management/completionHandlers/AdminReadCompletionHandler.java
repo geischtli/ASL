@@ -30,20 +30,20 @@ public class AdminReadCompletionHandler implements CompletionHandler<Integer, Ob
 	}
 	
 	public static AdminReadCompletionHandler create(AsynchronousSocketChannel sc, ClientInfo ci, ByteBuffer inbuf, List<RequestType> requestList, int requestId) {
-		ci.getMyTimeLogger().click(Timing.CLIENT_START_READ, ci.getClientId(), ci.getRequestId(), ci.getStartTime());
+		ci.getMyTimeLogger().click(Timing.CLIENT_START_READ, ci.getClientId(), ci.getRequestId(), ci.getStartTimeNS());
 		return new AdminReadCompletionHandler(sc, ci, inbuf, requestList, requestId);
 	}
 	
 	@Override
 	public void completed(Integer readBytes, Object attachment) {
 		ByteBufferWrapper fullInbufWrap = SerializingUtilities.forceFurtherReadIfNeeded(inbuf, readBytes, sc);
-		ci.getMyTimeLogger().click(Timing.CLIENT_END_READ, ci.getClientId(), ci.getRequestId(), ci.getStartTime());
+		ci.getMyTimeLogger().click(Timing.CLIENT_END_READ, ci.getClientId(), ci.getRequestId(), ci.getStartTimeNS());
 		
 		if (fullInbufWrap == null || readBytes == -1) {
 			return;
 		}
 
-		ci.getMyTimeLogger().click(Timing.CLIENT_START_POSTPROCESSING, ci.getClientId(), ci.getRequestId(), ci.getStartTime());
+		ci.getMyTimeLogger().click(Timing.CLIENT_START_POSTPROCESSING, ci.getClientId(), ci.getRequestId(), ci.getStartTimeNS());
 		Request ansReq = SerializingUtilities.unpackRequest(fullInbufWrap.getBuf(), fullInbufWrap.getBytes());
 		try {
 			ansReq.processOnClient(ci);
@@ -52,7 +52,7 @@ public class AdminReadCompletionHandler implements CompletionHandler<Integer, Ob
 			System.out.println("And reason: " + ansReq.getException().getMessage());
 		}
 		AdminClient.semaphore.release();
-		ci.getMyTimeLogger().click(Timing.CLIENT_END_POSTPROCESSING, ci.getClientId(), ci.getRequestId(), ci.getStartTime());
+		ci.getMyTimeLogger().click(Timing.CLIENT_END_POSTPROCESSING, ci.getClientId(), ci.getRequestId(), ci.getStartTimeNS());
 		SocketHelper.closeSocket(sc);
 		System.out.println("Client is done and closed socket");
 	}

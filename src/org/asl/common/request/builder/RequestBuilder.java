@@ -111,6 +111,8 @@ public class RequestBuilder {
 						);
 			case BASELINE_DUMMY:
 				return new BaselineDummyRequest(
+						clientId,
+						requestId
 						);
 			default:
 				System.out.println("No request type found for " + type.toString());

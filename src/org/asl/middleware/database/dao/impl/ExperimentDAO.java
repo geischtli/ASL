@@ -10,6 +10,7 @@ import org.asl.middleware.MiddlewareInfo;
 import org.asl.middleware.database.config.ASLDatabase;
 import org.asl.middleware.database.connectionpool.ConnectionWrapper;
 import org.asl.middleware.database.dao.IExperimentDAO;
+import org.asl.middleware.database.dao.common.CommonDAO;
 import org.asl.middleware.database.model.ExperimentTable;
 
 public class ExperimentDAO implements IExperimentDAO {
@@ -19,10 +20,10 @@ public class ExperimentDAO implements IExperimentDAO {
 	}
 	
 	@Override
-	public void baselineDummy(MiddlewareInfo mi) throws BaselineDummyException {
+	public void baselineDummy(int clientId, int requestId, MiddlewareInfo mi) throws BaselineDummyException {
 		try (ConnectionWrapper conn = ASLDatabase.getNewConnection().get()) {
 			PreparedStatement baselineDummy = conn.get().prepareStatement(ExperimentTable.BASELINE_DUMMY_STRING);
-			baselineDummy.execute();
+			CommonDAO.executeQuery(conn.get(), baselineDummy, clientId, requestId, mi);
 		} catch (IOException | InterruptedException | ExecutionException | SQLException e) {
 			throw new BaselineDummyException(e);
 		}
