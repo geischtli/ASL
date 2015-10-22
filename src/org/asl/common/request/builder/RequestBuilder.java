@@ -17,6 +17,7 @@ import org.asl.common.request.types.client.ReadAllMessagesOfQueueRequest;
 import org.asl.common.request.types.client.ReadMessageFromSenderRequest;
 import org.asl.common.request.types.client.RemoveTopMessageFromQueueRequest;
 import org.asl.common.request.types.client.SendMessageRequest;
+import org.asl.common.request.types.experiments.types.BaselineDummyRequest;
 import org.asl.common.request.types.middleware.RegisterMiddlewareRequest;
 
 /**
@@ -107,6 +108,9 @@ public class RequestBuilder {
 				return new GetNumberOfMessagesRequest(
 						clientId,
 						requestId
+						);
+			case BASELINE_DUMMY:
+				return new BaselineDummyRequest(
 						);
 			default:
 				System.out.println("No request type found for " + type.toString());

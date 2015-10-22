@@ -65,6 +65,7 @@ public abstract class Request implements Serializable {
 		REGISTER_MIDDLEWARE,
 		GET_NUMBER_OF_MESSAGES,
 		GET_REGISTERED_QUEUES,
+		BASELINE_DUMMY
 	}
 	
 	public abstract void processOnMiddleware(MiddlewareInfo mi);

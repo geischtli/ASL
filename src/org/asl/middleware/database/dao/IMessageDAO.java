@@ -9,4 +9,5 @@ public interface IMessageDAO {
 	
 	public DateTriple sendMessage(int sender, int receiver, int queue, String content, int requestId, MiddlewareInfo mi) throws SendMessageException;
 	public int getNumberOfMessages(int clientId, int requestId, MiddlewareInfo mi) throws GetNumberOfMessagesException;
+	
 }

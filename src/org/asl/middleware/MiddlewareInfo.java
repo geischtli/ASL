@@ -10,6 +10,7 @@ public class MiddlewareInfo {
 	
 	public MiddlewareInfo() {
 		this.middlewareId = 0;
+		// use this as dummy writer before initialization/registration of the middleware
 		this.myTimeLogger = TimeLogger.create("MIDDLEWARE", this.middlewareId, System.nanoTime());
 	}
 	

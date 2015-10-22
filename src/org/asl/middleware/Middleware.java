@@ -19,7 +19,6 @@ public class Middleware {
 	
 	private final AsynchronousServerSocketChannel serverChannel;
 	private PropertyParser propParser;
-	private final ASLDatabase db;
 	public static int INITIAL_BUFSIZE;
 	private int requestId;
 	private WatchDog watchDog;
@@ -33,12 +32,12 @@ public class Middleware {
 		this.serverChannel.bind(new InetSocketAddress(port));
 		this.serverChannel.setOption(StandardSocketOptions.SO_REUSEADDR, true);
 		this.propParser = PropertyParser.create("config/config_common.xml").parse();
-		this.db = ASLDatabase.getDatabase();
+		ASLDatabase.initDatabase();
 		Middleware.INITIAL_BUFSIZE = Integer.valueOf(propParser.getProperty(PropertyKey.INITIAL_BUFSIZE));
 		this.requestId = -1;
 		this.watchDog = WatchDog.create(500);
 		this.watchDogTimer = new Timer();
-		this.watchDogTimer.scheduleAtFixedRate(this.watchDog, 0, 5000);
+		this.watchDogTimer.scheduleAtFixedRate(this.watchDog, 0, 5);
 		this.mi = MiddlewareInfo.create();
 		Middleware.isShuttingDown = false;
 		Middleware.numClientsGone = new AtomicInteger(0);
