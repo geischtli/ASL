@@ -51,7 +51,7 @@ while [  $CURR_DB_CONNECTIONS -le $END_DB_CONNECTIONS ]; do
 		-f C:/Users/Sandro/Documents/eclipse/ASL/db_baseline/benchScripts/benchLevel$1.sql \
 		-c $CURR_DB_CONNECTIONS -j $CURR_DB_CONNECTIONS \
 		-s $CURR_DB_CONNECTIONS mydb \
-		>> C:/Users/Sandro/Documents/eclipse/ASL/db_baseline/logs/level$1_$2_$3.log
+		>> ./logs/level$1_$2_$3.log
 		
 	CURR_DB_CONNECTIONS=`expr $CURR_DB_CONNECTIONS + $INCREMENT_DB_CONNECTIONS`
 done
