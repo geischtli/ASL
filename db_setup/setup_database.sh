@@ -6,14 +6,14 @@ sudo yum install zlib-devel -y
 
 tar xjf postgresql-9.4.4.tar.bz2
 
+mkdir /home/ec2-user/postgres
+
 cd postgresql-9.4.4
 ./configure --prefix="/home/ec2-user/postgres"
 
-make
+gmake
 
-mkdir /home/ec2-user/postgres
-
-make install
+gmake install
 
 LD_LIBRARY_PATH=/home/ec2-user/postgres/lib export LD_LIBRARY_PATH
 
