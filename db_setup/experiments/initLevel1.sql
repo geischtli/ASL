@@ -1,7 +1,3 @@
--- delete the pgbench_account table, because its big and not needed
--- in this experiment
-DROP TABLE pgbench_accounts;
-
 -- simulate a shared resource among all connection/db threads
 CREATE SEQUENCE SHARED START 1;
 

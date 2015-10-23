@@ -1,7 +1,7 @@
 clear variables
 
 basedir = '..\db_baseline\logs\';
-level = '0';
+level = '2_30_20';
 levelstr = strcat('level', level);
 filename = strcat(levelstr, '_plotReady.log');
 logfile = dir(strcat(basedir, filename));

@@ -21,7 +21,7 @@ public class BgBechLogParser {
 	private static List<Integer> maxTPSPerConnectionExc = new ArrayList<Integer>();
 	public static void main(String[] args) {
 		dir = new File("C:\\Users\\Sandro\\Documents\\eclipse\\ASL\\db_baseline\\logs\\");
-		filename = "level1_10_5";
+		filename = "level2_30_20";
 		File logFile = new File(dir + "\\" + filename + ".log");
 		modFile = new File(dir + "\\" + filename + "_plotReady.log");
 		try {
