@@ -17,6 +17,6 @@ while [  $CURR_DB_CONNECTIONS -le $END_DB_CONNECTIONS ]; do
 	CURR_WORKER_THREADS=$CURR_DB_CONNECTIONS
 	./pgbench -h 127.0.0.1 -U postgres --no-vacuum -T $TIME_PER_RUN -f C:/Users/Sandro/Documents/eclipse/ASL/db_baseline/benchLevel0.sql \
 		-c $CURR_DB_CONNECTIONS -j $CURR_DB_CONNECTIONS mydb \
-		>> C:/Users/Sandro/Documents/eclipse/ASL/db_baseline/logs/level0log.txt
+		>> C:/Users/Sandro/Documents/eclipse/ASL/db_baseline/logs/level0.log
 	CURR_DB_CONNECTIONS=`expr $CURR_DB_CONNECTIONS + $INCREMENT_DB_CONNECTIONS`
 done
