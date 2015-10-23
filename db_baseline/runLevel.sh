@@ -8,6 +8,9 @@ CURR_DB_CONNECTIONS=$START_DB_CONNECTIONS;
 
 TIME_PER_RUN=$3;
 
+# create a directory for our logs
+mkdir -p logs
+
 printf "Level %d setup:\n%d runs\neach one of %d seconds\n\n" $1 $END_DB_CONNECTIONS $TIME_PER_RUN
 
 #cd D:/PostgreSQL/9.4.4/bin/
