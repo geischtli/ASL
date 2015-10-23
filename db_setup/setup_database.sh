@@ -11,9 +11,9 @@ mkdir /home/ec2-user/postgres
 cd postgresql-9.4.4
 ./configure --prefix="/home/ec2-user/postgres"
 
-gmake
+gmake world
 
-gmake install
+gmake install-world
 
 LD_LIBRARY_PATH=/home/ec2-user/postgres/lib export LD_LIBRARY_PATH
 
