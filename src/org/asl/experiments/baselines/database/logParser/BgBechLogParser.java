@@ -59,21 +59,32 @@ public class BgBechLogParser {
 					maxTPSPerConnectionExc.add(tpsExc);
 					writer.write(clients + " " + tpsInc + " " + tpsExc + " " + latency);
 					writer.newLine();
-				} else if (s.contains("send message")) {
-					sendMessage = Double.parseDouble(parts[0]);
+				} else if (s.contains("send_message")) {
+					String[] subparts = parts[0].split("\t");
+					sendMessage = Double.parseDouble(subparts[1]);
 				} else if (s.contains("get_queues")) {
-					getQueues = Double.parseDouble(parts[0]);
+					String[] subparts = parts[0].split("\t");
+					getQueues = Double.parseDouble(subparts[1]);
 				} else if (s.contains("read_all")) {
-					readAll = Double.parseDouble(parts[0]);
+					String[] subparts = parts[0].split("\t");
+					readAll = Double.parseDouble(subparts[1]);
 				} else if (s.contains("read_message")) {
-					readFrom = Double.parseDouble(parts[0]);
+					String[] subparts = parts[0].split("\t");
+					readFrom = Double.parseDouble(subparts[1]);
 				} else if (s.contains("remove_top")) {
-					removeTop = Double.parseDouble(parts[0]);
-					// TODO: CONTINUE HERE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+					String[] subparts = parts[0].split("\t");
+					removeTop = Double.parseDouble(subparts[1]);
+					queryWriter.write(String.valueOf(sendMessage) + " "
+							+ String.valueOf(getQueues) + " "
+							+ String.valueOf(readAll) + " "
+							+ String.valueOf(readFrom) + " "
+							+ String.valueOf(removeTop));
+					queryWriter.newLine();
 				}
 			}
 			writer.close();
 			reader.close();
+			queryWriter.close();
 		} catch (IOException e) {
 			e.printStackTrace();
 		} 
