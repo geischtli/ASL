@@ -19,20 +19,30 @@ public class BgBechLogParser {
 	private static String filename;
 	private static List<Integer> maxTPSPerConnectionInc = new ArrayList<Integer>();
 	private static List<Integer> maxTPSPerConnectionExc = new ArrayList<Integer>();
+	private static BufferedWriter queryWriter;
+	private static File queryFile;
+	
 	public static void main(String[] args) {
-		dir = new File("C:\\Users\\Sandro\\Documents\\eclipse\\ASL\\db_baseline\\logs\\");
-		filename = "level2_30_20";
+		dir = new File("C:\\Users\\Sandro\\Documents\\ASL_LOGS\\level2NIND\\logs");
+		filename = "level2_30_30";
 		File logFile = new File(dir + "\\" + filename + ".log");
-		modFile = new File(dir + "\\" + filename + "_plotReady.log");
+		modFile = new File(dir + "\\" + filename + "_summary.log");
+		queryFile = new File(dir + "\\" + filename + "_queries.log");
 		try {
 			reader = new BufferedReader(new FileReader(logFile));
 			writer = new BufferedWriter(new FileWriter(modFile));
+			queryWriter = new BufferedWriter(new FileWriter(queryFile));
 			String s;
 			int clients = 0;
 			int threads = 0;
 			double latency = 0;
 			int tpsInc = 0;
 			int tpsExc = 0;
+			double sendMessage = 0.0;
+			double getQueues = 0.0;
+			double readAll = 0.0;
+			double readFrom = 0.0;
+			double removeTop = 0.0;
 			while ((s = reader.readLine()) != null) {
 				String[] parts = s.split(" ");
 				if (s.contains("clients")) {
@@ -49,6 +59,17 @@ public class BgBechLogParser {
 					maxTPSPerConnectionExc.add(tpsExc);
 					writer.write(clients + " " + tpsInc + " " + tpsExc + " " + latency);
 					writer.newLine();
+				} else if (s.contains("send message")) {
+					sendMessage = Double.parseDouble(parts[0]);
+				} else if (s.contains("get_queues")) {
+					getQueues = Double.parseDouble(parts[0]);
+				} else if (s.contains("read_all")) {
+					readAll = Double.parseDouble(parts[0]);
+				} else if (s.contains("read_message")) {
+					readFrom = Double.parseDouble(parts[0]);
+				} else if (s.contains("remove_top")) {
+					removeTop = Double.parseDouble(parts[0]);
+					// TODO: CONTINUE HERE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 				}
 			}
 			writer.close();

@@ -7,6 +7,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class ClientParser {
@@ -21,20 +22,25 @@ public class ClientParser {
 	private static File dir;
 	
 	public static void main(String[] args) {
-		dir = new File("C:\\Users\\Sandro\\Documents\\ASL_LOGS\\level0");
+		int level = 2;
+		dir = new File("C:\\Users\\Sandro\\Documents\\ASL_LOGS\\level" + String.valueOf(level) + "WIND");
 		File[] logFiles = dir.listFiles();
-		tpFile = new File("C:\\Users\\Sandro\\Documents\\ASL_LOGS\\summaries\\level0" + "\\tp_summary.log");
-		latFile = new File("C:\\Users\\Sandro\\Documents\\ASL_LOGS\\summaries\\level0" + "\\lat_summary.log");
-		idxFile = new File("C:\\Users\\Sandro\\Documents\\ASL_LOGS\\summaries\\level0" + "\\idx_summary.log");
+		tpFile = new File("C:\\Users\\Sandro\\Documents\\ASL_LOGS\\summaries\\level" + String.valueOf(level) + "WIND" + "\\tp_summary.log");
+		latFile = new File("C:\\Users\\Sandro\\Documents\\ASL_LOGS\\summaries\\level" + String.valueOf(level) + "WIND" + "\\lat_summary.log");
+		idxFile = new File("C:\\Users\\Sandro\\Documents\\ASL_LOGS\\summaries\\level" + String.valueOf(level) + "WIND" + "\\idx_summary.log");
 		int maxDBConnections = 30; 
 		int startIndex = 2;
-		int numClientFiles = maxDBConnections*(maxDBConnections + 1)/2;
+		//int numClientFiles = maxDBConnections*(maxDBConnections + 1)/2;
+		int numClientFiles = 406;
 		int fileIndex = 0;
 		int currDBConnections = 1;
 		try {
 			tpWriter = new BufferedWriter(new FileWriter(tpFile));
 			latWriter = new BufferedWriter(new FileWriter(latFile));
 			idxWriter = new BufferedWriter(new FileWriter(idxFile));
+			List<Integer> tpSum = null;
+			List<Integer> latSum = null;
+			int numEffecitveLines = 29;
 			while (fileIndex < numClientFiles) {
 				String id = "";
 		 		for (int i = 1; i <= currDBConnections; i++) {
@@ -47,6 +53,8 @@ public class ClientParser {
 		 			if (i == 1) {
 		 				String currId = filenameparts[filenameparts.length - 1];
 		 				id = currId;
+		 				tpSum = new ArrayList<Integer>(Collections.nCopies(numEffecitveLines, 0));
+		 				latSum = new ArrayList<Integer>(Collections.nCopies(numEffecitveLines, 0));
 		 			} else {
 		 				String currIdTemp = filenameparts[filenameparts.length - 1];
 		 				String[] currIds = currIdTemp.split("\\.");
@@ -57,23 +65,32 @@ public class ClientParser {
 		 			}
 		 			reader = new BufferedReader(new FileReader(file));
 		 			String s;
-		 			int line = 0;
+		 			// skip first line due to warm-up phase
+		 			// second line is at 0 -> useful index
+		 			int line = -2;
 		 			while ((s = reader.readLine()) != null) {
-		 				if (line == 0) {
+		 				line++;
+		 				if (line == -1) {
 		 					// first line is still warmup phase
-		 					line++;
 		 					continue;
 		 				}
 		 				String[] parts = s.split(" ");
-		 				tpWriter.write(parts[1]);
-		 				tpWriter.newLine();
-		 				latWriter.write(parts[2]);
-		 				latWriter.newLine();
-		 				idxWriter.write(String.valueOf(currDBConnections));
-		 				idxWriter.newLine();
+		 				int currTpSum = tpSum.get(line);
+		 				tpSum.set(line, currTpSum + Integer.parseInt(parts[1]));
+		 				int currLatSum = latSum.get(line);
+		 				latSum.set(line, currLatSum + Integer.parseInt(parts[2]));
 		 			}
 		 			fileIndex++;
 		 		}
+		 		// write the summed up latencies and throughputs
+	 			for (int j = 0; j < numEffecitveLines; j++) {
+	 				tpWriter.write(String.valueOf(tpSum.get(j)));
+	 				tpWriter.newLine();
+	 				latWriter.write(String.valueOf(latSum.get(j)));
+	 				latWriter.newLine();
+	 				idxWriter.write(String.valueOf(currDBConnections));
+	 				idxWriter.newLine();
+	 			}
 		 		currDBConnections++;
 			}
 			tpWriter.close();
