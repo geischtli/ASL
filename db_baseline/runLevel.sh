@@ -71,7 +71,7 @@ while [  $CURR_DB_CONNECTIONS -le $END_DB_CONNECTIONS ]; do
 	fi
 	
 	# resetup the bgbench base environment/tables
-	/home/ec2-user/postgres/bin/pgbench -U postgres -i --no-vacuum -q mydb
+	/home/ec2-user/postgres/bin/pgbench -U postgres -i -q mydb
 	
 	# clear the pgbech_accounts table, becuase we dont need it ant its quite big
 	/home/ec2-user/postgres/bin/psql -U postgres -d mydb -f ../db_setup/experiments/clearAccountsTable.sql -q	
