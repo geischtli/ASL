@@ -1,1 +1,0 @@
-COPY MESSAGE FROM 'C:\Users\Sandro\Documents\eclipse\ASL\db_baseline\initalMessageLoad\messageData_500K_200.dat'
