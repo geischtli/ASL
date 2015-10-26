@@ -18,7 +18,7 @@ public class AritificialMessageDataGenerator {
 	public static void main(String[] args) {
 		String numEntries = args[0];
 		String contentLength = args[1];
-		dataFile = new File("C:\\Users\\Sandro\\Documents\\eclipse\\ASL\\db_baseline\\initalMessageLoad\\messageData_"
+		dataFile = new File("/home/ec2-user/ASL/db_baseline/initialMessageLoad/messageData_"
 				+ numEntries
 				+ "_"
 				+ contentLength

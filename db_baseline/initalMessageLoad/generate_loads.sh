@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # make sure ant is installed
-#sudo yum install ant -y
+sudo yum install ant -y
 
 ant -f antRunLoadGenerator.xml -DnumEntries=500000 -DcontentLenth=200
 ant -f antRunLoadGenerator.xml -DnumEntries=1000000 -DcontentLenth=200
