@@ -16,14 +16,20 @@ public class AritificialMessageDataGenerator {
 	private static Random random = new Random();
 	
 	public static void main(String[] args) {
-		dataFile = new File("C:\\Users\\Sandro\\Documents\\eclipse\\ASL\\db_baseline\\initalMessageLoad\\messageData_500K_2000.dat");
+		String numEntries = args[0];
+		String contentLength = args[1];
+		dataFile = new File("C:\\Users\\Sandro\\Documents\\eclipse\\ASL\\db_baseline\\initalMessageLoad\\messageData_"
+				+ numEntries
+				+ "_"
+				+ contentLength
+				+ ".dat");
 		try {
 			writer = new BufferedWriter(new FileWriter(dataFile));
-			int numEntries = 500000;
+			int numRows = Integer.parseInt(numEntries);
 			int numClients = 100;
 			int numQueues = 100;
-			int contentLen = 2000;
-			for (int i = 1; i <= numEntries; i++) {
+			int contentLen = Integer.parseInt(contentLength);
+			for (int i = 1; i <= numRows; i++) {
 				writer.write(String.valueOf(i) + "\t"
 						+ String.valueOf(getRandomIntegerInclusiveMax(numClients, random)) + "\t"
 						+ String.valueOf(getRandomIntegerInclusiveMax(numClients, random)) + "\t"

@@ -13,4 +13,4 @@
 cd D:\\PostgreSQL\\9.4.4\\bin
 #./psql -U postgres -d mydb -c 'COPY MESSAGE FROM '"$MYFILE"';'
 #./psql -U postgres -d mydb -c 'COPY MESSAGE FROM '\''C:\Users\Sandro\Documents\eclipse\ASL\db_baseline\initalMessageLoad\messageData_500K_200.dat'\'
-./psql -U postgres -d mydb -f C:\\Users\\Sandro\\Documents\\eclipse\\ASL\\db_baseline\\initalMessageLoad\\copy_from_500K_200.sql
+./psql -U postgres -d mydb -f $1

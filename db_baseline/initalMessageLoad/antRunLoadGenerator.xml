@@ -31,6 +31,8 @@
             <classpath>
                 <path location="${jar.dir}/${ant.project.name}.jar"/>
             </classpath>
+			<arg value="${numEntries}"/>
+			<arg value="${contentLenth}"/>
         </java>
     </target>
 
