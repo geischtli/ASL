@@ -16,16 +16,16 @@ public class AritificialMessageDataGenerator {
 	private static Random random = new Random();
 	
 	public static void main(String[] args) {
-		String numEntries = args[0];
+		String numEntriesArgs = args[0];
 		String contentLength = args[1];
 		dataFile = new File("/home/ec2-user/ASL/db_baseline/initialMessageLoad/messageData_"
-				+ numEntries
+				+ numEntriesArgs
 				+ "_"
 				+ contentLength
 				+ ".dat");
 		try {
 			writer = new BufferedWriter(new FileWriter(dataFile));
-			int numRows = Integer.parseInt(numEntries);
+			int numRows = Integer.parseInt(numEntriesArgs);
 			int numClients = 100;
 			int numQueues = 100;
 			int contentLen = Integer.parseInt(contentLength);
