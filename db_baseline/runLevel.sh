@@ -35,8 +35,12 @@ while [  $CURR_DB_CONNECTIONS -le $END_DB_CONNECTIONS ]; do
 			/home/ec2-user/postgres/bin/psql -U postgres -d mydb -f ../db_setup/experiments/initLevel$1.sql -q
 		else
 			# level 2
-			/home/ec2-user/postgres/bin/psql -U postgres -d mydb -f ../db_setup/initDatabase.sql -q
-			
+			if [ $4 == 0 ]
+				then
+					/home/ec2-user/postgres/bin/psql -U postgres -d mydb -f ../db_setup/initDatabase.sql -q
+				else
+					/home/ec2-user/postgres/bin/psql -U postgres -d mydb -f ../db_setup/initPreFilledDatabase.sql -q
+			fi			
 			if [ $4 == 0 ]
 				then
 					#Prefill the database with the number of clients running in the system
@@ -44,8 +48,8 @@ while [  $CURR_DB_CONNECTIONS -le $END_DB_CONNECTIONS ]; do
 					#is not important for benchmarking
 					CLIENT=1
 					while [ $CLIENT -le $CURR_DB_CONNECTIONS ]; do
-						/home/ec2-user/postgres/bin/psql -U postgres -d mydb -c 'SELECT * FROM register_client(1);'
-						/home/ec2-user/postgres/bin/psql -U postgres -d mydb -c 'SELECT * FROM create_queue('"$CLIENT"');'
+						/home/ec2-user/postgres/bin/psql -U postgres -d mydb -q -c 'SELECT * FROM register_client(1);'
+						/home/ec2-user/postgres/bin/psql -U postgres -d mydb -q -c 'SELECT * FROM create_queue('"$CLIENT"');'
 						CLIENT=`expr $CLIENT + 1`
 					done
 				else
@@ -54,11 +58,12 @@ while [  $CURR_DB_CONNECTIONS -le $END_DB_CONNECTIONS ]; do
 					# data expects these to be present
 					CLIENT=1
 					while [ $CLIENT -le 100 ]; do
-						/home/ec2-user/postgres/bin/psql -U postgres -d mydb -c 'SELECT * FROM register_client(1);'
-						/home/ec2-user/postgres/bin/psql -U postgres -d mydb -c 'SELECT * FROM create_queue('"$CLIENT"');'
+						/home/ec2-user/postgres/bin/psql -U postgres -d mydb -q -c 'SELECT * FROM register_client(1);'
+						/home/ec2-user/postgres/bin/psql -U postgres -d mydb -q -c 'SELECT * FROM create_queue('"$CLIENT"');'
 						CLIENT=`expr $CLIENT + 1`
 					done
 					
+					printf 'Start filling message table...\n'
 					#now load the data specified by the file into the message table
 					sh /home/ec2-user/ASL/db_baseline/initialMessageLoad/addMessageData.sh \
 						/home/ec2-user/ASL/db_baseline/initialMessageLoad/messageData_500000_200.dat
