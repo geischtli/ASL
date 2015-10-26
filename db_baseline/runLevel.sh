@@ -3,7 +3,7 @@
 
 # ARGUMENTS
 # $1 - The level: {0, 1, 2}
-# $2 - The maximal number of concurrent database connections: INTEGER
+# $2 - The maximal number of concurrent database connections (runs from 1 to $2): INTEGER
 # $3 - Time per run: INTEGER
 # $4 - Preload the database with messages: {0, 1}
 
@@ -48,8 +48,8 @@ while [  $CURR_DB_CONNECTIONS -le $END_DB_CONNECTIONS ]; do
 					#is not important for benchmarking
 					CLIENT=1
 					while [ $CLIENT -le $CURR_DB_CONNECTIONS ]; do
-						/home/ec2-user/postgres/bin/psql -U postgres -d mydb -q -c 'SELECT * FROM register_client(1);'
-						/home/ec2-user/postgres/bin/psql -U postgres -d mydb -q -c 'SELECT * FROM create_queue('"$CLIENT"');'
+						/home/ec2-user/postgres/bin/psql -U postgres -d mydb -q -c 'SELECT * FROM register_client(1);' >/dev/null
+						/home/ec2-user/postgres/bin/psql -U postgres -d mydb -q -c 'SELECT * FROM create_queue('"$CLIENT"');' >/dev/null
 						CLIENT=`expr $CLIENT + 1`
 					done
 				else
@@ -58,8 +58,8 @@ while [  $CURR_DB_CONNECTIONS -le $END_DB_CONNECTIONS ]; do
 					# data expects these to be present
 					CLIENT=1
 					while [ $CLIENT -le 100 ]; do
-						/home/ec2-user/postgres/bin/psql -U postgres -d mydb -q -c 'SELECT * FROM register_client(1);'
-						/home/ec2-user/postgres/bin/psql -U postgres -d mydb -q -c 'SELECT * FROM create_queue('"$CLIENT"');'
+						/home/ec2-user/postgres/bin/psql -U postgres -d mydb -q -c 'SELECT * FROM register_client(1);' >/dev/null
+						/home/ec2-user/postgres/bin/psql -U postgres -d mydb -q -c 'SELECT * FROM create_queue('"$CLIENT"');' >/dev/null
 						CLIENT=`expr $CLIENT + 1`
 					done
 					
