@@ -23,17 +23,18 @@ public class ClientParser {
 	
 	public static void main(String[] args) {
 		int level = 2;
-		dir = new File("C:\\Users\\Sandro\\Documents\\ASL_LOGS\\level" + String.valueOf(level) + "WIND");
+		String basedir = "C:\\Users\\Sandro\\Documents\\ASL_LOGS\\DB_BASELINE 31-60 DB CONNS\\";
+		dir = new File(basedir + "level" + String.valueOf(level) + "WIND");
 		File[] logFiles = dir.listFiles();
-		tpFile = new File("C:\\Users\\Sandro\\Documents\\ASL_LOGS\\summaries\\level" + String.valueOf(level) + "WIND" + "\\tp_summary.log");
-		latFile = new File("C:\\Users\\Sandro\\Documents\\ASL_LOGS\\summaries\\level" + String.valueOf(level) + "WIND" + "\\lat_summary.log");
-		idxFile = new File("C:\\Users\\Sandro\\Documents\\ASL_LOGS\\summaries\\level" + String.valueOf(level) + "WIND" + "\\idx_summary.log");
-		int maxDBConnections = 30; 
+		tpFile = new File(basedir + "summaries\\level" + String.valueOf(level)  + "WIND" + "\\tp_summary.log");
+		latFile = new File(basedir + "summaries\\level" + String.valueOf(level) + "WIND" + "\\lat_summary.log");
+		idxFile = new File(basedir + "summaries\\level" + String.valueOf(level) + "WIND" + "\\idx_summary.log");
+		int maxDBConnections = 60; 
 		int startIndex = 2;
 		//int numClientFiles = maxDBConnections*(maxDBConnections + 1)/2;
 		int numClientFiles = 406;
 		int fileIndex = 0;
-		int currDBConnections = 1;
+		int currDBConnections = 31;
 		try {
 			tpWriter = new BufferedWriter(new FileWriter(tpFile));
 			latWriter = new BufferedWriter(new FileWriter(latFile));
@@ -41,7 +42,7 @@ public class ClientParser {
 			List<Integer> tpSum = null;
 			List<Integer> latSum = null;
 			int numEffecitveLines = 29;
-			while (fileIndex < numClientFiles) {
+			while (currDBConnections <= maxDBConnections) {
 				String id = "";
 		 		for (int i = 1; i <= currDBConnections; i++) {
 		 			File file = logFiles[startIndex + fileIndex];

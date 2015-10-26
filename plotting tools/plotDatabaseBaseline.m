@@ -1,7 +1,7 @@
 clear variables
 
-basedir = '..\..\..\ASL_LOGS\summaries\level';
-level = '2NIND\';
+basedir = '..\..\..\ASL_LOGS\summary_db_1_60_DB_CONNS_NO_DATA\level';
+level = '2WIND\';
 basedir = strcat(basedir, level);
 
 throughputFile = strcat(basedir, 'tp_summary.log');
