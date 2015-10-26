@@ -1,5 +1,12 @@
 #!/bin/bash
 
+
+# ARGUMENTS
+# $1 - The level: {0, 1, 2}
+# $2 - The maximal number of concurrent database connections: INTEGER
+# $3 - Time per run: INTEGER
+# $4 - Preload the database with messages: {0, 1}
+
 START_DB_CONNECTIONS=1;
 END_DB_CONNECTIONS=$2;
 INCREMENT_DB_CONNECTIONS=1;
@@ -21,26 +28,45 @@ while [  $CURR_DB_CONNECTIONS -le $END_DB_CONNECTIONS ]; do
 	#./psql -U postgres -d mydb -f C:/Users/Sandro/Documents/eclipse/ASL/db_setup/clearDatabase.sql -q
 	/home/ec2-user/postgres/bin/psql -U postgres -d mydb -f ../db_setup/clearDatabase.sql -q
 	
-	# register all needed functions in this level
+	# register all needed functions/data in this level
 	if [ $1 -lt 2 ]
 		then
+			# level 0 and 1
 			/home/ec2-user/postgres/bin/psql -U postgres -d mydb -f ../db_setup/experiments/initLevel$1.sql -q
 		else
+			# level 2
 			/home/ec2-user/postgres/bin/psql -U postgres -d mydb -f ../db_setup/initDatabase.sql -q
 			
-			#Prefill the database with the number of clients running in the system
-			#this allows to ignore the handshake/creation part of the system, which
-			#is not important for benchmarking
-			CLIENT=1
-			while [ $CLIENT -le $CURR_DB_CONNECTIONS ]; do
-				/home/ec2-user/postgres/bin/psql -U postgres -d mydb -c 'SELECT * FROM register_client(1);'
-				/home/ec2-user/postgres/bin/psql -U postgres -d mydb -c 'SELECT * FROM create_queue('"$CLIENT"');'
-				CLIENT=`expr $CLIENT + 1`
-			done
+			if [ $4 == 0 ]
+				then
+					#Prefill the database with the number of clients running in the system
+					#this allows to ignore the handshake/creation part of the system, which
+					#is not important for benchmarking
+					CLIENT=1
+					while [ $CLIENT -le $CURR_DB_CONNECTIONS ]; do
+						/home/ec2-user/postgres/bin/psql -U postgres -d mydb -c 'SELECT * FROM register_client(1);'
+						/home/ec2-user/postgres/bin/psql -U postgres -d mydb -c 'SELECT * FROM create_queue('"$CLIENT"');'
+						CLIENT=`expr $CLIENT + 1`
+					done
+				else
+					# Fill the database with a lot of data to benchmark this effect, too.
+					# Prefill the database with 100 clients and queues, because the prepared
+					# data expects these to be present
+					CLIENT=1
+					while [ $CLIENT -le 100 ]; do
+						/home/ec2-user/postgres/bin/psql -U postgres -d mydb -c 'SELECT * FROM register_client(1);'
+						/home/ec2-user/postgres/bin/psql -U postgres -d mydb -c 'SELECT * FROM create_queue('"$CLIENT"');'
+						CLIENT=`expr $CLIENT + 1`
+					done
+					
+					#now load the data specified by the file into the message table
+					sh /home/ec2-user/ASL/db_baseline/initialMessageLoad/addMessageData.sh \
+						/home/ec2-user/ASL/db_baseline/initialMessageLoad/messageData_500000_200.dat
+			fi
 	fi
 	
 	# resetup the bgbench base environment/tables
-	/home/ec2-user/postgres/bin/pgbench -U postgres -i -q mydb
+	/home/ec2-user/postgres/bin/pgbench -U postgres -i --no-vacuum -q mydb
 	
 	# clear the pgbech_accounts table, becuase we dont need it ant its quite big
 	/home/ec2-user/postgres/bin/psql -U postgres -d mydb -f ../db_setup/experiments/clearAccountsTable.sql -q	
