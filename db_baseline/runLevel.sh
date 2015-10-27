@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # ARGUMENTS
-# $1 - The level: {0, 1, 2}
+# $1 - The level: {0, 1, 2, 3}
 # $2 - The maximal number of concurrent database connections (runs from 1 to $2): INTEGER
 # $3 - Time per run: INTEGER
 # $4 - Fill the database with 100 clients and queues: {0, 1}
@@ -81,7 +81,7 @@ while [  $CURR_DB_CONNECTIONS -le $END_DB_CONNECTIONS ]; do
 
 	printf "Run script with %d concurrent database connection for %d seconds\n" $CURR_DB_CONNECTIONS $TIME_PER_RUN
 	CURR_WORKER_THREADS=$CURR_DB_CONNECTIONS
-	/home/ec2-user/postgres/bin/pgbench -r -l -U postgres --no-vacuum -t $TIME_PER_RUN \
+	/home/ec2-user/postgres/bin/pgbench -r -l --aggregate-interval=1 -U postgres --no-vacuum -t $TIME_PER_RUN \
 		-f ./benchScripts/benchLevel$1.sql \
 		-c $CURR_DB_CONNECTIONS -j $CURR_DB_CONNECTIONS \
 		-s $CURR_DB_CONNECTIONS mydb \
