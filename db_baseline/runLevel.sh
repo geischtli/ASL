@@ -1,11 +1,11 @@
 #!/bin/bash
 
-
 # ARGUMENTS
 # $1 - The level: {0, 1, 2}
 # $2 - The maximal number of concurrent database connections (runs from 1 to $2): INTEGER
 # $3 - Time per run: INTEGER
-# $4 - Preload the database with messages: {0, 1}
+# $4 - Fill the database with 100 clients and queues: {0, 1}
+# $5 - Fill the database with prerecorded messages: {0, 1}
 
 START_DB_CONNECTIONS=1;
 END_DB_CONNECTIONS=$2;
@@ -63,10 +63,13 @@ while [  $CURR_DB_CONNECTIONS -le $END_DB_CONNECTIONS ]; do
 						CLIENT=`expr $CLIENT + 1`
 					done
 					
-					printf 'Start filling message table...\n'
-					#now load the data specified by the file into the message table
-					sh /home/ec2-user/ASL/db_baseline/initialMessageLoad/addMessageData.sh \
-						/home/ec2-user/ASL/db_baseline/initialMessageLoad/messageData_500000_200.dat
+					if [ $5 == 1 ]
+						then
+							printf 'Start filling message table...\n'
+							#now load the data specified by the file into the message table
+							sh /home/ec2-user/ASL/db_baseline/initialMessageLoad/addMessageData.sh \
+								/home/ec2-user/ASL/db_baseline/initialMessageLoad/messageData_500000_200.dat
+					fi	
 			fi
 	fi
 	
@@ -78,7 +81,7 @@ while [  $CURR_DB_CONNECTIONS -le $END_DB_CONNECTIONS ]; do
 
 	printf "Run script with %d concurrent database connection for %d seconds\n" $CURR_DB_CONNECTIONS $TIME_PER_RUN
 	CURR_WORKER_THREADS=$CURR_DB_CONNECTIONS
-	/home/ec2-user/postgres/bin/pgbench -r -l --aggregate-interval=1 -U postgres --no-vacuum -T $TIME_PER_RUN \
+	/home/ec2-user/postgres/bin/pgbench -r -l -U postgres --no-vacuum -t $TIME_PER_RUN \
 		-f ./benchScripts/benchLevel$1.sql \
 		-c $CURR_DB_CONNECTIONS -j $CURR_DB_CONNECTIONS \
 		-s $CURR_DB_CONNECTIONS mydb \
