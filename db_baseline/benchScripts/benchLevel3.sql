@@ -6,5 +6,5 @@
 BEGIN
 	\setrandom myClientId 1 100
 	\setrandom queue 1 100
-	SELECT * FROM send_message(:myClientId, :myClientId, :queue, 'this is some random content to simulate real world behaviour');
+	SELECT * FROM send_message(:myClientId, :myClientId, :queue, 'abcdhjels0abcdhjels0abcdhjels0abcdhjels0abcdhjels0abcdhjels0abcdhjels0abcdhjels0abcdhjels0abcdhjels0abcdhjels0abcdhjels0abcdhjels0abcdhjels0abcdhjels0abcdhjels0abcdhjels0abcdhjels0abcdhjels0abcdhjels0');
 END;
