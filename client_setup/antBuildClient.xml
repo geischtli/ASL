@@ -11,7 +11,7 @@
 	</path>
 	
     <target name="clean">
-        
+        <delete dir="${build.dir}"/>
     </target>
 
     <target name="compile">
@@ -31,7 +31,7 @@
         </jar>
     </target>
 
-	<target name="run" depends="jar">
+	<target name="run">
         <java fork="true" classname="${main-class}">
             <classpath>
                 <path refid="classpath"/>
