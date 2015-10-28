@@ -21,20 +21,22 @@ public class MiddlewareWriteCompletionHandler implements CompletionHandler<Integ
 	private MiddlewareInfo mi;
 	private int clientId;
 	private int requestId;
+	private long rttStart;
 	
 	public MiddlewareWriteCompletionHandler(
-			MiddlewareInfo mi, AsynchronousSocketChannel sc, ByteBufferWrapper outbufWrap, int clientId, int requestId) {
+			MiddlewareInfo mi, AsynchronousSocketChannel sc, ByteBufferWrapper outbufWrap, int clientId, int requestId, long rttStart) {
 		this.mi = mi;
 		this.sc = sc;
 		this.outbufWrap = outbufWrap;
 		this.clientId = clientId;
 		this.requestId = requestId;
+		this.rttStart = rttStart;
 	}
 	
 	public static MiddlewareWriteCompletionHandler create(
-			MiddlewareInfo mi, AsynchronousSocketChannel sc, ByteBufferWrapper outbufWrap, int clientId, int requestId) {
+			MiddlewareInfo mi, AsynchronousSocketChannel sc, ByteBufferWrapper outbufWrap, int clientId, int requestId, long rttStart) {
 		mi.getMyTimeLogger().click(Timing.MIDDLEWARE_START_WRITE, clientId, requestId, mi.getStartTime());
-		return new MiddlewareWriteCompletionHandler(mi, sc, outbufWrap, clientId, requestId);
+		return new MiddlewareWriteCompletionHandler(mi, sc, outbufWrap, clientId, requestId, rttStart);
 	}
 	
 	@Override
@@ -44,6 +46,8 @@ public class MiddlewareWriteCompletionHandler implements CompletionHandler<Integ
 		ByteBuffer inbuf = ByteBuffer.allocate(Middleware.INITIAL_BUFSIZE);
 		sc.read(inbuf, connTimeWrapper, MiddlewareReadCompletionHandler.create(mi, sc, inbuf, 0));
 		connTimeWrapper.reset();
+		Middleware.messageCount.incrementAndGet();
+		Middleware.writeRTT(System.nanoTime() - rttStart);
 	}
 
 	@Override

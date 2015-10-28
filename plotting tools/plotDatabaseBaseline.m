@@ -13,6 +13,8 @@ lat = dlmread(latencyFile);
 idx = dlmread(indexFile);
 
 boxplot(tp, idx);
+figure()
+boxplot(lat, idx);
 
 %% plot data
 %% DATA COLUMNS
