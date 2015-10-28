@@ -52,8 +52,8 @@ public class Middleware {
 	
 	public Middleware(int port) throws IOException, SQLException {
 		cachedExecutor = Executors.newCachedThreadPool();
-		//acg = AsynchronousChannelGroup.withCachedThreadPool(cachedExecutor, 100);
-		acg = AsynchronousChannelGroup.withFixedThreadPool(10, Executors.defaultThreadFactory());
+		acg = AsynchronousChannelGroup.withCachedThreadPool(cachedExecutor, 100);
+		//acg = AsynchronousChannelGroup.withFixedThreadPool(10, Executors.defaultThreadFactory());
 		this.serverChannel = AsynchronousServerSocketChannel.open(acg);
 
 		this.serverChannel.bind(new InetSocketAddress(port));
