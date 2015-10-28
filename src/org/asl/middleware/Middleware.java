@@ -7,6 +7,7 @@ import java.net.InetSocketAddress;
 import java.net.StandardSocketOptions;
 import java.nio.channels.AsynchronousChannelGroup;
 import java.nio.channels.AsynchronousServerSocketChannel;
+import java.nio.channels.ShutdownChannelGroupException;
 import java.sql.SQLException;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -101,8 +102,10 @@ public class Middleware {
 			}
 			serverChannel.close();
 			System.out.println("ServerChannel closed");
-		} catch (InterruptedException | IOException e) {
-			e.printStackTrace();
+		} catch (InterruptedException | IOException | ShutdownChannelGroupException e) {
+			if (!(e instanceof ShutdownChannelGroupException)) {
+				e.printStackTrace();
+			}
 		}
 		try {
 			Middleware.rttWriter.close();
