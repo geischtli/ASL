@@ -104,6 +104,13 @@ public class Middleware {
 		} catch (InterruptedException | IOException e) {
 			e.printStackTrace();
 		}
+		try {
+			Middleware.rttWriter.close();
+			tpWriter.close();
+			System.out.println("Benchmark files closed");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		System.out.println("Middleware successfully shut down");
 	}
 	
