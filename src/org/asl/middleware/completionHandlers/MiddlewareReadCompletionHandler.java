@@ -64,10 +64,10 @@ public class MiddlewareReadCompletionHandler implements CompletionHandler<Intege
 		//req.processOnMiddleware(mi);
 		// ONLY USED FOR MW BENCHMARK
 		// BECAUSE DB CONN POOL ACCESS IS THE CRITICAL BIT ONLY DO THIS HERE LOCALY
-		try (ConnectionWrapper conn = ASLDatabase.getNewConnection().get()) {
+		/*try (ConnectionWrapper conn = ASLDatabase.getNewConnection().get()) {
 		} catch (IOException | InterruptedException | ExecutionException | SQLException e) {
 			e.printStackTrace();
-		}
+		}*/
 		
 		mi.getMyTimeLogger().click(Timing.MIDDLEWARE_END_PROCESSING, req.getClientId(), req.getRequestId(), mi.getStartTime());
 		

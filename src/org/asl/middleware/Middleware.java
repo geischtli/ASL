@@ -47,7 +47,7 @@ public class Middleware {
 	
 	public Middleware(int port) throws IOException, SQLException {
 		cachedExecutor = Executors.newCachedThreadPool();
-		acg = AsynchronousChannelGroup.withCachedThreadPool(cachedExecutor, 30);
+		acg = AsynchronousChannelGroup.withCachedThreadPool(cachedExecutor, 100);
 		this.serverChannel = AsynchronousServerSocketChannel.open(acg);
 		
 		this.serverChannel.bind(new InetSocketAddress(port));
@@ -63,7 +63,7 @@ public class Middleware {
 		Middleware.isShuttingDown = false;
 		Middleware.numClientsGone = new AtomicInteger(0);
 		Middleware.messageCount = new AtomicInteger(0);
-		this.tpWriter = new BufferedWriter(new FileWriter("/home/ec2-user/ASL/mw_baseline/throughput.log"));
+		this.tpWriter = new BufferedWriter(new FileWriter("/home/ec2-user/ASL/mw_baseline/throughput.log", false));
 		this.tpTimer = new Timer();
 		this.tpTimer.scheduleAtFixedRate(new TimerTask() {
 			
@@ -78,7 +78,7 @@ public class Middleware {
 			}
 			
 		}, 0, 1000);
-		Middleware.rttWriter = new BufferedWriter(new FileWriter("/home/ec2-user/ASL/mw_baseline/rtt.log"));
+		Middleware.rttWriter = new BufferedWriter(new FileWriter("/home/ec2-user/ASL/mw_baseline/rtt.log", false));
 		
 		RequestBuilder.getRegisterMiddlewareRequest().processOnMiddleware(mi);
 	}
