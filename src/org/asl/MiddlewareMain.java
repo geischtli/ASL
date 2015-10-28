@@ -18,5 +18,6 @@ public class MiddlewareMain {
 		System.out.println("Wait for shutdown command (ENTER) ...");
 		System.in.read();
 		mw.shutdown();
+		System.in.read();
 	}
 }
