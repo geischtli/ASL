@@ -39,13 +39,15 @@ public class Middleware {
 	// write current throughput via this writer
 	private BufferedWriter tpWriter;
 	// write messagecount every second and reset it
-	private Timer outTimer;
+	private Timer tpTimer;
 	private ExecutorService cachedExecutor;
 	private AsynchronousChannelGroup acg;
 	// write each RTT to a file
 	private static BufferedWriter rttWriter;
 	// write the number of exectuing threads into a file
 	private static BufferedWriter threadWriter;
+	// timer for the threadWriter
+	private Timer threadTimer;
 	
 	public Middleware(int port) throws IOException, SQLException {
 		cachedExecutor = Executors.newCachedThreadPool();
@@ -67,28 +69,37 @@ public class Middleware {
 		Middleware.messageCount = new AtomicInteger(0);
 		this.tpWriter = new BufferedWriter(new FileWriter("/home/ec2-user/ASL/mw_baseline/throughput.log", false));
 		Middleware.threadWriter = new BufferedWriter(new FileWriter("/home/ec2-user/ASL/mw_baseline/threadCount.log", false));
-		this.outTimer = new Timer();
-		this.outTimer.scheduleAtFixedRate(new TimerTask() {
-			
+		this.tpTimer = new Timer();
+		this.tpTimer.scheduleAtFixedRate(new TimerTask() {
 			@Override
 			public void run() {
 				try {
 					tpWriter.write(String.valueOf(Middleware.messageCount.getAndSet(0)));
 					tpWriter.newLine();
-					int numRunning = 0;
-					for (Thread t : Thread.getAllStackTraces().keySet()) {
-						if (t.getState() == Thread.State.RUNNABLE) {
-							numRunning++;
-						}
-					}
-					threadWriter.write(String.valueOf(numRunning));
-					threadWriter.newLine();
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
 			}
-			
 		}, 0, 1000);
+		
+		this.threadTimer = new Timer();
+		this.threadTimer.schedule(new TimerTask() {
+			@Override
+			public void run() {
+				int numRunning = 0;
+				for (Thread t : Thread.getAllStackTraces().keySet()) {
+					if (t.getState() == Thread.State.RUNNABLE) {
+						numRunning++;
+					}
+				}
+				try {
+					threadWriter.write(String.valueOf(numRunning));
+					threadWriter.newLine();	
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}, 0, 100);
 		
 		Middleware.rttWriter = new BufferedWriter(new FileWriter("/home/ec2-user/ASL/mw_baseline/rtt.log", false));
 		RequestBuilder.getRegisterMiddlewareRequest().processOnMiddleware(mi);
@@ -102,8 +113,9 @@ public class Middleware {
 		System.out.println("Shutting down middleware");
 		Middleware.isShuttingDown = true;
 		mi.getMyTimeLogger().stopMyTimeLogger();
-		outTimer.cancel();
-		System.out.println("outTimer stopped");
+		tpTimer.cancel();
+		threadTimer.cancel();
+		System.out.println("timers stopped");
 		try {
 			if (!cachedExecutor.awaitTermination(0, TimeUnit.SECONDS)) {
 				System.out.println("Force cachedExecutor to shutdown");
