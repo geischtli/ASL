@@ -3,9 +3,9 @@
 <properties>
 	<entry key="USER">postgres</entry>
 	<entry key="PASSWORD"></entry>
-	<entry key="MIDDLEWARE_IP">52.29.33.13</entry>
+	<entry key="MIDDLEWARE_IP">52.29.100.137</entry>
 	<entry key="MIDDLEWARE_PORT">9090</entry>
-	<entry key="DATABASE_IP">52.29.62.155</entry>
+	<entry key="DATABASE_IP">52.29.100.137</entry>
 	<entry key="DATABASE_PORT">5432</entry>
 	<entry key="DATABASE_NAME">mydb</entry>
 	<entry key="NUM_ASYNC_CONNECTION_POOL_THREADS">1</entry>
