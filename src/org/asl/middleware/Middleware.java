@@ -123,6 +123,7 @@ public class Middleware {
 		try {
 			Middleware.rttWriter.close();
 			tpWriter.close();
+			Middleware.threadWriter.close();
 			System.out.println("Benchmark files closed");
 		} catch (IOException e) {
 			e.printStackTrace();
