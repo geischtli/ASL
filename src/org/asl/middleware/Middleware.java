@@ -62,7 +62,7 @@ public class Middleware {
 		Middleware.isShuttingDown = false;
 		Middleware.numClientsGone = new AtomicInteger(0);
 		Middleware.messageCount = new AtomicInteger(0);
-		this.tpWriter = new BufferedWriter(new FileWriter("/home/ec2-user/ASL/mw_baseline/logs/throughput.log"));
+		this.tpWriter = new BufferedWriter(new FileWriter("/home/ec2-user/ASL/mw_baseline/throughput.log"));
 		this.tpTimer = new Timer();
 		this.tpTimer.scheduleAtFixedRate(new TimerTask() {
 			
@@ -77,7 +77,7 @@ public class Middleware {
 			}
 			
 		}, 0, 1000);
-		Middleware.rttWriter = new BufferedWriter(new FileWriter("/home/ec2-user/ASL/mw_baseline/logs/rtt.log"));
+		Middleware.rttWriter = new BufferedWriter(new FileWriter("/home/ec2-user/ASL/mw_baseline/rtt.log"));
 		
 		RequestBuilder.getRegisterMiddlewareRequest().processOnMiddleware(mi);
 	}
