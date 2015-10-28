@@ -91,6 +91,8 @@ public class Middleware {
 		System.out.println("Shutting down middleware");
 		Middleware.isShuttingDown = true;
 		mi.getMyTimeLogger().stopMyTimeLogger();
+		tpTimer.cancel();
+		System.out.println("tpTimer stopped");
 		try {
 			if (!cachedExecutor.awaitTermination(0, TimeUnit.SECONDS)) {
 				System.out.println("Force cachedExecutor to shutdown");
