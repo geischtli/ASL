@@ -17,7 +17,9 @@ public class MiddlewareMain {
 		// wait for enter strike such that the middleware can safely close all its services
 		System.out.println("Wait for shutdown command (ENTER) ...");
 		System.in.read();
+		System.out.println("I'm gonna shut down...");
 		mw.shutdown();
+		System.out.println("Shutdown is done");
 		System.in.read();
 	}
 }
