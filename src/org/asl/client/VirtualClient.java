@@ -46,14 +46,14 @@ public class VirtualClient extends AbstractClient {
 	}
 	
 	public void gatherRequests() {
-		/*RequestBuilder.addRequestTypes(
+		RequestBuilder.addRequestTypes(
 				requestList,
 				new RequestType[] {
 						RequestType.HANDSHAKE,
 						RequestType.CREATE_QUEUE
 						},
 				1
-				);*/
+				);
 		RequestBuilder.addRequestTypes(
 				requestList,
 				new RequestType[] {

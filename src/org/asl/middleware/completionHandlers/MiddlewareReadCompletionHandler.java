@@ -61,6 +61,13 @@ public class MiddlewareReadCompletionHandler implements CompletionHandler<Intege
 		mi.getMyTimeLogger().setClick(Timing.MIDDLEWARE_END_READ, MIDDLEWARE_END_READ, req.getClientId(), req.getRequestId(), mi.getStartTime());
 		
 		mi.getMyTimeLogger().click(Timing.MIDDLEWARE_START_PROCESSING, req.getClientId(), req.getRequestId(), mi.getStartTime());
+		req.processOnMiddleware(mi);
+		// ONLY USED FOR MW BENCHMARK
+		// BECAUSE DB CONN POOL ACCESS IS THE CRITICAL BIT ONLY DO THIS HERE LOCALY
+		/*try (ConnectionWrapper conn = ASLDatabase.getNewConnection().get()) {
+		} catch (IOException | InterruptedException | ExecutionException | SQLException e) {
+			e.printStackTrace();
+		}*/
 		mi.getMyTimeLogger().click(Timing.MIDDLEWARE_END_PROCESSING, req.getClientId(), req.getRequestId(), mi.getStartTime());
 		
 		ByteBufferWrapper outbufWrap = SerializingUtilities.packRequest(req);
