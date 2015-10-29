@@ -27,7 +27,7 @@ public class BenchClient extends AbstractClient {
 				new RequestType[] {
 						RequestType.SEND_MESSAGE
 						},
-				1000
+				10
 				);
 	}
 	
@@ -42,9 +42,13 @@ public class BenchClient extends AbstractClient {
 				Integer result = 0;
 				while (result < outbufWrap.getBytes()) {
 					Future<Integer> writefuture = sc.write(outbufWrap.getBuf());
+					System.out.println("Completed write");
 					result += writefuture.get();
+					System.out.println("wrote " + result + " bytes of " + outbufWrap.getBytes());
 				}
+				System.out.println("request " + i);
 			}
+			System.out.println("Client sent all requests.");
 		} catch (UnknownHostException | InterruptedException | ExecutionException e1) {
 			e1.printStackTrace();
 		}
