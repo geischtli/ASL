@@ -30,6 +30,7 @@ public class VirtualClient extends AbstractClient {
 		myFile = new File("/home/ec2-user/ASL/client_baseline/client"
 				+ String.valueOf(fileId) + ".log");
 		} while (myFile.exists());
+		System.out.println("log file opened");
 		VirtualClient.logWriter = new BufferedWriter(new FileWriter(myFile));
 	}
 	
@@ -58,7 +59,7 @@ public class VirtualClient extends AbstractClient {
 					//	RequestType.GET_REGISTERED_QUEUES,
 						RequestType.SEND_MESSAGE
 						},
-				1000
+				1
 				);
 	}
 	
