@@ -65,7 +65,7 @@ public class ClientWriteCompletionHandler implements CompletionHandler<Integer, 
 					);
 			}
 		} else {
-			VirtualClient.writeLog(String.valueOf((double)((System.nanoTime() - VirtualClient.startAll))/80000.0));
+			VirtualClient.writeLog(String.valueOf((double)((System.nanoTime() - VirtualClient.startAll))/(80000.0*1000000000)));
 			try {
 				VirtualClient.logWriter.close();
 			} catch (IOException e) {
