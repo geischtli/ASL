@@ -1,14 +1,11 @@
 package org.asl.client;
 
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.UnknownHostException;
 import java.util.Random;
-import java.util.concurrent.Semaphore;
 
 import org.asl.client.completionHandlers.ConnectCompletionHandler;
 import org.asl.common.request.Request.RequestType;
@@ -17,11 +14,6 @@ import org.asl.common.socket.SocketHelper;
 
 public class VirtualClient extends AbstractClient {
 
-	public static BufferedWriter logWriter;
-	public static long startAll;
-	public static long doneAll;
-	public static Semaphore semaphore = new Semaphore(0);
-	
 	public VirtualClient(int port, String ip) throws IOException {
 		super(port, ip);
 		gatherRequests();
@@ -33,16 +25,6 @@ public class VirtualClient extends AbstractClient {
 				+ String.valueOf(fileId) + ".log");
 		} while (myFile.exists());
 		System.out.println("log file opened");
-		VirtualClient.logWriter = new BufferedWriter(new FileWriter(myFile));
-	}
-	
-	public static void writeLog(String s) {
-		try {
-			VirtualClient.logWriter.write(s);
-			VirtualClient.logWriter.newLine();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
 	}
 	
 	public void gatherRequests() {

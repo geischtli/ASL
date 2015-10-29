@@ -1,11 +1,8 @@
 package org.asl.middleware.completionHandlers;
 
-import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.channels.AsynchronousSocketChannel;
 import java.nio.channels.CompletionHandler;
-import java.sql.SQLException;
-import java.util.concurrent.ExecutionException;
 
 import org.asl.common.request.Request;
 import org.asl.common.request.serialize.ByteBufferWrapper;
@@ -17,8 +14,6 @@ import org.asl.common.timing.Timing;
 import org.asl.middleware.Middleware;
 import org.asl.middleware.MiddlewareInfo;
 import org.asl.middleware.connectioncontrol.ConnectionTimeWrapper;
-import org.asl.middleware.database.config.ASLDatabase;
-import org.asl.middleware.database.connectionpool.ConnectionWrapper;
 
 public class MiddlewareReadCompletionHandler implements CompletionHandler<Integer, ConnectionTimeWrapper> {
 

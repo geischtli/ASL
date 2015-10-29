@@ -5,7 +5,6 @@ import java.nio.channels.CompletionHandler;
 import java.util.List;
 
 import org.asl.client.ClientInfo;
-import org.asl.client.VirtualClient;
 import org.asl.common.request.Request.RequestType;
 import org.asl.common.request.builder.RequestBuilder;
 import org.asl.common.request.serialize.ByteBufferWrapper;
@@ -35,7 +34,6 @@ public class ConnectCompletionHandler implements CompletionHandler<Void, Object>
 	@Override
 	public void completed(Void result, Object attachment) {
 		ByteBufferWrapper outbufWrap = SerializingUtilities.packRequest(RequestBuilder.getRequest(requestList.get(ci.getRequestId()), ci));
-		VirtualClient.startAll = System.nanoTime();
 		sc.write(outbufWrap.getBuf(), outbufWrap.getBytes(), ClientWriteCompletionHandler.create(sc, outbufWrap, ci, requestList, requestId));
 	}
 
