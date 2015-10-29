@@ -55,6 +55,11 @@ public class MiddlewareReadCompletionHandler implements CompletionHandler<Intege
 			return;
 		}
 		
+		// only used for client benchmark
+		ByteBuffer inbuf = ByteBuffer.allocate(Middleware.INITIAL_BUFSIZE);
+		sc.read(inbuf, connTimeWrapper, MiddlewareReadCompletionHandler.create(mi, sc, inbuf, 0));
+		return;
+		/*
 		Request req = SerializingUtilities.unpackRequest(fullInbufWrap.getBuf(), fullInbufWrap.getBytes());
 		
 		mi.getMyTimeLogger().setClick(Timing.MIDDLEWARE_START_READ, MIDDLEWARE_START_READ, req.getClientId(), req.getRequestId(), mi.getStartTime());
@@ -68,7 +73,7 @@ public class MiddlewareReadCompletionHandler implements CompletionHandler<Intege
 		} catch (IOException | InterruptedException | ExecutionException | SQLException e) {
 			e.printStackTrace();
 		}*/
-		
+		/*
 		mi.getMyTimeLogger().click(Timing.MIDDLEWARE_END_PROCESSING, req.getClientId(), req.getRequestId(), mi.getStartTime());
 		
 		ByteBufferWrapper outbufWrap = SerializingUtilities.packRequest(req);
@@ -79,6 +84,7 @@ public class MiddlewareReadCompletionHandler implements CompletionHandler<Intege
 				MiddlewareWriteCompletionHandler.create(
 						mi, sc, outbufWrap, req.getClientId(), req.getRequestId(), MiddlewareReadCompletionHandler.rttStart)
 			);
+		*/
 	}
 
 	@Override
