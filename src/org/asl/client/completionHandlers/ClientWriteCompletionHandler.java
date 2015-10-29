@@ -30,7 +30,7 @@ public class ClientWriteCompletionHandler implements CompletionHandler<Integer, 
 	private int requestId;
 	private long startWrite;
 	private long startPrepare;
-	private static Semaphore semaphore;
+	private static Semaphore semaphore = new Semaphore(0);
 	
 	public ClientWriteCompletionHandler(AsynchronousSocketChannel sc, ByteBufferWrapper outbufWrap, ClientInfo ci, List<RequestType> requestList, int requestId) {
 		this.sc = sc;
