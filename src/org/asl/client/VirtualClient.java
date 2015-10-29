@@ -29,7 +29,7 @@ public class VirtualClient extends AbstractClient {
 		int fileId = random.nextInt(Integer.MAX_VALUE);
 		myFile = new File("/home/ec2-user/ASL/client_baseline/client"
 				+ String.valueOf(fileId) + ".log");
-		} while (!myFile.exists());
+		} while (myFile.exists());
 		VirtualClient.logWriter = new BufferedWriter(new FileWriter(myFile));
 	}
 	
