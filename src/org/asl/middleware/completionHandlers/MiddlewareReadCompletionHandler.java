@@ -55,25 +55,12 @@ public class MiddlewareReadCompletionHandler implements CompletionHandler<Intege
 			return;
 		}
 		
-		// only used for client benchmark
-		ByteBuffer inbuf = ByteBuffer.allocate(Middleware.INITIAL_BUFSIZE);
-		sc.read(inbuf, connTimeWrapper, MiddlewareReadCompletionHandler.create(mi, sc, inbuf, 0));
-		return;
-		/*
 		Request req = SerializingUtilities.unpackRequest(fullInbufWrap.getBuf(), fullInbufWrap.getBytes());
 		
 		mi.getMyTimeLogger().setClick(Timing.MIDDLEWARE_START_READ, MIDDLEWARE_START_READ, req.getClientId(), req.getRequestId(), mi.getStartTime());
 		mi.getMyTimeLogger().setClick(Timing.MIDDLEWARE_END_READ, MIDDLEWARE_END_READ, req.getClientId(), req.getRequestId(), mi.getStartTime());
 		
 		mi.getMyTimeLogger().click(Timing.MIDDLEWARE_START_PROCESSING, req.getClientId(), req.getRequestId(), mi.getStartTime());
-		//req.processOnMiddleware(mi);
-		// ONLY USED FOR MW BENCHMARK
-		// BECAUSE DB CONN POOL ACCESS IS THE CRITICAL BIT ONLY DO THIS HERE LOCALY
-		/*try (ConnectionWrapper conn = ASLDatabase.getNewConnection().get()) {
-		} catch (IOException | InterruptedException | ExecutionException | SQLException e) {
-			e.printStackTrace();
-		}*/
-		/*
 		mi.getMyTimeLogger().click(Timing.MIDDLEWARE_END_PROCESSING, req.getClientId(), req.getRequestId(), mi.getStartTime());
 		
 		ByteBufferWrapper outbufWrap = SerializingUtilities.packRequest(req);
@@ -84,7 +71,6 @@ public class MiddlewareReadCompletionHandler implements CompletionHandler<Intege
 				MiddlewareWriteCompletionHandler.create(
 						mi, sc, outbufWrap, req.getClientId(), req.getRequestId(), MiddlewareReadCompletionHandler.rttStart)
 			);
-		*/
 	}
 
 	@Override
