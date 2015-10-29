@@ -8,6 +8,7 @@ import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.UnknownHostException;
 import java.util.Random;
+import java.util.concurrent.Semaphore;
 
 import org.asl.client.completionHandlers.ConnectCompletionHandler;
 import org.asl.common.request.Request.RequestType;
@@ -19,6 +20,7 @@ public class VirtualClient extends AbstractClient {
 	public static BufferedWriter logWriter;
 	public static long startAll;
 	public static long doneAll;
+	public static Semaphore semaphore = new Semaphore(0);
 	
 	public VirtualClient(int port, String ip) throws IOException {
 		super(port, ip);
