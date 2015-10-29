@@ -1,5 +1,6 @@
 package org.asl.client.completionHandlers;
 
+import java.io.IOException;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
@@ -65,6 +66,11 @@ public class ClientWriteCompletionHandler implements CompletionHandler<Integer, 
 			}
 		} else {
 			VirtualClient.writeLog(String.valueOf((double)((System.nanoTime() - VirtualClient.startAll))/80000.0));
+			try {
+				VirtualClient.logWriter.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 			ci.getMyTimeLogger().stopMyTimeLogger();
 			SocketHelper.closeSocket(sc);
 			System.out.println("Client is done and closed socket");
