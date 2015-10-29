@@ -3,7 +3,7 @@
     <property name="build.dir"   value="build"/>
     <property name="classes.dir" value="${build.dir}/classes"/>
     <property name="jar.dir"     value="${build.dir}/jar"/>
-    <property name="main-class"  value="org.asl.experiments.baselines.client.middlewarelistener.BenchClientMain"/>
+    <property name="main-class"  value="org.asl.experiments.baselines.client.loadgenerator.BenchClientMain"/>
 	<property name="lib.dir"     value="lib"/>
 	
 	<path id="classpath">
