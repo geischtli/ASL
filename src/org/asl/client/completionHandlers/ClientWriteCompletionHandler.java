@@ -7,6 +7,7 @@ import java.nio.ByteBuffer;
 import java.nio.channels.AsynchronousSocketChannel;
 import java.nio.channels.CompletionHandler;
 import java.util.List;
+import java.util.concurrent.Semaphore;
 
 import org.asl.client.AbstractClient;
 import org.asl.client.ClientInfo;
@@ -29,7 +30,8 @@ public class ClientWriteCompletionHandler implements CompletionHandler<Integer, 
 	private int requestId;
 	private long startWrite;
 	private long startPrepare;
-
+	private static Semaphore semaphore;
+	
 	public ClientWriteCompletionHandler(AsynchronousSocketChannel sc, ByteBufferWrapper outbufWrap, ClientInfo ci, List<RequestType> requestList, int requestId) {
 		this.sc = sc;
 		this.outbufWrap = outbufWrap;
@@ -49,6 +51,7 @@ public class ClientWriteCompletionHandler implements CompletionHandler<Integer, 
 		System.out.println("write completed");
 		SerializingUtilities.forceFurtherWriteIfNeeded(outbufWrap.getBuf(), writtenBytes, expectedWriteBytes, sc);
 		System.out.println("force write completed");
+		semaphore.release();
 		VirtualClient.writeLog(String.valueOf(System.nanoTime() - startWrite));
 		System.out.println("1st log completed");
 		//ci.getMyTimeLogger().click(Timing.CLIENT_END_WRITE, ci.getClientId(), ci.getRequestId(), ci.getStartTimeNS());
@@ -67,6 +70,11 @@ public class ClientWriteCompletionHandler implements CompletionHandler<Integer, 
 				System.out.println("packing completed");
 				VirtualClient.writeLog(String.valueOf(System.nanoTime() - startPrepare));
 				System.out.println("2nd log completed");
+				try {
+					semaphore.acquire();
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
 				sc.write(outbufWrap.getBuf(), outbufWrap.getBytes(), ClientWriteCompletionHandler.create(sc, outbufWrap, ci, requestList, requestId));
 				System.out.println("write call completed");
 			} else {
