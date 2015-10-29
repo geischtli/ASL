@@ -53,6 +53,7 @@ public class ClientWriteCompletionHandler implements CompletionHandler<Integer, 
     	//sc.read(inbuf, null, ClientReadCompletionHandler.create(sc, ci, inbuf, requestList, requestId));
 		startPrepare = System.nanoTime();
     	// Only used for load generator benchmark
+		System.out.println("request = " + ci.getRequestId());
     	if (ci.getRequestId() + 1 < requestList.size()) {
 			if (sc.isOpen()) {
 				ci.incrementRequestId();
