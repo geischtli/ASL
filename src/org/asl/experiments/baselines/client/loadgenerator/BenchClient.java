@@ -25,6 +25,10 @@ public class BenchClient extends AbstractClient {
 	int totalRequests;
 	private Timer timer;
 	private int reqPerSec;
+	private long startWrite;
+	private long startRead;
+	private long totalWritePerSec;
+	private long totalReadPerSec;
 	
 	private final class WriteCompletionHandler implements CompletionHandler<Integer, Integer> {
 		
@@ -32,6 +36,7 @@ public class BenchClient extends AbstractClient {
 		
 		private WriteCompletionHandler(ByteBufferWrapper outbufWrap) {
 			this.outbufWrap = outbufWrap;
+			startWrite = System.nanoTime();
 		}
 		
 		@Override
@@ -43,6 +48,7 @@ public class BenchClient extends AbstractClient {
 					e.printStackTrace();
 				}
 			}
+			totalWritePerSec += (System.nanoTime() - startWrite);
 			if (reqCount + 1 == requestList.size()) {
 				try {
 					System.out.println("I quit");
@@ -55,7 +61,9 @@ public class BenchClient extends AbstractClient {
 			}
 			ByteBuffer inbuf = ByteBuffer.allocate(10);
 			try {
+				startRead = System.nanoTime();
 				sc.read(inbuf).get();
+				totalReadPerSec += (System.nanoTime() - startRead);
 			} catch (InterruptedException | ExecutionException e) {
 				e.printStackTrace();
 			}
@@ -83,8 +91,14 @@ public class BenchClient extends AbstractClient {
 			@Override
 			public void run() {
 				try {
-					logWriter.write(String.valueOf(id) + "\t" + String.valueOf(reqPerSec) + "\n");
+					// schema
+					// id	requests/last second	[totalWriteTime in last second in ms]	[total read time in last second in ms]
+					logWriter.write(String.valueOf(id) + "\t" + String.valueOf(reqPerSec)
+					+ String.valueOf((double)totalWritePerSec/1000000.0) + "\t"
+					+ String.valueOf((double)totalReadPerSec/1000000.0) + "\n");
 					reqPerSec = 0;
+					totalWritePerSec = 0;
+					totalReadPerSec = 0;
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
