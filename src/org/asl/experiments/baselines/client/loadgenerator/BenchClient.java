@@ -42,8 +42,8 @@ public class BenchClient extends AbstractClient {
 			if (reqCount + 1 == requestList.size()) {
 				try {
 					System.out.println("I quit");
-					double ms = (double)(System.nanoTime() - startTime)/1000000000.0;
-					logWriter.write(String.valueOf(ms));
+					double sec = (double)(System.nanoTime() - startTime)/1000000000.0;
+					logWriter.write(String.valueOf((double)(totalRequests)/sec));
 					logWriter.newLine();
 					logWriter.flush();
 					sc.close();
