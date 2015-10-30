@@ -93,7 +93,8 @@ public class BenchClient extends AbstractClient {
 				try {
 					// schema
 					// id	requests/last second	[totalWriteTime in last second in ms]	[total read time in last second in ms]
-					logWriter.write(String.valueOf(id) + "\t" + String.valueOf(reqPerSec)
+					logWriter.write(String.valueOf(id) + "\t"
+					+ String.valueOf(reqPerSec) + "\t"
 					+ String.valueOf((double)totalWritePerSec/1000000.0) + "\t"
 					+ String.valueOf((double)totalReadPerSec/1000000.0) + "\n");
 					reqPerSec = 0;
