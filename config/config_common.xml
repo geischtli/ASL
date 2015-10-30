@@ -9,7 +9,7 @@
 	<entry key="DATABASE_PORT">5432</entry>
 	<entry key="DATABASE_NAME">mydb</entry>
 	<entry key="NUM_ASYNC_CONNECTION_POOL_THREADS">1</entry>
-	<entry key="CONTENT_LENGTH">200</entry>
+	<entry key="CONTENT_LENGTH">2000</entry>
 	<entry key="MAX_CONNECTIONS_TO_DB">10</entry>
 	<entry key="INITIAL_BUFSIZE">10240</entry>
 </properties>
