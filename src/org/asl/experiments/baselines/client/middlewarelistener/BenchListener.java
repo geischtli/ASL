@@ -50,7 +50,7 @@ public class BenchListener {
 			public void run() {
 				try {
 					timeLogger.write(String.valueOf(numReqPerSec.get()) + "\t"
-							+ String.valueOf(totalWritePerSec) + "\t" + String.valueOf(totalReadPerSec) + "\n");
+							+ String.valueOf((double)(totalWritePerSec)/1000000.0) + "\t" + String.valueOf((double)(totalReadPerSec)/1000000.0) + "\n");
 					numReqPerSec.set(0);
 					totalWritePerSec = 0L;
 					totalReadPerSec = 0L;
