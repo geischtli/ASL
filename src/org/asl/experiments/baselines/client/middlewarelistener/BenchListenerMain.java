@@ -14,6 +14,7 @@ public class BenchListenerMain {
 		}
 		try {
 			System.in.read();
+			bl.shutdown();
 			System.out.println("Middleware saw " + bl.numRequests.get() + " requests");
 		} catch (IOException e) {
 			e.printStackTrace();

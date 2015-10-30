@@ -1,5 +1,7 @@
 package org.asl.experiments.baselines.client.middlewarelistener;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
@@ -7,6 +9,8 @@ import java.nio.channels.AsynchronousChannelGroup;
 import java.nio.channels.AsynchronousServerSocketChannel;
 import java.nio.channels.AsynchronousSocketChannel;
 import java.nio.channels.CompletionHandler;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -23,6 +27,10 @@ public class BenchListener {
 	private int port = 9090;
 	public AtomicInteger numRequests;
 	private int goneClients;
+	private BufferedWriter timeLogger;
+	private Timer timer;
+	private Long totalWritePerSec;
+	private Long totalReadPerSec;
 	
 	public BenchListener() throws IOException {
 		cachedExecutor = Executors.newCachedThreadPool();
@@ -31,11 +39,32 @@ public class BenchListener {
 		this.serverChannel.bind(new InetSocketAddress(port));
 		this.numRequests = new AtomicInteger(0);
 		this.goneClients = 1;
+		this.timeLogger = new BufferedWriter(new FileWriter("/home/ec2-user/ASL/client_baseline/middlewareTimes.log", false));
+		this.timer = new Timer();
+		this.timer.scheduleAtFixedRate(new TimerTask() {
+			@Override
+			public void run() {
+				try {
+					timeLogger.write(String.valueOf(totalWritePerSec) + "\t" + String.valueOf(totalReadPerSec) + "\n");
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}, 0, 1000);
 	}
 	
 	public void go() {
 		System.out.println("Server started");
 		serverChannel.accept(null, new AcceptCompletionHandler());
+	}
+	
+	public void shutdown() {
+		this.timer.cancel();
+		try {
+			this.timeLogger.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	private final class AcceptCompletionHandler implements CompletionHandler<AsynchronousSocketChannel, Object> {
@@ -56,10 +85,12 @@ public class BenchListener {
 	private final class ReadCompletionHandler implements CompletionHandler<Integer, Void> {
 		private AsynchronousSocketChannel sc;
 		private ByteBuffer inbuf;
+		private long readStart;
 
 		private ReadCompletionHandler(AsynchronousSocketChannel sc, ByteBuffer inbuf) {
 			this.sc = sc;
 			this.inbuf = inbuf;
+			this.readStart = System.nanoTime();
 		}
 
 		@Override
@@ -77,9 +108,16 @@ public class BenchListener {
 					}
 				}
 			}
+			synchronized (totalReadPerSec) {
+				totalReadPerSec += (System.nanoTime() - readStart);
+			}
 			numRequests.incrementAndGet();
 			try {
+				long startWrite = System.nanoTime();
 				sc.write(ByteBuffer.wrap("0".getBytes())).get();
+				synchronized (totalWritePerSec) {
+					totalWritePerSec += (System.nanoTime() - startWrite);
+				}
 			} catch (InterruptedException | ExecutionException e) {
 				e.printStackTrace();
 			}
