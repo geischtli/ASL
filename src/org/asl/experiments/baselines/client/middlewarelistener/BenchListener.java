@@ -40,6 +40,8 @@ public class BenchListener {
 		this.numRequests = new AtomicInteger(0);
 		this.goneClients = 1;
 		this.timeLogger = new BufferedWriter(new FileWriter("/home/ec2-user/ASL/client_baseline/middlewareTimes.log", false));
+		this.totalReadPerSec = new Long(0);
+		this.totalWritePerSec = new Long(0);
 		this.timer = new Timer();
 		this.timer.scheduleAtFixedRate(new TimerTask() {
 			@Override
