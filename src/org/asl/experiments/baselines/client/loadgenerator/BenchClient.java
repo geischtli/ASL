@@ -1,5 +1,6 @@
 package org.asl.experiments.baselines.client.loadgenerator;
 
+import java.io.BufferedWriter;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
@@ -17,6 +18,8 @@ import org.asl.common.socket.SocketHelper;
 public class BenchClient extends AbstractClient {
 
 	private int reqCount;
+	private long startTime;
+	BufferedWriter logWriter;
 	
 	private final class WriteCompletionHandler implements CompletionHandler<Integer, Integer> {
 		
@@ -38,6 +41,10 @@ public class BenchClient extends AbstractClient {
 			if (reqCount + 1 == requestList.size()) {
 				try {
 					System.out.println("I quit");
+					double ms = (double)(System.nanoTime() - startTime)/1000000.0;
+					logWriter.write(String.valueOf(ms));
+					logWriter.newLine();
+					logWriter.flush();
 					sc.close();
 				} catch (IOException e) {
 					e.printStackTrace();
@@ -61,10 +68,12 @@ public class BenchClient extends AbstractClient {
 		}
 	}
 
-	public BenchClient(int port, String ip) throws IOException {
+	public BenchClient(int port, String ip, BufferedWriter logWriter) throws IOException {
 		super(port, ip);
 		gatherRequests();
 		this.reqCount = 0;
+		this.startTime = 0;
+		this.logWriter = logWriter;
 	}
 	
 	public void gatherRequests() {
@@ -79,6 +88,7 @@ public class BenchClient extends AbstractClient {
 	
 	@Override
 	public void run() {
+		startTime = System.nanoTime();
 		sc = SocketHelper.openSocket();
 		try {
 			sc.connect(new InetSocketAddress(InetAddress.getByName(AbstractClient.ip), AbstractClient.port), null,

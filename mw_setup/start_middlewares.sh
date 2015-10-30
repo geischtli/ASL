@@ -5,7 +5,7 @@ sudo yum install ant -y
 
 mkdir -p logs
 
-# Parse the number of clients to be launched
+# Parse the number of middlewares to be launched
 while getopts "n:" opt; do
   case $opt in
     n)
