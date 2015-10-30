@@ -32,7 +32,7 @@ public class BenchClientMain {
 		
 		for (int i = 0; i < numClients; i++) {
 			try {
-				Thread t = new Thread(new BenchClient(mwPort, mwIp, logWriter, numRequests));
+				Thread t = new Thread(new BenchClient(mwPort, mwIp, logWriter, numRequests, i+1));
 				t.start();
 			} catch (IOException e) {
 				e.printStackTrace();

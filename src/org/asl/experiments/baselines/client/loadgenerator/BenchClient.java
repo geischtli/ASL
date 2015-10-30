@@ -6,6 +6,8 @@ import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
 import java.nio.channels.CompletionHandler;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.ExecutionException;
 
 import org.asl.client.AbstractClient;
@@ -21,6 +23,8 @@ public class BenchClient extends AbstractClient {
 	private long startTime;
 	BufferedWriter logWriter;
 	int totalRequests;
+	private Timer timer;
+	private int reqPerSec;
 	
 	private final class WriteCompletionHandler implements CompletionHandler<Integer, Integer> {
 		
@@ -43,9 +47,9 @@ public class BenchClient extends AbstractClient {
 				try {
 					System.out.println("I quit");
 					double sec = (double)(System.nanoTime() - startTime)/1000000000.0;
-					logWriter.write(String.valueOf((double)(totalRequests)/sec));
-					logWriter.newLine();
-					logWriter.flush();
+					logWriter.write(String.valueOf((double)(totalRequests)/sec) + "\n");
+					//logWriter.newLine();
+					//logWriter.flush();
 					sc.close();
 				} catch (IOException e) {
 					e.printStackTrace();
@@ -60,6 +64,7 @@ public class BenchClient extends AbstractClient {
 			}
 			ByteBufferWrapper outbufWrap = SerializingUtilities.packRequest(RequestBuilder.getRequest(requestList.get(reqCount), ci));
 			reqCount++;
+			reqPerSec++;
 			sc.write(outbufWrap.getBuf(), outbufWrap.getBytes(), new WriteCompletionHandler(outbufWrap));
 		}
 
@@ -69,12 +74,25 @@ public class BenchClient extends AbstractClient {
 		}
 	}
 
-	public BenchClient(int port, String ip, BufferedWriter logWriter, int totalRequests) throws IOException {
+	public BenchClient(int port, String ip, final BufferedWriter logWriter, int totalRequests, final int id) throws IOException {
 		super(port, ip);
 		this.reqCount = 0;
 		this.startTime = 0;
 		this.logWriter = logWriter;
 		this.totalRequests = totalRequests;
+		this.timer = new Timer();
+		this.reqPerSec = 0;
+		this.timer.scheduleAtFixedRate(new TimerTask() {
+			@Override
+			public void run() {
+				try {
+					logWriter.write(String.valueOf(id) + "\t" + String.valueOf(reqPerSec) + "\n");
+					reqPerSec = 0;
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}, 0, 1000);
 		gatherRequests();
 	}
 	
