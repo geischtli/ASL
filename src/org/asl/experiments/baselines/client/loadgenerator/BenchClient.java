@@ -29,6 +29,7 @@ public class BenchClient extends AbstractClient {
 	private long startRead;
 	private long totalWritePerSec;
 	private long totalReadPerSec;
+	private int id;
 	
 	private final class WriteCompletionHandler implements CompletionHandler<Integer, Integer> {
 		
@@ -51,7 +52,7 @@ public class BenchClient extends AbstractClient {
 			totalWritePerSec += (System.nanoTime() - startWrite);
 			if (reqCount + 1 == requestList.size()) {
 				try {
-					System.out.println("I quit");
+					System.out.println("Client" + id + " gone");
 					timer.cancel();
 					sc.close();
 				} catch (IOException e) {
@@ -87,6 +88,7 @@ public class BenchClient extends AbstractClient {
 		this.totalRequests = totalRequests;
 		this.timer = new Timer();
 		this.reqPerSec = 0;
+		this.id = id;
 		this.timer.scheduleAtFixedRate(new TimerTask() {
 			@Override
 			public void run() {
