@@ -31,6 +31,7 @@ public class BenchListener {
 	private Timer timer;
 	private Long totalWritePerSec;
 	private Long totalReadPerSec;
+	private AtomicInteger numReqPerSec;
 	
 	public BenchListener() throws IOException {
 		cachedExecutor = Executors.newCachedThreadPool();
@@ -42,12 +43,17 @@ public class BenchListener {
 		this.timeLogger = new BufferedWriter(new FileWriter("/home/ec2-user/ASL/client_baseline/middlewareTimes.log", false));
 		this.totalReadPerSec = new Long(0);
 		this.totalWritePerSec = new Long(0);
+		this.numReqPerSec = new AtomicInteger(0);
 		this.timer = new Timer();
 		this.timer.scheduleAtFixedRate(new TimerTask() {
 			@Override
 			public void run() {
 				try {
-					timeLogger.write(String.valueOf(totalWritePerSec) + "\t" + String.valueOf(totalReadPerSec) + "\n");
+					timeLogger.write(String.valueOf(numReqPerSec.get()) + "\t"
+							+ String.valueOf(totalWritePerSec) + "\t" + String.valueOf(totalReadPerSec) + "\n");
+					numReqPerSec.set(0);
+					totalWritePerSec = 0L;
+					totalReadPerSec = 0L;
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
@@ -123,6 +129,7 @@ public class BenchListener {
 			} catch (InterruptedException | ExecutionException e) {
 				e.printStackTrace();
 			}
+			numReqPerSec.incrementAndGet();
 			ByteBuffer newinbuf = ByteBuffer.allocate(10240);
 			sc.read(newinbuf, null, new ReadCompletionHandler(sc, newinbuf));
 		}
