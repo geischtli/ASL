@@ -3,9 +3,9 @@ package org.asl.experiments.baselines.client.loadgenerator;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
-import java.net.UnknownHostException;
+import java.nio.ByteBuffer;
+import java.nio.channels.CompletionHandler;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Future;
 
 import org.asl.client.AbstractClient;
 import org.asl.common.request.Request.RequestType;
@@ -16,9 +16,55 @@ import org.asl.common.socket.SocketHelper;
 
 public class BenchClient extends AbstractClient {
 
+	private int reqCount;
+	
+	private final class WriteCompletionHandler implements CompletionHandler<Integer, Integer> {
+		
+		private ByteBufferWrapper outbufWrap;
+		
+		private WriteCompletionHandler(ByteBufferWrapper outbufWrap) {
+			this.outbufWrap = outbufWrap;
+		}
+		
+		@Override
+		public void completed(Integer writtenBytes, Integer expectedWriteBytes) {
+			while (!writtenBytes.equals(expectedWriteBytes)) {
+				try {
+					writtenBytes += sc.write(outbufWrap.getBuf()).get();
+				} catch (InterruptedException | ExecutionException e) {
+					e.printStackTrace();
+				}
+			}
+			if (reqCount + 1 == requestList.size()) {
+				try {
+					System.out.println("I quit");
+					sc.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+				return;
+			}
+			ByteBuffer inbuf = ByteBuffer.allocate(10);
+			try {
+				sc.read(inbuf).get();
+			} catch (InterruptedException | ExecutionException e) {
+				e.printStackTrace();
+			}
+			ByteBufferWrapper outbufWrap = SerializingUtilities.packRequest(RequestBuilder.getRequest(requestList.get(reqCount), ci));
+			reqCount++;
+			sc.write(outbufWrap.getBuf(), outbufWrap.getBytes(), new WriteCompletionHandler(outbufWrap));
+		}
+
+		@Override
+		public void failed(Throwable exc, Integer expectedWriteBytes) {
+			System.out.println("write failed");
+		}
+	}
+
 	public BenchClient(int port, String ip) throws IOException {
 		super(port, ip);
 		gatherRequests();
+		this.reqCount = 0;
 	}
 	
 	public void gatherRequests() {
@@ -27,7 +73,7 @@ public class BenchClient extends AbstractClient {
 				new RequestType[] {
 						RequestType.SEND_MESSAGE
 						},
-				10
+				1000
 				);
 	}
 	
@@ -35,25 +81,24 @@ public class BenchClient extends AbstractClient {
 	public void run() {
 		sc = SocketHelper.openSocket();
 		try {
-			Future<Void> f = sc.connect(new InetSocketAddress(InetAddress.getByName(AbstractClient.ip), AbstractClient.port));
-			f.get();
-			for (int i = 0; i < requestList.size(); i++) {
-				ByteBufferWrapper outbufWrap = SerializingUtilities.packRequest(RequestBuilder.getRequest(requestList.get(ci.getRequestId()), ci));
-				Integer result = 0;
-				while (result < outbufWrap.getBytes()) {
-					Future<Integer> writefuture = sc.write(outbufWrap.getBuf());
-					System.out.println("Completed write");
-					result += writefuture.get();
-					System.out.println("wrote " + result + " bytes of " + outbufWrap.getBytes());
-				}
-				System.out.println("request " + i);
-			}
-			System.out.println("Client sent all requests.");
-		} catch (UnknownHostException | InterruptedException | ExecutionException e1) {
-			e1.printStackTrace();
+			sc.connect(new InetSocketAddress(InetAddress.getByName(AbstractClient.ip), AbstractClient.port), null,
+					new CompletionHandler<Void, Object>() {
+
+						@Override
+						public void completed(Void result, Object attachment) {
+							ByteBufferWrapper outbufWrap = SerializingUtilities.packRequest(RequestBuilder.getRequest(requestList.get(reqCount), ci));
+							sc.write(outbufWrap.getBuf(), outbufWrap.getBytes(), new WriteCompletionHandler(outbufWrap));
+						}
+
+						@Override
+						public void failed(Throwable exc, Object attachment) {
+							System.out.println("connect failed");
+						}
+				
+			});
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
-
-	
 	
 }

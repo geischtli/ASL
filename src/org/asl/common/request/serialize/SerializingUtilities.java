@@ -78,7 +78,7 @@ public class SerializingUtilities {
 	public static int forceRead(ByteBuffer inbuf, AsynchronousSocketChannel sc) {
 		Future<Integer> f = sc.read(inbuf);
 		try {
-			//System.out.println("im forced to read again...");
+			System.out.println("im forced to read again...");
 			return f.get();
 		} catch (InterruptedException | ExecutionException e) {
 			//e.printStackTrace();
@@ -91,6 +91,7 @@ public class SerializingUtilities {
 	public static int forceWrite(ByteBuffer outbuf, AsynchronousSocketChannel sc) {
 		Future<Integer> f = sc.write(outbuf);
 		try {
+			System.out.println("before f.get");
 			return f.get();
 		} catch (InterruptedException | ExecutionException e) {
 			e.printStackTrace();

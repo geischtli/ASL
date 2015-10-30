@@ -15,19 +15,23 @@ public class BenchClientMain {
 		propParser = PropertyParser.create("config/config_common.xml").parse();
 		mwIp = propParser.getProperty(PropertyKey.MIDDLEWARE_IP);
 		mwPort = Integer.parseInt(propParser.getProperty(PropertyKey.MIDDLEWARE_PORT));
-
-		Thread t;
-		try {
-			t = new Thread(new BenchClient(mwPort, mwIp));
-			t.start();
-		} catch (IOException e) {
-			e.printStackTrace();
+		
+		int numClients = 100;
+		for (int i = 0; i < numClients; i++) {
+			try {
+				Thread t = new Thread(new BenchClient(mwPort, mwIp));
+				t.start();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
+		
 		try {
 			Thread.sleep(1000*600);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
+		
 	}
 	
 }
