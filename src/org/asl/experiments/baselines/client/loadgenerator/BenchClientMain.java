@@ -27,11 +27,12 @@ public class BenchClientMain {
 		
 		
 		int numClients = Integer.parseInt(args[0]);
+		int numRequests = Integer.parseInt(args[1]);
 		System.out.println("Will run " + numClients + " clients");
 		
 		for (int i = 0; i < numClients; i++) {
 			try {
-				Thread t = new Thread(new BenchClient(mwPort, mwIp, logWriter));
+				Thread t = new Thread(new BenchClient(mwPort, mwIp, logWriter, numRequests));
 				t.start();
 			} catch (IOException e) {
 				e.printStackTrace();

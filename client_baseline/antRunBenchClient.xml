@@ -38,6 +38,7 @@
                 <path location="${jar.dir}/${ant.project.name}.jar"/>
             </classpath>
 			<arg value="${numClients}"/>
+			<arg value="${numRequests}"/>
         </java>
     </target>
 

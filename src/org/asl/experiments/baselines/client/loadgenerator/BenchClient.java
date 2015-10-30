@@ -20,6 +20,7 @@ public class BenchClient extends AbstractClient {
 	private int reqCount;
 	private long startTime;
 	BufferedWriter logWriter;
+	int totalRequests;
 	
 	private final class WriteCompletionHandler implements CompletionHandler<Integer, Integer> {
 		
@@ -41,7 +42,7 @@ public class BenchClient extends AbstractClient {
 			if (reqCount + 1 == requestList.size()) {
 				try {
 					System.out.println("I quit");
-					double ms = (double)(System.nanoTime() - startTime)/1000000.0;
+					double ms = (double)(System.nanoTime() - startTime)/1000000000.0;
 					logWriter.write(String.valueOf(ms));
 					logWriter.newLine();
 					logWriter.flush();
@@ -68,12 +69,13 @@ public class BenchClient extends AbstractClient {
 		}
 	}
 
-	public BenchClient(int port, String ip, BufferedWriter logWriter) throws IOException {
+	public BenchClient(int port, String ip, BufferedWriter logWriter, int totalRequests) throws IOException {
 		super(port, ip);
 		gatherRequests();
 		this.reqCount = 0;
 		this.startTime = 0;
 		this.logWriter = logWriter;
+		this.totalRequests = totalRequests;
 	}
 	
 	public void gatherRequests() {
@@ -82,7 +84,7 @@ public class BenchClient extends AbstractClient {
 				new RequestType[] {
 						RequestType.SEND_MESSAGE
 						},
-				1000
+				totalRequests
 				);
 	}
 	
