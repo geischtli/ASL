@@ -28,7 +28,7 @@ public class BenchClientMain {
 		
 		int numClients = Integer.parseInt(args[0]);
 		int numRequests = Integer.parseInt(args[1]);
-		System.out.println("Will run " + numClients + " clients");
+		System.out.println("Will run " + numClients + " clients with each sending " + numRequests + " requests");
 		
 		for (int i = 0; i < numClients; i++) {
 			try {
