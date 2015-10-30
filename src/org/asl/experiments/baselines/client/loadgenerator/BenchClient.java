@@ -71,11 +71,11 @@ public class BenchClient extends AbstractClient {
 
 	public BenchClient(int port, String ip, BufferedWriter logWriter, int totalRequests) throws IOException {
 		super(port, ip);
-		gatherRequests();
 		this.reqCount = 0;
 		this.startTime = 0;
 		this.logWriter = logWriter;
 		this.totalRequests = totalRequests;
+		gatherRequests();
 	}
 	
 	public void gatherRequests() {
@@ -90,9 +90,9 @@ public class BenchClient extends AbstractClient {
 	
 	@Override
 	public void run() {
-		startTime = System.nanoTime();
 		sc = SocketHelper.openSocket();
 		try {
+			startTime = System.nanoTime();
 			sc.connect(new InetSocketAddress(InetAddress.getByName(AbstractClient.ip), AbstractClient.port), null,
 					new CompletionHandler<Void, Object>() {
 
