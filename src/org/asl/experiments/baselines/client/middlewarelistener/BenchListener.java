@@ -62,7 +62,7 @@ public class BenchListener {
 	}
 	
 	public void go() {
-		System.out.println("Server started");
+		System.out.println("Server started!");
 		serverChannel.accept(null, new AcceptCompletionHandler());
 	}
 	
