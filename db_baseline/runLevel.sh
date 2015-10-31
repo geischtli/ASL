@@ -41,6 +41,10 @@ while [  $CURR_DB_CONNECTIONS -le $END_DB_CONNECTIONS ]; do
 					# to be sure that the random file execution doesn't kill us by choosing the removal
 					# file a lot in the beginning we initially fill the database with 1000 entries when setting up
 					# the system.
+					
+					# first init db with normal functionalities for sending and removing
+					/home/ec2-user/postgres/bin/psql -U postgres -d mydb -f ../db_setup/initDatabase.sql -q
+					
 					CLIENT=1
 					while [ $CLIENT -le 1 ]; do
 						/home/ec2-user/postgres/bin/psql -U postgres -d mydb -q -c 'SELECT * FROM register_client(1);' >/dev/null
