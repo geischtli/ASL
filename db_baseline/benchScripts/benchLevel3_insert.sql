@@ -1,9 +1,14 @@
 -- used for bench level3
 -- insert 1000 rows, all for client = receiver = queue = 1
+DECLARE
+	cnt INTEGER;
 BEGIN
-	DECLARE @cnt INT = 0
-	WHILE @cnt < 1000
-	BEGIN
+	cnt = 0;
+	LOOP
 		SELECT * FROM send_message(1, 1, 1, 'abcdhjels0abcdhjels0abcdhjels0abcdhjels0abcdhjels0abcdhjels0abcdhjels0abcdhjels0abcdhjels0abcdhjels0abcdhjels0abcdhjels0abcdhjels0abcdhjels0abcdhjels0abcdhjels0abcdhjels0abcdhjels0abcdhjels0abcdhjels0');
-	END;
+		cnt = cnt + 1;
+		IF cnt == 100 THEN
+			EXIT;
+		END IF;
+	END LOOP;
 END;
