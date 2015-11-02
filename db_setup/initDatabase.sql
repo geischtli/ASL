@@ -60,12 +60,12 @@ $$ LANGUAGE plpgsql;
 
 CREATE OR REPLACE FUNCTION get_queues_for_client(client_receiver INTEGER)
 	RETURNS SETOF INTEGER AS $$
-	SELECT DISTINCT QUEUE FROM MESSAGE WHERE RECEIVER = client_receiver;
+	SELECT DISTINCT QUEUE FROM MESSAGE WHERE (RECEIVER = client_receiver OR RECEIVER = 0);
 $$ LANGUAGE sql STABLE;
 
 CREATE OR REPLACE FUNCTION read_all_messages_of_queue(receiver_id INTEGER, queue_id INTEGER)
 	RETURNS SETOF MESSAGE AS $$
-	SELECT * FROM MESSAGE WHERE RECEIVER = receiver_id AND QUEUE = queue_id;
+	SELECT * FROM MESSAGE WHERE (RECEIVER = receiver_id OR RECEIVER = 0) AND QUEUE = queue_id;
 $$ LANGUAGE sql STABLE;
 
 -- probably also possible in plain sql withouth the NULL-stuff, but dont know about the result in the java, need to test
@@ -74,7 +74,7 @@ CREATE OR REPLACE FUNCTION read_message_from_sender(sender_id INTEGER, receiver_
 DECLARE
 	read_message MESSAGE;
 BEGIN
-	SELECT * FROM MESSAGE WHERE RECEIVER = receiver_id AND SENDER = sender_id LIMIT 1 INTO read_message;
+	SELECT * FROM MESSAGE WHERE (RECEIVER = receiver_id OR RECEIVER = 0) AND SENDER = sender_id ORDER BY ARRIVALTIME DESC LIMIT 1 INTO read_message;
 	IF NOT FOUND THEN
 		RETURN NULL;
 	ELSE
@@ -88,7 +88,7 @@ CREATE OR REPLACE FUNCTION remove_top_message_from_queue(receiver_id INTEGER, qu
 DECLARE
 	removed_message MESSAGE;
 BEGIN
-	DELETE FROM MESSAGE WHERE ctid IN (SELECT ctid FROM MESSAGE WHERE RECEIVER = receiver_id AND QUEUE = queue_id LIMIT 1) RETURNING * INTO removed_message;
+	DELETE FROM MESSAGE WHERE ctid IN (SELECT ctid FROM MESSAGE WHERE (RECEIVER = receiver_id OR RECEIVER = 0) AND QUEUE = queue_id ORDER BY ARRIVALTIME DESC LIMIT 1) RETURNING * INTO removed_message;
 	IF NOT FOUND THEN
 		RETURN NULL;
 	ELSE
@@ -153,5 +153,12 @@ CREATE TRIGGER take_stamp_trigger BEFORE INSERT ON MESSAGE
 	FOR EACH ROW EXECUTE PROCEDURE take_stamp();
 
 -- INDICES
--- create the index, for explanations see in thougths on index.txt
-CREATE INDEX msg_rcv_q_idx ON MESSAGE (RECEIVER, QUEUE);
+-- create the indices, for explanations see in thougths on index.txt
+CREATE INDEX msg_rcvr_q_idx ON MESSAGE (RECEIVER, QUEUE);
+CREATE INDEX msg_sndr_idx ON MESSAGE (SENDER);
+
+-- Postproduction
+-- Here we insert a ghost-client. It has ID=0 and is registered at middleware 0,
+-- which does not exist in the system. The use of this client is to guarantee, that
+-- when a message is meant as broadcoast (receiver = 0) the foreign key holds.
+INSERT INTO CLIENT (ID, ON_MIDDLEWARE) VALUES (0, 0);

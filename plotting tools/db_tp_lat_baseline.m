@@ -1,7 +1,7 @@
 clear variables
 
 basedir = '..\..\..\ASL_LOGS\summary_db_1_60_DB_CONNS_NO_DATA\';
-levels = char('level0\', 'level1\', 'level2NIND\', 'level2WIND\');
+levels = char('level0\', 'level1\', 'level2WIND\', 'level2NIND\');
 factors = [1 1 5 5];
 colors = [0 0 1; 0 1 0; 1 0.5 0; 1 0 0];
 
@@ -47,10 +47,10 @@ for level = numLevels:-1:1
 end
 
 % add legend and plot description
-title('Database Throughput under different configurations and query sets')
+title('Database Throughput under different query sets')
 xlabel('Number of concurrent clients')
 ylabel('Number of SQL-statements per second')
-legend('Level 2 with index', 'Level 2 no index', 'Level 1', 'Level 0', ...
+legend('Level 2 no index', 'Level 2 with index', 'Level 1', 'Level 0', ...
     'Location', 'northwest')
 %modify xticks because its too messy with standard distribution
 labels = char('1', '', '', '', '5', '', '', '', '', ...
@@ -70,15 +70,18 @@ hold on
 % remember how many medians were there before
 oldNumMedians = 0;
 
-for level = numLevels:-1:1
+for level = 1:numLevels
     currLevel = levels(level, :);
     % read the files of the current level
+    tp = dlmread(strcat(strcat(basedir, currLevel), 'tp_summary.log'));
     lat = dlmread(strcat(strcat(basedir, currLevel), 'lat_summary.log'));
     idx = dlmread(strcat(strcat(basedir, currLevel), 'idx_summary.log'));
-    % apply factor to latency
-    lat = lat / factors(level);
+    % apply factor to throughput
+    tp = tp * factors(level);
+    % get the actual latency
+    eff_lat = lat./tp;
     % plot the data
-    boxplot(lat, idx)
+    boxplot(eff_lat, idx)
     % now add the 50% quantile line
     medians = findobj(gca,'tag','Median');
     numMedians = length(medians);
@@ -90,7 +93,7 @@ for level = numLevels:-1:1
         currMedian = medians(j);
         yt = currMedian.YData;
         yyt = mean(yt);
-        if yyt ~= 0
+        if ~isnan(yyt)
             ys(medianCounter) = yyt;
             xt = currMedian.XData;
             xs(medianCounter) = mean(xt);
@@ -102,10 +105,10 @@ for level = numLevels:-1:1
 end
 
 % add legend and plot description
-title('Database Latency under different configurations and query sets')
+title('CB Latency under different query sets')
 xlabel('Number of concurrent clients')
-ylabel('Number of SQL-statements per second')
-legend('Level 2 with index', 'Level 2 no index', 'Level 1', 'Level 0', ...
+ylabel('Average latency per SQL-statement (microseconds)')
+legend('Level 0', 'Level 1', 'Level 2 with index', 'Level 2 no index', ...
     'Location', 'northwest')
 %modify xticks because its too messy with standard distribution
 labels = char('1', '', '', '', '5', '', '', '', '', ...

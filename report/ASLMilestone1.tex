@@ -1,6 +1,7 @@
 \documentclass[11pt]{article}
 \usepackage[a4paper, portrait, margin=1in]{geometry}
 \usepackage{graphicx}
+\usepackage{listings}
 
 
 \begin{document}
@@ -64,12 +65,54 @@ The database schema was chosen in such a way, that it provides all required func
 	\item \textbf{Client}: Guarantees through the serial datatype that each client in the whole system has a unique ID and stores which client is registered on which middleware. This can be handy when wanting an even distribution of clients over all middlewares.
 	\item \textbf{Queue}: Stores all queues created by clients. Also ensures that all queues are unique.
 	\item \textbf{Middleware}: A sequence which is used to get a unique ID for each middleware joining the system.
-	\item \textbf{Message}: Here, all messages sent by clients are stored. The foreign keys ensure that we only get messages from valid clients registered in the system. As one can see, the content column is of type text, despite the choice of varchar(200) or varchar(2000) may be more obvious with respect to the system requirements. But choice was made intentionally and is explained in section \ref{sec:design-decisions}.
+	\item \textbf{Message}: Here, all messages sent by clients are stored. The foreign keys ensure that we only get messages from valid clients registered in the system. As one can see, the content column is of type text, despite the choice of varchar(200) or varchar(2000) may be more obvious with respect to the system requirements. Find my thoughts about this choice in section \ref{sec:design-decisions}.
 \end{itemize}
+To speed up the data access I used the two following indices:
+\begin{lstlisting}[language=SQL,basicstyle=\small]
+(a) INDEX msg_rcvr_q_idx ON MESSAGE (RECEIVER, QUEUE);
+(b) CREATE INDEX msg_sndr_idx ON MESSAGE (SENDER);
+\end{lstlisting}
+The reasoning behind the choice of them is based on the following thoughts. The indices in a database system affect search time, i.e. filtering of rows with respect to a criterion. Since the whole system is built with predefined stored procedures (find a full list in section \ref{sec:stored-procedures}) we know exactly what these filter parameters will be. To simplify the view, only the most relevant parts of the queries are shown (query they belong to in brackets):
+\begin{lstlisting}[language=SQL,basicstyle=\small,escapeinside={(*@}{@*)}]
+(1) WHERE RECEIVER (*@(get\_queues\_for\_client)@*)
+(2) WHERE RECEIVER AND QUEUE (*@(read\_all\_messages\_of\_queue)@*)
+(3) WHERE RECEIVER AND QUEUE ORDER BY ARRIVALTIME (*@(remove\_top\_message\_from\_queue)@*)
+(4) WHERE RECEIVER AND SENDER ORDER BY ARRIVALTIME (*@(read\_message\_from\_sender)@*)
+\end{lstlisting}
+Since an index on two columns (c1, c2) is also an index onto c1, we can see that the index (a) already covers the WHERE clauses of (1)-(3). In addition with index (b) we get a full coverage of all queries having to filter some data. It is intentional that there is no index on the GROUP BY of ARRIVALTIME. Find more about the reasoning in section \ref{sec:design-decisions}.
+
 \subsubsection{Stored Procedures}\label{sec:stored-procedures}
+Every database access is done via a stored procedure. This allows to have a single point of failure, maintenance and control over functionality. Having this lone entry guarantees fast and reliable feature implementation and debugging. In Java the stored procedures are interfaced via Prepared Statments, which can be cached by the VM, such that only the dynamic parameter values have to get fetched, before a query can be executed. The following stored procedures are implemented:
+\begin{lstlisting}
+create_queue(creator_client INTEGER)
+delete_queue(queue_id INTEGER)
+register_client(on_middleware INTEGER)
+get_queues_for_client(client_receiver INTEGER)
+read_all_messages_of_queue(receiver_id INTEGER, queue_id INTEGER)
+read_message_from_sender(sender_id INTEGER, receiver_id INTEGER)
+remove_top_message_from_queue(receiver_id INTEGER, queue_id INTEGER)
+send_message(sender_id INTEGER,
+	receiver_id INTEGER, queue_id INTEGER, content TEXT)
+register_middleware()
+get_registered_clients()
+get_number_of_messages()
+get_registered_queues()
+take_stamp()
+\end{lstlisting}
 
 \subsubsection{Design decisions}\label{sec:design-decisions}
-
+The design aims to be simple, but yet complex enough to provide all necessary functionalities through a nice interface. Please find in the following lines the reasoning about some design decision I took while implementing the system:
+\begin{itemize}
+	\item \textbf{text vs varchar(n)}: First of all, all datatypes char(n), varchar(n), varchar and text are internally all converted to the same C data structure varlena. So from the performance perspective no (major) differences are measurable. Because I wanted to be flexible and send messages of length 200 and 2000 in the same setup I decided to go with the flexible variant text. Choosing varchar(2000) for every case is bad, because the unused space when inserting smaller strings will be filled with spaces and thus not give any performance advantages.
+	\item \textbf{Ghost-Client}: Since messages can also be addressed to all clients in the system, I introduced a ghost-client with an ID of 0, which gets created right at the database initialization. This ghost-client allows that instead of having RECEIVER=NULL, we have RECEIVER=0 for all broadcast messages, which is internally much easier to handle.
+	\item \textbf{Index on ARRIVALTIME}: Maintaining an index is not cheap for a database system, so it's wise to use them with caution. Because of that I decided that the indices (1) and (2) are already discarding enough rows, such that the sorting operation is not too costly anymore.
+	\item \textbf{ARRIVALTIME location}: The ARRIVALTIME is implemented as a trigger on the database. Another, also valid choice, would have been to let the client set it. But because I wanted to minimize the work of the clients and guarantee a unique timestamp on each message I did choose the trigger-option.
+\end{itemize}
+receiver = 0
+content = text and not varchar
+no index on group by of arrivaltime
+1 main table -> no update, only simple insert/delete queries
+trigger/arrivaltime on db and not on client side
 \subsubsection{Performance characteristics}\label{sec:performance-characteristics}
 
 \subsection{Middleware}\label{sec:middleware}
