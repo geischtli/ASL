@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (MiKTeX 2.9) (preloaded format=pdflatex 2015.10.13)  2 NOV 2015 18:33
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (MiKTeX 2.9) (preloaded format=pdflatex 2015.10.13)  2 NOV 2015 23:15
 entering extended mode
 **ASLMilestone1.tex
 (ASLMilestone1.tex
@@ -272,7 +272,7 @@ d-to.pdf>
 (epstopdf)                    size: 30026 bytes
 (epstopdf)             Command: <epstopdf --outfile=figures/database/levels0_2_
 tp-eps-converted-to.pdf figures/database/levels0_2_tp.eps>
-(epstopdf)             \includegraphics on input line 162.
+(epstopdf)             \includegraphics on input line 161.
 Package epstopdf Info: Output file is already uptodate.
 
 <figures/database/levels0_2_tp-eps-converted-to.pdf, id=21, 421.575pt x 316.181
@@ -281,7 +281,7 @@ File: figures/database/levels0_2_tp-eps-converted-to.pdf Graphic file (type pdf
 )
  <use figures/database/levels0_2_tp-eps-converted-to.pdf>
 Package pdftex.def Info: figures/database/levels0_2_tp-eps-converted-to.pdf use
-d on input line 162.
+d on input line 161.
 (pdftex.def)             Requested size: 249.13371pt x 186.85408pt.
 Package epstopdf Info: Source file: <figures/database/levels0_2_lat.eps>
 (epstopdf)                    date: 2015-11-02 18:12:09
@@ -292,7 +292,7 @@ ed-to.pdf>
 (epstopdf)                    size: 28981 bytes
 (epstopdf)             Command: <epstopdf --outfile=figures/database/levels0_2_
 lat-eps-converted-to.pdf figures/database/levels0_2_lat.eps>
-(epstopdf)             \includegraphics on input line 162.
+(epstopdf)             \includegraphics on input line 161.
 Package epstopdf Info: Output file is already uptodate.
 
 <figures/database/levels0_2_lat-eps-converted-to.pdf, id=22, 421.575pt x 316.18
@@ -301,7 +301,7 @@ File: figures/database/levels0_2_lat-eps-converted-to.pdf Graphic file (type pd
 f)
  <use figures/database/levels0_2_lat-eps-converted-to.pdf>
 Package pdftex.def Info: figures/database/levels0_2_lat-eps-converted-to.pdf us
-ed on input line 162.
+ed on input line 161.
 (pdftex.def)             Requested size: 249.13371pt x 186.85408pt.
 Package epstopdf Info: Source file: <figures/database/levels0_2_tp.eps>
 (epstopdf)                    date: 2015-11-02 18:12:19
@@ -312,17 +312,17 @@ d-to.pdf>
 (epstopdf)                    size: 30026 bytes
 (epstopdf)             Command: <epstopdf --outfile=figures/database/levels0_2_
 tp-eps-converted-to.pdf figures/database/levels0_2_tp.eps>
-(epstopdf)             \includegraphics on input line 162.
+(epstopdf)             \includegraphics on input line 161.
 Package epstopdf Info: Output file is already uptodate.
 File: figures/database/levels0_2_tp-eps-converted-to.pdf Graphic file (type pdf
 )
 
 <use figures/database/levels0_2_tp-eps-converted-to.pdf>
 Package pdftex.def Info: figures/database/levels0_2_tp-eps-converted-to.pdf use
-d on input line 162.
+d on input line 161.
 (pdftex.def)             Requested size: 249.14522pt x 186.85408pt.
 
-Overfull \hbox (22.66127pt too wide) in paragraph at lines 162--162
+Overfull \hbox (22.66127pt too wide) in paragraph at lines 161--161
  [][] 
  []
 
@@ -335,42 +335,63 @@ ed-to.pdf>
 (epstopdf)                    size: 28981 bytes
 (epstopdf)             Command: <epstopdf --outfile=figures/database/levels0_2_
 lat-eps-converted-to.pdf figures/database/levels0_2_lat.eps>
-(epstopdf)             \includegraphics on input line 162.
+(epstopdf)             \includegraphics on input line 161.
 Package epstopdf Info: Output file is already uptodate.
 File: figures/database/levels0_2_lat-eps-converted-to.pdf Graphic file (type pd
 f)
 <use figures/database/levels0_2_lat-eps-converted-to.pdf>
 Package pdftex.def Info: figures/database/levels0_2_lat-eps-converted-to.pdf us
-ed on input line 162.
+ed on input line 161.
 (pdftex.def)             Requested size: 249.14522pt x 186.85408pt.
 
-Overfull \hbox (22.66127pt too wide) in paragraph at lines 162--162
+Overfull \hbox (22.66127pt too wide) in paragraph at lines 161--161
  [][] 
  []
 
-[4 <./figures/database/levels0_2_tp-eps-converted-to.pdf> <./figures/database/l
-evels0_2_lat-eps-converted-to.pdf>] [5] [6] (ASLMilestone1.aux) ) 
+Package epstopdf Info: Source file: <figures/database/data_baseline.eps>
+(epstopdf)                    date: 2015-11-02 22:38:47
+(epstopdf)                    size: 771827 bytes
+(epstopdf)             Output file: <figures/database/data_baseline-eps-convert
+ed-to.pdf>
+(epstopdf)                    date: 2015-11-02 22:38:52
+(epstopdf)                    size: 33283 bytes
+(epstopdf)             Command: <epstopdf --outfile=figures/database/data_basel
+ine-eps-converted-to.pdf figures/database/data_baseline.eps>
+(epstopdf)             \includegraphics on input line 168.
+Package epstopdf Info: Output file is already uptodate.
+
+<figures/database/data_baseline-eps-converted-to.pdf, id=23, 421.575pt x 316.18
+124pt>
+File: figures/database/data_baseline-eps-converted-to.pdf Graphic file (type pd
+f)
+ <use figures/database/data_baseline-eps-converted-to.pdf>
+Package pdftex.def Info: figures/database/data_baseline-eps-converted-to.pdf us
+ed on input line 168.
+(pdftex.def)             Requested size: 317.07614pt x 237.81078pt.
+ [4 <./figures/database/levels0_2_tp-eps-converted-to.pdf> <./figures/database/
+levels0_2_lat-eps-converted-to.pdf>] [5 <./figures/database/data_baseline-eps-c
+onverted-to.pdf>] [6] [7] (ASLMilestone1.aux) ) 
 Here is how much of TeX's memory you used:
- 4578 strings out of 493673
- 70701 string characters out of 3141526
- 159959 words of memory out of 3000000
- 7892 multiletter control sequences out of 15000+200000
+ 4595 strings out of 493673
+ 71010 string characters out of 3141526
+ 160006 words of memory out of 3000000
+ 7897 multiletter control sequences out of 15000+200000
  9453 words of font info for 33 fonts, out of 3000000 for 9000
  1025 hyphenation exceptions out of 8191
- 42i,7n,43p,1131b,1506s stack positions out of 5000i,500n,10000p,200000b,50000s
-<C:/Program Fi
-les (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmbx10.pfb><C:/Program File
-s (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmbx12.pfb><C:/Program Files 
-(x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi8.pfb><C:/Program Files (x8
-6)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr10.pfb><C:/Program Files (x86)/
-MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr12.pfb><C:/Program Files (x86)/MiK
-TeX 2.9/fonts/type1/public/amsfonts/cm/cmr17.pfb><C:/Program Files (x86)/MiKTeX
- 2.9/fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/Program Files (x86)/MiKTeX 2
-.9/fonts/type1/public/amsfonts/cm/cmti10.pfb><C:/Program Files (x86)/MiKTeX 2.9
-/fonts/type1/public/amsfonts/cm/cmti12.pfb>
-Output written on ASLMilestone1.pdf (6 pages, 222594 bytes).
+ 42i,8n,43p,1315b,1506s stack positions out of 5000i,500n,10000p,200000b,50000s
+<C:/Program Files (x86)/MiKTeX 2
+.9/fonts/type1/public/amsfonts/cm/cmbx10.pfb><C:/Program Files (x86)/MiKTeX 2.9
+/fonts/type1/public/amsfonts/cm/cmbx12.pfb><C:/Program Files (x86)/MiKTeX 2.9/f
+onts/type1/public/amsfonts/cm/cmmi8.pfb><C:/Program Files (x86)/MiKTeX 2.9/font
+s/type1/public/amsfonts/cm/cmr10.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/t
+ype1/public/amsfonts/cm/cmr12.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type
+1/public/amsfonts/cm/cmr17.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/p
+ublic/amsfonts/cm/cmsy10.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/pub
+lic/amsfonts/cm/cmti10.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/publi
+c/amsfonts/cm/cmti12.pfb>
+Output written on ASLMilestone1.pdf (7 pages, 257787 bytes).
 PDF statistics:
- 74 PDF objects out of 1000 (max. 8388607)
+ 84 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
- 16 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 21 words of extra memory for PDF output out of 10000 (max. 10000000)
 

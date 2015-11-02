@@ -22,19 +22,16 @@ public class ClientParser {
 	private static File dir;
 	
 	public static void main(String[] args) {
-		int level = 2;
-		String basedir = "C:\\Users\\Sandro\\Documents\\ASL_LOGS\\DB_BASELINE 31-60 DB CONNS\\";
-		dir = new File(basedir + "level" + String.valueOf(level) + "WIND");
+		String basedir = "C:\\Users\\Sandro\\Documents\\ASL_LOGS\\level2_500K_200_5INCR_1_60\\";
+		dir = new File(basedir);
 		File[] logFiles = dir.listFiles();
-		tpFile = new File(basedir + "summaries\\level" + String.valueOf(level)  + "WIND" + "\\tp_summary.log");
-		latFile = new File(basedir + "summaries\\level" + String.valueOf(level) + "WIND" + "\\lat_summary.log");
-		idxFile = new File(basedir + "summaries\\level" + String.valueOf(level) + "WIND" + "\\idx_summary.log");
+		tpFile = new File(basedir + "summaries\\" + "\\tp_summary.log");
+		latFile = new File(basedir + "summaries\\" + "\\lat_summary.log");
+		idxFile = new File(basedir + "summaries\\" + "\\idx_summary.log");
 		int maxDBConnections = 60; 
-		int startIndex = 2;
-		//int numClientFiles = maxDBConnections*(maxDBConnections + 1)/2;
-		int numClientFiles = 406;
+		int startIndex = 3;
 		int fileIndex = 0;
-		int currDBConnections = 31;
+		int currDBConnections = 1;
 		try {
 			tpWriter = new BufferedWriter(new FileWriter(tpFile));
 			latWriter = new BufferedWriter(new FileWriter(latFile));
@@ -92,7 +89,7 @@ public class ClientParser {
 	 				idxWriter.write(String.valueOf(currDBConnections));
 	 				idxWriter.newLine();
 	 			}
-		 		currDBConnections++;
+		 		currDBConnections += 5;
 			}
 			tpWriter.close();
 			latWriter.close();

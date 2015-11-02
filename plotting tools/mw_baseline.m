@@ -5,6 +5,10 @@ tpData = [];
 tpIdx = [];
 rttData = [];
 rttIdx = [];
+q75 = [];
+q90 = [];
+q95 = [];
+q99 = [];
 for i = 10:10:100
     filename = strcat('C:\Users\Sandro\Documents\ASL_LOGS\mw_baseline\mw_baseline_', int2str(i));
     rtt = dlmread(strcat(filename, 'C\rtt.log'));
@@ -28,7 +32,10 @@ for i = 10:10:100
     end
     rttData((end+1):(end+length(smoothRttData))) = smoothRttData;
     rttIdx((end+1):(end+length(smoothRttData))) = i;
-    %rtmean(j) = mean(rttData);
+    q75 = [q75; quantile(smoothRttData, 0.75)];
+    q90 = [q90; quantile(smoothRttData, 0.90)];
+    q95 = [q95; quantile(smoothRttData, 0.95)];
+    q99 = [q99; quantile(smoothRttData, 0.99)];
     
     tp = dlmread(strcat(filename, 'C\throughput.log'));
     fnnz = find(tp);
@@ -37,14 +44,3 @@ for i = 10:10:100
     tpIdx((end+1):(end+31)) = i;
     j = j + 1;
 end
-
-boxplot(rttData/1000000, rttIdx)
-xlabel('Number of concurrent Clients')
-ylabel('RoundtripTime (only within-middleware) (ms)')
-h = gca;
-set(h, 'YScale', 'log')
-
-figure()
-boxplot(tpData, tpIdx)
-xlabel('Number of concurrent Clients')
-ylabel('Throughput (Requests per second)')
