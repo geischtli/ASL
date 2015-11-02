@@ -47,10 +47,10 @@ for level = numLevels:-1:1
 end
 
 % add legend and plot description
-title('Database Throughput under different query sets')
+title('DB Throughput under different query sets')
 xlabel('Number of concurrent clients')
 ylabel('Number of SQL-statements per second')
-legend('Level 2 no index', 'Level 2 with index', 'Level 1', 'Level 0', ...
+legend('Level 2 no index', 'Level 2 with indices', 'Level 1', 'Level 0', ...
     'Location', 'northwest')
 %modify xticks because its too messy with standard distribution
 labels = char('1', '', '', '', '5', '', '', '', '', ...
@@ -105,10 +105,10 @@ for level = 1:numLevels
 end
 
 % add legend and plot description
-title('CB Latency under different query sets')
+title('DB Latency under different query sets')
 xlabel('Number of concurrent clients')
 ylabel('Average latency per SQL-statement (microseconds)')
-legend('Level 0', 'Level 1', 'Level 2 with index', 'Level 2 no index', ...
+legend('Level 0', 'Level 1', 'Level 2 with indices', 'Level 2 no index', ...
     'Location', 'northwest')
 %modify xticks because its too messy with standard distribution
 labels = char('1', '', '', '', '5', '', '', '', '', ...

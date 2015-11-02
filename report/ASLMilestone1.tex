@@ -2,9 +2,55 @@
 \usepackage[a4paper, portrait, margin=1in]{geometry}
 \usepackage{graphicx}
 \usepackage{listings}
-
+\usepackage{epstopdf}
+\usepackage{caption}
 
 \begin{document}
+
+\newsavebox\IBoxA \newsavebox\IBoxB \newsavebox\IBoxC \newlength\IHeight
+\newcommand\TriFig[9]{% Image1 Caption1 Label1 Image2 ...
+	\sbox\IBoxA{\includegraphics[width=0.32\textwidth]{#1}}
+	\sbox\IBoxB{\includegraphics[width=0.32\textwidth]{#4}}
+	\sbox\IBoxC{\includegraphics[width=0.32\textwidth]{#7}}%
+	\ifdim\ht\IBoxA>\ht\IBoxB
+	\setlength\IHeight{\ht\IBoxB}\else\setlength\IHeight{\ht\IBoxA}\fi%
+	\ifdim\ht\IBoxA>\ht\IBoxC
+	\setlength\IHeight{\ht\IBoxC}\else\setlength\IHeight{\ht\IBoxA}\fi%
+	\ifdim\ht\IBoxB>\ht\IBoxC
+	\setlength\IHeight{\ht\IBoxC}\else\setlength\IHeight{\ht\IBoxB}\fi%  
+	\begin{figure}[!htb]
+		\minipage[t]{0.32\textwidth}\centering
+		\includegraphics[height=\IHeight]{#1}
+		\caption{#2}\label{#3}
+		\endminipage\hfill
+		\minipage[t]{0.32\textwidth}\centering
+		\includegraphics[height=\IHeight]{#4}
+		\caption{#5}\label{#6}
+		\endminipage\hfill
+		\minipage[t]{0.32\textwidth}\centering
+		\includegraphics[height=\IHeight]{#7}
+		\caption{#8}\label{#9}
+		\endminipage
+	\end{figure}%
+}
+
+\newcommand\TwoFig[6]{% Image1 Caption1 Label1 Image2 ...
+	\sbox\IBoxA{\includegraphics[width=0.55\textwidth]{#1}}
+	\sbox\IBoxB{\includegraphics[width=0.55\textwidth]{#4}}%
+	\ifdim\ht\IBoxA>\ht\IBoxB
+	\setlength\IHeight{\ht\IBoxB}\else\setlength\IHeight{\ht\IBoxA}\fi%
+	\begin{figure}[!htb]
+		\minipage[t]{0.5\textwidth}\centering
+		\includegraphics[height=\IHeight]{#1}
+		\caption*{#2}\label{#3}
+		\endminipage \hfill
+		\minipage[t]{0.5\textwidth}\centering
+		\includegraphics[height=\IHeight]{#4}
+		\caption*{#5}\label{#6}
+		\endminipage
+	\end{figure}%
+}
+
 
 \title{Advanced Systems Lab (Fall'15) -- First
 Milestone}
@@ -108,12 +154,12 @@ The design aims to be simple, but yet complex enough to provide all necessary fu
 	\item \textbf{Index on ARRIVALTIME}: Maintaining an index is not cheap for a database system, so it's wise to use them with caution. Because of that I decided that the indices (1) and (2) are already discarding enough rows, such that the sorting operation is not too costly anymore.
 	\item \textbf{ARRIVALTIME location}: The ARRIVALTIME is implemented as a trigger on the database. Another, also valid choice, would have been to let the client set it. But because I wanted to minimize the work of the clients and guarantee a unique timestamp on each message I did choose the trigger-option.
 \end{itemize}
-receiver = 0
-content = text and not varchar
-no index on group by of arrivaltime
-1 main table -> no update, only simple insert/delete queries
-trigger/arrivaltime on db and not on client side
+
 \subsubsection{Performance characteristics}\label{sec:performance-characteristics}
+To measure the performance of the database I used the postgresql tool pgbench. For the machine details, please refer to section \ref{sec:system-configurations}. I defined three levels of difficulty, which correspond to different query sets, level 0 beeing the easiest, level 2 the hardest. This allows us to get a smooth transition from absolute best to real-world behaviour. For a detailed insight into the levels, please find them in /db\_baseline/benchScripts. Before running the presented experiment I tested how many clients per database connection are optimal. I expected that the relation of 1:1 should hold, which indeed was the case. For the throughput and latency I expect the knee to be found around 16 clients, because we work with a machina that provides 8 physical cores and thus 16 hyperthreads. Of course the throughput level ranking from hightest to lowest should be: 0, 1, 2+, 2- (+/- for with or without indices), and vice-versa with the latency. After the knee there should at least be a visible stagnation of the throughput, but a remarkable increase of latency.
+
+\TwoFig {figures/database/levels0_2_tp.eps} {} {fig:tp}
+		{figures/database/levels0_2_lat.eps} {} {fig:lat}
 
 \subsection{Middleware}\label{sec:middleware}
 
