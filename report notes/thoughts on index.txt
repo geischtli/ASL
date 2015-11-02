@@ -10,7 +10,7 @@ On MESSAGE
 
 RECEIVER
 RECEIVER		|	QUEUE
-SENDER		|	RECEIVER
+RECEIVER		|	SENDER
 RECEIVER		|	QUEUE
 
 we use only 1 index on message working on receiver and queue

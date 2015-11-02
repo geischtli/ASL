@@ -1,6 +1,6 @@
 \documentclass[11pt]{article}
 \usepackage[a4paper, portrait, margin=1in]{geometry}
-
+\usepackage{graphicx}
 
 
 \begin{document}
@@ -53,7 +53,19 @@ Include baseline performance characteristics of the database (max
 throughput, response time, and scalability).
 
 \subsubsection{Schema and Indexes}\label{sec:schema-and-indexes}
-
+\begin{figure}[!ht]
+\centering
+\includegraphics[width=0.7\linewidth]{figures/database/db_schema}
+\caption{The Database Schema}
+\label{fig:db_schema}
+\end{figure}
+The database schema was chosen in such a way, that it provides all required functionality, but is still easy to setup and maintain. The following lines shortly illuminate the tables and their column types.
+\begin{itemize}
+	\item \textbf{Client}: Guarantees through the serial datatype that each client in the whole system has a unique ID and stores which client is registered on which middleware. This can be handy when wanting an even distribution of clients over all middlewares.
+	\item \textbf{Queue}: Stores all queues created by clients. Also ensures that all queues are unique.
+	\item \textbf{Middleware}: A sequence which is used to get a unique ID for each middleware joining the system.
+	\item \textbf{Message}: Here, all messages sent by clients are stored. The foreign keys ensure that we only get messages from valid clients registered in the system. As one can see, the content column is of type text, despite the choice of varchar(200) or varchar(2000) may be more obvious with respect to the system requirements. But choice was made intentionally and is explained in section \ref{sec:design-decisions}.
+\end{itemize}
 \subsubsection{Stored Procedures}\label{sec:stored-procedures}
 
 \subsubsection{Design decisions}\label{sec:design-decisions}

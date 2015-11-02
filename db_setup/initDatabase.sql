@@ -74,7 +74,7 @@ CREATE OR REPLACE FUNCTION read_message_from_sender(sender_id INTEGER, receiver_
 DECLARE
 	read_message MESSAGE;
 BEGIN
-	SELECT * FROM MESSAGE WHERE SENDER = sender_id AND RECEIVER = receiver_id LIMIT 1 INTO read_message;
+	SELECT * FROM MESSAGE WHERE RECEIVER = receiver_id AND SENDER = sender_id LIMIT 1 INTO read_message;
 	IF NOT FOUND THEN
 		RETURN NULL;
 	ELSE
