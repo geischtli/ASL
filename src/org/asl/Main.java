@@ -12,12 +12,9 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 import org.asl.client.VirtualClient;
-import org.asl.client.management.ASLAnimator;
 import org.asl.common.propertyparser.PropertyKey;
 import org.asl.common.propertyparser.PropertyParser;
 import org.asl.middleware.Middleware;
-
-import javafx.application.Application;
 
 public class Main {
 
@@ -55,7 +52,7 @@ public class Main {
 				);
 		int numClients = 100;
 		
-		checkManagement(args, threadpool, mwPort, mwIp);
+		//checkManagement(args, threadpool, mwPort, mwIp);
 		
 		for (int i = 0; i < numClients; i++) {
 			try {
@@ -81,13 +78,13 @@ public class Main {
 		}
 	}
 	
-	private static void checkManagement(String[] args, ExecutorService threadpool, int port, String ip) {
+	/*private static void checkManagement(String[] args, ExecutorService threadpool, int port, String ip) {
 		for (String s : args){
 			if (s.equals("admin")) {
 				String[] portArg = {String.valueOf(port), ip};
 				Application.launch(ASLAnimator.class, portArg);
 			}
 		}
-	}
+	}*/
 
 }
