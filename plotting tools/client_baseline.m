@@ -40,8 +40,8 @@ for k = 1:2
         end
         % effective number of considered seconds
         numEffectiveRows = maxSecondsIdx - minSecondsIdx + 1;
-        % take the average of all client-seperate sums
-        secondsData = secondsData / numEffectiveRows;
+        % take the average of all client-seperate sums ONLY IN THE TIMINGS!
+        secondsData(2:3) = secondsData(2:3) / numEffectiveRows;
         % fill the vectors
         % this data all belongs to the 2^i testset
         indices(end+1:(end+numEffectiveRows), :) = numClients;

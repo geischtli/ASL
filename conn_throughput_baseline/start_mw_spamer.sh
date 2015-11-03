@@ -5,4 +5,4 @@
 # we send exactly 500*1024*1024 bytes.
 
 # $1 = IP of target machine
-dd if=/dev/zero bs=500M count=1| nc -v $1 9090
+dd if=/dev/zero bs=5000M count=1| nc -v $1 9090
