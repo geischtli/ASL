@@ -9,11 +9,11 @@ q75 = [];
 q90 = [];
 q95 = [];
 q99 = [];
-for i = 10:10:70
-    filename = strcat('C:\Users\Sandro\Documents\ASL_LOGS\mw_baseline_fixed\mw_baseline_', int2str(i));
+for i = 10:10:100
+    filename = strcat('C:\Users\Sandro\Documents\ASL_LOGS\mw_baseline_fixed_2ClientMachines\mw_baseline_', int2str(i));
     rtt = dlmread(strcat(filename, 'C\rtt.log'));
     % dont read the first 100k inserts
-    currRtt = rtt(100001:end);
+    currRtt = rtt(100001:end-100000);
     % we have to smooth it here, because there is too much data oO
     len = length(currRtt);
     ptr = 1;
