@@ -46,16 +46,20 @@ xlabel('Number of concurrent Clients')
 ylabel('Throughput (Requests per second)')
 title('Middleware throughput behaviour')
 
-% medians = findobj(gca,'tag','Median');
-% numMedians = length(medians);
-% xs = zeros(numMedians, 1);
-% ys = zeros(numMedians, 1);
-% for i = 1:numMedians
-%     currMedian = medians(i);
-%     xt = currMedian.XData;
-%     xs(i) = mean(xt);
-%     yt = currMedian.YData;
-%     ys(i) = mean(yt);
-% end
-% plot(xs, ys, 'color', 'blue', 'linewidth', 2)
-% legend('50% quantile', 'Location', 'northwest')
+medians = findobj(gca,'tag','Median');
+numMedians = length(medians)/2;
+colors = ['g', 'b'];
+for i = 1:2
+    currMedians = medians(((i-1)*numMedians + 1):(i*numMedians));
+    xs = zeros(numMedians, 1);
+    ys = zeros(numMedians, 1);
+    for j = 1:numMedians
+        currMedian = currMedians(j);
+        xt = currMedian.XData;
+        xs(j) = mean(xt);
+        yt = currMedian.YData;
+        ys(j) = mean(yt);
+    end
+    plot(xs, ys, 'color', colors(i), 'linewidth', 2)
+end
+legend('50% quantile 2CM', '50% quantile 1CM', 'Location', 'northwest')
