@@ -9,7 +9,7 @@ q75 = [];
 q90 = [];
 q95 = [];
 q99 = [];
-for i = 10:10:100
+for i = 10:10:70
     filename = strcat('C:\Users\Sandro\Documents\ASL_LOGS\mw_baseline_fixed\mw_baseline_', int2str(i));
     rtt = dlmread(strcat(filename, 'C\rtt.log'));
     % dont read the first 100k inserts
