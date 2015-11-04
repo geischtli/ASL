@@ -34,7 +34,8 @@ public class VirtualClient extends AbstractClient {
 						RequestType.SEND_MESSAGE,
 						RequestType.GET_QUEUES_WITH_MESSAGES_FOR_CLIENT,
 						RequestType.READ_ALL_MESSAGES_OF_QUEUE,
-						RequestType.READ_MESSAGE_FROM_SENDER
+						RequestType.READ_MESSAGE_FROM_SENDER,
+						RequestType.REMOVE_TOP_MESSAGE_FROM_QUEUE,
 						},
 				1000000
 				);

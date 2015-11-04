@@ -59,9 +59,9 @@ public class RemoveTopMessageFromQueueRequest extends Request {
 	@Override
 	public void processOnClient(ClientInfo ci) throws ASLException {
 		if (!getException().carriesError()) {
-			System.out.println("Client received message with content: " + message.getContent());
+			//System.out.println("Client received message with content: " + message.getContent());
 			// we don't know if this was the last message of the queue, we have to ask again for a list of queues
-			ci.setReadQueueId(0);
+			//ci.setReadQueueId(0);
 		} else {
 			throw getException();
 		}

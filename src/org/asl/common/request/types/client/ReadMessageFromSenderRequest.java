@@ -59,7 +59,7 @@ public class ReadMessageFromSenderRequest extends Request {
 	@Override
 	public void processOnClient(ClientInfo ci) throws ASLException {
 		if (!getException().carriesError()) {
-			System.out.println("System successfully received " + (message != null ? 1 : 0) + " messages");
+			//System.out.println("System successfully received " + (message != null ? 1 : 0) + " messages");
 		} else {
 			throw getException();
 		}

@@ -61,7 +61,7 @@ public class ReadAllMessagesOfQueueRequest extends Request {
 	@Override
 	public void processOnClient(ClientInfo ci) throws ASLException {
 		if (!getException().carriesError()) {
-			System.out.println("Successfully read " + messages.size() + " messages");
+			//System.out.println("Successfully read " + messages.size() + " messages");
 			/*System.out.println("Messages:");
 			for (int i = 0; i < messages.size(); i++) {
 				Message m = messages.get(i);

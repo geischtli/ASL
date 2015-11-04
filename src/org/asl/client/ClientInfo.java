@@ -179,7 +179,7 @@ public class ClientInfo {
 		try {
 			this.tpWriter = new BufferedWriter(new FileWriter("/home/ec2-user/ASL/client_baseline/client"
 					+ this.getClientId() + "tp.log", false));
-			this.tpWriter = new BufferedWriter(new FileWriter("/home/ec2-user/ASL/client_baseline/client"
+			this.rttWriter = new BufferedWriter(new FileWriter("/home/ec2-user/ASL/client_baseline/client"
 					+ this.getClientId() + "rtt.log", false));
 		} catch (IOException e) {
 			e.printStackTrace();
