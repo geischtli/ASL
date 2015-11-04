@@ -64,7 +64,7 @@ public class ClientInfo {
 		this.reqCount = 0;
 		this.reqPerSec = new AtomicInteger(0);
 		this.rttPerSec = new AtomicLong(0);
-		this.logTimer = new Timer();
+		this.logTimer = null;
 		initMyContent();
 	}
 	
@@ -178,18 +178,19 @@ public class ClientInfo {
 		myTimeLogger = TimeLogger.create("CLIENT", getClientId(), getStartTimeNS()/1000000);
 		try {
 			this.tpWriter = new BufferedWriter(new FileWriter("/home/ec2-user/ASL/client_baseline/client"
-					+ getClientId() + "tp.log", false));
+					+ this.getClientId() + "tp.log", false));
 			this.tpWriter = new BufferedWriter(new FileWriter("/home/ec2-user/ASL/client_baseline/client"
-					+ getClientId() + "rtt.log", false));
+					+ this.getClientId() + "rtt.log", false));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		this.logTimer = new Timer();
 		this.logTimer.scheduleAtFixedRate(new TimerTask() {
 			@Override
 			public void run() {
 				try {
-					tpWriter.write(String.valueOf(reqPerSec) + "\n");
-					rttWriter.write(String.valueOf(rttPerSec) + "\n");
+					tpWriter.write(String.valueOf(reqPerSec.get()) + "\n");
+					rttWriter.write(String.valueOf(rttPerSec.get()) + "\n");
 					reqCount = reqCount + reqPerSec.get();
 					reqPerSec.set(0);
 					rttPerSec.set(0);
