@@ -53,12 +53,14 @@ public class VirtualClient extends AbstractClient {
 			e.printStackTrace();
 		}
 		try {
-			System.in.read();
-		} catch (IOException e) {
-			e.printStackTrace();
+			Thread.sleep(1000*6);
+		} catch (InterruptedException e1) {
+			e1.printStackTrace();
 		}
 		try {
+			ci.tpWriter.flush();
 			ci.tpWriter.close();
+			ci.rttWriter.flush();
 			ci.rttWriter.close();
 			System.out.println("closed loggers ugh");
 		} catch (IOException e) {
