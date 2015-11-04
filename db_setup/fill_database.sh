@@ -13,8 +13,9 @@
 /home/ec2-user/postgres/bin/psql -U postgres -d mydb -q -c 'SELECT * FROM create_queue(1);' >/dev/null
 
 MESSAGE=1
-while [ $MESSAGE -le 300000 ]; do
+while [ $MESSAGE -le 1 ]; do
 	/home/ec2-user/postgres/bin/psql -U postgres -d mydb -q -c 'SELECT * FROM send_message(1, 1, 1, 0123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789);' >/dev/null
+	MESSAGE=`expr $MESSAGE + 1`
 done
 
 echo done
