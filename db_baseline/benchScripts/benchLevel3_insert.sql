@@ -1,5 +1,5 @@
 -- used for bench level3
--- insert 1000 rows, all for client = receiver = queue = 1
+-- insert 10 rows, all for client = receiver = queue = 1
 BEGIN;
 	SELECT * FROM send_message(1, 1, 1, 'abcdhjels0abcdhjels0abcdhjels0abcdhjels0abcdhjels0abcdhjels0abcdhjels0abcdhjels0abcdhjels0abcdhjels0abcdhjels0abcdhjels0abcdhjels0abcdhjels0abcdhjels0abcdhjels0abcdhjels0abcdhjels0abcdhjels0abcdhjels0');
 	SELECT * FROM send_message(1, 1, 1, 'abcdhjels0abcdhjels0abcdhjels0abcdhjels0abcdhjels0abcdhjels0abcdhjels0abcdhjels0abcdhjels0abcdhjels0abcdhjels0abcdhjels0abcdhjels0abcdhjels0abcdhjels0abcdhjels0abcdhjels0abcdhjels0abcdhjels0abcdhjels0');
