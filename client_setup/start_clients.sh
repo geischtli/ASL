@@ -1,10 +1,5 @@
 #!/bin/bash
 
-cd /home/ec2-user/ASL/experiment_log
-rm ./*
-cd ..
-cd client_setup
-
 # Parse the number of clients to be launched
 while getopts "n:m:i:" opt; do
   case $opt in
