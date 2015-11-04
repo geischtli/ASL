@@ -3,7 +3,7 @@
 <properties>
 	<entry key="USER">postgres</entry>
 	<entry key="PASSWORD"></entry>
-	<entry key="MIDDLEWARE_IP">52.29.120.108</entry>
+	<entry key="MIDDLEWARE_IP">52.29.120.117</entry>
 	<entry key="MIDDLEWARE_PORT">9090</entry>
 	<entry key="DATABASE_IP">52.29.120.55</entry>
 	<entry key="DATABASE_PORT">5432</entry>
