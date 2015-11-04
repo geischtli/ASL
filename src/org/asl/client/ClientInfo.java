@@ -44,6 +44,7 @@ public class ClientInfo {
 	public AtomicInteger reqPerSec;
 	public AtomicLong rttPerSec;
 	private Timer logTimer;
+	private int contentLength;
 	
 	public ClientInfo() {
 		this.clientId = 0;
@@ -67,11 +68,16 @@ public class ClientInfo {
 		this.reqPerSec = new AtomicInteger(0);
 		this.rttPerSec = new AtomicLong(0);
 		this.logTimer = null;
+		this.contentLength = 0;
 		initMyContent();
 	}
 	
+	public void setContentLength(int contentLength) {
+		this.contentLength = contentLength;
+	}
+	
 	public void initMyContent() {
-		int contentLength = Integer.parseInt(propParser.getProperty(PropertyKey.CONTENT_LENGTH));
+		//int contentLength = Integer.parseInt(propParser.getProperty(PropertyKey.CONTENT_LENGTH));
 		for (int i = 0; i < contentLength; i++) {
 			stringBuilder.append(alphabet[random.nextInt(alphabet.length)]);
 		}

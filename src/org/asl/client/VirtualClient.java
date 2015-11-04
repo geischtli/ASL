@@ -12,8 +12,8 @@ import org.asl.common.socket.SocketHelper;
 
 public class VirtualClient extends AbstractClient {
 
-	public VirtualClient(int port, String ip) throws IOException {
-		super(port, ip);
+	public VirtualClient(int port, String ip, int contentLength) throws IOException {
+		super(port, ip, contentLength);
 		gatherRequests();
 	}
 	
@@ -52,7 +52,7 @@ public class VirtualClient extends AbstractClient {
 		} catch (UnknownHostException e) {
 			e.printStackTrace();
 		}
-		try {
+		/*try {
 			Thread.sleep(1000*360);
 		} catch (InterruptedException e1) {
 			e1.printStackTrace();
@@ -65,7 +65,7 @@ public class VirtualClient extends AbstractClient {
 			System.out.println("closed loggers ugh");
 		} catch (IOException e) {
 			e.printStackTrace();
-		}
+		}*/
 	}
 	
 	public void shutdown() {

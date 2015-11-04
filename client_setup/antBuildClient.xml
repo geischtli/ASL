@@ -37,6 +37,7 @@
                 <path refid="classpath"/>
                 <path location="${jar.dir}/${ant.project.name}.jar"/>
             </classpath>
+			<arg value="${msgsize}"/>
         </java>
     </target>
 

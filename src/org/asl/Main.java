@@ -38,7 +38,7 @@ public class Main {
 		mwIp = propParser.getProperty(PropertyKey.MIDDLEWARE_IP);
 		mwPort = Integer.parseInt(propParser.getProperty(PropertyKey.MIDDLEWARE_PORT));		
 		
-		Middleware mw = new Middleware(mwPort);
+		Middleware mw = new Middleware(mwPort, 40);
 		mw.accept();
 		System.out.println("Started server");
 		
@@ -56,7 +56,7 @@ public class Main {
 		
 		for (int i = 0; i < numClients; i++) {
 			try {
-				threadpool.submit(new VirtualClient(mwPort, mwIp));
+				threadpool.submit(new VirtualClient(mwPort, mwIp, 200));
 			} catch (Exception e) {
 				System.out.println("Problem with client creation " + e.getMessage());
 				e.printStackTrace();

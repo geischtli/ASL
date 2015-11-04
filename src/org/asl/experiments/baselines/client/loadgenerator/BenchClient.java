@@ -81,7 +81,7 @@ public class BenchClient extends AbstractClient {
 	}
 
 	public BenchClient(int port, String ip, final BufferedWriter logWriter, int totalRequests, final int id) throws IOException {
-		super(port, ip);
+		super(port, ip, 200);
 		this.reqCount = 0;
 		this.startTime = 0;
 		this.logWriter = logWriter;

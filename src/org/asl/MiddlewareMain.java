@@ -10,7 +10,8 @@ public class MiddlewareMain {
 	private static final int port = 9090;
 	
 	public static void main(String[] args) throws SQLException, IOException, InterruptedException {
-		Middleware mw = new Middleware(port);
+		int numDBConns = Integer.parseInt(args[0]);
+		Middleware mw = new Middleware(port, numDBConns);
 		System.out.println("Started server");
 		mw.accept();
 

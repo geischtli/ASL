@@ -1,4 +1,4 @@
-basedir = 'C:\Users\Sandro\Documents\ASL_LOGS\stability_client';
+basedir = 'C:\Users\Sandro\Documents\ASL_LOGS\stability\stability_client';
 
 tp = zeros(360, 1);
 rtt = zeros(360, 1);
@@ -112,8 +112,8 @@ legend('50% Quantile of Client Machine 1', ...
     'Location', 'northwest')
 
 % do some cross-checking with middleware data
-mw1tp = dlmread('C:\Users\Sandro\Documents\ASL_LOGS\stability_mw1\throughput.log');
-mw2tp = dlmread('C:\Users\Sandro\Documents\ASL_LOGS\stability_mw2\throughput.log');
+mw1tp = dlmread('C:\Users\Sandro\Documents\ASL_LOGS\stability\stability_mw1\throughput.log');
+mw2tp = dlmread('C:\Users\Sandro\Documents\ASL_LOGS\stability\stability_mw2\throughput.log');
 mwtp = mw1tp + mw2tp;
 %mwtp = mwtp * factor;
 
