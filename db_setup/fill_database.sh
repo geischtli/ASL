@@ -12,9 +12,10 @@
 /home/ec2-user/postgres/bin/psql -U postgres -d mydb -q -c 'SELECT * FROM register_client(1);' >/dev/null
 /home/ec2-user/postgres/bin/psql -U postgres -d mydb -q -c 'SELECT * FROM create_queue(1);' >/dev/null
 
+CONTENT='testcontent'
 MESSAGE=1
 while [ $MESSAGE -le 1 ]; do
-	/home/ec2-user/postgres/bin/psql -U postgres -d mydb -q -c 'SELECT * FROM send_message(1, 1, 1, `0123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789`);' >/dev/null
+	/home/ec2-user/postgres/bin/psql -U postgres -d mydb -q -c 'SELECT * FROM send_message(1, 1, 1, '"$CONTENT"');' >/dev/null
 	MESSAGE=`expr $MESSAGE + 1`
 done
 
