@@ -27,18 +27,22 @@ public class ClientReadCompletionHandler implements CompletionHandler<Integer, O
 	ByteBuffer inbuf;
 	private List<RequestType> requestList;
 	private int requestId;
+	private long startRtt;
 	
-	public ClientReadCompletionHandler(AsynchronousSocketChannel sc, ClientInfo ci, ByteBuffer inbuf, List<RequestType> requestList, int requestId) {
+	public ClientReadCompletionHandler(AsynchronousSocketChannel sc, ClientInfo ci, ByteBuffer inbuf,
+			List<RequestType> requestList, int requestId, long startRtt) {
 		this.sc = sc;
 		this.ci = ci;
 		this.inbuf = inbuf;
 		this.requestList = requestList;
 		this.requestId = requestId;
+		this.startRtt = startRtt;
 	}
 	
-	public static ClientReadCompletionHandler create(AsynchronousSocketChannel sc, ClientInfo ci, ByteBuffer inbuf, List<RequestType> requestList, int requestId) {
+	public static ClientReadCompletionHandler create(AsynchronousSocketChannel sc, ClientInfo ci,
+			ByteBuffer inbuf, List<RequestType> requestList, int requestId, long startRtt) {
 		ci.getMyTimeLogger().click(Timing.CLIENT_START_READ, ci.getClientId(), ci.getRequestId(), ci.getStartTimeNS());
-		return new ClientReadCompletionHandler(sc, ci, inbuf, requestList, requestId);
+		return new ClientReadCompletionHandler(sc, ci, inbuf, requestList, requestId, startRtt);
 	}
 	
 	@Override
@@ -58,6 +62,8 @@ public class ClientReadCompletionHandler implements CompletionHandler<Integer, O
 			System.out.println("Reading message failed with type: " + ansReq.getException().getClass());
 			System.out.println("And reason: " + ansReq.getException().getMessage());
 		}
+		ci.reqPerSec.incrementAndGet();
+		ci.rttPerSec.addAndGet(System.currentTimeMillis() - startRtt);
 		ci.getMyTimeLogger().click(Timing.CLIENT_END_POSTPROCESSING, ci.getClientId(), ci.getRequestId(), ci.getStartTimeNS());
 		if (ci.getRequestId() + 1 < requestList.size() && (System.nanoTime() - ci.getStartTimeNS())/1000000000 < AbstractClient.DURATION_SEC) {
 			if (sc.isOpen()) {

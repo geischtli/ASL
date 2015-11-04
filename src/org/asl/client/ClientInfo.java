@@ -1,8 +1,14 @@
 package org.asl.client;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.List;
 import java.util.Random;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicLong;
 
 import org.asl.common.propertyparser.PropertyKey;
 import org.asl.common.propertyparser.PropertyParser;
@@ -29,6 +35,13 @@ public class ClientInfo {
 	private Random random;
 	private PropertyParser propParser;
 	private String content;
+	// logging
+	private int reqCount;
+	BufferedWriter tpWriter;
+	BufferedWriter rttWriter;
+	public AtomicInteger reqPerSec;
+	public AtomicLong rttPerSec;
+	private Timer logTimer;
 	
 	public ClientInfo() {
 		this.clientId = 0;
@@ -48,6 +61,10 @@ public class ClientInfo {
 		this.random = new Random();
 		this.propParser = PropertyParser.create("config/config_common.xml").parse();
 		this.content = "";
+		this.reqCount = 0;
+		this.reqPerSec = new AtomicInteger(0);
+		this.rttPerSec = new AtomicLong(0);
+		this.logTimer = new Timer();
 		initMyContent();
 	}
 	
@@ -159,6 +176,28 @@ public class ClientInfo {
 	public void initTimeLogger() {
 		setStartTimeNS(System.nanoTime());
 		myTimeLogger = TimeLogger.create("CLIENT", getClientId(), getStartTimeNS()/1000000);
+		try {
+			this.tpWriter = new BufferedWriter(new FileWriter("/home/ec2-user/ASL/client_baseline/client"
+					+ getClientId() + "tp.log", false));
+			this.tpWriter = new BufferedWriter(new FileWriter("/home/ec2-user/ASL/client_baseline/client"
+					+ getClientId() + "rtt.log", false));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		this.logTimer.scheduleAtFixedRate(new TimerTask() {
+			@Override
+			public void run() {
+				try {
+					tpWriter.write(String.valueOf(reqPerSec) + "\n");
+					rttWriter.write(String.valueOf(rttPerSec) + "\n");
+					reqCount = reqCount + reqPerSec.get();
+					reqPerSec.set(0);
+					rttPerSec.set(0);
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}, 0, 1000);
 	}
 	
 	public TimeLogger getMyTimeLogger() {

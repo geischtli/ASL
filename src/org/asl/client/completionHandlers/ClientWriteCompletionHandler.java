@@ -22,18 +22,21 @@ public class ClientWriteCompletionHandler implements CompletionHandler<Integer, 
 	private ClientInfo ci;
 	private List<RequestType> requestList;
 	private int requestId;
+	private long startRtt;
 
-	public ClientWriteCompletionHandler(AsynchronousSocketChannel sc, ByteBufferWrapper outbufWrap, ClientInfo ci, List<RequestType> requestList, int requestId) {
+	public ClientWriteCompletionHandler(AsynchronousSocketChannel sc, ByteBufferWrapper outbufWrap,
+			ClientInfo ci, List<RequestType> requestList, int requestId, long startRtt) {
 		this.sc = sc;
 		this.outbufWrap = outbufWrap;
 		this.ci = ci;
 		this.requestList = requestList;
 		this.requestId = requestId;
+		this.startRtt = startRtt;
 	}
 	
 	public static ClientWriteCompletionHandler create(AsynchronousSocketChannel sc, ByteBufferWrapper outbufWrap, ClientInfo ci, List<RequestType> requestList, int requestId) {
 		ci.getMyTimeLogger().click(Timing.CLIENT_START_WRITE, ci.getClientId(), ci.getRequestId(), ci.getStartTimeNS());
-		return new ClientWriteCompletionHandler(sc, outbufWrap, ci, requestList, requestId);
+		return new ClientWriteCompletionHandler(sc, outbufWrap, ci, requestList, requestId, System.currentTimeMillis());
 	}
 	
 	@Override
@@ -41,7 +44,7 @@ public class ClientWriteCompletionHandler implements CompletionHandler<Integer, 
 		SerializingUtilities.forceFurtherWriteIfNeeded(outbufWrap.getBuf(), writtenBytes, expectedWriteBytes, sc);
 		ci.getMyTimeLogger().click(Timing.CLIENT_END_WRITE, ci.getClientId(), ci.getRequestId(), ci.getStartTimeNS());
     	ByteBuffer inbuf = ByteBuffer.allocate(AbstractClient.INITIAL_BUFSIZE);
-    	sc.read(inbuf, null, ClientReadCompletionHandler.create(sc, ci, inbuf, requestList, requestId));
+    	sc.read(inbuf, null, ClientReadCompletionHandler.create(sc, ci, inbuf, requestList, requestId, startRtt));
 	}
 
 	@Override

@@ -1,11 +1,9 @@
 package org.asl.client;
 
-import java.io.File;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.UnknownHostException;
-import java.util.Random;
 
 import org.asl.client.completionHandlers.ConnectCompletionHandler;
 import org.asl.common.request.Request.RequestType;
@@ -17,14 +15,6 @@ public class VirtualClient extends AbstractClient {
 	public VirtualClient(int port, String ip) throws IOException {
 		super(port, ip);
 		gatherRequests();
-		Random random = new Random();
-		File myFile = null;
-		do {
-		int fileId = random.nextInt(Integer.MAX_VALUE);
-		myFile = new File("/home/ec2-user/ASL/client_baseline/client"
-				+ String.valueOf(fileId) + ".log");
-		} while (myFile.exists());
-		System.out.println("log file opened");
 	}
 	
 	public void gatherRequests() {
