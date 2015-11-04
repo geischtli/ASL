@@ -53,7 +53,7 @@ public class VirtualClient extends AbstractClient {
 			e.printStackTrace();
 		}
 		try {
-			Thread.sleep(1000*6);
+			Thread.sleep(1000*360);
 		} catch (InterruptedException e1) {
 			e1.printStackTrace();
 		}
@@ -66,6 +66,10 @@ public class VirtualClient extends AbstractClient {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public void shutdown() {
+		
 	}
 	
 }
