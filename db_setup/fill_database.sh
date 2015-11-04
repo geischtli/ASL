@@ -17,8 +17,8 @@
 #	/home/ec2-user/postgres/bin/psql -U postgres -d mydb -q -c 'SELECT * FROM send_message(1, 1, 1, '"'"'01234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789'"'"');' >/dev/null
 #	MESSAGE=`expr $MESSAGE + 1`
 #done
-/home/ec2-user/postgres/bin/pgbench -U postgres --no-vacuum -t 10000 \
-	-f ../db_baseline/benchScripts/benchLevel3_insert.sql
+/home/ec2-user/postgres/bin/pgbench -U postgres --no-vacuum -t 1000 \
+	-f ../db_baseline/benchScripts/benchLevel3_insert.sql \
 	-c 30 -j 30 mydb \
 	>> ../db_baseline/logs/level$1_$2_$3.log
 
