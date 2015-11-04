@@ -85,6 +85,7 @@ public class ClientReadCompletionHandler implements CompletionHandler<Integer, O
 			}
 		} else {
 			ci.getMyTimeLogger().stopMyTimeLogger();
+			ci.closeLoggers();
 			SocketHelper.closeSocket(sc);
 			int secsRunned = (int) ((System.nanoTime() - ci.getStartTimeNS())/1000000000);
 			System.out.println("Client is done and closed socket after " + secsRunned + " seconds");

@@ -10,6 +10,8 @@ import java.util.TimerTask;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 
+import javax.swing.plaf.synth.SynthSeparatorUI;
+
 import org.asl.common.propertyparser.PropertyKey;
 import org.asl.common.propertyparser.PropertyParser;
 import org.asl.common.timing.TimeLogger;
@@ -202,6 +204,17 @@ public class ClientInfo {
 				}
 			}
 		}, 0, 1000);
+	}
+	
+	public void closeLoggers() {
+		this.logTimer.cancel();
+		try {
+			this.tpWriter.close();
+			this.rttWriter.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		System.out.println("loggers closed after seeing " + reqCount + " requests");
 	}
 	
 	public TimeLogger getMyTimeLogger() {
