@@ -180,9 +180,9 @@ public class ClientInfo {
 		setStartTimeNS(System.nanoTime());
 		myTimeLogger = TimeLogger.create("CLIENT", getClientId(), getStartTimeNS()/1000000);
 		try {
-			this.tpWriter = new BufferedWriter(new FileWriter("/home/ec2-user/ASL/client_baseline/client"
+			this.tpWriter = new BufferedWriter(new FileWriter("/home/ec2-user/ASL/experiment_log/client"
 					+ this.getClientId() + "tp.log", false));
-			this.rttWriter = new BufferedWriter(new FileWriter("/home/ec2-user/ASL/client_baseline/client"
+			this.rttWriter = new BufferedWriter(new FileWriter("/home/ec2-user/ASL/experiment_log/client"
 					+ this.getClientId() + "rtt.log", false));
 		} catch (IOException e) {
 			e.printStackTrace();
