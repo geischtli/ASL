@@ -1,3 +1,4 @@
+clear variables
 basedir = 'C:\Users\Sandro\Documents\ASL_LOGS\stability\stability_client';
 
 tp = zeros(360, 1);
