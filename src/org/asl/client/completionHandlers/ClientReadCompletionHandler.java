@@ -59,7 +59,7 @@ public class ClientReadCompletionHandler implements CompletionHandler<Integer, O
 			System.out.println("And reason: " + ansReq.getException().getMessage());
 		}
 		ci.getMyTimeLogger().click(Timing.CLIENT_END_POSTPROCESSING, ci.getClientId(), ci.getRequestId(), ci.getStartTimeNS());
-		if (ci.getRequestId() + 1 < requestList.size()) {
+		if (ci.getRequestId() + 1 < requestList.size() && (System.nanoTime() - ci.getStartTimeNS())/1000000000 < AbstractClient.DURATION_SEC) {
 			if (sc.isOpen()) {
 				ci.incrementRequestId();
 				ByteBufferWrapper outbufWrap = SerializingUtilities.packRequest(RequestBuilder.getRequest(requestList.get(ci.getRequestId()), ci));
@@ -72,7 +72,8 @@ public class ClientReadCompletionHandler implements CompletionHandler<Integer, O
 		} else {
 			ci.getMyTimeLogger().stopMyTimeLogger();
 			SocketHelper.closeSocket(sc);
-			System.out.println("Client is done and closed socket");
+			int secsRunned = (int) ((System.nanoTime() - ci.getStartTimeNS())/1000000000);
+			System.out.println("Client is done and closed socket after " + secsRunned + " seconds");
 		}
 	}
 

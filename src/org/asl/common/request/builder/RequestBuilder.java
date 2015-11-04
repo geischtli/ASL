@@ -73,7 +73,7 @@ public class RequestBuilder {
 						);
 			case READ_ALL_MESSAGES_OF_QUEUE:
 				return new ReadAllMessagesOfQueueRequest(
-						clientId,
+						ci.getReadQueueId(),
 						clientId,
 						clientId,
 						requestId

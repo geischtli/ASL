@@ -39,6 +39,8 @@ public class HandshakeRequest extends Request {
 	public void processOnClient(ClientInfo ci) throws ASLException {
 		if (!getException().carriesError()) {
 			ci.setClientId(clientIdReturnedFromDB);
+			ci.setReadFromSenderId(clientIdReturnedFromDB);
+			ci.setSendReceiverId(clientIdReturnedFromDB);
 			ci.initTimeLogger();
 			System.out.println("Client got ID " + ci.getClientId());
 		} else {
