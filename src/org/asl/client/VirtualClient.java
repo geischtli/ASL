@@ -52,6 +52,18 @@ public class VirtualClient extends AbstractClient {
 		} catch (UnknownHostException e) {
 			e.printStackTrace();
 		}
+		try {
+			System.in.read();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		try {
+			ci.tpWriter.close();
+			ci.rttWriter.close();
+			System.out.println("closed loggers ugh");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 	
 }
