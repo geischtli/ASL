@@ -164,6 +164,9 @@ public class ClientInfo {
 	public void incrementRequestId() {
 		requestId.incrementAndGet();
 	}
+	public void setRequestId(int val) {
+		requestId.set(val);
+	}
 
 	public String getSendContext() {
 		return sendContext;

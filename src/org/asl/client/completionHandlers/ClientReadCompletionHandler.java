@@ -65,7 +65,15 @@ public class ClientReadCompletionHandler implements CompletionHandler<Integer, O
 		ci.reqPerSec.incrementAndGet();
 		ci.rttPerSec.addAndGet(System.currentTimeMillis() - startRtt);
 		ci.getMyTimeLogger().click(Timing.CLIENT_END_POSTPROCESSING, ci.getClientId(), ci.getRequestId(), ci.getStartTimeNS());
-		if (ci.getRequestId() + 1 < requestList.size() && (System.nanoTime() - ci.getStartTimeNS())/1000000000 < AbstractClient.DURATION_SEC) {
+		if (ci.getRequestId() + 1 >= requestList.size()
+				&& (System.nanoTime() - ci.getStartTimeNS())/1000000000 < AbstractClient.DURATION_SEC) {
+			ci.setRequestId(2);
+		}
+		
+			
+		
+		if (ci.getRequestId() + 1 < requestList.size()
+				&& (System.nanoTime() - ci.getStartTimeNS())/1000000000 < AbstractClient.DURATION_SEC) {
 			if (sc.isOpen()) {
 				ci.incrementRequestId();
 				ByteBufferWrapper outbufWrap = SerializingUtilities.packRequest(RequestBuilder.getRequest(requestList.get(ci.getRequestId()), ci));
