@@ -6,6 +6,7 @@
 \usepackage{caption}
 \usepackage{svg}
 \usepackage{amsmath}
+\usepackage{lscape}
 
 \begin{document}
 
@@ -376,11 +377,85 @@ Conduct a 2\^{}k analysis of your system (aim at exploring non-obvious
 interactions of parameters). Use the methods learned in this lecture to
 conduct the detailed analysis.
 
+The \#Clients and \#DB Connections are evenly distributed over the middlewares if there are two in play.
+\begin{landscape}
+\begin{table}
+\small
+\centering
+\caption{$2^k$ Factors}
+\label{tbl:2k_labels}
+\begin{tabular}{cccc}
+	Symbol & Factor & Level -1 & Level 1 \\ \hline
+	A & \#Middlewares & 1 & 2 \\
+	B & \#Clients & 60 & 120 \\
+	C & Message Length & 200 & 2000 \\
+	D & \#DB Connections & 20 & 40 \\ \hline
+\end{tabular}
+\end{table}
+\begin{table}[]
+	\small
+	\centering
+	\caption{$2^k$ Effects}
+	\label{tbl:2k}
+	\begin{tabular}{|cccccccccccccccc|cc|}
+		\hline
+		I & A & B & C & D & AB & AC & AD & BC & BD & CD & ABC & ABD & ACD & BCD & ABCD & TP(Req/s) & RT(ms)\\ \hline
+		1 & -1 & -1 & -1 & -1 & 1 & 1 & 1 & 1 & 1 & 1 & -1 & -1 & -1 & -1 & 1 & 12427 & 5.12\\
+		1 & -1 & -1 & -1 & 1 & 1 & 1 & -1 & 1 & -1 & -1 & -1 & 1 & 1 & 1 & -1 & 14707 & 3.87 \\
+		1 & -1 & -1 & 1 & -1 & 1 & -1 & 1 & -1 & 1 & -1 & 1 & -1 & 1 & 1 & -1 & 11859 & 4.84 \\
+		1 & -1 & -1 & 1 & 1 & 1 & -1 & -1 & -1 & -1 & 1 & 1 & 1 & -1 & -1 & 1 & 16133 & 3.66 \\
+		1 & -1 & 1 & -1 & -1 & -1 & 1 & 1 & -1 & -1 & 1 & 1 & 1 & -1 & 1 & -1 & 12413 & 9.98 \\
+		1 & -1 & 1 & -1 & 1 & -1 & 1 & -1 & -1 & 1 & -1 & 1 & -1 & 1 & -1 & 1 & 18233 & 7.07 \\
+		1 & -1 & 1 & 1 & -1 & -1 & -1 & 1 & 1 & -1 & -1 & -1 & 1 & 1 & -1 & 1 & 13238 & 9.14 \\
+		1 & -1 & 1 & 1 & 1 & -1 & -1 & -1 & 1 & 1 & 1 & -1 & -1 & -1 & 1 & -1 & 16428 & 6.97 \\
+		1 & 1 & -1 & -1 & -1 & -1 & -1 & -1 & 1 & 1 & 1 & 1 & 1 & 1 & -1 & -1 & 13488 & 4.69 \\
+		1 & 1 & -1 & -1 & 1 & -1 & -1 & 1 & 1 & -1 & -1 & 1 & -1 & -1 & 1 & 1 & 15954 & 3.87 \\
+		1 & 1 & -1 & 1 & -1 & -1 & 1 & -1 & -1 & 1 & -1 & -1 & 1 & -1 & 1 & 1 & 12289 & 4.94 \\
+		1 & 1 & -1 & 1 & 1 & -1 & 1 & 1 & -1 & -1 & 1 & -1 & -1 & 1 & -1 & -1 & 15855 & 4.19 \\
+		1 & 1 & 1 & -1 & -1 & 1 & -1 & -1 & -1 & -1 & 1 & -1 & -1 & 1 & 1 & 1 & 13017 & 9.16 \\
+		1 & 1 & 1 & -1 & 1 & 1 & -1 & 1 & -1 & 1 & -1 & -1 & 1 & -1 & -1 & -1 & 17701 & 6.57 \\
+		1 & 1 & 1 & 1 & -1 & 1 & 1 & -1 & 1 & -1 & -1 & 1 & -1 & -1 & -1 & -1 & 13054 & 9.31 \\
+		1 & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 12427 & 6.73 \\ \hline
+		14650 & 221 & 561 & -91 & 1927 & -86 & -76 & -17 & -36 & 354 & 21 & 193 & 47 & 101 & -365 & 212 \\
+		6.25 & -0.07 & 1.85 & -0.03 & -0.89 & -0.09 & 0.14 & 0.05 & -0.04 & -0.4 & 0.06 & 0.01 & -0.06 & -0.05 & 0.04 & -0.05
+	\end{tabular}
+\end{table}
+\end{landscape}
+
+\begin{table}
+\centering
+\caption{Variation explained by each factor in \% (Sum $\neq100$ due to rounding for better readability)}
+\label{tbl:2k_labels}
+\begin{tabular}{ccc}
+	Parameter & TP & RT \\ \hline
+	$q_{A}$ & 1.10  & 0.12  \\
+	$q_{B}$ & \textbf{7.09} & \textbf{77.57}  \\
+	$q_{C}$ & 0.19 & 0.03  \\
+	$q_{D}$ & \textbf{83.35} & \textbf{17.80} \\
+	$q_{AB}$ & 0.17 & 0.22  \\
+	$q_{AC}$ & 0.13  & 0.47  \\
+	$q_{AD}$ & 0.01  & 0.05  \\
+	$q_{BC}$ & 0.03  & 0.04  \\
+	$q_{BD}$ & 2.82  & 3.42 \\
+	$q_{CD}$ & 0.01  & 0.07  \\
+	$q_{ACB}$ & 0.84  & 0.00  \\
+	$q_{ABD}$ & 0.05  & 0.08  \\
+	$q_{ACD}$ & 0.23  & 0.05  \\
+	$q_{BCD}$ & 3.99  & 0.03  \\
+	$q_{ABCD}$ & 1.02  & 0.05  \\
+\end{tabular}
+\end{table}
+It's clearly visible, that the throughput and response time are mainly dependent of each a single factor. For the throughput, the most important factor is the number of concurrent database connections (explains $\approx83.35\%$ of the variation). For the response time however the cruial factor is the number of active clients (explains $\approx77.57\%$ of the variation). In words this means the following:
+\begin{itemize}
+	\item \textbf{Throughput}: If more database connections are added, the throughput raises. If the number of database connections is reduces, also the throughput will decrease. The second important factor to consider is the number of clients operating concurrently in the whole system. With an effect of $561$ in column B (see table \ref{tbl:2k}), this yields, that when more clients join the system the throughput will go up, and vice-versa for less clients.
+	\item \textbf{Response Time}: When more clients are join the system the response time will grow. If some clients leave the response time will decrease. The number of database connections has also nearly $\approx18\%$ of influence on the performance. Since the effect of $-0.89$ in the column D (see table \ref{tbl:2k}) is negative, this means, that the more connections to the database are available, the smaller the response will be, and vice-versa for less connections to the database.
+\end{itemize}
 \subsection{Conclusion}\label{sec:conclusion}
 
 To conclude the report summarize the behavior of the system in terms of
 the design and the representative workloads. Finally, outline in a few
 points what would you do differently if you could design the system
 anew.
+
 
 \end{document}
