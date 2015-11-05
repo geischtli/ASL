@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (MiKTeX 2.9) (preloaded format=pdflatex 2015.10.13)  5 NOV 2015 09:51
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (MiKTeX 2.9) (preloaded format=pdflatex 2015.10.13)  5 NOV 2015 13:37
 entering extended mode
 **ASLMilestone1.tex
 (ASLMilestone1.tex
@@ -760,13 +760,31 @@ Overfull \hbox (22.66127pt too wide) in paragraph at lines 348--348
  [][] 
  []
 
-[12] [13 <./figures/stability/stability_tp-eps-converted-to.pdf> <./figures/sta
-bility/stability_rt-eps-converted-to.pdf>]
+Package epstopdf Info: Source file: <figures/max_tp.eps>
+(epstopdf)                    date: 2015-11-05 13:35:47
+(epstopdf)                    size: 93398 bytes
+(epstopdf)             Output file: <figures/max_tp-eps-converted-to.pdf>
+(epstopdf)                    date: 2015-11-05 13:36:20
+(epstopdf)                    size: 6063 bytes
+(epstopdf)             Command: <epstopdf --outfile=figures/max_tp-eps-converte
+d-to.pdf figures/max_tp.eps>
+(epstopdf)             \includegraphics on input line 363.
+Package epstopdf Info: Output file is already uptodate.
+<figures/max_tp-eps-converted-to.pdf, id=107, 421.575pt x 316.18124pt>
+File: figures/max_tp-eps-converted-to.pdf Graphic file (type pdf)
+
+<use figures/max_tp-eps-converted-to.pdf>
+Package pdftex.def Info: figures/max_tp-eps-converted-to.pdf used on input line
+ 363.
+(pdftex.def)             Requested size: 317.07614pt x 237.81078pt.
+ [12] [13 <./figures/stability/stability_tp-eps-converted-to.pdf> <./figures/st
+ability/stability_rt-eps-converted-to.pdf> <./figures/max_tp-eps-converted-to.p
+df>] [14]
 
 LaTeX Warning: No positions in optional float specifier.
-               Default added (so using `tbp') on input line 395.
+               Default added (so using `tbp') on input line 403.
 
-[14] [15
+[15] [16
 
 
 ] (ASLMilestone1.aux)
@@ -775,10 +793,10 @@ LaTeX Warning: There were multiply-defined labels.
 
  ) 
 Here is how much of TeX's memory you used:
- 6235 strings out of 493673
- 93563 string characters out of 3141526
- 192056 words of memory out of 3000000
- 9466 multiletter control sequences out of 15000+200000
+ 6241 strings out of 493673
+ 93744 string characters out of 3141526
+ 192066 words of memory out of 3000000
+ 9471 multiletter control sequences out of 15000+200000
  12301 words of font info for 44 fonts, out of 3000000 for 9000
  1025 hyphenation exceptions out of 8191
  42i,10n,81p,2138b,1556s stack positions out of 5000i,500n,10000p,200000b,50000s
@@ -795,9 +813,9 @@ MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr9.pfb><C:/Program Files (x86)/MiKT
 eX 2.9/fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/Program Files (x86)/MiKTeX
  2.9/fonts/type1/public/amsfonts/cm/cmti10.pfb><C:/Program Files (x86)/MiKTeX 2
 .9/fonts/type1/public/amsfonts/cm/cmti12.pfb>
-Output written on ASLMilestone1.pdf (15 pages, 506031 bytes).
+Output written on ASLMilestone1.pdf (16 pages, 510984 bytes).
 PDF statistics:
- 170 PDF objects out of 1000 (max. 8388607)
+ 182 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
- 61 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 66 words of extra memory for PDF output out of 10000 (max. 10000000)
 
