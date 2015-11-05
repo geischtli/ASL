@@ -39,7 +39,7 @@ while [  $CURR_DB_CONNECTIONS -le $END_DB_CONNECTIONS ]; do
 					# level 3
 					# we expect on this level 1 client and 1 queue already online
 					# to be sure that the random file execution doesn't kill us by choosing the removal
-					# file a lot in the beginning we initially fill the database with 1000 entries when setting up
+					# file a lot in the beginning we initially fill the database with some entries when setting up
 					# the system.
 					
 					# first init db with normal functionalities for sending and removing
@@ -51,7 +51,7 @@ while [  $CURR_DB_CONNECTIONS -le $END_DB_CONNECTIONS ]; do
 						/home/ec2-user/postgres/bin/psql -U postgres -d mydb -q -c 'SELECT * FROM create_queue('"$CLIENT"');' >/dev/null
 						CLIENT=`expr $CLIENT + 1`
 					done
-					# init with 1000 rows
+					# init with some rows
 					/home/ec2-user/postgres/bin/psql -U postgres -d mydb -q -f ./benchScripts/benchLevel3_insert.sql
 				else
 					# level2

@@ -13,6 +13,8 @@ for i = 1:360
     end
 end
 
+numClients = 60;
+
 % we have an average of 5 seconds, to sum up we have to rescale it
 % accordingly. This was done to reduce size of log files
 factor = 5;
@@ -38,10 +40,10 @@ for currClient = 1:2
     end
     if currClient == 1
         client1tp = tp;
-        client1rtt = rtt;
+        client1rtt = rtt/numClients;
     else
         client2tp = tp;
-        client2rtt = rtt;
+        client2rtt = rtt/numClients;
     end
 end
 hold on
