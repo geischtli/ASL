@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# first delete everything in the experiment log
+rm -r /home/ec2-user/ASL/experiment_log/*
+
 # Parse the number of clients to be launched
 while getopts "n:m:i:" opt; do
   case $opt in
