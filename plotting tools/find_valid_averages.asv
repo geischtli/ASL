@@ -1,9 +1,0 @@
-function [data_data, data_idx] = find_valid_averages(data, idx)
-% data is length 140 - > split in subintervals of length 20
-% ignore first 5, avg over other 15
-data_data
-for i = 0:6
-    currInt = data((i*20)+1:(i+1)*20);
-    data_data(i+1) = mean(currInt(6:end));
-end
-end

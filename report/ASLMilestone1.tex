@@ -356,15 +356,15 @@ Measure the maximum throughput of the system (describe the exact
 configuration and workload, and the reasoning behind choosing these
 particular ones) and show the average response time for this experiment.
 \newline
-since its not clear to me what exact configuration the maximum throughput yields, I let clients join dynamically the system. With this approach we can see how the throughput behaves with respect to the amount of clients in the system. The approach was to run each database connection number for 60 up to 120 clients, 10 clients joining every 20 seconds. msg size = 200, 2 middlewares.
+since its not clear to me what exact configuration the maximum throughput yields, I let clients join dynamically the system. With this approach we can see how the throughput behaves with respect to the amount of clients in the system. The approach was to run each database connection number for 40 up to 120 clients, 10 clients joining every 20 seconds. msg size = 200, 2 middlewares.
 the result is:
 \begin{figure}[!htb]
 \centering
 \includegraphics[width=0.7\linewidth]{figures/max_tp}
-\caption{}
+\caption{Maximum Throughput behaviour with respect to the number of database connections}
 \label{fig:max_tp}
 \end{figure}
-
+The best possible configuration under this worload is with 60 clients, 40 database connections, 2 middlewares and a message size of 200.
 
 \subsection{System Scalability}\label{sec:system-scalability}
 

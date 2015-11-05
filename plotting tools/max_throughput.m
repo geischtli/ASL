@@ -20,7 +20,7 @@ for i = 1:length(dbconns)
     % ignore the first 5 seconds, and average over the 15 seconds coming
     % afterwards
     [mw_avg, mw_data, mw_idx] = find_valid_averages(mwtot);
-    [val, idx] = max(mw_avg);
+    [val, idx] = max(mw_avg)
     dat = mw_data((idx-1)*10+1:(idx*10));
     resbox_data(:, i) = dat;
     resbox_idx(:, i) = i;
