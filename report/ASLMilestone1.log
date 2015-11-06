@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (MiKTeX 2.9) (preloaded format=pdflatex 2015.10.13)  6 NOV 2015 10:40
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (MiKTeX 2.9) (preloaded format=pdflatex 2015.10.13)  6 NOV 2015 13:08
 entering extended mode
 **ASLMilestone1.tex
 (ASLMilestone1.tex
@@ -290,7 +290,7 @@ Package: lscape 2000/10/22 v3.01 Landscape Pages (DPC)
 )
 (ASLMilestone1.aux
 
-LaTeX Warning: Label `tbl:2k_labels' multiply defined.
+LaTeX Warning: Label `' multiply defined.
 
 )
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 11.
@@ -789,17 +789,103 @@ Package epstopdf Info: Source file: <figures/max_tp.eps>
 (epstopdf)                    size: 6063 bytes
 (epstopdf)             Command: <epstopdf --outfile=figures/max_tp-eps-converte
 d-to.pdf figures/max_tp.eps>
-(epstopdf)             \includegraphics on input line 460.
+(epstopdf)             \includegraphics on input line 456.
 Package epstopdf Info: Output file is already uptodate.
 <figures/max_tp-eps-converted-to.pdf, id=118, 421.575pt x 316.18124pt>
 File: figures/max_tp-eps-converted-to.pdf Graphic file (type pdf)
 
 <use figures/max_tp-eps-converted-to.pdf>
 Package pdftex.def Info: figures/max_tp-eps-converted-to.pdf used on input line
- 460.
+ 456.
 (pdftex.def)             Requested size: 317.07614pt x 237.81078pt.
  [16 <./figures/stability/stability_tp-eps-converted-to.pdf> <./figures/stabili
-ty/stability_rt-eps-converted-to.pdf>]
+ty/stability_rt-eps-converted-to.pdf>] [17 <./figures/max_tp-eps-converted-to.p
+df>]
+Package epstopdf Info: Source file: <figures/db_scalability_1m_tp.eps>
+(epstopdf)                    date: 2015-11-06 13:06:47
+(epstopdf)                    size: 43312 bytes
+(epstopdf)             Output file: <figures/db_scalability_1m_tp-eps-converted
+-to.pdf>
+(epstopdf)                    date: 2015-11-06 13:07:08
+(epstopdf)                    size: 5916 bytes
+(epstopdf)             Command: <epstopdf --outfile=figures/db_scalability_1m_t
+p-eps-converted-to.pdf figures/db_scalability_1m_tp.eps>
+(epstopdf)             \includegraphics on input line 472.
+Package epstopdf Info: Output file is already uptodate.
+
+<figures/db_scalability_1m_tp-eps-converted-to.pdf, id=141, 421.575pt x 316.181
+24pt>
+File: figures/db_scalability_1m_tp-eps-converted-to.pdf Graphic file (type pdf)
+
+ <use figures/db_scalability_1m_tp-eps-converted-to.pdf>
+Package pdftex.def Info: figures/db_scalability_1m_tp-eps-converted-to.pdf used
+ on input line 472.
+(pdftex.def)             Requested size: 249.13371pt x 186.85408pt.
+Package epstopdf Info: Source file: <figures/db_scalability_1m_rt.eps>
+(epstopdf)                    date: 2015-11-06 13:07:02
+(epstopdf)                    size: 40413 bytes
+(epstopdf)             Output file: <figures/db_scalability_1m_rt-eps-converted
+-to.pdf>
+(epstopdf)                    date: 2015-11-06 13:07:08
+(epstopdf)                    size: 6083 bytes
+(epstopdf)             Command: <epstopdf --outfile=figures/db_scalability_1m_r
+t-eps-converted-to.pdf figures/db_scalability_1m_rt.eps>
+(epstopdf)             \includegraphics on input line 472.
+Package epstopdf Info: Output file is already uptodate.
+
+<figures/db_scalability_1m_rt-eps-converted-to.pdf, id=142, 421.575pt x 316.181
+24pt>
+File: figures/db_scalability_1m_rt-eps-converted-to.pdf Graphic file (type pdf)
+
+ <use figures/db_scalability_1m_rt-eps-converted-to.pdf>
+Package pdftex.def Info: figures/db_scalability_1m_rt-eps-converted-to.pdf used
+ on input line 472.
+(pdftex.def)             Requested size: 249.13371pt x 186.85408pt.
+Package epstopdf Info: Source file: <figures/db_scalability_1m_tp.eps>
+(epstopdf)                    date: 2015-11-06 13:06:47
+(epstopdf)                    size: 43312 bytes
+(epstopdf)             Output file: <figures/db_scalability_1m_tp-eps-converted
+-to.pdf>
+(epstopdf)                    date: 2015-11-06 13:07:08
+(epstopdf)                    size: 5916 bytes
+(epstopdf)             Command: <epstopdf --outfile=figures/db_scalability_1m_t
+p-eps-converted-to.pdf figures/db_scalability_1m_tp.eps>
+(epstopdf)             \includegraphics on input line 472.
+Package epstopdf Info: Output file is already uptodate.
+File: figures/db_scalability_1m_tp-eps-converted-to.pdf Graphic file (type pdf)
+
+
+<use figures/db_scalability_1m_tp-eps-converted-to.pdf>
+Package pdftex.def Info: figures/db_scalability_1m_tp-eps-converted-to.pdf used
+ on input line 472.
+(pdftex.def)             Requested size: 249.14522pt x 186.85408pt.
+
+Overfull \hbox (22.66127pt too wide) in paragraph at lines 472--472
+ [][] 
+ []
+
+Package epstopdf Info: Source file: <figures/db_scalability_1m_rt.eps>
+(epstopdf)                    date: 2015-11-06 13:07:02
+(epstopdf)                    size: 40413 bytes
+(epstopdf)             Output file: <figures/db_scalability_1m_rt-eps-converted
+-to.pdf>
+(epstopdf)                    date: 2015-11-06 13:07:08
+(epstopdf)                    size: 6083 bytes
+(epstopdf)             Command: <epstopdf --outfile=figures/db_scalability_1m_r
+t-eps-converted-to.pdf figures/db_scalability_1m_rt.eps>
+(epstopdf)             \includegraphics on input line 472.
+Package epstopdf Info: Output file is already uptodate.
+File: figures/db_scalability_1m_rt-eps-converted-to.pdf Graphic file (type pdf)
+
+<use figures/db_scalability_1m_rt-eps-converted-to.pdf>
+Package pdftex.def Info: figures/db_scalability_1m_rt-eps-converted-to.pdf used
+ on input line 472.
+(pdftex.def)             Requested size: 249.14522pt x 186.85408pt.
+
+Overfull \hbox (22.66127pt too wide) in paragraph at lines 472--472
+ [][] 
+ []
+
 Package epstopdf Info: Source file: <figures/rt_experiment.eps>
 (epstopdf)                    date: 2015-11-05 17:22:41
 (epstopdf)                    size: 33552 bytes
@@ -812,19 +898,20 @@ onverted-to.pdf figures/rt_experiment.eps>
 (epstopdf)             \includegraphics on input line 480.
 Package epstopdf Info: Output file is already uptodate.
 
-<figures/rt_experiment-eps-converted-to.pdf, id=130, 422.57875pt x 316.18124pt>
+<figures/rt_experiment-eps-converted-to.pdf, id=143, 422.57875pt x 316.18124pt>
 File: figures/rt_experiment-eps-converted-to.pdf Graphic file (type pdf)
 <use figures/rt_experiment-eps-converted-to.pdf>
 Package pdftex.def Info: figures/rt_experiment-eps-converted-to.pdf used on inp
 ut line 480.
 (pdftex.def)             Requested size: 317.07614pt x 237.2463pt.
- [17 <./figures/max_tp-eps-converted-to.pdf>] [18 <./figures/rt_experiment-eps-
-converted-to.pdf>]
+ [18 <./figures/db_scalability_1m_tp-eps-converted-to.pdf> <./figures/db_scalab
+ility_1m_rt-eps-converted-to.pdf> <./figures/rt_experiment-eps-converted-to.pdf
+>] [19]
 
 LaTeX Warning: No positions in optional float specifier.
                Default added (so using `tbp') on input line 507.
 
-[19] [20
+[20] [21
 
 
 ] (ASLMilestone1.aux)
@@ -833,10 +920,10 @@ LaTeX Warning: There were multiply-defined labels.
 
  ) 
 Here is how much of TeX's memory you used:
- 6408 strings out of 493673
- 95995 string characters out of 3141526
- 197556 words of memory out of 3000000
- 9631 multiletter control sequences out of 15000+200000
+ 6420 strings out of 493673
+ 96495 string characters out of 3141526
+ 197575 words of memory out of 3000000
+ 9641 multiletter control sequences out of 15000+200000
  12992 words of font info for 46 fonts, out of 3000000 for 9000
  1025 hyphenation exceptions out of 8191
  42i,10n,81p,1446b,1229s stack positions out of 5000i,500n,10000p,200000b,50000s
@@ -856,9 +943,9 @@ fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/Program Files (x86)/MiKTeX 2.9/fo
 nts/type1/public/amsfonts/cm/cmti10.pfb><C:/Program Files (x86)/MiKTeX 2.9/font
 s/type1/public/amsfonts/cm/cmti12.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/
 type1/public/amsfonts/cm/cmti9.pfb>
-Output written on ASLMilestone1.pdf (20 pages, 568141 bytes).
+Output written on ASLMilestone1.pdf (21 pages, 580051 bytes).
 PDF statistics:
- 208 PDF objects out of 1000 (max. 8388607)
+ 221 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
- 71 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 81 words of extra memory for PDF output out of 10000 (max. 10000000)
 

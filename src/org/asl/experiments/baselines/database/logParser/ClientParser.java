@@ -22,7 +22,7 @@ public class ClientParser {
 	private static File dir;
 	
 	public static void main(String[] args) {
-		String basedir = "C:\\Users\\Sandro\\Documents\\ASL_LOGS\\level2_500K_200_5INCR_1_60\\";
+		String basedir = "C:\\Users\\Sandro\\Documents\\ASL_LOGS\\level2_1M_2000_5INCR_1_60\\";
 		dir = new File(basedir);
 		File[] logFiles = dir.listFiles();
 		tpFile = new File(basedir + "summaries\\" + "\\tp_summary.log");
@@ -68,11 +68,17 @@ public class ClientParser {
 		 			int line = -2;
 		 			while ((s = reader.readLine()) != null) {
 		 				line++;
-		 				if (line == -1) {
-		 					// first line is still warmup phase
+		 				String[] parts = s.split(" ");
+		 				// check if line has all 0's, then it doesn't count
+		 				if (Integer.parseInt(parts[1]) == 0 && Integer.parseInt(parts[2]) == 0) {
+		 					// line doesnt count
+		 					line--;
 		 					continue;
 		 				}
-		 				String[] parts = s.split(" ");
+		 				if (line == -1) {
+		 					// first effective line is still warmup phase
+		 					continue;
+		 				}
 		 				int currTpSum = tpSum.get(line);
 		 				tpSum.set(line, currTpSum + Integer.parseInt(parts[1]));
 		 				int currLatSum = latSum.get(line);
