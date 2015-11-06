@@ -40,10 +40,10 @@ for currClient = 1:2
     end
     if currClient == 1
         client1tp = tp;
-        client1rtt = rtt/numClients;
+        client1rtt = rtt./client1tp;
     else
         client2tp = tp;
-        client2rtt = rtt/numClients;
+        client2rtt = rtt./client2tp;
     end
 end
 hold on
@@ -80,9 +80,9 @@ title('Full System Throughput Client View')
 hold off
 figure()
 hold on
-rtt = rtt./tp;
-client1rtt = client1rtt/120;
-client2rtt = client2rtt/120;
+%rtt = rtt./tp;
+%client1rtt = client1rtt/120;
+%client2rtt = client2rtt/120;
 
 boxplot(client1rtt(3:end), idx(3:end))
 boxplot(client2rtt(3:end), idx(3:end))

@@ -285,14 +285,29 @@ Which are the sanity checks in place for ensuring correct load
 generation and validity of responses?
 
 \subsubsection{Design and interface}\label{sec:design-and-interface}
-For the design please have a look at Figure \ref{fig:mw_design} again. The client is built upon the same principles as the middleware: modular, adaptive and highly parallelisable. We again use the principle of the observer pattern in combination with the completion handlers to implement the client functionality. The interface to the middlewares is provided through the already mentionned \textit{AsynchronousSocketChannel} class provided by the Java NIO-library. As mentioned in section \ref{sec:interfacing-with-clients}, each client fetches the IP and port number from the command line or the config file. These are then used to establish a connection to the middleware server. From then on, everything is done by the corresponding completion handlers.
+For the design please have a look at Figure \ref{fig:mw_design} again. The client is built upon the same principles as the middleware: modular, adaptive and highly parallelisable. We again use the principle of the observer pattern in combination with the completion handlers to implement the client functionality. The interface to the middlewares is provided through the already mentionned \textit{AsynchronousSocketChannel} class provided by the Java NIO-library. As explained in section \ref{sec:interfacing-with-clients}, each client fetches the IP and port number from the command line or the config file. These are then used to establish a connection to the middleware server socket channel. From then on, everything is done by the corresponding completion handlers.
 
 \subsubsection{Instrumentation}\label{sec:instrumentation}
- To simplify the debugging a lot, I made sure that as much modules as possible were implemented seperately, namely accepting, writing and reading. Every client runs in its own process, so I am able to stop a certain process anytime and debug it without needing to touch the other ones. The logging for the benchmarks is simply done with the standard \textit{BufferedFileWriter}. I started with the log4j2 library and got it working with batched logging, but only in combination with an additional library (what is not allowed). Instead of down-grading the whole system which would have taken another day, I decided to go with the logical next choice. There are two main logging functionalities used, (1) a timer, that executes a scheduled logging task every x seconds, and (2) an event-driven logger, that writes to the log as soon as the corresponding action has finished.
-
+ To simplify the debugging a lot, I made sure that as much functionality as possible, namely accepting, writing and reading is implemented seperately. This is done by inheriting from the class \textit{CompletionHandler$<$V, A$>$} into an \textit{Accept-}, \textit{Connect-}, \textit{Read-}, and \textit{WriteCompletionHandler$<$V, A$>$}. Every client runs in its own process, so I am able to stop a certain process anytime and debug it without needing to interrupt the other ones.
+ 
+ The logging for the benchmarks is simply done with the standard \textit{BufferedFileWriter}. I started with the log4j2 library and got it working with batched logging, but only in combination with an additional library (what is not allowed). Instead of down-grading the whole system which would have taken another day, I decided to go that way, because I had some experience in it and was able to get things running quickly. In the whole project, there are two main logging functionalities used:
+ \begin{enumerate}
+ 	\item \textbf{Time-driven Logging}: To do this, a timer is used, that executes a scheduled logging task every x seconds. In code this looks like following:
+\begin{lstlisting}[basicstyle=\small, language=Java]
+myTimer.scheduleAtFixedRate(new TimerTask() {
+    @Override
+    public void run() {
+        // write to the log file(s)
+        // reset variables
+    }
+});
+\end{lstlisting}
+	\item \textbf{Event-driven Logging}: This is done by logging in the \textit{complete} method of the corresponding action. We then are sure, that this action has finished successfully.
+\end{enumerate}
+ 
 \subsubsection{Workloads and deployment}\label{sec:workloads-and-deployment}
-To ensure comparable results, when not mentionned explicitly different, I worked with a single workload that represents all important functionalities with the same weigth. The workload looks like this:
-\begin{lstlisting}[basicstyle=\small]
+To ensure comparable results, when not mentionned explicitly something different, I worked with a single workload that represents all important functionalities with the same weigth. The workload looks like this:
+\begin{lstlisting}[basicstyle=\small,caption={Main work load},label=lst:load]
 (1) Handshake
 (2) Create my queue
 (3) Loop until done
@@ -302,7 +317,7 @@ To ensure comparable results, when not mentionned explicitly different, I worked
     (d) Remove the top message of one of these queues if any
 (4) Done when time is up or no more requests are available
 \end{lstlisting}
-The generation of the actual requests is fully done in code. This is done, such that no file access is needed, which typically tends to be slow, the files are big and it's generally less flexible. The procedure is split into two parts:
+Please note that no such thing as planned requests per second or a wait time is used to control the number of requests this workload generates. The plan is to always send as much as possible. This is useful, because we can be sure, that the client side desperately tries to flood the system with requests and nothung does hold it back in any possible way. This workload also makes sure, that the database does not grow in time. This allows making better predictions, because we can disgard one degree of freedom in the analysis. The generation of the actual requests is fully done in code. The thought behind this is, because then no file access is needed, which typically tends to be slow, the files get large fast and it's generally less flexible. The process is split into two parts:
 \begin{enumerate}
 	\item The client generates a list of request types (enum in class \textit{Request}). In code this looks like this:
 \begin{lstlisting}[basicstyle=\small, language=Java]
@@ -315,17 +330,26 @@ RequestBuilder.addRequestTypes(
     1
 );
 \end{lstlisting}
-This adds the array [\textit{HANDSHAKE}, \textit{CREATE\_QUEUE}] once to the \textit{requestList}, which is later accessed by the client.
-	\item When running, the client accesses this list and dynamically creates a request object of the corresponding type, passing the currently available field values (stored in a session object each client manages, where earlier answers of queries are written into) as parameters to the constructor. In code this is as simple as:
+This adds the array [\textit{HANDSHAKE}, \textit{CREATE\_QUEUE}] once (therefor the parameter 1) to the \textit{requestList}.
+	\item When running, the client accesses this list and dynamically creates a request object of the corresponding types, passing the currently available field values (stored in a session object each client manages, where earlier answers of queries are written into) as parameters to the constructors. In code this is as simple as:
 \begin{lstlisting}[basicstyle=\small, language=Java]
 Request req = RequestBuilder.getRequest(
     requestList.get(reqCounter, client_session));
-\end{lstlisting}, where \textit{getRequest} is simply a switch-case about the inputted request type.
+\end{lstlisting}, where \textit{getRequest} is simply a switch-statement over the all possible request types.
 \end{enumerate}
+
+Let's find the performance baseline for the client, generating the load described in listing \ref{lst:load}. The experiment conducted for this used one client and one middleware machine. As spoilered in section \ref{sec:performance-characteristics-1}, the middleware server listening here, is a minimalistic version of the one used in the real-use case. The workflow is then the following:
+\begin{enumerate}
+	\item The client prepares and sends a request
+	\item The middleware fully reads the request
+	\item The middleware instantly sends an answer, consisting of a single digit number. An answer is needed sucht the client knows when the channel is writable again.
+\end{enumerate}
+\underline{Expectation}: The client machine (details in section \ref{sec:system-configurations}) does provide 32 hyperthreads. Since we can assume, that the network delay in the described setting should be minimal, all of these threads should be nearly constantly busy. This means, the knee is expected to be at 32 concurrent clients for the throughput as well as the latency. To not have the client as a bottleneck it should surely be able to provide stable more than 20'000 requests per second (see database baseline performance in figure \ref{fig:tp}).
 \TwoFig {figures/client/client_tp.eps} {Client Throughput behaviour} {fig:client_tp}
 {figures/client/client_lat.eps} {Client Latency behaviour} {fig:client_lat}
+\newline\underline{Reality} (figures \ref{fig:client_tp} and \ref{fig:client_lat}): The knee can indeed be found at 32 clients, at least for messages of length 2000. Messages of length 200 boost the maximal possible number of requests generated per second by a factor of about 1.5. The reason for that is the additional time needed for de- and serialization, and and a slightly higher network delay, simply due to package size of a single request. With 32 clients we have for both cases length 200 and 2000 a stable request generation of $\approx$45'000 requests per second.
 
-The deployment of a client is done in only a few steps, since the whole source code and all needed files are stored in a git repository:
+The deployment of a client can be done in only a few steps, since the whole source code and all needed files are stored in a git repository:
 \begin{enumerate}
 	\item Launch a client machine and install git: \textit{sudo yum install git -y}
 	\item Clone the repository to the machine: \textit{git clone https://github.com/geischtli/ASL.git}
@@ -335,7 +359,7 @@ The deployment of a client is done in only a few steps, since the whole source c
 \end{enumerate}
 
 \subsubsection{Sanity checks}\label{sec:sanity-checks}
-Besides the internal message counting and logging, the main sanity check is done on request level. There are two possible outcomes for a request: (1) the request is successfullly propagated through the whole system, or (2) the request is lost somewhere in between (due to a code error/bug or a network failure). In case of scenario (2) the watchdog will sometime close the TCP connection forcefully, which will lead to a thrown exception on the client side. This exception is catched and the client starts over with the request by reconnecting to the middleware. In case of scenario (1) the request is received by the client and deserialized. It is then checked if any exception is embedded (by the middleware) in the object. If not, everything went fine. If there was an exception, the client retries the same request.
+Besides the internal message counting and logging, the main sanity check is done on request level. There are two possible outcomes for a request: (1) the request is successfullly propagated through the whole system, or (2) the request is lost somewhere in between (due to a code error/bug or a network failure). In case of scenario (2) the watchdog will sometime close the TCP connection forcefully, which will lead to a thrown exception on the client side. This exception is catched and the client starts over with the request by reconnecting to the middleware. In case of scenario (1) the request is received  and deserialized by the client. It is then checked if any exception is embedded (by the middleware) in the object. If not, everything went fine. If there was an exception, the client retries the same request.
 
 \section{Experimental Setup}\label{sec:experimental-setup}
 
@@ -352,8 +376,7 @@ reference the different script files you submit as code in the SVN
 repository.
 
 \subsection{System Configurations}\label{sec:system-configurations}
-The overall design of the system is showed in Figure \ref{fig:overall_design}. Multiple clients are launched in a single machine, but all operating in their own process. They all connect to one of the available middlewares, each running on a single machine. Lastly, the middlewares have a connection pool to the database which is reused for all incoming requests.\newline
-TODO: how many mw, clients, ...\newline
+The overall design of the system is showed in Figure \ref{fig:overall_design}. Multiple clients are launched in a single machine, but all operating in their own process. They all connect to one of the available middlewares, each running on a single machine. Each of them has a connection pool to the database. In the next sections, whenever a number of clients or connections to the database is written, please note that this number does account for the total number in the whole system. They are both shared evenly over the middlewares, if there are multiple online. For example, if 100 clients and two middlewares online and the database is accessed by 30 connections, each middleware will support 50 clients, while having a connection pool of size 15.
 \begin{figure}
 \centering
 \includegraphics[width=0.7\linewidth]{figures/overall_design}
@@ -362,35 +385,38 @@ TODO: how many mw, clients, ...\newline
 \end{figure}
 The detailed configurations of the machines are the following:
 \begin{itemize}
-	\item \textbf{Client}: The clients are runned on a C3.8xlarge machine. These machines provide 16 physical cores and thus allow a high number of processes to be executed concurrently.
-	\item \textbf{Middleware}: The middlewares are runned on a C3.4xlarge machine. With their 8 physical cores they can nicely distribute the incoming read or write tasks onto the available threads.
-	\item \textbf{Database}: The database is runned on a R3.4xlarge machine. Besides the 8 physical cores this machine type provides, it also is equiped with 122GB of RAM. This guarantees that also big tables can still fit into the working memory.
+	\item \textbf{Client}: The clients run on a C3.8XLarge machine. These machines provide 16 physical cores and thus allow a high number of processes to be executed concurrently.
+	\item \textbf{Middleware}: The middlewares run on a C3.4XLarge machine. With their 8 physical cores they can nicely distribute the incoming read or write tasks onto the available threads.
+	\item \textbf{Database}: The database runs on a R3.4XLarge machine. Besides the 8 physical cores this machine type provides, it also is equiped with 122GB of RAM. This guarantees that also big tables can still fit into the working memory.
 \end{itemize}
 
 \subsection{Configuration and Deployment mechanisms}\label{sec:configuration-and-deployment-mechanisms}
-In the scope of this project, I worked with two client machines, two middlewares and one database. The client deployment mechanism of the system was already introduced in section \ref{sec:workloads-and-deployment}. The deployment of the other two system parts follow the same schema:
+The typical experiment machine layout is setup with 2 client, 2 middleware and 1 database machine. Refering to figure \ref{fig:overall_design}, we have $N=2$. If not mentionned otherwise, the workload generated by the clients is the one, presented in listing \ref{lst:load}. The client deployment mechanism of the system was already introduced in section \ref{sec:workloads-and-deployment}. The deployment of the other two system parts follow the same schema:
 \begin{itemize}
 	\item \textbf{Deploy the Middleware}:
 	\begin{enumerate}
 		\item Enter the database IP into the corresponding field in \textit{ASL/config/config\_common.xml}
-		\item Launch a middleware machine, install git and clone respository: Lookup steps (2) and (3) in section \ref{sec:workloads-and-deployment}
+		\item Launch a middleware machine, install git and clone respository: Lookup steps (1) and (2) in section \ref{sec:workloads-and-deployment}
 		\item Install all needed libraries and create necessary log folders:\newline
 		\textit{sh /home/ec2-user/ASL/mw\_setup/setup\_middleware.sh}
-		\item Start M middlewares on the current machine:\newline
-		\textit{sh /home/ec2-user/ASL/mw\_setup/start\_middleware -n M}
+		\item Start a middleware with a connection pool of size D on the current machine:\newline
+		\textit{sh /home/ec2-user/ASL/mw\_setup/start\_middleware -d D}
 		\item When the experiment is done hit ENTER to flush and close all logging files and shutdown gracefully
 	\end{enumerate}
 	\item \textbf{Deploy the Database}:
 	\begin{enumerate}
-		\item Launch a database machine and perform steps (2) and (3) of section \ref{sec:workloads-and-deployment}
+		\item Launch a database machine and perform steps (1) and (2) of section \ref{sec:workloads-and-deployment}
 		\item Setup, configure and run the database: \newline
 		\textit{sh /home/ec2-user/ASL/db\_setup/setup\_database.sh}
 		\item For control over the postgres process call \textit{/home/ec2-user/ASL/pg\_ctl command}, with \textit{command}, one of \{\textit{start}, \textit{stop}, \textit{status}, \textit{status}\}
+		\item To setup the database quickly after the first installation use \textit{/home/ec2\_user/postgres /bin/psql -U postgres -d mydb -f /home/ec2\_user/ASL/db\_setup/initDatabase.sql}
 	\end{enumerate}
 \end{itemize}
 
 \subsection{Logging and Benchmarking mechanisms}\label{sec:logging-and-benchmarking-mechanisms}
-When done with the experiment it's important to fetch the data to the local machine fast and without much effort. This functionality is provided by \textit{ASL/download\_logs.sh}. Simply put the path of interest into the preconstructed command and then call it with like this: \textit{sh download\_logs.sh target\_folder}. Sometimes the data was too big to be plotted efficiently, so I built some log parsers which do some averaging or filtering on the data. This means more work, but also that I always could go back to the original data and be sure that I have anything I need for later computations. These parsers are implemented in Java and can be found in \textit{src/org/asl/experiments/baselines/database/logParser}. When the data was ready it was processed in Matlab where all plots are produces. The corresponding files are found in \textit{ASL/plotting tools}.
+When done with the experiment it's important to fetch the data to the local machine fast and without much effort. This functionality is provided by \textit{ASL/download\_logs.sh}. Simply put the path of interest into the preconstructed command and then call it with like this: \textit{sh download\_logs.sh target\_folder}.
+
+Sometimes the data was too big to be plotted efficiently, so I built some log parsers which do some averaging or filtering on the data. This means more work, but also that I always could go back to the original data and be sure that I have anything I need for later computations. These parsers are implemented in Java and can be found in \textit{src/org/asl/experiments/baselines /database/logParser}. When the data was ready, it was processed in Matlab where all plots are produces. The corresponding files are found in \textit{ASL/plotting tools}.
 
 \section{Evaluation}\label{sec:evaluation}
 
@@ -414,12 +440,13 @@ To prove that your system functions correctly and that it is stable
 include the trace of a 30 minute run, plotting both response time and
 throughput. Use at least 30 clients (sending and receiving data), 2
 middlewares and a non-empty database.
+\newline\underline{Configuration}: One database, two middleware and two client machines. Each of the client machines runs 60 clients, sending and receiving messages of length 200. The workload generated by the clients is described in listing \ref{lst:load}. Each middleware handles all 60 clients of one clients machine. This made it very easy to launch the clients, because the targetted middleware IP is the same for all clients on a machine. The database was accessed through 40 concurrent connections. To run their connection pool, both middlewares got 20 of them. The database was filled with 300'000 messages before the experiment was run. The reason for this amount, is because, when eyeing at the database baseline with data shown in figure \ref{fig:data_baseline}, we can see that at this point the database already has a severe performance loss, but still operates stable. The database will always stay at this level of messages, because the used workload does not send more than it removes.
+\newline\underline{Expectation}: Looking at all three baselines, we can easily see, that most probably the database will be the bottleneck of the whole system. Introducing an additional delay by adding a load this big, will reduce the overall throughput pretty hefty. Conretely we can try to calculate the expected outcome of the experiment:
+
+A size 300'000 yields a remove response time of approximately $250ms$. Since all other queries are still extremely fast, they are negligible. This means a workload run through queries 3.a to 3.d also takes around $250ms$. We therefor have $\approx$16 requests per second of a single client. Now are 40 database connections open. This yields $16*40=640$ requests per second. Some of the queries are able to be executed in parallel to other queries. So let's postulate a throughput of about $16*(40+10)=800$ requests per second (assuming 10 connections can be used in parallel).
 \TwoFig {figures/stability/stability_tp.eps} {Throughput behaviour} {fig:stability_tp}
 		{figures/stability/stability_rt.eps} {Response time behaviour} {fig:stability_rt}
-content length: 200, num db conns: 40, 120 clients on each 60 clients, 2 middlewares on each a seperate machine
-\newline
-workload was
-send message, get queues with messages for client, read all messages of queue, read message from sender, remove top message from queue
+\newline\underline{Reality}: I'm really happy about how close the prediction was. Indeed, the only thing a bit underestimated was the parallelisability, which explains why more request could be handled than predicted. The startup of the whole system only took like 10 seconds, before it became stable. The increase at the end of figure \ref{fig:stability_tp} is explained by the reducing number of clients, since some are already finished and thus there is less congestion for the other ones.
 \subsection{System Throughput}\label{sec:system-throughput}
 todo: where is the bottleneck?answer: in the database: compare baseline measurements...\newline
 Measure the maximum throughput of the system (describe the exact

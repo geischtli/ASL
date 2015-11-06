@@ -108,6 +108,18 @@ for k = 1:2
         mwwritePerSec2000 = writePerSec;
         mwreadPerSec2000 = readPerSec;
     end
+    
+    if strcmp(msgLen, '200\')
+        clindices200 = indices;
+        clreqPerSec200 = reqPerSec;
+        clwritePerSec200 = writePerSec;
+        clreadPerSec200 = readPerSec;
+    else
+        clindices2000 = indices;
+        clreqPerSec2000 = reqPerSec;
+        clwritePerSec2000 = writePerSec;
+        clreadPerSec2000 = readPerSec;
+    end
     basedir = 'C:\Users\Sandro\Documents\ASL_LOGS\client_baseline_';
     msgLen = '2000\';
 end
