@@ -1,7 +1,6 @@
 clear variables
 
-basedir = 'C:\Users\Sandro\Documents\ASL_LOGS\db_data_baseline\';
-%basedir = 'C:\Users\Sandro\Documents\ASL_LOGS\third_index_db_baseline\';
+basedir = 'C:\Users\Sandro\Documents\ASL_LOGS\third_index_db_baseline\';
 files = dir(basedir);
 numFiles = length(files);
 
@@ -47,8 +46,6 @@ inserts = data(data(:, 4) == 0, :);
 % get all deletes
 deletes = data(data(:, 4) == 1, :);
 
-frac_two_indices = data(:, 3)./data(:, 6);
-
 % now plot the data
 hold on
 
@@ -85,7 +82,7 @@ legend('remove top message', ...
     'size of message table', 'Location', 'northwest')
 xlabel('Operation time (seconds)')
 ylabel('Time needed to complete action (ms)')
-title('Behaviour of the remove-top-most query')
+title('Behaviour of the remove-top-most query with 3rd index')
 
 % set xticks before confusing everything with second yaxis
 xticks = char('0', '', '20', '', '40', '', '60', '', '80', '', ...

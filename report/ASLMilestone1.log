@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (MiKTeX 2.9) (preloaded format=pdflatex 2015.10.13)  6 NOV 2015 13:08
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (MiKTeX 2.9) (preloaded format=pdflatex 2015.10.13)  6 NOV 2015 14:23
 entering extended mode
 **ASLMilestone1.tex
 (ASLMilestone1.tex
@@ -886,6 +886,26 @@ Overfull \hbox (22.66127pt too wide) in paragraph at lines 472--472
  [][] 
  []
 
+Package epstopdf Info: Source file: <figures/database/third_index.eps>
+(epstopdf)                    date: 2015-11-06 14:23:07
+(epstopdf)                    size: 852605 bytes
+(epstopdf)             Output file: <figures/database/third_index-eps-converted
+-to.pdf>
+(epstopdf)                    date: 2015-11-06 14:23:47
+(epstopdf)                    size: 38769 bytes
+(epstopdf)             Command: <epstopdf --outfile=figures/database/third_inde
+x-eps-converted-to.pdf figures/database/third_index.eps>
+(epstopdf)             \includegraphics on input line 476.
+Package epstopdf Info: Output file is already uptodate.
+
+<figures/database/third_index-eps-converted-to.pdf, id=143, 421.575pt x 316.181
+24pt>
+File: figures/database/third_index-eps-converted-to.pdf Graphic file (type pdf)
+
+ <use figures/database/third_index-eps-converted-to.pdf>
+Package pdftex.def Info: figures/database/third_index-eps-converted-to.pdf used
+ on input line 476.
+(pdftex.def)             Requested size: 317.07614pt x 237.81078pt.
 Package epstopdf Info: Source file: <figures/rt_experiment.eps>
 (epstopdf)                    date: 2015-11-05 17:22:41
 (epstopdf)                    size: 33552 bytes
@@ -895,21 +915,21 @@ Package epstopdf Info: Source file: <figures/rt_experiment.eps>
 (epstopdf)                    size: 5535 bytes
 (epstopdf)             Command: <epstopdf --outfile=figures/rt_experiment-eps-c
 onverted-to.pdf figures/rt_experiment.eps>
-(epstopdf)             \includegraphics on input line 480.
+(epstopdf)             \includegraphics on input line 488.
 Package epstopdf Info: Output file is already uptodate.
 
-<figures/rt_experiment-eps-converted-to.pdf, id=143, 422.57875pt x 316.18124pt>
+<figures/rt_experiment-eps-converted-to.pdf, id=144, 422.57875pt x 316.18124pt>
 File: figures/rt_experiment-eps-converted-to.pdf Graphic file (type pdf)
 <use figures/rt_experiment-eps-converted-to.pdf>
 Package pdftex.def Info: figures/rt_experiment-eps-converted-to.pdf used on inp
-ut line 480.
+ut line 488.
 (pdftex.def)             Requested size: 317.07614pt x 237.2463pt.
  [18 <./figures/db_scalability_1m_tp-eps-converted-to.pdf> <./figures/db_scalab
-ility_1m_rt-eps-converted-to.pdf> <./figures/rt_experiment-eps-converted-to.pdf
->] [19]
+ility_1m_rt-eps-converted-to.pdf> <./figures/database/third_index-eps-converted
+-to.pdf>] [19 <./figures/rt_experiment-eps-converted-to.pdf>]
 
 LaTeX Warning: No positions in optional float specifier.
-               Default added (so using `tbp') on input line 507.
+               Default added (so using `tbp') on input line 515.
 
 [20] [21
 
@@ -920,10 +940,10 @@ LaTeX Warning: There were multiply-defined labels.
 
  ) 
 Here is how much of TeX's memory you used:
- 6420 strings out of 493673
- 96495 string characters out of 3141526
- 197575 words of memory out of 3000000
- 9641 multiletter control sequences out of 15000+200000
+ 6426 strings out of 493673
+ 96742 string characters out of 3141526
+ 197585 words of memory out of 3000000
+ 9646 multiletter control sequences out of 15000+200000
  12992 words of font info for 46 fonts, out of 3000000 for 9000
  1025 hyphenation exceptions out of 8191
  42i,10n,81p,1446b,1229s stack positions out of 5000i,500n,10000p,200000b,50000s
@@ -943,9 +963,9 @@ fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/Program Files (x86)/MiKTeX 2.9/fo
 nts/type1/public/amsfonts/cm/cmti10.pfb><C:/Program Files (x86)/MiKTeX 2.9/font
 s/type1/public/amsfonts/cm/cmti12.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/
 type1/public/amsfonts/cm/cmti9.pfb>
-Output written on ASLMilestone1.pdf (21 pages, 580051 bytes).
+Output written on ASLMilestone1.pdf (21 pages, 617046 bytes).
 PDF statistics:
- 221 PDF objects out of 1000 (max. 8388607)
+ 226 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
- 81 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 86 words of extra memory for PDF output out of 10000 (max. 10000000)
 
