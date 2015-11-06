@@ -113,7 +113,7 @@ while [  $CURR_DB_CONNECTIONS -le $END_DB_CONNECTIONS ]; do
 			# first init db with normal functionalities for sending and removing
 			#/home/ec2-user/postgres/bin/psql -U postgres -d mydb -f ../db_setup/initDatabaseWithThirdIndex.sql -q
 			# level3
-			/home/ec2-user/postgres/bin/pgbench -r -l -U postgres --no-vacuum -T $TIME_PER_RUN \
+			/home/ec2-user/postgres/bin/pgbench -r -l -U postgres --no-vacuum -t $TIME_PER_RUN \
 				-f ./benchScripts/benchLevel3_insert.sql -f ./benchScripts/benchLevel3_delete.sql \
 				-c $CURR_DB_CONNECTIONS -j $CURR_DB_CONNECTIONS mydb \
 				>> ./logs/level$1_$2_$3.log

@@ -1,6 +1,7 @@
 clear variables
 
-basedir = 'C:\Users\Sandro\Documents\ASL_LOGS\db_data_baseline\';
+%basedir = 'C:\Users\Sandro\Documents\ASL_LOGS\db_data_baseline\';
+basedir = 'C:\Users\Sandro\Documents\ASL_LOGS\third_index_db_baseline\';
 files = dir(basedir);
 numFiles = length(files);
 
