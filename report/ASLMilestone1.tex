@@ -90,22 +90,10 @@ Milestone}
 
 \subsection{Database}\label{sec:database}
 
-Length: 1-2 pages
-
-Start by explaining the schema of the database and the indexes used to
-speed up data access. Describe the interface to the database (queries
-and stored procedures).
-
-Make sure to explain the design in terms of what you wanted to achieve,
-what decisions you took and what is the expected behavior.
-
-Include baseline performance characteristics of the database (max
-throughput, response time, and scalability).
-
 \subsubsection{Schema and Indexes}\label{sec:schema-and-indexes}
 \begin{figure}[!ht]
 \centering
-\includegraphics[width=0.7\linewidth]{figures/database/db_schema}
+\includegraphics[width=0.6\linewidth]{figures/database/db_schema}
 \caption{The Database Schema}
 \label{fig:db_schema}
 \end{figure}
@@ -166,7 +154,7 @@ The design aims to be simple, but yet complex enough to provide all necessary fu
 \end{itemize}
 
 \subsubsection{Performance characteristics}\label{sec:performance-characteristics}
-To measure the performance of the database I used the postgresql tool pgbench. For the machine details, please refer to section \ref{sec:system-configurations}. I defined three levels of difficulty, which correspond to different query sets, level 0 beeing the easiest, level 2 the hardest (increasing number as well as complexity of statements). This allows us to hopefully see a smooth transition from absolute best to real-world behaviour when benchmarking all levels. For a detailed insight into the levels, please find them in /db\_baseline/benchScripts. All contents had length 200 \textbf{TODO:2000???}. Before evaluating the actual database performance experiment I tested how many clients per database connection are optimal. I expected that the relation of 1:1 should hold, which indeed was the case. This makes sense, because the think-time for a client is very minimal, and thus the connection reusage very good. Even only one additional client is not worthwile. But back to our original baseline experiment.
+\underline{Configuration}: To measure the performance of the database I used the postgresql tool pgbench. For the machine details, please refer to section \ref{sec:system-configurations}. I defined three levels of difficulty, which correspond to different query sets, level 0 beeing the easiest, level 2 the hardest (increasing number as well as complexity of statements). All levels are runned for 30 seconds (ignoring instable start and end seconds) for one up to 60 clients. This allows us to hopefully see a smooth transition from absolute best to real-world behaviour when benchmarking all levels. For a detailed insight into the levels, please find them in /db\_baseline/benchScripts. All contents had length 200. Before evaluating the actual database performance experiment I tested how many clients per database connection are optimal. I expected that the relation of 1:1 should hold, which indeed was the case. This makes sense, because the think-time for a client is very minimal, and thus the connection reusage very good. Even only one additional client is not worthwile. But back to our original baseline experiment.
 \newline\underline{Expectation}: For the throughput and latency I expect the knee to be found around 20 clients, because we work with a machine that provides 8 physical cores and the official rule of thumb given in the PostgreSQL documentation\footnote[1]{https://wiki.postgresql.org/wiki/Number\_Of\_Database\_Connections} is \textit{optimal number of DB connections} $\approx$ $2(core\_count)+c$, where $c$ is a constant. Of course the throughput level ranking from hightest to lowest should be: 0, 1, 2+, 2- (+/- for with or without indices), and vice-versa with the latency. After the knee there should at least be a visible stagnation of the throughput, but a remarkable increase of latency.
 \TwoFig {figures/database/levels0_2_tp.eps} {Database Throughput} {fig:tp}
 		{figures/database/levels0_2_lat.eps} {Database Latency} {fig:lat}
@@ -174,33 +162,19 @@ To measure the performance of the database I used the postgresql tool pgbench. F
 
 The most costly operation in the whole benchmark is identified as the removal of the top message, i.e. executing \textit{remove\_top\_message\_from\_queue}. To further investigate this I performed the subsequent follow-up experiment.
 
-The speed of the top most message removal is highly correlated with the size of the database, because the more messages, the longer the index access and the longer the sorting (ORDER BY) of the final table entries will take. To simulate an extreme scenario I only registered one client and one queue in the system into which all messages were sent. All messages also had sender and receiver set to the lone client and had a random content of length 200. This allows to focus on the behaviour of the performance of the query with respect to the size of the database. We use again the tool pgbench to realize this experiment. The database was benched by 40 concurrent clients operating on 40 database connections. I chose 40, because we just saw, that around this many clients, the database throughput on the level 2+ was maximal. Each client ran independantly and chose 3000 times randomly between either inserting 10 new messages, or removing the top most message of the single queue. This workload ensured, that the database grew over time and the whole experiment ran sufficiently long.
+The speed of the top most message removal is highly correlated with the size of the database, because the more messages, the longer the index access and the longer the sorting (ORDER BY) of the final table entries will take.
+\newline\underline{Configuration}: To simulate an extreme scenario I only registered one client and one queue in the system into which all messages were sent. All messages also had sender and receiver set to the lone client and had a random content of length 200. This allows to focus on the behaviour of the performance of the query with respect to the size of the database. We use again the tool pgbench to realize this experiment. The database was benched by 40 concurrent clients operating on 40 database connections. I chose 40, because we just saw, that around this many clients, the database throughput on the level 2+ was maximal. Each client ran independantly and chose 3000 times randomly between either inserting 10 new messages, or removing the top most message of the single queue. This workload ensured, that the database grew over time and the whole experiment ran sufficiently long.
 \newline\underline{Expectation}: As we saw in the last experiment, neither the throughput, nor the latency totally colapes or exploded. This means that we can expect here a steady increase of the latency, following the trend of the database size quite closely.
-\begin{figure}[!htb]
-\centering
-\includegraphics[width=0.7\linewidth]{figures/database/data_baseline}
-\caption{Deletion performance on a growing database}
-\label{fig:data_baseline}
-\end{figure}
+\TwoFig {figures/database/data_baseline} {Normal Configuration} {fig:data_baseline}
+		{figures/rt_experiment} {Extended Configuration} {fig:third_index}
 \newline\underline{Reality} (figure \ref{fig:data_baseline}): It's clearly visible that the expectation of having a close relation between the performance of the query and the database size is true. To be sure, that the insertion of new messages does not blur the picture, also this data is plotted. The abrupt break-down of the latency at the end of the experiment is due to the completion of the first few clients. This allows the ones still running to get a congestion-free access to the database. The increasing variance is indicates that the query performance starts to get somewhat unstable when the database gets big enough. But nevertheless, even when going up to half a million entries in the message table, there is no extreme behaviour noticable.
 
 \subsection{Middleware}\label{sec:middleware}
 
-Length: 1-2 pages
-
-Explain the design from a high-level point of view, highlighting what
-you wanted to achieve, design decisions, expected behavior.
-
-Then go into more detail on how the middleware connects to the database
-and clients, and how queuing is implemented.
-
-Show what are the performance characteristics of the middleware
-(i.e.~throughput, latency, scalability).
-
 \subsubsection{Design overview}\label{sec:design-overview}
 \begin{figure}[!htb]
 \centering
-\includegraphics[width=1.0\linewidth]{figures/middleware/mw_design}
+\includegraphics[width=1.0\linewidth, height=0.5\linewidth]{figures/middleware/mw_design}
 \caption{A flow diagram of the whole system, showcasing the completion handler functionality. On the middleware there is a watchdog monitoring all connections, and closing them, when they were inactive for a given time interval. Yet unfinished clients would then have to reconnect.}
 \label{fig:mw_design}
 \end{figure}
@@ -254,7 +228,7 @@ When the middleware does start up, it also initializes a connection pool with op
 The queueing is implemented following the slogan \textit{'Queues are nothing, queueing is everything'}.\footnote{The orinal quote from Dwight D. Eisenhower reads \textit{'Plans are nothing, planning is everything'}. See https://en.wikipedia.org/wiki/Plan under Quotations.} Having the concept of completion handlers in hand, no explicit queue is needed. Instead, every incoming request is instantly handled by a completion handler, which also carries out the query execution. The sending of the answer is then performed by another thread of the pool, woken up by the call to the \textit{write} method in the read handler, when the database access is done.
 
 \subsubsection{Performance characteristics}\label{sec:performance-characteristics-1}
-To measure the performance baseline for the middleware I again tried to analyze the Unit-Under-Test as isolated as possible. In the case of the middleware this means to fully exclude the database access, but of course not the connection pooling. To generate the work load another machine, running the clients, is used. This setup of course suffers from network latency, but since we are only interested in the within-middleware response time, as long as the network bandwidth is not the bottleneck we're fine.
+\underline{Configuration}: To measure the performance baseline for the middleware I again tried to analyze the Unit-Under-Test as isolated as possible. In the case of the middleware this means to fully exclude the database access, but of course not the connection pooling. To generate the work load another machine, running the clients, is used. This setup of course suffers from network latency, but since we are only interested in the within-middleware response time, as long as the network bandwidth is not the bottleneck we're fine.
 
 To verify that this is indeed true, before running the main experiment, a bandwidth measurement was done between a middleware and a client machine, which resulted in a 95\% confidence interval of $\pm15.73$MB/s $(=4.64\%)$ around $339.7MB/s$. Each measurement was performed by sending 5GB of data over the network as fast as possible. There was difference between sending the data in one big packet, or in small 1024kB blocks. This is due to the operating system which does cut the network traffic in small packets anyway. For more insight, please find the scripts for this experiment in \textit{/conn\_throughput\_baseline}. When having messages of length 200 characters, the serialized requests are $\approx2000B=2kB$ big. This means we theoretically could send $\frac{337.7MB/s}{2kB}=\frac{337700kB/s}{2kB}=168850$ requests per second. For messages of length 2000 which yield $\approx4kB$, we still can send $84425$ requests per second. Having in mind that the database level 2 maximal throughput layed at $\approx20000$ requests per second, we can be sure, that we won't have any network bottleneck when the bandwidth is that high throughout the experiments.
 
@@ -263,26 +237,11 @@ All requests sent in the upcoming experiment use a content size of 200, this giv
 \TwoFig {figures/middleware/mw_throughput.eps} {Middleware Throughput} {fig:mw_tp}
 {figures/middleware/mw_latency.eps} {Middleware Latency} {fig:mw_lat}
 \newline\underline{Reality} (figures \ref{fig:mw_tp} and \ref{fig:mw_lat}): Let's first consider only the blue curves, i.e. the setting where the middleware was fed by a single client machine  (1CM = 1 client machine). We can clearly see, that the performance of the middleware was underestimated with respect to the number of concurrent clients that can be served while still running stable. 50 clients seem to be handled quite nicely, although the variance starts to grow now. Very strange is the sudden decrease of the troughput after 60 clients. There can be two causes for this behaviour: (1) the middleware reached it's capacity, or (2) the client is the bottleneck and too many clients are trying to send on the same client machine and hinder each other to run at full capacity. To find if (1) or (2) was the reason for this measurements I introduced a second client machine and ran the upcoming follow-up experiment.
-
-Let there be two client machines, which provide sending clients. Each client machine only handles half the clients with this setting. This ensures that the requests per time unit entering the middleware should at least be the same compared to the single-machine case and exceeding the old mark, where it was blocked by the limited resources available on a single machine before. 
+\newline\underline{Configuration}: Let there be two client machines, which provide sending clients. Each client machine only handles half the clients with this setting. This ensures that the requests per time unit entering the middleware should at least be the same compared to the single-machine case and exceeding the old mark, where it was blocked by the limited resources available on a single machine before. 
 \newline\underline{Expectation}: Peeking at the client's locale performance showed in figure \ref{fig:client_tp} (was done before this baseline), we can see that a single client machine provides $\approx$ 60'000 requests per second in a still stable manner (for a detailed experiment description see section \ref{sec:clients}). The only important fact from the client experiment is, that this performance baseline was generated by benchmarking against the simplest middleware listener possible. Since the middleware peaked at about 45'000 requests per second it seems logical to think that the middleware is really at it's limit. But this does not include the extra work the middleware has to do, namely de- and serialization and connection pooling. Let's assume this pulls the response time up to $0.03ms$. This would mean, that the clients would only be able to send $\frac{1s}{0.03ms/Req}\approx$ 33'000 requests per second. This small example shows, that it's not absurd to question the middleware as the bottleneck. So my expectation is, that the knee is pushed to the right, when splitting the work onto two client machines.
 \newline\underline{Reality} (figures \ref{fig:mw_tp} and \ref{fig:mw_lat}): Now let's inspect the resulting green curves (2CM = 2 client machines). Indeed it can be verified, that the bottleneck was at the client-side. This can be said, because the throughput from 70 clients on is now stabilized with a small variance, whereas in the latter case we measured a major break-down with high instability. Having a stable throughput and simultaneously an increasing latency is a clear sign, that the performance peak of the middleware was found, in this case at around 70 clients while processing 45'000 requests per second with a response time of $\approx1$ms on average! One question the plot poses is not yet answered: Why is the throughput for two client machines lower when having less than 70 clients, compared to the single-machine case (and with the latency vice-versa)? This is indeed not so clear, and I had not enough time to investigate this further, so I can only speculate about the reasons: Having two machines, does also mean two have seperate network links. One machine probably benefits from operating system optimizations at the network layer, whereas this effect with two machines is halved. This does then lead to less throughput. But having less throughput does come with the benefit of small variance, and thus high predictability.
 
 \subsection{Clients}\label{sec:clients}
-
-Length: 2-3 pages
-
-Explain the interface of the clients to your messaging system and their
-high level design, including the ways you have instrumented the code for
-debugging and benchmarking purposes.
-
-Provide a detailed description of the workloads used later in the report
-(operation mix, starting and ending state of the database, assumptions
-on workload behavior). Explain how the load was generated (include
-baselines on load generation speed) and how the clients were deployed.
-
-Which are the sanity checks in place for ensuring correct load
-generation and validity of responses?
 
 \subsubsection{Design and interface}\label{sec:design-and-interface}
 For the design please have a look at Figure \ref{fig:mw_design} again. The client is built upon the same principles as the middleware: modular, adaptive and highly parallelisable. We again use the principle of the observer pattern in combination with the completion handlers to implement the client functionality. The interface to the middlewares is provided through the already mentionned \textit{AsynchronousSocketChannel} class provided by the Java NIO-library. As explained in section \ref{sec:interfacing-with-clients}, each client fetches the IP and port number from the command line or the config file. These are then used to establish a connection to the middleware server socket channel. From then on, everything is done by the corresponding completion handlers.
@@ -337,8 +296,8 @@ Request req = RequestBuilder.getRequest(
     requestList.get(reqCounter, client_session));
 \end{lstlisting}, where \textit{getRequest} is simply a switch-statement over the all possible request types.
 \end{enumerate}
-
-Let's find the performance baseline for the client, generating the load described in listing \ref{lst:load}. The experiment conducted for this used one client and one middleware machine. As spoilered in section \ref{sec:performance-characteristics-1}, the middleware server listening here, is a minimalistic version of the one used in the real-use case. The workflow is then the following:
+Let's find the performance baseline for the client, generating the load described in listing \ref{lst:load}.
+\newline\underline{Configuration}: The experiment conducted for this used one client and one middleware machine. As spoilered in section \ref{sec:performance-characteristics-1}, the middleware server listening here, is a minimalistic version of the one used in the real-use case. The workflow is then the following:
 \begin{enumerate}
 	\item The client prepares and sends a request
 	\item The middleware fully reads the request
@@ -363,23 +322,11 @@ Besides the internal message counting and logging, the main sanity check is done
 
 \section{Experimental Setup}\label{sec:experimental-setup}
 
-Length: 1-2 pages
-
-Explain the overall design of the complete system and list the
-configurations (number of middlewares, number of clients, types of
-machines, communication patterns) corresponding to the main workloads.
-
-Describe the mechanisms for deploying the system for experiments and the
-way performance numbers are gathered and processed. Make the description
-so that someone unfamiliar with your system can replicate the steps, and
-reference the different script files you submit as code in the SVN
-repository.
-
 \subsection{System Configurations}\label{sec:system-configurations}
 The overall design of the system is showed in Figure \ref{fig:overall_design}. Multiple clients are launched in a single machine, but all operating in their own process. They all connect to one of the available middlewares, each running on a single machine. Each of them has a connection pool to the database. In the next sections, whenever a number of clients or connections to the database is written, please note that this number does account for the total number in the whole system. They are both shared evenly over the middlewares, if there are multiple online. For example, if 100 clients and two middlewares online and the database is accessed by 30 connections, each middleware will support 50 clients, while having a connection pool of size 15.
 \begin{figure}
 \centering
-\includegraphics[width=0.7\linewidth]{figures/overall_design}
+\includegraphics[width=0.5\linewidth]{figures/overall_design}
 \caption{The overall system design}
 \label{fig:overall_design}
 \end{figure}
@@ -420,33 +367,15 @@ Sometimes the data was too big to be plotted efficiently, so I built some log pa
 
 \section{Evaluation}\label{sec:evaluation}
 
-Length: up to 10 pages
-
-In this section we expect to see the different experiments you ran to
-exercise the system, and with each experiment we expect a clear
-description of the system configuration used, the hypothesis on behavior
-and the explanation of the behavior observed (in terms of the different
-design decisions taken beforehand) -- \emph{missing either of these for
-an experiment might make you lose all points for that given experiment!}
-Keep in mind that for a good explanation of the results of an experiment
-you might have to use one or more methods of data analysis presented in
-the lecture and in the book.
-
-See below for a short description on what each part should contain.
-
 \subsection{System Stability}\label{sec:system-stability}
 
-To prove that your system functions correctly and that it is stable
-include the trace of a 30 minute run, plotting both response time and
-throughput. Use at least 30 clients (sending and receiving data), 2
-middlewares and a non-empty database.
-\newline\underline{Configuration}: One database, two middleware and two client machines. Each of the client machines runs 60 clients, sending and receiving messages of length 200. The workload generated by the clients is described in listing \ref{lst:load}. Each middleware handles all 60 clients of one clients machine. This made it very easy to launch the clients, because the targetted middleware IP is the same for all clients on a machine. The database was accessed through 40 concurrent connections. To run their connection pool, both middlewares got 20 of them. The database was filled with 300'000 messages to and from random clients before the experiment was run. The reason for this amount, is because, when eyeing at the database baseline with data shown in figure \ref{fig:data_baseline}, we can see that at this point the database already has a severe performance loss, but still operates stable. The database will always stay at this level of messages, because the used workload does not send more than it removes.
+\underline{Configuration}: One database, two middleware and two client machines. Each of the client machines runs 60 clients, sending and receiving messages of length 200. The workload generated by the clients is described in listing \ref{lst:load}. Each middleware handles all 60 clients of one clients machine. This made it very easy to launch the clients, because the targetted middleware IP is the same for all clients on a machine. The database was accessed through 40 concurrent connections. To run their connection pool, both middlewares got 20 of them. The database was filled with 300'000 messages to and from random clients before the experiment was run. The reason for this amount, is because, when eyeing at the database baseline with data shown in figure \ref{fig:data_baseline}, we can see that at this point the database already has a severe performance loss, but still operates stable. The database will always stay at this level of messages, because the used workload does not send more than it removes.
 \newline\underline{Expectation}: Looking at all three baselines, we can easily see, that most probably the database will be the bottleneck of the whole system. Introducing an additional delay by adding a load this big, will reduce the overall throughput pretty hefty. Conretely we can try to calculate the expected outcome of the experiment:
 
 A size 300'000 yields a remove response time of approximately $250ms$. Since all other queries are still extremely fast, they are negligible. This means a workload run through queries 3.a to 3.d also takes around $250ms$. We therefor have $\approx$16 requests per second of a single client. Now are 40 database connections open. This yields $16*40=640$ requests per second. Some of the queries are able to be executed in parallel to other queries. So let's postulate a throughput of about $16*(40+10)=800$ requests per second (assuming 10 connections can be used in parallel).
 \TwoFig {figures/stability/stability_tp.eps} {Throughput behaviour} {fig:stability_tp}
 		{figures/stability/stability_rt.eps} {Response time behaviour} {fig:stability_rt}
-\newline\underline{Reality}: I'm really happy about how close the prediction was. Indeed, the only thing a bit underestimated was the parallelisability, which explains why more request could be handled than predicted. The startup of the whole system only took like 10 seconds, before it became stable. The increase at the end of figure \ref{fig:stability_tp} is explained by the reducing number of clients, since some are already finished and thus there is less congestion for the other ones. The latency does fit quite well onto the expectation: Having approximately $120ms$ per request, gives us $4*120ms=480ms$ per request package (3.a - 3.d). Of these, we know that about $250ms$ are needed for the delte operation. This yields a rest of $480-(250+10)ms=220ms$, where $10ms$ are accounted for all other network and computational work of the deletion request. Therefor the three other requests need $\approx70ms$ per request, which does not seem too bad, since the parsing of the list for example can take a lot of time when having this much messages in the system.
+\newline\underline{Reality} (figures \ref{fig:stability_tp} and \ref{fig:stability_rt}): I'm really happy about how close the prediction was. Indeed, the only thing a bit underestimated was the parallelisability, which explains why more request could be handled than predicted. The startup of the whole system only took like 10 seconds, before it became stable. The increase at the end of figure \ref{fig:stability_tp} is explained by the reducing number of clients, since some are already finished and thus there is less congestion for the other ones. The latency does fit quite well onto the expectation: Having approximately $120ms$ per request, gives us $4*120ms=480ms$ per request package (3.a - 3.d). Of these, we know that about $250ms$ are needed for the delte operation. This yields a rest of $480-(250+10)ms=220ms$, where $10ms$ are accounted for all other network and computational work of the deletion request. Therefor the three other requests need $\approx70ms$ per request, which does not seem too bad, since the parsing of the list for example can take a lot of time when having this much messages in the system.
 
 \subsection{System Throughput}\label{sec:system-throughput}
 \underline{Configuration}: One database, two middleware and two client machines. All messages sent and received are of length 200 and stored in an empty database. The workload generated by the clients is described in listing \ref{lst:load}. This means that the size of the database (i.e. message table) will never be of remarkable size and close to 0. The obvious bottleneck in the system is currently the database. So it's important to make sure to really use this bottleneck to it's limits, in order to get a maximal throughput. Eyeing at the $2^k$ experiment performed in section \ref{sec:k-experiment}, we can see in table \ref{tbl:2k_percentages}, that the distortion between the individual factors are only small. Nevertheless we search through the scope of possible best configurations for the maximal throughput. In detail this means we run 20, 30, ... 80 each on two client machines and flood two middlewares with requests. This surely should be enough to find the maximal throughput. In detail the experiment is done by first fixing the number of connections to the database and launching the middlewares. Then the clients join the system. All 30 seconds, 10 new clients join the system. This allows us to reduce the amount of seperate runs we have to to significantly.
@@ -461,43 +390,50 @@ A size 300'000 yields a remove response time of approximately $250ms$. Since all
 
 \subsection{System Scalability}\label{sec:system-scalability}
 
-Explain the different configurations used to explore the scalability of
-your system, and the outcomes of these experiments in terms of
-throughput and response times. The main goal of this subsection is to
-define the ranges in which your system operates best.
+The scalability of our system is firstly watched as a question onto each seperate part of the system:
+\begin{itemize}
+	\item \textbf{Clients}: The client itself is easy scalable: just give it more physical resources and you're fine. Adding more clients into the system would require to have more middlewares listening.
+	\item \textbf{Middleware}: The middleware itself is also only scalable through physical extendsion on machine level. Adding more middlewares only is benefitial when the other ones are oversaturated.
+	\item \textbf{Database}: The database currently provides stable and reliable data access. To get scaling going one would have to introduce table and/or query optimizations.
+\end{itemize}
+Speaking of database optimizations, in the beginning I had the idea of introducing a third index on the column of ARRIVALTIME. Let's quickly see if it allows to scale-up the database with this modification.
+\newline\underline{Configuration}: This experiment is exactly the same as already performed in section \ref{sec:performance-characteristics}. We have the isolated database machine with no middlewares or clients. 40 concurrent clients try to use 40 database connections to perform the same protocol as mentionned there. The only difference is, that now we introduce a new index, namely
+\begin{lstlisting}[language=SQL,basicstyle=\small]
+CREATE INDEX msg_arrtm_idx ON MESSAGE (ARRIVALTIME);
+\end{lstlisting}
+We again inspect the performance of the deletion, the most costly operation in the system.
+\underline{Expectation}: The new index makes our search go to O(1), as soon as we have looked-up the index tree of course. The tradeoff now is that we have exact filtering, because each timestamp is unique, but the size of the index bookkeeping structures will grow immensely fast. My feeling is, that this should never pay off. Having an index this big (actually it's O(log(\#Messages)) high, when assuming a binary tree as index structure behind the scenes), the search for the right row will get extremely slow very quickly.
+%\begin{figure}[!htb]
+%	\centering
+%	\includegraphics[width=0.7\linewidth]{figures/database/third_index}
+%	\caption{}
+%	\label{fig:third_index}
+%\end{figure}
+\newline\underline{Reality} (figure \ref{fig:third_index}): We can see that this new index really gives some problems in the early phase of the benchmark. Just to be sure this is not a random phenomena, I verified this behaviour with multiple runs. So what happens? First the index starts really to get hefty. Luckily, after 60 seconds, the automatic \textit{ANALYZE} call can safe the database from a total breakdown. The solution of it is to totally ignore the third index and only work with the two other ones. We can see that the system recovery after this repair is very fast, which is nice.
 
-A db msg entry is $4+4+4+4+200+8=224bytes$. our machine amusingly is provided with 224GiB of RAM. So let's add $10^9$ entries into our message table, to make sure we need more space than working memory is available.
-result:
-\TwoFig {figures/db_scalability_1m_tp} {Throughput behaviour} {}
-		{figures/db_scalability_1m_rt} {Response Time behaviour} {}
-I also had time to investigate the 3rd index:
-\begin{figure}[!htb]
-\centering
-\includegraphics[width=0.7\linewidth]{figures/database/third_index}
-\caption{}
-\label{fig:third_index}
-\end{figure}
+The second question related to the database is about the maximal table space, before major performance issues are recognized. So let's also try to find an answer to the scalability of the database with respect to memory.
+\newline\underline{Configuration}: An entry in the message table is $4+4+4+4+200+8=224bytes$ big. Our machine amusingly is provided with exactly 224GiB of RAM. So let's add $10^9$ entries into our message table, to make sure we need more space than working memory is available. We use the same configuration as in section \ref{sec:performance-characteristics} experiment 1.
+\newline\underline{Expectation}: I can't image how bad it will be, but surely the performance will drop to below a 1000 requests per second, along with a response time in the region of seconds.
+\TwoFig {figures/db_scalability_1m_tp} {Throughput behaviour} {fig:tp_1m}
+		{figures/db_scalability_1m_rt} {Response Time behaviour} {fig:rt_1m}
+\newline\underline{Reality} (figures \ref{fig:tp_1m} and \ref{fig:rt_1m}): The throughput did really nearly completely vanish, and those clients who got some messages through had to wait for 10's of seconds. This behaviour is clear, because now, the RAM is full, and to fetch data we have to access the much slower main memory.
 
 \subsection{Response Time Variations}\label{sec:response-time-variations}
 
-Report and analyze how the response times change in the system with
-different message sizes, different number of clients and different
-number of middleware nodes.
+\underline{Configuration}: This experiment was carried out under the configuration with one database, two client and one/two (depending on which line you follow in figure \ref{fig:rt_experiment}) middleware machines. There were a total of 40 concurrent database connections. The factors in this experiment are number of clients (going from 20 up 120 in total), the message size (200 or 2000) and as said, the number of middlewares (one or two). The clients did send as much as they can generating the workload described in listing 1.
+\newline\underline{Expectation}: When looking at earlier benchmarks, it seems to be safe to say, that the response time for both, bigger length and more middlewares when the number of client grows should increase. Since the size of a message has indeed an inpact on the database performance, as we just saw, I assume that also here it's visible that the longer messages take a longer response time. Looking at the middleware baseline one can assume that the number of middlewares should be benefitial to the response time.
 \begin{figure}[!htb]
 \centering
 \includegraphics[width=0.7\linewidth]{figures/rt_experiment}
 \caption{Respose Time Variation with respect two Middlewares, Clients and Message Size}
 \label{fig:rt_experiment}
 \end{figure}
-
+\newline\underline{Reality} (figure \ref{fig:rt_experiment}): Sadly the conficence goal of 95\% was here not reached and there was nomore time to do more runs. It's therefor hard to make an exact statment, but neverteless I try. In general it seems that the expectations are met. Besides the two anomalies at 40 and 60 clients, the trends are confirmed, when also in less an explicit way. It's nice that the system seems to perform well for both configurations though.
 
 \subsection{$2^k$ Experiment}\label{sec:k-experiment}
 
-Conduct a 2\^{}k analysis of your system (aim at exploring non-obvious
-interactions of parameters). Use the methods learned in this lecture to
-conduct the detailed analysis.
-
-The \#Clients and \#DB Connections are evenly distributed over the middlewares if there are two in play.
+\underline{Configuration}: The $2^k$ experiment is performed with one database, two middleware and two client machines. The clients follow the workload schema of listing 1. The database is empty at start and will never reach a considerable size. The number of clients and number of database connections are evenly distributed over the middlewares if there are two in play. Each of the runs operated for one minute. Only the stable 30 seconds near the end are included as valid data. The runs are evaluated in terms of throughput and response time.
+\newline\underline{Expectation}: After seeing the basic baselines there seem to be two factors outstanding for the performance of the system: The number of client and the connection pool size. So I expect these two to explain a lot of variance and the others much less.
 \begin{landscape}
 \begin{table}
 \small
@@ -545,38 +481,27 @@ The \#Clients and \#DB Connections are evenly distributed over the middlewares i
 
 \begin{table}
 \centering
-\caption{Variation explained by each factor in \% (Sum $\neq100$ due to rounding for better readability)}
+\caption{Variation explained by each factor in \% (only parameters shown with values $>1\%$)}
 \label{tbl:2k_percentages}
 \begin{tabular}{ccc}
 	Parameter & TP & RT \\ \hline
-	$q_{A}$ & 1.10  & 0.12  \\
+	$q_{A}$ & 1.10 & 0.12 \\
 	$q_{B}$ & \textbf{7.09} & \textbf{77.57}  \\
-	$q_{C}$ & 0.19 & 0.03  \\
 	$q_{D}$ & \textbf{83.35} & \textbf{17.80} \\
-	$q_{AB}$ & 0.17 & 0.22  \\
-	$q_{AC}$ & 0.13  & 0.47  \\
-	$q_{AD}$ & 0.01  & 0.05  \\
-	$q_{BC}$ & 0.03  & 0.04  \\
-	$q_{BD}$ & 2.82  & 3.42 \\
-	$q_{CD}$ & 0.01  & 0.07  \\
-	$q_{ACB}$ & 0.84  & 0.00  \\
-	$q_{ABD}$ & 0.05  & 0.08  \\
-	$q_{ACD}$ & 0.23  & 0.05  \\
-	$q_{BCD}$ & 3.99  & 0.03  \\
-	$q_{ABCD}$ & 1.02  & 0.05  \\
+	$q_{BD}$ & 2.82 & 3.42 \\
+	$q_{CD}$ & 0.01 & 0.07  \\
+	$q_{BCD}$ & 3.99 & 0.03  \\
+	$q_{ABCD}$ & 1.02 & 0.05  \\
 \end{tabular}
 \end{table}
-It's clearly visible, that the throughput and response time are mainly dependent of a single factor each. For the throughput, the most important factor is the number of concurrent database connections (explains $\approx83.35\%$ of the variation). For the response time however the cruial factor is the number of active clients (explains $\approx77.57\%$ of the variation). In words this means the following:
+\underline{Reality} (table \ref{tbl:2k_percentages}): It's clearly visible, that the throughput and response time are mainly dependent of a single factor each. For the throughput, the most important factor is the number of concurrent database connections (explains $\approx83.35\%$ of the variation). For the response time however the cruial factor is the number of active clients (explains $\approx77.57\%$ of the variation). In other words this means the following:
 \begin{itemize}
 	\item \textbf{Throughput}: If more database connections are added, the throughput raises. If the number of database connections is reduces, also the throughput will decrease. The second important factor to consider is the number of clients operating concurrently in the whole system. With an effect of $561$ in column B (see table \ref{tbl:2k}), this yields, that when more clients join the system the throughput will go up, and vice-versa for less clients.
 	\item \textbf{Response Time}: When more clients are join the system the response time will grow. If some clients leave the response time will decrease. The number of database connections has also nearly $\approx18\%$ of influence on the performance. Since the effect of $-0.89$ in the column D (see table \ref{tbl:2k}) is negative, this means, that the more connections to the database are available, the smaller the response will be, and vice-versa for less connections to the database.
 \end{itemize}
 \subsection{Conclusion}\label{sec:conclusion}
+The system is overall performing better than I expected. It was really nice to have the Java NIO-library at hand and to make use of these amazing features. The weak spot of the system is the database. When the message stable starts to grow, the whole system performance gradually starts to decrease. I sadly had no time to investigate this issue further, besides playing with a new index, but I could imagine that a modification by e.g. introducing new tables which ease the look-up, could be benefitial in terms of throughput.
 
-To conclude the report summarize the behavior of the system in terms of
-the design and the representative workloads. Finally, outline in a few
-points what would you do differently if you could design the system
-anew.
-
+If I could start from scratch I would defenitely make use of the log4j2 library again. Logging with Java libraries is indeed quick to setup, but so much less flexible and adaptive. I would also surely stick to git as a repository manager. It's so easy and flexible and through the command line it's possible to ship the code fast and easy to multiple machines. A thing I will never do again, is to put dynamic things like the IP of the database into a config file, because I had to do a lot of git pushes just to set new IP's or ports, which gets very tiring when you have to really do a lot of experiments with a lot of machine changes.
 
 \end{document}

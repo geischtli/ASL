@@ -35,7 +35,7 @@ for i = 1:numMws
             for l = 1:2
                 clientfolder = strcat(strcat(basedir, foldername), clientfolders(l, :));
                 files = dir(clientfolder);
-                for m = 3:2:(numClients+2)
+                for m = 3:2:(currClients+2)
                     % first rtt then tp file
                     currRtt = dlmread(strcat(clientfolder, files(m).name));
                     currTp = dlmread(strcat(clientfolder, files(m+1).name));
@@ -100,7 +100,7 @@ legend('2 Middlewares, Message Length 2000', ...
     '2 Middlewares, Message Length 200', ...
     '1 Middleware, Message Length 2000', ...
     '1 Middleware, Message Length 200', ...
-    'Location', 'northeast')
+    'Location', 'northwest')
 %set(gca, 'YLim', [2, 10])
 title('Response Time Behaviour')
 xlabel('Number of concurrent Clients')

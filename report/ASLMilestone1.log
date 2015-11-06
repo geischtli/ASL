@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (MiKTeX 2.9) (preloaded format=pdflatex 2015.10.13)  6 NOV 2015 14:23
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (MiKTeX 2.9) (preloaded format=pdflatex 2015.10.13)  6 NOV 2015 16:39
 entering extended mode
 **ASLMilestone1.tex
 (ASLMilestone1.tex
@@ -288,11 +288,7 @@ LaTeX Info: Redefining \] on input line 2666.
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\graphics\lscape.sty"
 Package: lscape 2000/10/22 v3.01 Landscape Pages (DPC)
 )
-(ASLMilestone1.aux
-
-LaTeX Warning: Label `' multiply defined.
-
-)
+(ASLMilestone1.aux)
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 11.
 LaTeX Font Info:    ... okay on input line 11.
 LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 11.
@@ -369,32 +365,32 @@ Package caption Info: End \AtBeginDocument code.
 File: figures/database/db_schema.png Graphic file (type png)
 
 <use figures/database/db_schema.png>
-Package pdftex.def Info: figures/database/db_schema.png used on input line 108.
-
-(pdftex.def)             Requested size: 317.07614pt x 135.96516pt.
-LaTeX Font Info:    Try loading font information for OMS+cmr on input line 114.
+Package pdftex.def Info: figures/database/db_schema.png used on input line 96.
+(pdftex.def)             Requested size: 271.7835pt x 116.54329pt.
+LaTeX Font Info:    Try loading font information for OMS+cmr on input line 102.
 
 
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\omscmr.fd"
 File: omscmr.fd 2014/09/29 v2.5h Standard LaTeX font definitions
 )
 LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <10.95> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 114.
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 102.
 
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\listings\lstlang1.sty"
 File: lstlang1.sty 2015/06/04 1.6 listings language file
-) [2 <./figures/database/db_schema.png>]
-Overfull \hbox (4.19655pt too wide) in paragraph at lines 134--135
+)
+Overfull \hbox (4.19655pt too wide) in paragraph at lines 122--123
 \OT1/cmr/m/n/10.95 Every database ac-cess is done via a stored pro-ce-dure de-f
 ined in the file \OT1/cmr/m/it/10.95 /db[]setup/initDatabase.sql\OT1/cmr/m/n/10
 .95 .
  []
 
+[2 <./figures/database/db_schema.png>]
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\listings\lstlang1.sty"
 File: lstlang1.sty 2015/06/04 1.6 listings language file
 )
 LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <10> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 154.
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 142.
  [3]
 Package epstopdf Info: Source file: <figures/database/levels0_2_tp.eps>
 (epstopdf)                    date: 2015-11-02 18:12:19
@@ -405,7 +401,7 @@ d-to.pdf>
 (epstopdf)                    size: 30026 bytes
 (epstopdf)             Command: <epstopdf --outfile=figures/database/levels0_2_
 tp-eps-converted-to.pdf figures/database/levels0_2_tp.eps>
-(epstopdf)             \includegraphics on input line 172.
+(epstopdf)             \includegraphics on input line 160.
 Package epstopdf Info: Output file is already uptodate.
 
 <figures/database/levels0_2_tp-eps-converted-to.pdf, id=22, 421.575pt x 316.181
@@ -414,7 +410,7 @@ File: figures/database/levels0_2_tp-eps-converted-to.pdf Graphic file (type pdf
 )
  <use figures/database/levels0_2_tp-eps-converted-to.pdf>
 Package pdftex.def Info: figures/database/levels0_2_tp-eps-converted-to.pdf use
-d on input line 172.
+d on input line 160.
 (pdftex.def)             Requested size: 249.13371pt x 186.85408pt.
 Package epstopdf Info: Source file: <figures/database/levels0_2_lat.eps>
 (epstopdf)                    date: 2015-11-02 18:12:09
@@ -425,7 +421,7 @@ ed-to.pdf>
 (epstopdf)                    size: 28981 bytes
 (epstopdf)             Command: <epstopdf --outfile=figures/database/levels0_2_
 lat-eps-converted-to.pdf figures/database/levels0_2_lat.eps>
-(epstopdf)             \includegraphics on input line 172.
+(epstopdf)             \includegraphics on input line 160.
 Package epstopdf Info: Output file is already uptodate.
 
 <figures/database/levels0_2_lat-eps-converted-to.pdf, id=23, 421.575pt x 316.18
@@ -434,7 +430,7 @@ File: figures/database/levels0_2_lat-eps-converted-to.pdf Graphic file (type pd
 f)
  <use figures/database/levels0_2_lat-eps-converted-to.pdf>
 Package pdftex.def Info: figures/database/levels0_2_lat-eps-converted-to.pdf us
-ed on input line 172.
+ed on input line 160.
 (pdftex.def)             Requested size: 249.13371pt x 186.85408pt.
 Package epstopdf Info: Source file: <figures/database/levels0_2_tp.eps>
 (epstopdf)                    date: 2015-11-02 18:12:19
@@ -445,17 +441,17 @@ d-to.pdf>
 (epstopdf)                    size: 30026 bytes
 (epstopdf)             Command: <epstopdf --outfile=figures/database/levels0_2_
 tp-eps-converted-to.pdf figures/database/levels0_2_tp.eps>
-(epstopdf)             \includegraphics on input line 172.
+(epstopdf)             \includegraphics on input line 160.
 Package epstopdf Info: Output file is already uptodate.
 File: figures/database/levels0_2_tp-eps-converted-to.pdf Graphic file (type pdf
 )
 
 <use figures/database/levels0_2_tp-eps-converted-to.pdf>
 Package pdftex.def Info: figures/database/levels0_2_tp-eps-converted-to.pdf use
-d on input line 172.
+d on input line 160.
 (pdftex.def)             Requested size: 249.14522pt x 186.85408pt.
 
-Overfull \hbox (22.66127pt too wide) in paragraph at lines 172--172
+Overfull \hbox (22.66127pt too wide) in paragraph at lines 160--160
  [][] 
  []
 
@@ -468,19 +464,21 @@ ed-to.pdf>
 (epstopdf)                    size: 28981 bytes
 (epstopdf)             Command: <epstopdf --outfile=figures/database/levels0_2_
 lat-eps-converted-to.pdf figures/database/levels0_2_lat.eps>
-(epstopdf)             \includegraphics on input line 172.
+(epstopdf)             \includegraphics on input line 160.
 Package epstopdf Info: Output file is already uptodate.
 File: figures/database/levels0_2_lat-eps-converted-to.pdf Graphic file (type pd
 f)
 <use figures/database/levels0_2_lat-eps-converted-to.pdf>
 Package pdftex.def Info: figures/database/levels0_2_lat-eps-converted-to.pdf us
-ed on input line 172.
+ed on input line 160.
 (pdftex.def)             Requested size: 249.14522pt x 186.85408pt.
 
-Overfull \hbox (22.66127pt too wide) in paragraph at lines 172--172
+Overfull \hbox (22.66127pt too wide) in paragraph at lines 160--160
  [][] 
  []
 
+[4 <./figures/database/levels0_2_tp-eps-converted-to.pdf> <./figures/database/l
+evels0_2_lat-eps-converted-to.pdf>]
 Package epstopdf Info: Source file: <figures/database/data_baseline.eps>
 (epstopdf)                    date: 2015-11-02 22:38:47
 (epstopdf)                    size: 771827 bytes
@@ -490,37 +488,98 @@ ed-to.pdf>
 (epstopdf)                    size: 33283 bytes
 (epstopdf)             Command: <epstopdf --outfile=figures/database/data_basel
 ine-eps-converted-to.pdf figures/database/data_baseline.eps>
-(epstopdf)             \includegraphics on input line 181.
+(epstopdf)             \includegraphics on input line 169.
 Package epstopdf Info: Output file is already uptodate.
 
-<figures/database/data_baseline-eps-converted-to.pdf, id=24, 421.575pt x 316.18
+<figures/database/data_baseline-eps-converted-to.pdf, id=43, 421.575pt x 316.18
 124pt>
 File: figures/database/data_baseline-eps-converted-to.pdf Graphic file (type pd
 f)
  <use figures/database/data_baseline-eps-converted-to.pdf>
 Package pdftex.def Info: figures/database/data_baseline-eps-converted-to.pdf us
-ed on input line 181.
-(pdftex.def)             Requested size: 317.07614pt x 237.81078pt.
- [4]
-<figures/middleware/mw_design.png, id=32, 530.73282pt x 347.79938pt>
+ed on input line 169.
+(pdftex.def)             Requested size: 249.13371pt x 186.85408pt.
+Package epstopdf Info: Source file: <figures/rt_experiment.eps>
+(epstopdf)                    date: 2015-11-06 15:39:43
+(epstopdf)                    size: 34000 bytes
+(epstopdf)             Output file: <figures/rt_experiment-eps-converted-to.pdf
+>
+(epstopdf)                    date: 2015-11-06 15:39:53
+(epstopdf)                    size: 5535 bytes
+(epstopdf)             Command: <epstopdf --outfile=figures/rt_experiment-eps-c
+onverted-to.pdf figures/rt_experiment.eps>
+(epstopdf)             \includegraphics on input line 169.
+Package epstopdf Info: Output file is already uptodate.
+
+<figures/rt_experiment-eps-converted-to.pdf, id=44, 421.575pt x 316.18124pt>
+File: figures/rt_experiment-eps-converted-to.pdf Graphic file (type pdf)
+
+<use figures/rt_experiment-eps-converted-to.pdf>
+Package pdftex.def Info: figures/rt_experiment-eps-converted-to.pdf used on inp
+ut line 169.
+(pdftex.def)             Requested size: 249.13371pt x 186.85408pt.
+Package epstopdf Info: Source file: <figures/database/data_baseline.eps>
+(epstopdf)                    date: 2015-11-02 22:38:47
+(epstopdf)                    size: 771827 bytes
+(epstopdf)             Output file: <figures/database/data_baseline-eps-convert
+ed-to.pdf>
+(epstopdf)                    date: 2015-11-02 22:38:52
+(epstopdf)                    size: 33283 bytes
+(epstopdf)             Command: <epstopdf --outfile=figures/database/data_basel
+ine-eps-converted-to.pdf figures/database/data_baseline.eps>
+(epstopdf)             \includegraphics on input line 169.
+Package epstopdf Info: Output file is already uptodate.
+File: figures/database/data_baseline-eps-converted-to.pdf Graphic file (type pd
+f)
+
+<use figures/database/data_baseline-eps-converted-to.pdf>
+Package pdftex.def Info: figures/database/data_baseline-eps-converted-to.pdf us
+ed on input line 169.
+(pdftex.def)             Requested size: 249.14522pt x 186.85408pt.
+
+Overfull \hbox (22.66127pt too wide) in paragraph at lines 169--169
+ [][] 
+ []
+
+Package epstopdf Info: Source file: <figures/rt_experiment.eps>
+(epstopdf)                    date: 2015-11-06 15:39:43
+(epstopdf)                    size: 34000 bytes
+(epstopdf)             Output file: <figures/rt_experiment-eps-converted-to.pdf
+>
+(epstopdf)                    date: 2015-11-06 15:39:53
+(epstopdf)                    size: 5535 bytes
+(epstopdf)             Command: <epstopdf --outfile=figures/rt_experiment-eps-c
+onverted-to.pdf figures/rt_experiment.eps>
+(epstopdf)             \includegraphics on input line 169.
+Package epstopdf Info: Output file is already uptodate.
+File: figures/rt_experiment-eps-converted-to.pdf Graphic file (type pdf)
+<use figures/rt_experiment-eps-converted-to.pdf>
+Package pdftex.def Info: figures/rt_experiment-eps-converted-to.pdf used on inp
+ut line 169.
+(pdftex.def)             Requested size: 249.14522pt x 186.85408pt.
+
+Overfull \hbox (22.66127pt too wide) in paragraph at lines 169--169
+ [][] 
+ []
+
+<figures/middleware/mw_design.png, id=45, 530.73282pt x 347.79938pt>
 File: figures/middleware/mw_design.png Graphic file (type png)
 
 <use figures/middleware/mw_design.png>
-Package pdftex.def Info: figures/middleware/mw_design.png used on input line 20
-3.
-(pdftex.def)             Requested size: 452.9679pt x 296.84085pt.
- [5 <./figures/database/levels0_2_tp-eps-converted-to.pdf> <./figures/database/
-levels0_2_lat-eps-converted-to.pdf>]
-[6 <./figures/database/data_baseline-eps-converted-to.pdf> <./figures/middlewar
-e/mw_design.png>]
-LaTeX Font Info:    Try loading font information for OML+cmr on input line 214.
+Package pdftex.def Info: figures/middleware/mw_design.png used on input line 17
+7.
+(pdftex.def)             Requested size: 452.97144pt x 226.48085pt.
+ [5 <./figures/database/data_baseline-eps-converted-to.pdf> <./figures/rt_exper
+iment-eps-converted-to.pdf>]
+LaTeX Font Info:    Try loading font information for OML+cmr on input line 188.
 
- ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\omlcmr.fd"
+
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\omlcmr.fd"
 File: omlcmr.fd 2014/09/29 v2.5h Standard LaTeX font definitions
 )
 LaTeX Font Info:    Font shape `OML/cmr/m/n' in size <10> not available
-(Font)              Font shape `OML/cmm/m/it' tried instead on input line 214.
- [7] [8]
+(Font)              Font shape `OML/cmm/m/it' tried instead on input line 188.
+ [6 <./figures/middleware/mw_design.png>] [7]
 Package epstopdf Info: Source file: <figures/middleware/mw_throughput.eps>
 (epstopdf)                    date: 2015-11-03 11:05:43
 (epstopdf)                    size: 100128 bytes
@@ -530,16 +589,16 @@ rted-to.pdf>
 (epstopdf)                    size: 6851 bytes
 (epstopdf)             Command: <epstopdf --outfile=figures/middleware/mw_throu
 ghput-eps-converted-to.pdf figures/middleware/mw_throughput.eps>
-(epstopdf)             \includegraphics on input line 264.
+(epstopdf)             \includegraphics on input line 238.
 Package epstopdf Info: Output file is already uptodate.
 
-<figures/middleware/mw_throughput-eps-converted-to.pdf, id=64, 421.575pt x 316.
+<figures/middleware/mw_throughput-eps-converted-to.pdf, id=65, 421.575pt x 316.
 18124pt>
 File: figures/middleware/mw_throughput-eps-converted-to.pdf Graphic file (type 
 pdf)
  <use figures/middleware/mw_throughput-eps-converted-to.pdf>
 Package pdftex.def Info: figures/middleware/mw_throughput-eps-converted-to.pdf 
-used on input line 264.
+used on input line 238.
 (pdftex.def)             Requested size: 249.13371pt x 186.85408pt.
 Package epstopdf Info: Source file: <figures/middleware/mw_latency.eps>
 (epstopdf)                    date: 2015-11-03 11:05:24
@@ -550,16 +609,16 @@ d-to.pdf>
 (epstopdf)                    size: 54811 bytes
 (epstopdf)             Command: <epstopdf --outfile=figures/middleware/mw_laten
 cy-eps-converted-to.pdf figures/middleware/mw_latency.eps>
-(epstopdf)             \includegraphics on input line 264.
+(epstopdf)             \includegraphics on input line 238.
 Package epstopdf Info: Output file is already uptodate.
 
-<figures/middleware/mw_latency-eps-converted-to.pdf, id=65, 421.575pt x 317.185
+<figures/middleware/mw_latency-eps-converted-to.pdf, id=66, 421.575pt x 317.185
 pt>
 File: figures/middleware/mw_latency-eps-converted-to.pdf Graphic file (type pdf
 )
  <use figures/middleware/mw_latency-eps-converted-to.pdf>
 Package pdftex.def Info: figures/middleware/mw_latency-eps-converted-to.pdf use
-d on input line 264.
+d on input line 238.
 (pdftex.def)             Requested size: 249.13371pt x 187.44727pt.
 Package epstopdf Info: Source file: <figures/middleware/mw_throughput.eps>
 (epstopdf)                    date: 2015-11-03 11:05:43
@@ -570,17 +629,17 @@ rted-to.pdf>
 (epstopdf)                    size: 6851 bytes
 (epstopdf)             Command: <epstopdf --outfile=figures/middleware/mw_throu
 ghput-eps-converted-to.pdf figures/middleware/mw_throughput.eps>
-(epstopdf)             \includegraphics on input line 264.
+(epstopdf)             \includegraphics on input line 238.
 Package epstopdf Info: Output file is already uptodate.
 File: figures/middleware/mw_throughput-eps-converted-to.pdf Graphic file (type 
 pdf)
 
 <use figures/middleware/mw_throughput-eps-converted-to.pdf>
 Package pdftex.def Info: figures/middleware/mw_throughput-eps-converted-to.pdf 
-used on input line 264.
+used on input line 238.
 (pdftex.def)             Requested size: 249.14522pt x 186.85408pt.
 
-Overfull \hbox (22.66127pt too wide) in paragraph at lines 264--264
+Overfull \hbox (22.66127pt too wide) in paragraph at lines 238--238
  [][] 
  []
 
@@ -593,21 +652,21 @@ d-to.pdf>
 (epstopdf)                    size: 54811 bytes
 (epstopdf)             Command: <epstopdf --outfile=figures/middleware/mw_laten
 cy-eps-converted-to.pdf figures/middleware/mw_latency.eps>
-(epstopdf)             \includegraphics on input line 264.
+(epstopdf)             \includegraphics on input line 238.
 Package epstopdf Info: Output file is already uptodate.
 File: figures/middleware/mw_latency-eps-converted-to.pdf Graphic file (type pdf
 )
 <use figures/middleware/mw_latency-eps-converted-to.pdf>
 Package pdftex.def Info: figures/middleware/mw_latency-eps-converted-to.pdf use
-d on input line 264.
+d on input line 238.
 (pdftex.def)             Requested size: 248.35399pt x 186.85408pt.
 
-Overfull \hbox (21.87004pt too wide) in paragraph at lines 264--264
+Overfull \hbox (21.87004pt too wide) in paragraph at lines 238--238
  [][] 
  []
 
-[9 <./figures/middleware/mw_throughput-eps-converted-to.pdf> <./figures/middlew
-are/mw_latency-eps-converted-to.pdf>] [10] [11]
+[8] [9 <./figures/middleware/mw_throughput-eps-converted-to.pdf> <./figures/mid
+dleware/mw_latency-eps-converted-to.pdf>] [10]
 Package epstopdf Info: Source file: <figures/client/client_tp.eps>
 (epstopdf)                    date: 2015-11-06 08:24:43
 (epstopdf)                    size: 144762 bytes
@@ -617,14 +676,14 @@ pdf>
 (epstopdf)                    size: 10130 bytes
 (epstopdf)             Command: <epstopdf --outfile=figures/client/client_tp-ep
 s-converted-to.pdf figures/client/client_tp.eps>
-(epstopdf)             \includegraphics on input line 349.
+(epstopdf)             \includegraphics on input line 308.
 Package epstopdf Info: Output file is already uptodate.
 
-<figures/client/client_tp-eps-converted-to.pdf, id=88, 421.575pt x 316.18124pt>
+<figures/client/client_tp-eps-converted-to.pdf, id=90, 421.575pt x 316.18124pt>
 File: figures/client/client_tp-eps-converted-to.pdf Graphic file (type pdf)
 <use figures/client/client_tp-eps-converted-to.pdf>
 Package pdftex.def Info: figures/client/client_tp-eps-converted-to.pdf used on 
-input line 349.
+input line 308.
 (pdftex.def)             Requested size: 249.13371pt x 186.85408pt.
 Package epstopdf Info: Source file: <figures/client/client_lat.eps>
 (epstopdf)                    date: 2015-11-06 08:20:45
@@ -635,15 +694,15 @@ Package epstopdf Info: Source file: <figures/client/client_lat.eps>
 (epstopdf)                    size: 9385 bytes
 (epstopdf)             Command: <epstopdf --outfile=figures/client/client_lat-e
 ps-converted-to.pdf figures/client/client_lat.eps>
-(epstopdf)             \includegraphics on input line 349.
+(epstopdf)             \includegraphics on input line 308.
 Package epstopdf Info: Output file is already uptodate.
 
-<figures/client/client_lat-eps-converted-to.pdf, id=89, 421.575pt x 316.18124pt
+<figures/client/client_lat-eps-converted-to.pdf, id=91, 421.575pt x 316.18124pt
 >
 File: figures/client/client_lat-eps-converted-to.pdf Graphic file (type pdf)
  <use figures/client/client_lat-eps-converted-to.pdf>
 Package pdftex.def Info: figures/client/client_lat-eps-converted-to.pdf used on
- input line 349.
+ input line 308.
 (pdftex.def)             Requested size: 249.13371pt x 186.85408pt.
 Package epstopdf Info: Source file: <figures/client/client_tp.eps>
 (epstopdf)                    date: 2015-11-06 08:24:43
@@ -654,16 +713,16 @@ pdf>
 (epstopdf)                    size: 10130 bytes
 (epstopdf)             Command: <epstopdf --outfile=figures/client/client_tp-ep
 s-converted-to.pdf figures/client/client_tp.eps>
-(epstopdf)             \includegraphics on input line 349.
+(epstopdf)             \includegraphics on input line 308.
 Package epstopdf Info: Output file is already uptodate.
 File: figures/client/client_tp-eps-converted-to.pdf Graphic file (type pdf)
 
 <use figures/client/client_tp-eps-converted-to.pdf>
 Package pdftex.def Info: figures/client/client_tp-eps-converted-to.pdf used on 
-input line 349.
+input line 308.
 (pdftex.def)             Requested size: 249.14522pt x 186.85408pt.
 
-Overfull \hbox (22.66127pt too wide) in paragraph at lines 349--349
+Overfull \hbox (22.66127pt too wide) in paragraph at lines 308--308
  [][] 
  []
 
@@ -676,26 +735,26 @@ Package epstopdf Info: Source file: <figures/client/client_lat.eps>
 (epstopdf)                    size: 9385 bytes
 (epstopdf)             Command: <epstopdf --outfile=figures/client/client_lat-e
 ps-converted-to.pdf figures/client/client_lat.eps>
-(epstopdf)             \includegraphics on input line 349.
+(epstopdf)             \includegraphics on input line 308.
 Package epstopdf Info: Output file is already uptodate.
 File: figures/client/client_lat-eps-converted-to.pdf Graphic file (type pdf)
 <use figures/client/client_lat-eps-converted-to.pdf>
 Package pdftex.def Info: figures/client/client_lat-eps-converted-to.pdf used on
- input line 349.
+ input line 308.
 (pdftex.def)             Requested size: 249.14522pt x 186.85408pt.
 
-Overfull \hbox (22.66127pt too wide) in paragraph at lines 349--349
+Overfull \hbox (22.66127pt too wide) in paragraph at lines 308--308
  [][] 
  []
 
-[12] <figures/overall_design.png, id=93, 592.46344pt x 581.92406pt>
+[11] <figures/overall_design.png, id=95, 592.46344pt x 581.92406pt>
 File: figures/overall_design.png Graphic file (type png)
 
 <use figures/overall_design.png>
-Package pdftex.def Info: figures/overall_design.png used on input line 382.
-(pdftex.def)             Requested size: 317.07614pt x 311.44617pt.
- [13 <./figures/client/client_tp-eps-converted-to.pdf> <./figures/client/client
-_lat-eps-converted-to.pdf>] [14 <./figures/overall_design.png>] [15]
+Package pdftex.def Info: figures/overall_design.png used on input line 329.
+(pdftex.def)             Requested size: 226.48395pt x 222.45647pt.
+ [12 <./figures/client/client_tp-eps-converted-to.pdf> <./figures/client/client
+_lat-eps-converted-to.pdf>] [13 <./figures/overall_design.png>]
 Package epstopdf Info: Source file: <figures/stability/stability_tp.eps>
 (epstopdf)                    date: 2015-11-04 13:37:22
 (epstopdf)                    size: 50411 bytes
@@ -705,16 +764,16 @@ ed-to.pdf>
 (epstopdf)                    size: 6981 bytes
 (epstopdf)             Command: <epstopdf --outfile=figures/stability/stability
 _tp-eps-converted-to.pdf figures/stability/stability_tp.eps>
-(epstopdf)             \includegraphics on input line 448.
+(epstopdf)             \includegraphics on input line 377.
 Package epstopdf Info: Output file is already uptodate.
 
-<figures/stability/stability_tp-eps-converted-to.pdf, id=116, 421.575pt x 316.1
+<figures/stability/stability_tp-eps-converted-to.pdf, id=115, 421.575pt x 316.1
 8124pt>
 File: figures/stability/stability_tp-eps-converted-to.pdf Graphic file (type pd
 f)
  <use figures/stability/stability_tp-eps-converted-to.pdf>
 Package pdftex.def Info: figures/stability/stability_tp-eps-converted-to.pdf us
-ed on input line 448.
+ed on input line 377.
 (pdftex.def)             Requested size: 249.13371pt x 186.85408pt.
 Package epstopdf Info: Source file: <figures/stability/stability_rt.eps>
 (epstopdf)                    date: 2015-11-06 10:33:00
@@ -725,16 +784,16 @@ ed-to.pdf>
 (epstopdf)                    size: 9121 bytes
 (epstopdf)             Command: <epstopdf --outfile=figures/stability/stability
 _rt-eps-converted-to.pdf figures/stability/stability_rt.eps>
-(epstopdf)             \includegraphics on input line 448.
+(epstopdf)             \includegraphics on input line 377.
 Package epstopdf Info: Output file is already uptodate.
 
-<figures/stability/stability_rt-eps-converted-to.pdf, id=117, 421.575pt x 316.1
+<figures/stability/stability_rt-eps-converted-to.pdf, id=116, 421.575pt x 316.1
 8124pt>
 File: figures/stability/stability_rt-eps-converted-to.pdf Graphic file (type pd
 f)
  <use figures/stability/stability_rt-eps-converted-to.pdf>
 Package pdftex.def Info: figures/stability/stability_rt-eps-converted-to.pdf us
-ed on input line 448.
+ed on input line 377.
 (pdftex.def)             Requested size: 249.13371pt x 186.85408pt.
 Package epstopdf Info: Source file: <figures/stability/stability_tp.eps>
 (epstopdf)                    date: 2015-11-04 13:37:22
@@ -745,17 +804,17 @@ ed-to.pdf>
 (epstopdf)                    size: 6981 bytes
 (epstopdf)             Command: <epstopdf --outfile=figures/stability/stability
 _tp-eps-converted-to.pdf figures/stability/stability_tp.eps>
-(epstopdf)             \includegraphics on input line 448.
+(epstopdf)             \includegraphics on input line 377.
 Package epstopdf Info: Output file is already uptodate.
 File: figures/stability/stability_tp-eps-converted-to.pdf Graphic file (type pd
 f)
 
 <use figures/stability/stability_tp-eps-converted-to.pdf>
 Package pdftex.def Info: figures/stability/stability_tp-eps-converted-to.pdf us
-ed on input line 448.
+ed on input line 377.
 (pdftex.def)             Requested size: 249.14522pt x 186.85408pt.
 
-Overfull \hbox (22.66127pt too wide) in paragraph at lines 448--448
+Overfull \hbox (22.66127pt too wide) in paragraph at lines 377--377
  [][] 
  []
 
@@ -768,19 +827,20 @@ ed-to.pdf>
 (epstopdf)                    size: 9121 bytes
 (epstopdf)             Command: <epstopdf --outfile=figures/stability/stability
 _rt-eps-converted-to.pdf figures/stability/stability_rt.eps>
-(epstopdf)             \includegraphics on input line 448.
+(epstopdf)             \includegraphics on input line 377.
 Package epstopdf Info: Output file is already uptodate.
 File: figures/stability/stability_rt-eps-converted-to.pdf Graphic file (type pd
 f)
 <use figures/stability/stability_rt-eps-converted-to.pdf>
 Package pdftex.def Info: figures/stability/stability_rt-eps-converted-to.pdf us
-ed on input line 448.
+ed on input line 377.
 (pdftex.def)             Requested size: 249.14522pt x 186.85408pt.
 
-Overfull \hbox (22.66127pt too wide) in paragraph at lines 448--448
+Overfull \hbox (22.66127pt too wide) in paragraph at lines 377--377
  [][] 
  []
 
+[14]
 Package epstopdf Info: Source file: <figures/max_tp.eps>
 (epstopdf)                    date: 2015-11-05 13:35:47
 (epstopdf)                    size: 93398 bytes
@@ -789,17 +849,17 @@ Package epstopdf Info: Source file: <figures/max_tp.eps>
 (epstopdf)                    size: 6063 bytes
 (epstopdf)             Command: <epstopdf --outfile=figures/max_tp-eps-converte
 d-to.pdf figures/max_tp.eps>
-(epstopdf)             \includegraphics on input line 456.
+(epstopdf)             \includegraphics on input line 385.
 Package epstopdf Info: Output file is already uptodate.
-<figures/max_tp-eps-converted-to.pdf, id=118, 421.575pt x 316.18124pt>
+ <figures/max_tp-eps-converted-to.pdf, id=120, 421.575pt x 316.18124pt>
 File: figures/max_tp-eps-converted-to.pdf Graphic file (type pdf)
 
 <use figures/max_tp-eps-converted-to.pdf>
 Package pdftex.def Info: figures/max_tp-eps-converted-to.pdf used on input line
- 456.
+ 385.
 (pdftex.def)             Requested size: 317.07614pt x 237.81078pt.
- [16 <./figures/stability/stability_tp-eps-converted-to.pdf> <./figures/stabili
-ty/stability_rt-eps-converted-to.pdf>] [17 <./figures/max_tp-eps-converted-to.p
+ [15 <./figures/stability/stability_tp-eps-converted-to.pdf> <./figures/stabili
+ty/stability_rt-eps-converted-to.pdf>] [16 <./figures/max_tp-eps-converted-to.p
 df>]
 Package epstopdf Info: Source file: <figures/db_scalability_1m_tp.eps>
 (epstopdf)                    date: 2015-11-06 13:06:47
@@ -810,16 +870,16 @@ Package epstopdf Info: Source file: <figures/db_scalability_1m_tp.eps>
 (epstopdf)                    size: 5916 bytes
 (epstopdf)             Command: <epstopdf --outfile=figures/db_scalability_1m_t
 p-eps-converted-to.pdf figures/db_scalability_1m_tp.eps>
-(epstopdf)             \includegraphics on input line 472.
+(epstopdf)             \includegraphics on input line 418.
 Package epstopdf Info: Output file is already uptodate.
 
-<figures/db_scalability_1m_tp-eps-converted-to.pdf, id=141, 421.575pt x 316.181
+<figures/db_scalability_1m_tp-eps-converted-to.pdf, id=143, 421.575pt x 316.181
 24pt>
 File: figures/db_scalability_1m_tp-eps-converted-to.pdf Graphic file (type pdf)
 
  <use figures/db_scalability_1m_tp-eps-converted-to.pdf>
 Package pdftex.def Info: figures/db_scalability_1m_tp-eps-converted-to.pdf used
- on input line 472.
+ on input line 418.
 (pdftex.def)             Requested size: 249.13371pt x 186.85408pt.
 Package epstopdf Info: Source file: <figures/db_scalability_1m_rt.eps>
 (epstopdf)                    date: 2015-11-06 13:07:02
@@ -830,16 +890,16 @@ Package epstopdf Info: Source file: <figures/db_scalability_1m_rt.eps>
 (epstopdf)                    size: 6083 bytes
 (epstopdf)             Command: <epstopdf --outfile=figures/db_scalability_1m_r
 t-eps-converted-to.pdf figures/db_scalability_1m_rt.eps>
-(epstopdf)             \includegraphics on input line 472.
+(epstopdf)             \includegraphics on input line 418.
 Package epstopdf Info: Output file is already uptodate.
 
-<figures/db_scalability_1m_rt-eps-converted-to.pdf, id=142, 421.575pt x 316.181
+<figures/db_scalability_1m_rt-eps-converted-to.pdf, id=144, 421.575pt x 316.181
 24pt>
 File: figures/db_scalability_1m_rt-eps-converted-to.pdf Graphic file (type pdf)
 
  <use figures/db_scalability_1m_rt-eps-converted-to.pdf>
 Package pdftex.def Info: figures/db_scalability_1m_rt-eps-converted-to.pdf used
- on input line 472.
+ on input line 418.
 (pdftex.def)             Requested size: 249.13371pt x 186.85408pt.
 Package epstopdf Info: Source file: <figures/db_scalability_1m_tp.eps>
 (epstopdf)                    date: 2015-11-06 13:06:47
@@ -850,17 +910,17 @@ Package epstopdf Info: Source file: <figures/db_scalability_1m_tp.eps>
 (epstopdf)                    size: 5916 bytes
 (epstopdf)             Command: <epstopdf --outfile=figures/db_scalability_1m_t
 p-eps-converted-to.pdf figures/db_scalability_1m_tp.eps>
-(epstopdf)             \includegraphics on input line 472.
+(epstopdf)             \includegraphics on input line 418.
 Package epstopdf Info: Output file is already uptodate.
 File: figures/db_scalability_1m_tp-eps-converted-to.pdf Graphic file (type pdf)
 
 
 <use figures/db_scalability_1m_tp-eps-converted-to.pdf>
 Package pdftex.def Info: figures/db_scalability_1m_tp-eps-converted-to.pdf used
- on input line 472.
+ on input line 418.
 (pdftex.def)             Requested size: 249.14522pt x 186.85408pt.
 
-Overfull \hbox (22.66127pt too wide) in paragraph at lines 472--472
+Overfull \hbox (22.66127pt too wide) in paragraph at lines 418--418
  [][] 
  []
 
@@ -873,99 +933,72 @@ Package epstopdf Info: Source file: <figures/db_scalability_1m_rt.eps>
 (epstopdf)                    size: 6083 bytes
 (epstopdf)             Command: <epstopdf --outfile=figures/db_scalability_1m_r
 t-eps-converted-to.pdf figures/db_scalability_1m_rt.eps>
-(epstopdf)             \includegraphics on input line 472.
+(epstopdf)             \includegraphics on input line 418.
 Package epstopdf Info: Output file is already uptodate.
 File: figures/db_scalability_1m_rt-eps-converted-to.pdf Graphic file (type pdf)
 
 <use figures/db_scalability_1m_rt-eps-converted-to.pdf>
 Package pdftex.def Info: figures/db_scalability_1m_rt-eps-converted-to.pdf used
- on input line 472.
+ on input line 418.
 (pdftex.def)             Requested size: 249.14522pt x 186.85408pt.
 
-Overfull \hbox (22.66127pt too wide) in paragraph at lines 472--472
+Overfull \hbox (22.66127pt too wide) in paragraph at lines 418--418
  [][] 
  []
 
-Package epstopdf Info: Source file: <figures/database/third_index.eps>
-(epstopdf)                    date: 2015-11-06 14:23:07
-(epstopdf)                    size: 852605 bytes
-(epstopdf)             Output file: <figures/database/third_index-eps-converted
--to.pdf>
-(epstopdf)                    date: 2015-11-06 14:23:47
-(epstopdf)                    size: 38769 bytes
-(epstopdf)             Command: <epstopdf --outfile=figures/database/third_inde
-x-eps-converted-to.pdf figures/database/third_index.eps>
-(epstopdf)             \includegraphics on input line 476.
-Package epstopdf Info: Output file is already uptodate.
-
-<figures/database/third_index-eps-converted-to.pdf, id=143, 421.575pt x 316.181
-24pt>
-File: figures/database/third_index-eps-converted-to.pdf Graphic file (type pdf)
-
- <use figures/database/third_index-eps-converted-to.pdf>
-Package pdftex.def Info: figures/database/third_index-eps-converted-to.pdf used
- on input line 476.
-(pdftex.def)             Requested size: 317.07614pt x 237.81078pt.
 Package epstopdf Info: Source file: <figures/rt_experiment.eps>
-(epstopdf)                    date: 2015-11-05 17:22:41
-(epstopdf)                    size: 33552 bytes
+(epstopdf)                    date: 2015-11-06 15:39:43
+(epstopdf)                    size: 34000 bytes
 (epstopdf)             Output file: <figures/rt_experiment-eps-converted-to.pdf
 >
-(epstopdf)                    date: 2015-11-05 17:22:51
+(epstopdf)                    date: 2015-11-06 15:39:53
 (epstopdf)                    size: 5535 bytes
 (epstopdf)             Command: <epstopdf --outfile=figures/rt_experiment-eps-c
 onverted-to.pdf figures/rt_experiment.eps>
-(epstopdf)             \includegraphics on input line 488.
+(epstopdf)             \includegraphics on input line 427.
 Package epstopdf Info: Output file is already uptodate.
-
-<figures/rt_experiment-eps-converted-to.pdf, id=144, 422.57875pt x 316.18124pt>
 File: figures/rt_experiment-eps-converted-to.pdf Graphic file (type pdf)
 <use figures/rt_experiment-eps-converted-to.pdf>
 Package pdftex.def Info: figures/rt_experiment-eps-converted-to.pdf used on inp
-ut line 488.
-(pdftex.def)             Requested size: 317.07614pt x 237.2463pt.
- [18 <./figures/db_scalability_1m_tp-eps-converted-to.pdf> <./figures/db_scalab
-ility_1m_rt-eps-converted-to.pdf> <./figures/database/third_index-eps-converted
--to.pdf>] [19 <./figures/rt_experiment-eps-converted-to.pdf>]
+ut line 427.
+(pdftex.def)             Requested size: 317.07614pt x 237.81078pt.
+ [17 <./figures/db_scalability_1m_tp-eps-converted-to.pdf> <./figures/db_scalab
+ility_1m_rt-eps-converted-to.pdf>] [18]
 
 LaTeX Warning: No positions in optional float specifier.
-               Default added (so using `tbp') on input line 515.
+               Default added (so using `tbp') on input line 451.
 
-[20] [21
+[19] [20
 
 
-] (ASLMilestone1.aux)
-
-LaTeX Warning: There were multiply-defined labels.
-
- ) 
+] (ASLMilestone1.aux) ) 
 Here is how much of TeX's memory you used:
- 6426 strings out of 493673
- 96742 string characters out of 3141526
- 197585 words of memory out of 3000000
- 9646 multiletter control sequences out of 15000+200000
+ 6422 strings out of 493673
+ 96536 string characters out of 3141526
+ 194838 words of memory out of 3000000
+ 9643 multiletter control sequences out of 15000+200000
  12992 words of font info for 46 fonts, out of 3000000 for 9000
  1025 hyphenation exceptions out of 8191
- 42i,10n,81p,1446b,1229s stack positions out of 5000i,500n,10000p,200000b,50000s
-<C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmbx10.pfb>
-<C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmbx12.pfb><C
-:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi10.pfb><C:/
-Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi7.pfb><C:/Pro
-gram Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi8.pfb><C:/Progra
-m Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr10.pfb><C:/Program F
-iles (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr12.pfb><C:/Program File
-s (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr17.pfb><C:/Program Files (
-x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr6.pfb><C:/Program Files (x86)
-/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr7.pfb><C:/Program Files (x86)/MiK
-TeX 2.9/fonts/type1/public/amsfonts/cm/cmr8.pfb><C:/Program Files (x86)/MiKTeX 
-2.9/fonts/type1/public/amsfonts/cm/cmr9.pfb><C:/Program Files (x86)/MiKTeX 2.9/
-fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/Program Files (x86)/MiKTeX 2.9/fo
-nts/type1/public/amsfonts/cm/cmti10.pfb><C:/Program Files (x86)/MiKTeX 2.9/font
-s/type1/public/amsfonts/cm/cmti12.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/
-type1/public/amsfonts/cm/cmti9.pfb>
-Output written on ASLMilestone1.pdf (21 pages, 617046 bytes).
+ 42i,10n,81p,1446b,1552s stack positions out of 5000i,500n,10000p,200000b,50000s
+<C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/am
+sfonts/cm/cmbx10.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsf
+onts/cm/cmbx12.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfon
+ts/cm/cmmi10.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts
+/cm/cmmi7.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm
+/cmmi8.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cm
+r10.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr12
+.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr17.pf
+b><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr6.pfb><C
+:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr7.pfb><C:/Pr
+ogram Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr8.pfb><C:/Progra
+m Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr9.pfb><C:/Program Fi
+les (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/Program File
+s (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmti10.pfb><C:/Program Files 
+(x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmti12.pfb><C:/Program Files (x
+86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmti9.pfb>
+Output written on ASLMilestone1.pdf (20 pages, 582645 bytes).
 PDF statistics:
- 226 PDF objects out of 1000 (max. 8388607)
+ 218 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
- 86 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 81 words of extra memory for PDF output out of 10000 (max. 10000000)
 

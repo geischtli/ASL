@@ -1,3 +1,16 @@
+//////////////////////////////////////////////////
+// Semester:         Fall 2015
+//
+// Author:           Sandro Huber
+// Email:            sanhuber@student.ethz.ch
+// Lecture: 	     Advanced System Lab
+//
+//////////////////////////////////////////////////
+/*
+ * This is the main file of the clients. The client's ant
+ * script will call this main method in order to startup
+ * a client.
+ */
 package org.asl;
 
 import java.io.IOException;

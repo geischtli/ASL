@@ -1,3 +1,16 @@
+//////////////////////////////////////////////////
+// Semester:         Fall 2015
+//
+// Author:           Sandro Huber
+// Email:            sanhuber@student.ethz.ch
+// Lecture: 	     Advanced System Lab
+//
+//////////////////////////////////////////////////
+/*
+ * this file is only used for local debugging,
+ * sucht that we don't have two seperate processes,
+ * but rather only 1 for convenience
+ */
 package org.asl;
 
 import java.io.IOException;
