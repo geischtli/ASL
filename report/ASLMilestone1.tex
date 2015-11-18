@@ -38,8 +38,8 @@
 }
 
 \newcommand\TwoFig[6]{% Image1 Caption1 Label1 Image2 ...
-	\sbox\IBoxA{\includegraphics[width=0.55\textwidth]{#1}}
-	\sbox\IBoxB{\includegraphics[width=0.55\textwidth]{#4}}%
+	\sbox\IBoxA{\includegraphics[width=0.5\textwidth]{#1}}
+	\sbox\IBoxB{\includegraphics[width=0.5\textwidth]{#4}}%
 	\ifdim\ht\IBoxA>\ht\IBoxB
 	\setlength\IHeight{\ht\IBoxB}\else\setlength\IHeight{\ht\IBoxA}\fi%
 	\begin{figure}[!htb]
@@ -166,7 +166,7 @@ The speed of the top most message removal is highly correlated with the size of 
 \newline\underline{Configuration}: To simulate an extreme scenario I only registered one client and one queue in the system into which all messages were sent. All messages also had sender and receiver set to the lone client and had a random content of length 200. This allows to focus on the behaviour of the performance of the query with respect to the size of the database. We use again the tool pgbench to realize this experiment. The database was benched by 40 concurrent clients operating on 40 database connections. I chose 40, because we just saw, that around this many clients, the database throughput on the level 2+ was maximal. Each client ran independantly and chose 3000 times randomly between either inserting 10 new messages, or removing the top most message of the single queue. This workload ensured, that the database grew over time and the whole experiment ran sufficiently long.
 \newline\underline{Expectation}: As we saw in the last experiment, neither the throughput, nor the latency totally colapes or exploded. This means that we can expect here a steady increase of the latency, following the trend of the database size quite closely.
 \TwoFig {figures/database/data_baseline} {Normal Configuration} {fig:data_baseline}
-		{figures/rt_experiment} {Extended Configuration} {fig:third_index}
+		{figures/database/third_index} {Extended Configuration} {fig:third_index}
 \newline\underline{Reality} (figure \ref{fig:data_baseline}): It's clearly visible that the expectation of having a close relation between the performance of the query and the database size is true. To be sure, that the insertion of new messages does not blur the picture, also this data is plotted. The abrupt break-down of the latency at the end of the experiment is due to the completion of the first few clients. This allows the ones still running to get a congestion-free access to the database. The increasing variance is indicates that the query performance starts to get somewhat unstable when the database gets big enough. But nevertheless, even when going up to half a million entries in the message table, there is no extreme behaviour noticable.
 
 \subsection{Middleware}\label{sec:middleware}

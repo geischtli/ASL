@@ -87,7 +87,7 @@ title('Behaviour of the remove-top-most query with 3rd index')
 % set xticks before confusing everything with second yaxis
 xticks = char('0', '', '20', '', '40', '', '60', '', '80', '', ...
     '100', '', '120', '', '140', '', '160', '', '180', '', ...
-    '200', '', '220', '', '240', '', '260', '', '280', '', '300');
+    '200', '', '220', '', '240', '', '260', '', '280', '', '300', '', '320');
 set(gca, 'XTickLabel', xticks)
 set(gca, 'XLim', [0 32])
 

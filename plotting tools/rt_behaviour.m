@@ -74,16 +74,14 @@ doubleMw2000_idx = res((3*numQuarterRows+1):(4*numQuarterRows), 3);
 hold on
 boxplot(singleMw200_data, singleMw200_idx)
 boxplot(singleMw2000_data, singleMw2000_idx)
-boxplot(doubleMw200_data, doubleMw200_idx)
-boxplot(doubleMw2000_data, doubleMw2000_idx)
 
 % plot additionally the 50% quantile (media) for readability and
 % a nice legend reference
 medians = findobj(gca,'tag','Median');
-numMedians = length(medians)/4;
-colors = ['r', 'r', 'b', 'b'];
-linestyles = ['-', ':', '-', ':'];
-for i = 1:4
+numMedians = length(medians)/2;
+colors = ['b', 'b'];
+linestyles = ['-', ':'];
+for i = 1:2
     currMedians = medians(((i-1)*numMedians + 1):(i*numMedians));
     xs = zeros(numMedians, 1);
     ys = zeros(numMedians, 1);
@@ -96,9 +94,41 @@ for i = 1:4
     end
     plot(xs, ys, 'color', colors(i), 'linewidth', 2, 'linestyle', linestyles(i))
 end
-legend('2 Middlewares, Message Length 2000', ...
-    '2 Middlewares, Message Length 200', ...
-    '1 Middleware, Message Length 2000', ...
+legend('1 Middleware, Message Length 2000', ...
+    '1 Middleware, Message Length 200', ...
+    'Location', 'northwest')
+%set(gca, 'YLim', [2, 10])
+title('Response Time Behaviour')
+xlabel('Number of concurrent Clients')
+ylabel('Response Time per Request (ms)')
+
+hold off
+figure()
+hold on
+
+boxplot(doubleMw200_data, doubleMw200_idx)
+boxplot(doubleMw2000_data, doubleMw2000_idx)
+
+% plot additionally the 50% quantile (media) for readability and
+% a nice legend reference
+medians = findobj(gca,'tag','Median');
+numMedians = length(medians)/2;
+colors = ['b', 'b'];
+linestyles = ['-', ':'];
+for i = 1:2
+    currMedians = medians(((i-1)*numMedians + 1):(i*numMedians));
+    xs = zeros(numMedians, 1);
+    ys = zeros(numMedians, 1);
+    for j = 1:numMedians
+        currMedian = currMedians(j);
+        xt = currMedian.XData;
+        xs(j) = mean(xt);
+        yt = currMedian.YData;
+        ys(j) = mean(yt);
+    end
+    plot(xs, ys, 'color', colors(i), 'linewidth', 2, 'linestyle', linestyles(i))
+end
+legend('1 Middleware, Message Length 2000', ...
     '1 Middleware, Message Length 200', ...
     'Location', 'northwest')
 %set(gca, 'YLim', [2, 10])
