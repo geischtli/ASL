@@ -5,7 +5,7 @@ basedir = 'C:\Users\Sandro\Documents\ASL_LOGS\max_TP_2\';
 mw1foldername = 'max_tp_logs_mw1';
 mw2foldername = 'max_tp_logs_mw2';
 
-dbconns = 20:10:60;
+dbconns = [20:10:80, 100];
 clients = 2.^(0:7);
 
 % size of the interval which is assumed to be representative
@@ -61,8 +61,8 @@ set(gca, 'YLim', [0, 20000])
  medians = findobj(gca,'tag','Median');
 for i = 1:length(clients)
     % take the 5 latest drawns
-    idx_lo = (i-1)*5 + 1;
-    idx_hi = i*5;
+    idx_lo = (i-1)*length(dbconns) + 1;
+    idx_hi = i*length(dbconns);
     currMedians = medians(idx_lo:idx_hi);
     numMedians = length(currMedians);
     xs = zeros(numMedians, 1);
