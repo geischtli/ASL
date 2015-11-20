@@ -57,8 +57,7 @@ for i = 1:2
         'linestyle', ':')
 end
 
-plot(il_rt_200, 'color', 'magenta', 'linewidth', 2)
-plot(il_rt_2000, 'color', 'black', 'linewidth', 2)
+plot(il_rt_200, 'color', 
 
 title('Response Time with 10^9 entries')
 xlabel('Number of concurrent connections and clients')
