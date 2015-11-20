@@ -26,8 +26,12 @@ while [  $CURR_DB_CONNECTIONS -le $END_DB_CONNECTIONS ]; do
 	printf "Start filling database\n"
 	
 	# add a client and queue
-	/home/ec2-user/postgres/bin/psql -U postgres -d mydb -q -c 'SELECT * FROM register_client(1);' >/dev/null
-	/home/ec2-user/postgres/bin/psql -U postgres -d mydb -q -c 'SELECT * FROM create_queue(1);' >/dev/null
+	CLIENT=1
+	while [ $CLIENT -le $CURR_DB_CONNECTIONS ]; do
+		/home/ec2-user/postgres/bin/psql -U postgres -d mydb -q -c 'SELECT * FROM register_client(1);' >/dev/null
+		/home/ec2-user/postgres/bin/psql -U postgres -d mydb -q -c 'SELECT * FROM create_queue('"$CLIENT"');' >/dev/null
+		CLIENT=`expr $CLIENT + 1`
+	done
 	
 	# pre fill the message table with 10^9 messages
 	# 40*10*2500=10^9
