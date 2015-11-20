@@ -8,7 +8,7 @@ CURR_DB_CONNECTIONS=$START_DB_CONNECTIONS;
 TIME_PER_RUN=$1;
 
 # create a directory for our logs
-mkdir -p logs
+mkdir logs
 
 printf "Level %d setup:\n%d runs\neach one of %d seconds\n\n" 2 $END_DB_CONNECTIONS $TIME_PER_RUN
 
@@ -41,7 +41,7 @@ while [  $CURR_DB_CONNECTIONS -le $END_DB_CONNECTIONS ]; do
 	printf "Start with actual benchmark"
 	
 	/home/ec2-user/postgres/bin/pgbench -r -l -U postgres --no-vacuum -T 60 \
-				-f ./benchScripts/benchLevel$1.sql \
+				-f ./benchScripts/benchLevel2.sql \
 				-c $CURR_DB_CONNECTIONS -j $CURR_DB_CONNECTIONS \
 				-s $CURR_DB_CONNECTIONS mydb \
 				>> ./logs/level_2_$CURR_DB_CONNECTIONS.log
