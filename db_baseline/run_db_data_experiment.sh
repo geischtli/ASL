@@ -47,7 +47,7 @@ while [  $CURR_DB_CONNECTIONS -le $END_DB_CONNECTIONS ]; do
 	
 	printf "Start with actual benchmark\n"
 	
-	/home/ec2-user/postgres/bin/pgbench -r -l -U postgres --no-vacuum -T 60 \
+	/home/ec2-user/postgres/bin/pgbench -r -l -U postgres --no-vacuum -T 120 \
 				-f ./benchScripts/benchLevel2.sql \
 				-c $CURR_DB_CONNECTIONS -j $CURR_DB_CONNECTIONS \
 				-s $CURR_DB_CONNECTIONS mydb \
