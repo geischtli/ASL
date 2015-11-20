@@ -14,10 +14,6 @@ printf "Level %d setup:\n%d runs\neach one of %d seconds\n\n" 2 $END_DB_CONNECTI
 
 while [  $CURR_DB_CONNECTIONS -le $END_DB_CONNECTIONS ]; do
 	
-	# clear everything 
-	#./psql -U postgres -d mydb -f C:/Users/Sandro/Documents/eclipse/ASL/db_setup/clearDatabase.sql -q
-	/home/ec2-user/postgres/bin/psql -U postgres -d mydb -f ../db_setup/clearDatabase.sql -q
-	
 	# init with prefilled database
 	/home/ec2-user/postgres/bin/psql -U postgres -d mydb -f ../db_setup/initPreFilledDatabase.sql -q
 	
@@ -31,14 +27,14 @@ while [  $CURR_DB_CONNECTIONS -le $END_DB_CONNECTIONS ]; do
 	
 	# add a client and queue
 	/home/ec2-user/postgres/bin/psql -U postgres -d mydb -q -c 'SELECT * FROM register_client(1);' >/dev/null
-	/home/ec2-user/postgres/bin/psql -U postgres -d mydb -q -c 'SELECT * FROM create_queue('"$CLIENT"');' >/dev/null
+	/home/ec2-user/postgres/bin/psql -U postgres -d mydb -q -c 'SELECT * FROM create_queue(1);' >/dev/null
 	
 	# pre fill the message table with 10^9 messages
 	# 40*10*2500=10^9
 	/home/ec2-user/postgres/bin/pgbench -r -l -U postgres --no-vacuum -t 2500 \
 				-f ./benchScripts/benchLevel3_insert.sql \
 				-c 40 -j 40 -s 1 mydb \
-				>/dev/null
+				>>/dev/null
 				
 	printf "Complete\n"
 	
