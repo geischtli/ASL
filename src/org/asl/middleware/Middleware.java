@@ -130,6 +130,8 @@ public class Middleware {
 		this.rttWriter = new BufferedWriter(new FileWriter("/home/ec2-user/ASL/experiment_log/rtt.log", false));
 		this.waitForDbConnWriter = new BufferedWriter(new FileWriter("/home/ec2-user/ASL/experiment_log/waitForDbConn.log", false));
 		this.dbRtWriter = new BufferedWriter(new FileWriter("/home/ec2-user/ASL/experiment_log/db_plus_network_rt.log", false));
+		initLoggers();
+		// register mw itself as last step before it is ready to serve clients
 		RequestBuilder.getRegisterMiddlewareRequest().processOnMiddleware(mi);
 	}
 	
