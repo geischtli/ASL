@@ -19,10 +19,6 @@ import java.util.TimerTask;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 
-import javax.swing.plaf.synth.SynthSeparatorUI;
-
-import org.asl.common.propertyparser.PropertyKey;
-import org.asl.common.propertyparser.PropertyParser;
 import org.asl.common.timing.TimeLogger;
 
 public class ClientInfo {
@@ -44,14 +40,15 @@ public class ClientInfo {
 	private StringBuilder stringBuilder;
 	private char[] alphabet = "abcdefghijklmnopqrstuvwxyz".toCharArray();
 	private Random random;
-	private PropertyParser propParser;
 	private String content;
 	// logging
 	private int reqCount;
 	BufferedWriter tpWriter;
 	BufferedWriter rttWriter;
+	BufferedWriter thinkTimeWriter;
 	public AtomicInteger reqPerSec;
 	public AtomicLong rttPerSec;
+	public AtomicLong thinkTimePerSec;
 	private Timer logTimer;
 	private int contentLength;
 	
@@ -71,11 +68,11 @@ public class ClientInfo {
 		this.startTimeNS = -1;
 		this.stringBuilder = new StringBuilder();
 		this.random = new Random();
-		this.propParser = PropertyParser.create("config/config_common.xml").parse();
 		this.content = "";
 		this.reqCount = 0;
 		this.reqPerSec = new AtomicInteger(0);
 		this.rttPerSec = new AtomicLong(0);
+		this.thinkTimePerSec = new AtomicLong(0);
 		this.logTimer = null;
 		this.contentLength = 0;
 		initMyContent();
@@ -201,6 +198,8 @@ public class ClientInfo {
 					+ this.getClientId() + "tp.log", false));
 			this.rttWriter = new BufferedWriter(new FileWriter("/home/ec2-user/ASL/experiment_log/client"
 					+ this.getClientId() + "rtt.log", false));
+			this.thinkTimeWriter = new BufferedWriter(new FileWriter("/home/ec2-user/ASL/experiment_log/client"
+					+ this.getClientId() + "thinktime.log", false));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -211,9 +210,11 @@ public class ClientInfo {
 				try {
 					tpWriter.write(String.valueOf(reqPerSec.get()) + "\n");
 					rttWriter.write(String.valueOf(rttPerSec.get()) + "\n");
+					thinkTimeWriter.write(String.valueOf(thinkTimePerSec.get()) + "\n");
 					reqCount = reqCount + reqPerSec.get();
 					reqPerSec.set(0);
 					rttPerSec.set(0);
+					thinkTimePerSec.set(0);
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
@@ -226,6 +227,7 @@ public class ClientInfo {
 		try {
 			this.tpWriter.close();
 			this.rttWriter.close();
+			this.thinkTimeWriter.close();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

@@ -22,6 +22,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
@@ -52,11 +53,22 @@ public class Middleware {
 	private ExecutorService cachedExecutor;
 	private AsynchronousChannelGroup acg;
 	// write each RTT to a file
-	private static BufferedWriter rttWriter;
+	private BufferedWriter rttWriter;
 	// write the number of exectuing threads into a file
 	private static BufferedWriter threadWriter;
 	// timer for the threadWriter
 	private Timer threadTimer;
+	// generall log timer
+	private Timer logTimer;
+	// store all rtt's gathered in the last second
+	public static AtomicLong rttPerSec;
+	// how many nano seconds all threads waited to get a db connection
+	public static AtomicLong waitForDbConnPerSec;
+	private BufferedWriter waitForDbConnWriter;
+	// store the actual time needed to perform the database access
+	// this includes network MW<->DB + DB service time
+	public static AtomicLong dbRtPerSec;
+	private BufferedWriter dbRtWriter;
 	
 	public Middleware(int port, int numDBConns) throws IOException, SQLException {
 		cachedExecutor = Executors.newCachedThreadPool();
@@ -92,6 +104,10 @@ public class Middleware {
 			}
 		}, 0, 1000);
 		
+		Middleware.rttPerSec = new AtomicLong(0);
+		Middleware.waitForDbConnPerSec = new AtomicLong(0);
+		Middleware.dbRtPerSec = new AtomicLong(0);
+		
 		this.threadTimer = new Timer();
 		this.threadTimer.schedule(new TimerTask() {
 			@Override
@@ -111,8 +127,29 @@ public class Middleware {
 			}
 		}, 0, 1000);
 		
-		Middleware.rttWriter = new BufferedWriter(new FileWriter("/home/ec2-user/ASL/experiment_log/rtt.log", false));
+		this.rttWriter = new BufferedWriter(new FileWriter("/home/ec2-user/ASL/experiment_log/rtt.log", false));
+		this.waitForDbConnWriter = new BufferedWriter(new FileWriter("/home/ec2-user/ASL/experiment_log/waitForDbConn.log", false));
+		this.dbRtWriter = new BufferedWriter(new FileWriter("/home/ec2-user/ASL/experiment_log/db_plus_network_rt.log", false));
 		RequestBuilder.getRegisterMiddlewareRequest().processOnMiddleware(mi);
+	}
+	
+	public void initLoggers() {
+		this.logTimer = new Timer();
+		this.logTimer.scheduleAtFixedRate(new TimerTask() {
+			@Override
+			public void run() {
+				try {
+					rttWriter.write(String.valueOf(Middleware.rttPerSec.get()) + "\n");
+					waitForDbConnWriter.write(String.valueOf(Middleware.waitForDbConnPerSec.get()) + "\n");
+					dbRtWriter.write(String.valueOf(Middleware.dbRtPerSec.get()) + "\n");
+					Middleware.waitForDbConnPerSec.set(0);
+					Middleware.rttPerSec.set(0);
+					Middleware.dbRtPerSec.set(0);
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}, 0, 1000);
 	}
 	
 	public void accept() {
@@ -143,7 +180,7 @@ public class Middleware {
 			}
 		}
 		try {
-			Middleware.rttWriter.close();
+			this.rttWriter.close();
 			tpWriter.close();
 			Middleware.threadWriter.close();
 			System.out.println("Benchmark files closed");
@@ -151,17 +188,6 @@ public class Middleware {
 			e.printStackTrace();
 		}
 		System.out.println("Middleware successfully shut down");
-	}
-	
-	public static void writeRTT(long rtt) {
-		synchronized(Middleware.rttWriter) {
-			try {
-				Middleware.rttWriter.write(String.valueOf(rtt));
-				Middleware.rttWriter.newLine();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
 	}
 	
 }

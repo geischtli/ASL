@@ -78,13 +78,13 @@ public class ClientReadCompletionHandler implements CompletionHandler<Integer, O
 				&& (System.nanoTime() - ci.getStartTimeNS())/1000000000 < AbstractClient.DURATION_SEC) {
 			ci.setRequestId(2);
 		}
-		
 			
-		
+		long startThinkTime = System.nanoTime();
 		if (ci.getRequestId() + 1 < requestList.size()
 				&& (System.nanoTime() - ci.getStartTimeNS())/1000000000 < AbstractClient.DURATION_SEC) {
 			if (sc.isOpen()) {
 				ci.incrementRequestId();
+				ci.thinkTimePerSec.addAndGet(System.nanoTime() - startThinkTime);
 				ByteBufferWrapper outbufWrap = SerializingUtilities.packRequest(RequestBuilder.getRequest(requestList.get(ci.getRequestId()), ci));
 				sc.write(outbufWrap.getBuf(), outbufWrap.getBytes(), ClientWriteCompletionHandler.create(sc, outbufWrap, ci, requestList, requestId));
 			} else {

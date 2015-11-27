@@ -56,7 +56,7 @@ public class MiddlewareWriteCompletionHandler implements CompletionHandler<Integ
 		sc.read(inbuf, connTimeWrapper, MiddlewareReadCompletionHandler.create(mi, sc, inbuf, 0));
 		connTimeWrapper.reset();
 		Middleware.messageCount.incrementAndGet();
-		Middleware.writeRTT(System.nanoTime() - rttStart);
+		Middleware.rttPerSec.addAndGet(System.nanoTime() - rttStart);
 	}
 
 	@Override

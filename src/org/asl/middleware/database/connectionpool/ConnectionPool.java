@@ -18,6 +18,8 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.LinkedBlockingQueue;
 
+import org.asl.middleware.Middleware;
+
 public class ConnectionPool {
 	
 	private int numConnections;
@@ -58,7 +60,10 @@ public class ConnectionPool {
 				
 				@Override
 				public ConnectionWrapper call() throws Exception {
-					return connectionPool.take();
+					long startWait = System.nanoTime();
+					ConnectionWrapper cw = connectionPool.take();
+					Middleware.waitForDbConnPerSec.addAndGet(System.nanoTime() - startWait);
+					return cw;
 				}
 				
 			}
