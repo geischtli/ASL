@@ -181,6 +181,8 @@ public class Middleware {
 		}
 		try {
 			this.rttWriter.close();
+			this.waitForDbConnWriter.close();
+			this.dbRtWriter.close();
 			tpWriter.close();
 			Middleware.threadWriter.close();
 			System.out.println("Benchmark files closed");
