@@ -112,6 +112,7 @@ public class QueueDAO implements IQueueDAO {
 	@Override
 	public List<Integer> getQueuesWithMessagesForClient(int receiver, int clientId, int requestId, MiddlewareInfo mi) throws GetQueuesWithMessagesForClientException {
 		try (ConnectionWrapper conn = ASLDatabase.getNewConnection().get()) {
+			// TODO: MOVE QUEUEING TO THE OUTER SIDE TO HERE, BECAUSE CURRENTLY WE IGNORE THE ASYNCEXECUTOR QUEUE!!!
 			PreparedStatement getQueuesForClient = conn.get().prepareStatement(QueueTable.GET_QUEUES_FOR_CLIENT_STRING);
 			getQueuesForClient.setInt(1, receiver);
 			ResultSet rs = CommonDAO.executeQuery(conn.get(), getQueuesForClient, clientId, requestId, mi);
