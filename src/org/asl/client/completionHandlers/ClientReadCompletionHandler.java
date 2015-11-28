@@ -72,7 +72,7 @@ public class ClientReadCompletionHandler implements CompletionHandler<Integer, O
 			System.out.println("And reason: " + ansReq.getException().getMessage());
 		}
 		ci.reqPerSec.incrementAndGet();
-		ci.rttPerSec.addAndGet(System.currentTimeMillis() - startRtt);
+		ci.rttPerSec.addAndGet(System.nanoTime() - startRtt);
 		ci.getMyTimeLogger().click(Timing.CLIENT_END_POSTPROCESSING, ci.getClientId(), ci.getRequestId(), ci.getStartTimeNS());
 		if (ci.getRequestId() + 1 >= requestList.size()
 				&& (System.nanoTime() - ci.getStartTimeNS())/1000000000 < AbstractClient.DURATION_SEC) {

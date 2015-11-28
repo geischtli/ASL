@@ -24,7 +24,7 @@ CREATE TABLE MESSAGE(
 
 -- manually alter sequence to start at the given mark, such that the ID'see
 -- are still unique w.r. to the ones already in the prefilled data files
-ALTER SEQUENCE message_id_seq RESTART WITH 1000001;
+ALTER SEQUENCE message_id_seq RESTART WITH 300001;
 
 CREATE OR REPLACE FUNCTION create_queue(creator_client INTEGER)
 	RETURNS INTEGER AS $$

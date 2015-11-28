@@ -164,6 +164,7 @@ public class Middleware {
 		mi.getMyTimeLogger().stopMyTimeLogger();
 		tpTimer.cancel();
 		threadTimer.cancel();
+		this.logTimer.cancel();
 		System.out.println("timers stopped");
 		try {
 			if (!cachedExecutor.awaitTermination(0, TimeUnit.SECONDS)) {

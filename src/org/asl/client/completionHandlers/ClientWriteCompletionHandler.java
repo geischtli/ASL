@@ -45,7 +45,7 @@ public class ClientWriteCompletionHandler implements CompletionHandler<Integer, 
 	
 	public static ClientWriteCompletionHandler create(AsynchronousSocketChannel sc, ByteBufferWrapper outbufWrap, ClientInfo ci, List<RequestType> requestList, int requestId) {
 		ci.getMyTimeLogger().click(Timing.CLIENT_START_WRITE, ci.getClientId(), ci.getRequestId(), ci.getStartTimeNS());
-		return new ClientWriteCompletionHandler(sc, outbufWrap, ci, requestList, requestId, System.currentTimeMillis());
+		return new ClientWriteCompletionHandler(sc, outbufWrap, ci, requestList, requestId, System.nanoTime());
 	}
 	
 	@Override
