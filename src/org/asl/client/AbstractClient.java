@@ -29,7 +29,7 @@ public abstract class AbstractClient implements Runnable {
 	protected PropertyParser propParser;
 	public static int INITIAL_BUFSIZE;
 	protected ClientInfo ci;
-	public static int DURATION_SEC = 60;
+	public static int DURATION_SEC = 300;
 	private int contentLength;
 	
 	public AbstractClient() {
