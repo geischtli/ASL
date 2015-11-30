@@ -69,6 +69,10 @@ public class Middleware {
 	// this includes network MW<->DB + DB service time
 	public static AtomicLong dbRtPerSec;
 	private BufferedWriter dbRtWriter;
+	// log connection to db queue length
+	public static AtomicInteger currDbConnQueueLength;
+	public static AtomicLong dbConnQueueLengthPerSec;
+	private BufferedWriter dbConnQueueLengthWriter;
 	
 	public Middleware(int port, int numDBConns) throws IOException, SQLException {
 		cachedExecutor = Executors.newCachedThreadPool();
@@ -107,6 +111,8 @@ public class Middleware {
 		Middleware.rttPerSec = new AtomicLong(0);
 		Middleware.waitForDbConnPerSec = new AtomicLong(0);
 		Middleware.dbRtPerSec = new AtomicLong(0);
+		Middleware.dbConnQueueLengthPerSec = new AtomicLong(0);
+		Middleware.currDbConnQueueLength = new AtomicInteger(0);
 		
 		this.threadTimer = new Timer();
 		this.threadTimer.schedule(new TimerTask() {
@@ -130,6 +136,7 @@ public class Middleware {
 		this.rttWriter = new BufferedWriter(new FileWriter("/home/ec2-user/ASL/experiment_log/rtt.log", false));
 		this.waitForDbConnWriter = new BufferedWriter(new FileWriter("/home/ec2-user/ASL/experiment_log/waitForDbConn.log", false));
 		this.dbRtWriter = new BufferedWriter(new FileWriter("/home/ec2-user/ASL/experiment_log/db_plus_network_rt.log", false));
+		this.dbConnQueueLengthWriter = new BufferedWriter(new FileWriter("/home/ec2-user/ASL/experiment_log/db_conn_queue_length.log", false));
 		initLoggers();
 		// register mw itself as last step before it is ready to serve clients
 		RequestBuilder.getRegisterMiddlewareRequest().processOnMiddleware(mi);
@@ -144,9 +151,11 @@ public class Middleware {
 					rttWriter.write(String.valueOf(Middleware.rttPerSec.get()) + "\n");
 					waitForDbConnWriter.write(String.valueOf(Middleware.waitForDbConnPerSec.get()) + "\n");
 					dbRtWriter.write(String.valueOf(Middleware.dbRtPerSec.get()) + "\n");
+					dbConnQueueLengthWriter.write(String.valueOf(Middleware.dbConnQueueLengthPerSec.get()) + "\n");
 					Middleware.waitForDbConnPerSec.set(0);
 					Middleware.rttPerSec.set(0);
 					Middleware.dbRtPerSec.set(0);
+					Middleware.dbConnQueueLengthPerSec.set(0);
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
@@ -186,7 +195,8 @@ public class Middleware {
 			this.rttWriter.close();
 			this.waitForDbConnWriter.close();
 			this.dbRtWriter.close();
-			tpWriter.close();
+			this.tpWriter.close();
+			this.dbConnQueueLengthWriter.close();
 			Middleware.threadWriter.close();
 			System.out.println("Benchmark files closed");
 		} catch (IOException e) {

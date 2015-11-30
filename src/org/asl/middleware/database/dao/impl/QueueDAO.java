@@ -23,6 +23,7 @@ import org.asl.common.request.types.exceptions.GetQueuesWithMessagesForClientExc
 import org.asl.common.request.types.exceptions.GetRegisteredQueuesException;
 import org.asl.common.request.types.exceptions.ReadAllMessagesOfQueueException;
 import org.asl.common.request.types.exceptions.RemoveTopMessageFromQueueException;
+import org.asl.middleware.Middleware;
 import org.asl.middleware.MiddlewareInfo;
 import org.asl.middleware.database.config.ASLDatabase;
 import org.asl.middleware.database.connectionpool.ConnectionWrapper;
@@ -65,7 +66,12 @@ public class QueueDAO implements IQueueDAO {
 	
 	@Override
 	public Message removeTopMessageFromQueue(int receiver, int queue, int clientId, int requestId, MiddlewareInfo mi) throws RemoveTopMessageFromQueueException {
+		int currQueueLength = Middleware.currDbConnQueueLength.getAndIncrement();
+		Middleware.dbConnQueueLengthPerSec.addAndGet(currQueueLength);
+		long startWait = System.nanoTime();
 		try (ConnectionWrapper conn = ASLDatabase.getNewConnection().get()) {
+			Middleware.waitForDbConnPerSec.addAndGet(System.nanoTime() - startWait);
+			Middleware.currDbConnQueueLength.decrementAndGet();
 			PreparedStatement getMessage = conn.get().prepareStatement(QueueTable.REMOVE_TOP_MESSAGE_STRING);
 			getMessage.setInt(1, receiver);
 			getMessage.setInt(2, queue);
@@ -86,7 +92,12 @@ public class QueueDAO implements IQueueDAO {
 
 	@Override
 	public List<Message> readAllMessagesOfQueue(int receiver, int queue,  int clientId, int requestId, MiddlewareInfo mi) throws ReadAllMessagesOfQueueException {
+		int currQueueLength = Middleware.currDbConnQueueLength.getAndIncrement();
+		Middleware.dbConnQueueLengthPerSec.addAndGet(currQueueLength);
+		long startWait = System.nanoTime();
 		try (ConnectionWrapper conn = ASLDatabase.getNewConnection().get()) {
+			Middleware.waitForDbConnPerSec.addAndGet(System.nanoTime() - startWait);
+			Middleware.currDbConnQueueLength.decrementAndGet();
 			PreparedStatement getMessages = conn.get().prepareStatement(QueueTable.READ_ALL_MESSAGES_STRING);
 			getMessages.setInt(1, receiver);
 			getMessages.setInt(2, queue);
@@ -111,8 +122,12 @@ public class QueueDAO implements IQueueDAO {
 
 	@Override
 	public List<Integer> getQueuesWithMessagesForClient(int receiver, int clientId, int requestId, MiddlewareInfo mi) throws GetQueuesWithMessagesForClientException {
+		int currQueueLength = Middleware.currDbConnQueueLength.getAndIncrement();
+		Middleware.dbConnQueueLengthPerSec.addAndGet(currQueueLength);
+		long startWait = System.nanoTime();
 		try (ConnectionWrapper conn = ASLDatabase.getNewConnection().get()) {
-			// TODO: MOVE QUEUEING TO THE OUTER SIDE TO HERE, BECAUSE CURRENTLY WE IGNORE THE ASYNCEXECUTOR QUEUE!!!
+			Middleware.waitForDbConnPerSec.addAndGet(System.nanoTime() - startWait);
+			Middleware.currDbConnQueueLength.decrementAndGet();
 			PreparedStatement getQueuesForClient = conn.get().prepareStatement(QueueTable.GET_QUEUES_FOR_CLIENT_STRING);
 			getQueuesForClient.setInt(1, receiver);
 			ResultSet rs = CommonDAO.executeQuery(conn.get(), getQueuesForClient, clientId, requestId, mi);

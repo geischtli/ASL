@@ -20,6 +20,7 @@ import java.util.concurrent.ExecutionException;
 import org.asl.common.request.types.exceptions.GetRegisteredClientsException;
 import org.asl.common.request.types.exceptions.HandshakeException;
 import org.asl.common.request.types.exceptions.ReadMessageFromSenderException;
+import org.asl.middleware.Middleware;
 import org.asl.middleware.MiddlewareInfo;
 import org.asl.middleware.database.config.ASLDatabase;
 import org.asl.middleware.database.connectionpool.ConnectionWrapper;
@@ -49,7 +50,12 @@ public class ClientDAO implements IClientDAO {
 
 	@Override
 	public Message readMessageFromSender(int sender, int receiver, int clientId, int requestId, MiddlewareInfo mi) throws ReadMessageFromSenderException {
+		int currQueueLength = Middleware.currDbConnQueueLength.getAndIncrement();
+		Middleware.dbConnQueueLengthPerSec.addAndGet(currQueueLength);
+		long startWait = System.nanoTime();
 		try (ConnectionWrapper conn = ASLDatabase.getNewConnection().get()) {
+			Middleware.waitForDbConnPerSec.addAndGet(System.nanoTime() - startWait);
+			Middleware.currDbConnQueueLength.decrementAndGet();
 			PreparedStatement readMessageFromSender = conn.get().prepareStatement(ClientTable.READ_MESSAGE_FROM_SENDER);
 			readMessageFromSender.setInt(1, sender);
 			readMessageFromSender.setInt(2, receiver);

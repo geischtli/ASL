@@ -19,6 +19,7 @@ import java.util.concurrent.ExecutionException;
 import org.asl.common.dateTuple.DateTriple;
 import org.asl.common.request.types.exceptions.GetNumberOfMessagesException;
 import org.asl.common.request.types.exceptions.SendMessageException;
+import org.asl.middleware.Middleware;
 import org.asl.middleware.MiddlewareInfo;
 import org.asl.middleware.database.config.ASLDatabase;
 import org.asl.middleware.database.connectionpool.ConnectionWrapper;
@@ -34,7 +35,12 @@ public class MessageDAO implements IMessageDAO {
 	
 	@Override
 	public DateTriple sendMessage(int sender, int receiver, int queue, String content, int requestId, MiddlewareInfo mi) throws SendMessageException {
+		int currQueueLength = Middleware.currDbConnQueueLength.getAndIncrement();
+		Middleware.dbConnQueueLengthPerSec.addAndGet(currQueueLength);
+		long startWait = System.nanoTime();
 		try (ConnectionWrapper conn = ASLDatabase.getNewConnection().get()) {
+			Middleware.waitForDbConnPerSec.addAndGet(System.nanoTime() - startWait);
+			Middleware.currDbConnQueueLength.decrementAndGet();
 			PreparedStatement sendMessage = conn.get().prepareStatement(MessageTable.SEND_MESSAGE_STRING);
 			sendMessage.setInt(1, sender);
 			sendMessage.setInt(2, receiver);

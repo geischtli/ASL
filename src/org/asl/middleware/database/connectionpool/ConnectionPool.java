@@ -60,9 +60,9 @@ public class ConnectionPool {
 				
 				@Override
 				public ConnectionWrapper call() throws Exception {
-					long startWait = System.nanoTime();
+					//long startWait = System.nanoTime();
 					ConnectionWrapper cw = connectionPool.take();
-					Middleware.waitForDbConnPerSec.addAndGet(System.nanoTime() - startWait);
+					//Middleware.waitForDbConnPerSec.addAndGet(System.nanoTime() - startWait);
 					return cw;
 				}
 				
