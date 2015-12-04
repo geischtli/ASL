@@ -35,29 +35,27 @@ public class MiddlewareReadCompletionHandler implements CompletionHandler<Intege
 	private ByteBuffer inbuf;
 	private long MIDDLEWARE_START_READ;
 	private MiddlewareInfo mi;
-	// used for middleware benchmark
-	private long rttStart;
 	
 	public MiddlewareReadCompletionHandler(MiddlewareInfo mi,
-			AsynchronousSocketChannel sc, ByteBuffer inbuf, long MIDDLEWARE_START_READ, int requestId, long rttStart) {
+			AsynchronousSocketChannel sc, ByteBuffer inbuf, long MIDDLEWARE_START_READ, int requestId) {
 		this.mi = mi;
 		this.sc = sc;
 		this.inbuf = inbuf;
 		this.MIDDLEWARE_START_READ = MIDDLEWARE_START_READ;
-		this.rttStart = rttStart;
 	}
 	
 	public static MiddlewareReadCompletionHandler create(MiddlewareInfo mi, AsynchronousSocketChannel sc, ByteBuffer inbuf, int requestId) {
 		long MIDDLEWARE_START_READ = System.nanoTime();
-		long rttStart = System.nanoTime();
-		return new MiddlewareReadCompletionHandler(mi, sc, inbuf, MIDDLEWARE_START_READ, requestId, rttStart);
+		return new MiddlewareReadCompletionHandler(mi, sc, inbuf, MIDDLEWARE_START_READ, requestId);
 	}
 	
 	@Override
 	public void completed(Integer readBytes, ConnectionTimeWrapper connTimeWrapper) {
 		connTimeWrapper.reset();
 		ByteBufferWrapper fullInbufWrap = SerializingUtilities.forceFurtherReadIfNeeded(inbuf, (int)readBytes, sc);
-		long MIDDLEWARE_END_READ = System.nanoTime();
+		
+		long rttStart = System.nanoTime();
+		//long MIDDLEWARE_END_READ = System.nanoTime();
 		
 		if (fullInbufWrap == null || readBytes == -1) {
 			//System.out.println("Got null buffer or read -1 bytes, i return");
@@ -67,10 +65,10 @@ public class MiddlewareReadCompletionHandler implements CompletionHandler<Intege
 		
 		Request req = SerializingUtilities.unpackRequest(fullInbufWrap.getBuf(), fullInbufWrap.getBytes());
 		
-		mi.getMyTimeLogger().setClick(Timing.MIDDLEWARE_START_READ, MIDDLEWARE_START_READ, req.getClientId(), req.getRequestId(), mi.getStartTime());
-		mi.getMyTimeLogger().setClick(Timing.MIDDLEWARE_END_READ, MIDDLEWARE_END_READ, req.getClientId(), req.getRequestId(), mi.getStartTime());
+		//mi.getMyTimeLogger().setClick(Timing.MIDDLEWARE_START_READ, MIDDLEWARE_START_READ, req.getClientId(), req.getRequestId(), mi.getStartTime());
+		//mi.getMyTimeLogger().setClick(Timing.MIDDLEWARE_END_READ, MIDDLEWARE_END_READ, req.getClientId(), req.getRequestId(), mi.getStartTime());
 		
-		mi.getMyTimeLogger().click(Timing.MIDDLEWARE_START_PROCESSING, req.getClientId(), req.getRequestId(), mi.getStartTime());
+		//mi.getMyTimeLogger().click(Timing.MIDDLEWARE_START_PROCESSING, req.getClientId(), req.getRequestId(), mi.getStartTime());
 		req.processOnMiddleware(mi);
 		// ONLY USED FOR MW BENCHMARK
 		// BECAUSE DB CONN POOL ACCESS IS THE CRITICAL BIT ONLY DO THIS HERE LOCALY
@@ -78,7 +76,7 @@ public class MiddlewareReadCompletionHandler implements CompletionHandler<Intege
 		} catch (IOException | InterruptedException | ExecutionException | SQLException e) {
 			e.printStackTrace();
 		}*/
-		mi.getMyTimeLogger().click(Timing.MIDDLEWARE_END_PROCESSING, req.getClientId(), req.getRequestId(), mi.getStartTime());
+		//mi.getMyTimeLogger().click(Timing.MIDDLEWARE_END_PROCESSING, req.getClientId(), req.getRequestId(), mi.getStartTime());
 		
 		ByteBufferWrapper outbufWrap = SerializingUtilities.packRequest(req);
 		

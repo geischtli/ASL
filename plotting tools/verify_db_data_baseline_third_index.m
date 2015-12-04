@@ -117,10 +117,32 @@ for i = 1:numRows
     tp(data(i, 5) + 1) = tp(data(i, 5) + 1) + data(i, 6);
 end
 
+%% Also get the active number of clients to prove the point
+% of early termination of some clients
+first_actions = data(data(:, 2) == 0, :);
+last_actions = data(data(:, 2) == 2999, :);
+
+% we have 40 clients active during most of the time
+active_clients = ones(35, 1)*40;
+% set ending numbers
+active_clients(33) = 40 - ...
+    length(last_actions(last_actions(:, 5) == 31));
+active_clients(34) = active_clients(32) - ...
+    length(last_actions(last_actions(:, 5) == 32));
+active_clients(35) = active_clients(33) - ...
+    length(last_actions(last_actions(:, 5) == 33));
+
+% scale this line to make an appealing plot
+% the values are corrected by second axis
+original_active_clients = active_clients;
+active_clients = active_clients * 12.5;
+
+
+
 % we work with 10-second intervals, so scale tp accordingly
 tp = tp./10;
 % use interactive response time law
-rt = numClients./tp;
+rt = original_active_clients./tp;
 
 % we work with milliseconds
 rt = rt.*10^3;
@@ -150,25 +172,6 @@ rt = rt - Zs;
 % plot response time from interactive law
 plot(rt, 'color', 'blue', 'linewidth', 2)
 
-%% Also get the active number of clients to prove the point
-% of early termination of some clients
-first_actions = data(data(:, 2) == 0, :);
-last_actions = data(data(:, 2) == 2999, :);
-
-% we have 40 clients active during most of the time
-active_clients = ones(35, 1)*40;
-% set ending numbers
-active_clients(33) = 40 - ...
-    length(last_actions(last_actions(:, 5) == 31));
-active_clients(34) = active_clients(32) - ...
-    length(last_actions(last_actions(:, 5) == 32));
-active_clients(35) = active_clients(33) - ...
-    length(last_actions(last_actions(:, 5) == 33));
-
-% scale this line to make an appealing plot
-% the values are corrected by second axis
-active_clients = active_clients * 12.5;
-
 plot(active_clients, 'color', 'green', 'linewidth', 2)
 
 %% Finish the plot
@@ -187,7 +190,7 @@ xticks = char('0', '', '20', '', '40', '', '60', '', '80', '', ...
     '200', '', '220', '', '240', '', '260', '', '280', '', '300', '', ...
     '320', '', '340');
 set(gca, 'XTickLabel', xticks)
-set(gca, 'XLim', [0 35])
+set(gca, 'XLim', [0 36])
 
 set(gca,'Box', 'off');
 axesPosition = get(gca, 'Position');

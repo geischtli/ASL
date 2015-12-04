@@ -6,80 +6,108 @@ clear variables
 % Since we take the measurements from the stability experiment
 % we know both parameters.
 
-% Let's find the overall means to fix both parameter values
-% Find arrival rate
-% First read the throughput of the system
-mw1tp = dlmread('C:\Users\Sandro\Documents\ASL_LOGS\stability\stability_mw1\throughput.log');
-mw2tp = dlmread('C:\Users\Sandro\Documents\ASL_LOGS\stability\stability_mw2\throughput.log');
-total_tp = mw1tp + mw2tp;
-% ignore the first 10 and the last 20 seconds due to instability coming
-% from startup or early finishing of clients.
-total_tp = total_tp(13:360);
-arrival_rate = mean(total_tp);
+% constants
+num_clients_per_machine = 60;
 
-% Now find the service rate via the average response time
-basedir = 'C:\Users\Sandro\Documents\ASL_LOGS\stability\stability_client';
+% read global response time of client perspective, thinktime and
+% individual throughput
+basedir_base = 'C:\Users\Sandro\Documents\ASL_LOGS\stability_2\';
+db_conns_per_mw = 10:10:70;
+num_db_conns_per_mw = length(db_conns_per_mw);
 
-tp = zeros(360, 1);
-rtt = zeros(360, 1);
-% plot in 10 second intervals -> merge two columns
-idx = zeros(360, 1);
-j = 1;
-for i = 1:360
-    idx(i) = j;
-    if mod(i, 12) == 0
-        j = j + 1;
-    end
-end
+curr_num_db_conns_per_mw = 20;
+numstr = num2str(curr_num_db_conns_per_mw);
+postfix = strcat(numstr, strcat('_', numstr));
+basedir = strcat(...
+    basedir_base, strcat('db_conn_per_mw_', ...
+    strcat(postfix, '\')));
 
-numClients = 60;
+% client data vars
+total_rt_per_request = zeros(120, 1);
+total_thinktime_per_request = zeros(120, 1);
+total_tp = zeros(120, 1);
 
-% we have an average of 5 seconds, to sum up we have to rescale it
-% accordingly. This was done to reduce size of log files
-factor = 5;
-
-for currClient = 1:2
-    currDir = strcat(basedir, strcat(num2str(currClient), '\'));
-    files = dir(currDir);
+for k = 1:2
+    client_basedir = strcat(basedir, ...
+        strcat('data_client', ...
+        strcat(num2str(k), '\')));
+    files = dir(client_basedir);
     numFiles = length(files);
-    tp = zeros(360, 1);
-    rtt = zeros(360, 1);
-    for currFile = 3:numFiles
-        filename = files(currFile).name;
-        tpstr = filename(end-5:end-4);
-        rttstr = filename(end-6:end-4);
-        data = dlmread(strcat(currDir, filename));
-        %data = factor * data;
-        datalen = length(data);
-        if strcmp(tpstr, 'tp')
-            tp(1:datalen) = tp(1:datalen) + data;
-        elseif strcmp(rttstr, 'rtt')
-            rtt(1:datalen) = rtt(1:datalen) + data;
-        end
-    end
-    if currClient == 1
-        client1tp = tp;
-        client1rtt = rtt./client1tp;
-    else
-        client2tp = tp;
-        client2rtt = rtt./client2tp;
+
+    for i = 3:3:numFiles
+        curr_rt = dlmread(strcat(client_basedir, files(i).name));
+        curr_thinktime = dlmread(strcat(client_basedir, files(i+1).name));
+        curr_tp = dlmread(strcat(client_basedir, files(i+2).name));
+
+        curr_rt = curr_rt(1:120);
+        curr_thinktime = curr_thinktime(1:120);
+        curr_tp = curr_tp(1:120);
+
+        total_rt_per_request = total_rt_per_request + curr_rt./curr_tp;
+        total_thinktime_per_request = total_thinktime_per_request + ...
+            curr_thinktime./curr_tp;
+        total_tp = total_tp + curr_tp;
     end
 end
-% extract response time
-c1_rt = client1rtt(3:340);
-c2_rt = client2rtt(3:340);
 
-mean_rt = mean([c1_rt; c2_rt]);
-service_rate = 1/(mean_rt*10^-3);
+total_rt_per_request = total_rt_per_request/(2*num_clients_per_machine);
+total_thinktime_per_request = ...
+    total_thinktime_per_request/(2*num_clients_per_machine);
+% convert thinktime into milliseconds from nanoseconds
+total_thinktime_per_request = total_thinktime_per_request*10^-6;
+total_rt_per_request = total_rt_per_request*10^-6;
 
-% calculate other insightful variables
-traffic_intensity = arrival_rate/service_rate;
-mean_number_of_jobs_in_system = ...
-    traffic_intensity/(1 - traffic_intensity);
-variance_number_of_jobs_in_system = ...
-    traffic_intensity/(1 - traffic_intensity)^2;
-%%
-% TODO: Run experiment and log the number
-% of active middleware threads currently running
-% hopefully this will give us around 120 per middleware
-% which would explain why it's more towards m/m/120
+%     hold on
+%     plot(total_rt_per_request)
+%     plot(total_thinktime_per_request)
+% 
+%     hold off
+%     figure()
+%     plot(total_tp);
+%     title('full throughput')
+
+% now dig into the middleware logs
+db_plust_network_rt_per_request = zeros(81, 1);
+mw_rt_per_request = zeros(81, 1);
+thread_count = zeros(81, 1);
+wait_for_db_conn_per_request = zeros(81, 1);
+db_conn_queue_length_per_request = zeros(81, 1);
+for k = 1:2
+    mw_basedir = strcat(basedir, ...
+        strcat('data_mw', ...
+        strcat(num2str(k), '\')));
+    db_plus_network_rt = dlmread(strcat(mw_basedir, 'db_plus_network_rt.log'));
+    mw_rt = dlmread(strcat(mw_basedir, 'rtt.log'));
+    curr_thread_count = dlmread(strcat(mw_basedir, 'threadCount.log'));
+    mw_tp = dlmread(strcat(mw_basedir, 'throughput.log'));
+    wait_for_db_conn = dlmread(strcat(mw_basedir, 'waitForDbConn.log'));
+    db_conn_queue_length = dlmread(strcat(mw_basedir, 'db_conn_queue_length.log'));
+
+    curr_db_plust_network_rt_per_request = db_plus_network_rt(20:100)./(total_tp(20:100)/2)*10^-6;
+    curr_mw_rt_per_request = mw_rt(20:100)./(total_tp(20:100)/2)*10^-6;
+    curr_wait_for_db_conn_per_request = wait_for_db_conn(20:100)./(total_tp(20:100)/2)*10^-6;
+    curr_db_conn_queue_length_per_request = db_conn_queue_length(20:100)./(total_tp(20:100)/2);
+
+    db_plust_network_rt_per_request = ...
+        db_plust_network_rt_per_request + curr_db_plust_network_rt_per_request;
+    mw_rt_per_request = ...
+        mw_rt_per_request + curr_mw_rt_per_request;
+    thread_count = ...
+        thread_count + curr_thread_count(20:100);
+    wait_for_db_conn_per_request = ...
+        wait_for_db_conn_per_request + curr_wait_for_db_conn_per_request;
+    db_conn_queue_length_per_request = ...
+        db_conn_queue_length_per_request + curr_db_conn_queue_length_per_request;
+    if k == 1
+        mw1_tp = mw_tp(20:100);
+    else
+        mw2_tp = mw_tp(20:100);
+    end
+end
+
+service_time = mean(total_rt_per_request(~isnan(total_rt_per_request))) ...
+    - mean(wait_for_db_conn_per_request) ...
+    - mean(total_thinktime_per_request(~isnan(total_thinktime_per_request)));
+service_rate = 1/(service_time*10^-3);
+arrival_rate = total_tp(20:100);
+factor = mean(arrival_rate)/service_rate;

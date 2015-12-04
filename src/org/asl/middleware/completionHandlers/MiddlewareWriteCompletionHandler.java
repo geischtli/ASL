@@ -44,19 +44,19 @@ public class MiddlewareWriteCompletionHandler implements CompletionHandler<Integ
 	
 	public static MiddlewareWriteCompletionHandler create(
 			MiddlewareInfo mi, AsynchronousSocketChannel sc, ByteBufferWrapper outbufWrap, int clientId, int requestId, long rttStart) {
-		mi.getMyTimeLogger().click(Timing.MIDDLEWARE_START_WRITE, clientId, requestId, mi.getStartTime());
+		//mi.getMyTimeLogger().click(Timing.MIDDLEWARE_START_WRITE, clientId, requestId, mi.getStartTime());
 		return new MiddlewareWriteCompletionHandler(mi, sc, outbufWrap, clientId, requestId, rttStart);
 	}
 	
 	@Override
 	public void completed(Integer writtenBytes, ConnectionTimeWrapper connTimeWrapper) {
 		SerializingUtilities.forceFurtherWriteIfNeeded(outbufWrap.getBuf(), writtenBytes, outbufWrap.getBytes(), sc);
-		mi.getMyTimeLogger().click(Timing.MIDDLEWARE_END_WRITE, clientId, requestId, mi.getStartTime());
+		Middleware.rttPerSec.addAndGet(System.nanoTime() - rttStart);
+		Middleware.messageCount.incrementAndGet();
+		//mi.getMyTimeLogger().click(Timing.MIDDLEWARE_END_WRITE, clientId, requestId, mi.getStartTime());
 		ByteBuffer inbuf = ByteBuffer.allocate(Middleware.INITIAL_BUFSIZE);
 		sc.read(inbuf, connTimeWrapper, MiddlewareReadCompletionHandler.create(mi, sc, inbuf, 0));
-		connTimeWrapper.reset();
-		Middleware.messageCount.incrementAndGet();
-		Middleware.rttPerSec.addAndGet(System.nanoTime() - rttStart);
+		connTimeWrapper.reset();		
 	}
 
 	@Override
