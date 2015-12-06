@@ -92,6 +92,47 @@ title('Stability in Response Time')
 xlabel('Operation Time (sec)')
 ylabel('Response Time (ms/Req)')
 set(gca, 'XTickLabels', labels)
+set(gca, 'YLim', [0, 450])
 legend('Response Time 50% Quantile', 'Interactive Response Time Law')
 
 rt_stddev = sqrt(var(loc_mw_uncut_rt(21:100)));
+
+hold off
+figure()
+hold on
+
+queue_length_data = mw_uncut_effective_queue_length_per_request;
+queue_length_data = [0; queue_length_data(~isnan(queue_length_data))];
+
+boxplot(queue_length_data, data_idx)
+medians = findobj(gca,'tag','Median');
+numMedians = length(medians)/1;
+colors = ['b'];
+for i = 1:1
+    currMedians = medians(((i-1)*numMedians + 1):(i*numMedians));
+    xs = zeros(numMedians, 1);
+    ys = zeros(numMedians, 1);
+    for j = 1:numMedians
+        currMedian = currMedians(j);
+        xt = currMedian.XData;
+        xs(j) = mean(xt);
+        yt = currMedian.YData;
+        ys(j) = mean(yt);
+    end
+    plot(xs, ys, 'color', colors(i), 'linewidth', 2)
+end
+labels = char('1', '', '', '', '10', '', '', '', '', ...
+    '20', '', '', '', '', '30', '', '', '', '', ...
+    '40', '', '', '', '', '50', '', '', '', '', ...
+    '60', '', '', '', '', '70', '', '', '', '', ...
+    '80', '', '', '', '', '90', '', '', '', '', ...
+    '100', '', '', '', '', '110', '', '', '', '', ...
+    '120', '');
+title('Stability in Queue Length per Middleware')
+xlabel('Operation Time (sec)')
+ylabel('DB Connection Queue Length per Middleware')
+set(gca, 'XTickLabels', labels)
+set(gca, 'YLim', [0, 45])
+
+mean_queue_length = mean(queue_length_data(21:110));
+legend('Queue Length 50% Quantile')

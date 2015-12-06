@@ -23,6 +23,7 @@ mw_total_rt_per_request = zeros(2, 1);
 mw_mean_db_work_per_request = zeros(2, 1);
 mw_uncut_tp_sum = zeros(135, 1);
 mw_uncut_rt = zeros(135, 2);
+mw_uncut_queue_length_per_request = zeros(135, 2);
 
 % read the data of both middlewares
 for i = 1:2
@@ -39,6 +40,9 @@ for i = 1:2
         dlmread(strcat(mw_i_dir, 'waitForDbConn.log'));
     curr_rt = dlmread(strcat(mw_i_dir, 'rtt.log'));
     mw_uncut_rt(:, i) = curr_rt./curr_tp;
+    curr_queue_length = dlmread(strcat(mw_i_dir, 'db_conn_queue_length.log'));
+    mw_uncut_queue_length_per_request(:, i) = ...
+        curr_queue_length(1:135)./curr_tp;
     mw_total_rt_per_request(i) = mean(curr_rt(21:120)./curr_tp(21:120));
     % sum up total tp in system
     mw_total_tp = mw_total_tp + curr_tp(21:120);
@@ -56,6 +60,10 @@ mw_total_wait_time_for_db_conn_per_request = ...
 mw_total_rt_per_request_mean = mean(mw_total_rt_per_request);
 mw_total_wait_time_for_db_conn_per_request = ...
     mean(mw_total_wait_time_for_db_conn_per_request);
+mw_uncut_queue_length_per_request = ...
+    mean(mw_uncut_queue_length_per_request, 2);
+mw_uncut_effective_queue_length_per_request = ...
+    mw_uncut_queue_length_per_request + 1;
 
 % average over all seconds the tp was measured
 mw_total_tp_mean = mean(mw_total_tp);
