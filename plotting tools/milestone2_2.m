@@ -174,12 +174,26 @@ set(gca, 'YLim', [0, 9])
 % calculate other model-related numbers
 m = 40;
 %traffic intensity
-rho = single_tp_means./(40*(1./(single_service_means.*10^-3)));
+mu = 1./(single_service_means.*10^-3);
+rho = single_tp_means./(40*(mu));
 % probability of 0 jobs in the system
 rho0 = calculate_rho0(rho, m);
+% probability of having n requests in the system
+rho_n = calc_req_prob(rho, rho0, m, 60);
 % probability of queueing
 l = ((m.*rho).^m./(factorial(m)*(1-rho))).*rho0;
 % mean number of requests in the system
 En = m.*rho + (rho.*l)./(1-rho);
 % mean number of requests in the queue
 Enq = (rho.*l)./(1-rho);
+
+% normalize and plot rho_n
+hold off
+figure()
+hold on
+for i = 1:12
+    rho_nn(i, :) = rho_n(i, :)./sum(rho_n(i, :));
+    plot(rho_nn(i, :))
+end
+legend('120', '110', '100', '90', '80', '70', '60', ...
+    '50', '40', '30', '20', '10')

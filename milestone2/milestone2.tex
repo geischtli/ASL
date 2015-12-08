@@ -1,0 +1,269 @@
+% % % % % % % % % % % % % % %
+\documentclass[11pt]{article}
+\usepackage[a4paper, portrait, margin=1in]{geometry}
+% % % % % % % % % % % % % % %
+\usepackage{graphicx}
+\usepackage{listings}
+\usepackage{epstopdf}
+\usepackage{caption}
+\usepackage{svg}
+\usepackage{amsmath}
+\usepackage{lscape}
+\usepackage{multirow}
+
+\newsavebox\IBoxA \newsavebox\IBoxB \newsavebox\IBoxC \newlength\IHeight
+\newcommand\TriFig[9]{% Image1 Caption1 Label1 Image2 ...
+	\sbox\IBoxA{\includegraphics[width=0.32\textwidth]{#1}}
+	\sbox\IBoxB{\includegraphics[width=0.32\textwidth]{#4}}
+	\sbox\IBoxC{\includegraphics[width=0.32\textwidth]{#7}}%
+	\ifdim\ht\IBoxA>\ht\IBoxB
+	\setlength\IHeight{\ht\IBoxB}\else\setlength\IHeight{\ht\IBoxA}\fi%
+	\ifdim\ht\IBoxA>\ht\IBoxC
+	\setlength\IHeight{\ht\IBoxC}\else\setlength\IHeight{\ht\IBoxA}\fi%
+	\ifdim\ht\IBoxB>\ht\IBoxC
+	\setlength\IHeight{\ht\IBoxC}\else\setlength\IHeight{\ht\IBoxB}\fi%  
+	\begin{figure}[!htb]
+		\minipage[t]{0.32\textwidth}\centering
+		\includegraphics[height=\IHeight]{#1}
+		\caption{#2}\label{#3}
+		\endminipage\hfill
+		\minipage[t]{0.32\textwidth}\centering
+		\includegraphics[height=\IHeight]{#4}
+		\caption{#5}\label{#6}
+		\endminipage\hfill
+		\minipage[t]{0.32\textwidth}\centering
+		\includegraphics[height=\IHeight]{#7}
+		\caption{#8}\label{#9}
+		\endminipage
+	\end{figure}%
+}
+
+\newcommand\TwoFig[6]{% Image1 Caption1 Label1 Image2 ...
+	\sbox\IBoxA{\includegraphics[width=0.5\textwidth]{#1}}
+	\sbox\IBoxB{\includegraphics[width=0.5\textwidth]{#4}}%
+	\ifdim\ht\IBoxA>\ht\IBoxB
+	\setlength\IHeight{\ht\IBoxB}\else\setlength\IHeight{\ht\IBoxA}\fi%
+	\begin{figure}[!htb]
+		\minipage[t]{0.5\textwidth}\centering
+		\includegraphics[height=\IHeight]{#1}
+		\caption{#2}\label{#3}
+		\endminipage \hfill
+		\minipage[t]{0.5\textwidth}\centering
+		\includegraphics[height=\IHeight]{#4}
+		\caption{#5}\label{#6}
+		\endminipage
+	\end{figure}%
+}
+
+
+\begin{document}
+
+\title{Advanced Systems Lab (Fall'15) -- Second
+Milestone}
+
+\author{Name: \emph{Sandro Huber}\\Legi number: \emph{10-924-777}}
+
+\date{
+\vspace{4cm}
+\textbf{Grading} \\
+\begin{tabular}{|c|c|}
+\hline  \textbf{Section} & \textbf{Points} \\ 
+\hline  1 &  \\ 
+\hline  2 &  \\ 
+\hline  3.1 &  \\ 
+\hline  3.2 &  \\ 
+\hline  4 &  \\ 
+\hline  5 &  \\ 
+\hline \hline Total & \\
+\hline 
+\end{tabular} 
+}
+
+\maketitle
+
+\newpage
+
+\section*{Notes on writing the report}
+
+The report does not need to be extensive but it must be concise, complete, and correct. Conciseness is important  in  terms  of  content  and explanations,  focusing  on  what  has  been  done and  explanations  of the results. A long report is not necessarily a better report, especially if there are aspects of the design or  the  experiments  that  remain  unexplained.  Completeness  implies  that  the  report  should  give  a comprehensive idea of what has been done by mentioning all key aspects of the modeling and analysis effort. You are allowed to modify the system designed in Milestone 1 (changes must be explained in the report)  and  you  can  run  new  experiments. If  you  have  been  told  that something  must  be corrected  in your system as a result of the evaluation of Milestone 1, please do so and indicate the corrections in the report. Limited analysis because of flaws in the system or lack of experimental data from milestone 1 are not  valid  arguments  for  an incomplete  report.  If  bugs  or  lack  of  data  prevent  you  from  doing  a  correct analysis, the system must be debugged and new data collected. 
+
+Remember  that  this is  a  report  about modeling  and  analyzing the  system you  have  designed  and  built, using  the experimental data you have collected. There is no unique way to do the report and you may choose  to  focus  on  different  aspects  of  the  system  as  long  as  you deliver a  complete analysis of  its behavior. Please do not contact us seeking confirmation and assurances about, e.g., whether the report is  sufficient,  your  interpretation  of  the  data,  validation  of  concrete  aspects  of  your model, or  whether you have done enough experiments. Making those decisions is your job and part of what the course will evaluate. 
+
+The milestone is worth 300 points. 
+
+The report should be organized in sections as explained in the next pages, and each section should address at least the questions mentioned for each point. You might be called for a meeting in person to clarify aspects of the report or the system and to make a short presentation of the work done. By submitting the report, you  confirm  that  you  have  done  the  work  on  your  own,  the  data used comes  from  experiments  your have  done,  you  have  written  the  report  on  your  own,  and  you have  not  copied  neither text  nor  data from other sources.
+
+\section*{Formatting guidelines}
+While you can use any text processor of your choice for writing the report, please conform to the following formatting rules:
+\begin{itemize}
+\item  We expect you to submit \textbf{a single PDF that has the same section structure as this template} (if you use this file, you should remove this page with notes, and the short description provided by us at the beginning of sections).
+\item  The main text should be in \textbf{single-column format with 11pt font on A4 paper}. In case you don't start with one of the files provided by us, \textbf{for margins use 2.54 cm (1 inch) on all sides}.
+\end{itemize}
+
+\pagebreak
+
+
+\section{System as One Unit}\label{sec:system-one-unit}
+
+\textbf{TODO: CLARIFY OPERATIONS VS REQUESTS (I.E.) 1 OPERATION = 5 REQUESTS, WHICH ONES? PLUS TELL THAT SLEEPTIME IS NEGLIBABLE IN IRTL PLOTS/CALCULATIONS}
+
+Length: 1-2 pages
+
+Build an M/M/1 model of your entire system based on the stability trace that you had to run for the first milestone. Explain the characteristics and behavior of the model built, and compare it with the experimental data. Analyze the modeled and real-life behavior of the system (explain the similarities, the differences, and map them to aspects of the design or the experiments).
+
+The following numbers have been measured in the stability experiment 2, which only was ran for 120 seconds, since it was clear that the system itself is stably performing. All numbers are measured in the middleware, since this is the end and start of a request in the black box, which surrounds the middlewares and the database. To account for warmup and cooldown phase the first and last 10 seconds were ignored, such we end up with a 100 seconds of valid data. There were 2 middlewares and 1 database with 40 concurrent connections. Strangly the numbers from the milestone 1 couldn't be reached again, there was a constant shift by $\approx\frac{3}{5}$ over the whole data. So the bahaviour didn't change. The reason for this could be a higher network usage of the system or more distance between the individual machines hired. Because of the prizing and limited time budget I was not able to redo this experiment a third time.
+\begin{center}
+	\captionof{table}*{Measured Data} 
+	\begin{tabular}{c|c}
+		\hline
+		Throughput $X$ & 554.94 Req/sec \\
+		Response Time $R$ & 216.5 ms/Req \\
+		Queueing Time $I$ & 142.6 ms/Req \\ \hline		
+	\end{tabular}
+\end{center}
+
+\begin{center}
+	\captionof{table}*{Calculated Data}
+	\begin{tabular}{c|c}
+		\hline
+		Arrival Rate $\lambda$ & $X$* \\
+		Service Time $S$ & 71.91 ms/Req \\
+		Service Rate $\mu$ & 13.91 Req/sec \\
+		Traffic Intensity $\rho$ & 39.91 \\
+		\hline		
+	\end{tabular}
+\end{center}
+\footnotesize*This holds, because the system built is a closed one. This is known, because every client first sends a request into the system and waits until an answer in form of a request comes back. Only then the client proceeds with it's job based on the meaning of the answer. If an answer is lost during transmission or execution the system will automatically take care of this and closes the socket connection to this client, such that it knows an error occured and it has to reconnect if there are still messages not successfully sent yet. This guarantees that no messages are no false positives when logging the throughput.
+\normalsize
+\newline\newline
+Based on the following law:
+\begin{equation}
+	\text{System is stable}\Leftrightarrow \text{Traffic Intensity} < 1,
+\end{equation}
+\TwoFig {figures/stability_2/tp.eps} {Throughput of the whole System} {fig:stab2tp}
+		{figures/stability_2/rt.eps} {Response Time per Request} {fig:stab2rt}
+the system should be heavily unstable. But multiple factors show evidence that this is not the case. First we can have a look at the plots displayed in figures \ref{fig:stab2tp} and \ref{fig:stab2rt}. It's clearly visible that the system is stable. Another factor worth considering in view of this problem is the standard deviation of the throughput and response time which are $20.122$ Req/sec and $7.85$ ms/Req respectively. These two values are identical to $3.626\%$ (throughput) and $3.625\%$ variation with respect to the corresponding overall mean value, which again indicate a very stable system.
+
+So how to explain then that the traffic intensity $\rho$ $=39.91>1$? The answer lies in the choice of the model. Since the system that was built, internally has a lot of parallelism and works with threads that execute along eachother, the simple M/M/1 model is not able to explain this complex structure and thus fails. The value of the traffic intensity is not random at all though. It is still somewhat connected to the inner structure of the system. Precisely I am talking about the number of database connections, which are constantly 40 during the whole experiment (20 per middleware). In practice this means that on the database, 40 concurrent threads were available which serve concurrently all queries sent from the middlewares. This would perfectly explain the traffic intensity, since when inserting these 40 concurrent threads into the equation: $\rho$ $=\frac{\lambda}{40\mu}=\frac{554.94 \text{ sec/Req}}{40*13.91\text{ Req/sec}}=\frac{554.94 \text{ sec/Req}}{556.4 \text{ Req/sec}}=0.9973<1$. To be sure that all 40 threads on the database are really in use the whole time, we can see if there is queueing happening in the right part of the system. Each request has to go to the database somewhen. The connections are provided through a connection pool. If there are currently no connections available, the request has to wait. In figure \ref{fig:queue_length} we can see that the queue length per middleware is on average of length $38.9$, which makes visible that indeed the database is the bottleneck. These numbers do make sense, because we now can precisely say in which state all the requests are: 40 requests are processed on the database and $2*38.9=77.8$ are waiting for a database connection. Because there were exactly 120 clients online (each one having one open request in the system and the sleep time of $\approx0.003ms$ is negligable) we know that we are missing track of $120-40-77.8=2.2$ requests on average. But this makes sense, because there have to be some requests on the way from the database back to the clients and some new ones coming from the clients which did not yet reach the database connection queue.
+\begin{figure}
+\centering
+\includegraphics[width=0.5\linewidth]{figures/stability_2/queue_length}
+\caption{Queue length in front of DB Connection pool}
+\label{fig:queue_length}
+\end{figure}
+
+\section{Analysis of System Based on Scalability Data}\label{sec:analysis-scalability}
+
+Length: 1-4 pages
+
+Starting from the different configurations that you used in the first milestone, build queuing models of the system. Detail the characteristics of these series of models and compare them with experimental data. The goal is the analysis of the model and the real scalability of the system (explain the similarities, the 
+differences, and map them to aspects of the design or the experiments).
+
+The scalability of a system has two aspects: it describes the capability of the system to handle an increasing number of requests, but also the possibility of boosting the system performance by adding more modules. It's thus important to include both factors into the analysis. This is done by varying the number of clients as well as the number of middlewares. The number of clients ranged from 10 to 120 in steps of 10, whereas the number of middlewares were chosen to be either one or two. The reason for the client and middleware numbers are both based on benchmarks done in milestone 1. In short it holds that the database is the bottleneck and is saturated by already 60 clients in total operating on one middleware. To get the full picture, the range of possible values was enlarged. In case of two middlewares, the clients as well as the totally 40 database connections were evenly split among both. Let's analyse the first configuration with one middleware, all possible number of clients (evenly split among two client machines) and one database providing 40 concurrent connections.
+
+Also based on benchmarks evaluated in milestone one, we can assume that the database is the bottleneck in this configuration. As in the book of Raj Jain is written, an M/M/m queue is used to model a multi-server system where jobs for these servers are kept in one queue. In our case, the servers are equal to the threads on the database and the single queue is found as the waiting queue for a database connection on the middleware. It thus make sense to apply an M/M/40 queueing model, because as said, the database provides 40 concurrent connections, and thus, internally runs 40 threads.
+
+\begin{center}
+	\captionof{table}*{M/M/40 Model on Scalability Data for 1 Middleware}
+	\begin{tabular}{c|c|c||c}
+		\hline
+		& \multicolumn{2}{c||}{Model Parameters} & \multicolumn{1}{c}{Computed Variables} \\
+		\hline
+		\#Clients & $\lambda$ (Req/sec) & $\mu$ (Req/sec) & $\rho$ \\
+		\hline
+		10 & 2481.5 & 366.15 & 0.1694\\
+		20 & 4773.5 & 341.82 & 0.3491\\
+		30 & 7015.5 & 339.42 & 0.5167\\
+		40 & 9311.5 & 332.88 & 0.6993\\
+		50 & 10346.5 & 303.02 & 0.8536\\
+		60 & 12302 & 317.06 & 0.9700\\
+		70 & 13152 & 329.90 & 0.9967\\
+		80 & 13005.5 & 326.25 & 0.9966\\
+		90 & 12321 & 308.14 & 0.9996\\
+		100 & 13383 & 335.71 & 0.9966\\
+		110 & 13013.5 & 326.28 & 0.9971\\
+		120 & 12642.5 & 316.59 & 0.9983\\
+		\hline		
+	\end{tabular}
+\end{center}
+
+\section{Modeling Components as Independent Units}\label{sec:independent-units}
+
+Length: 1-5 pages
+
+In this section you will build M/M/m models of the middleware and the database and explain the characteristics of both. As before, compare them with relevant experimental data and analyze the similarities and differences between models and real behavior, and link these to specific design decisions in your system.
+
+\subsection{Middleware}
+
+\subsection{Database}
+
+\section{System as Network of Queues}\label{sec:network-of-queues}
+
+Length: 1-4 pages
+
+Based on the outcome of the different modeling efforts from the previous sections, build a comprehensive network of queues model for the whole system. Compare it with experimental data and use the methods discussed in the lecture and the book to provide an in-depth analysis of the behavior. This includes the identification and analysis of bottlenecks in your system.
+
+\section{Interactive Law Verification}\label{sec:interactive-law}
+
+Length: 1-2 pages
+
+Check the validity of all experiments from milestone 1 using the interactive law. Analyze the results and explain them in detail.
+
+mw baseline: with 1 cm interactive law does not fit the line, because with that setup the system was not closed? the client was not able to bring enough reqeuests, and started to block itself. thats way less throughput was registered and higher response times are expected, but not measured, because the middleware was not at it's limits yet.
+
+stability: discrepancy at the beginning due to the high think time used to setup clients.
+
+2k verification:
+
+\begin{tabular}{c|c|c||c|c}
+	TP(Req/s) & RT(ms) & IRL(ms) & Abs. Difference(ms) & Percentual Difference(\%) \\
+	\hline
+	12427 & 5.12 & 4.83 & 0.29 & 5.66 \\
+	14707 & 3.87 & 4.08 & 0.21 & 5.43 \\
+	11859 & 4.84 & 5.06 & 0.22 & 4.55 \\
+	16133 & 3.66 & 3.72 & 0.06 & 1.64 \\
+	12413 & 9.98 & 9.67 & 0.31 & 3.11 \\
+	18233 & 7.07 & 6.58 & 0.49 & 6.93 \\
+	13238 & 9.14 & 9.06 & 0.08 & 0.88 \\
+	16428 & 6.97 & 7.30 & 0.33 & 4.73 \\
+	13488 & 4.69 & 4.45 & 0.24 & 5.12 \\
+	15954 & 3.87 & 3.76 & 0.11 & 2.84 \\
+	12289 & 4.94 & 4.88 & 0.06 & 1.21 \\
+	15855 & 4.19 & 3.78 & 0.41 & 9.76 \\
+	13017 & 9.16 & 9.22 & 0.06 & 0.66 \\
+	17701 & 6.57 & 6.78 & 0.21 & 3.20 \\
+	13054 & 9.31 & 9.19 & 0.12 & 1.29 \\
+	17619 & 6.73 & 6.81 & 0.08 & 1.19 \\
+	\hline  
+	&&& avg: 0.21 & avg: 3.64 \\
+	\hline  
+\end{tabular}
+
+\TwoFig {figures/interactive_law/db_baseline} {IL on DB Baseline} {}
+		{figures/interactive_law/db_data_baseline} {IL on DB Data Baseline} {}
+
+\TwoFig {figures/interactive_law/db_data_baseline_third_index} {IL on DB Data Baseline with 3rd Index} {}
+		{figures/interactive_law/mw_baseline} {IL on MW Baseline} {}
+		
+\TwoFig {figures/interactive_law/client_baseline} {IL on Client Baseline} {}
+		{figures/interactive_law/stability} {IL on Stability} {}
+		
+\TwoFig {figures/interactive_law/rt_1cm} {IL on Client Baseline} {}
+		{figures/interactive_law/rt_2cm} {IL on Stability} {}
+
+\section*{Appendix: Repeated Experiments}
+
+Length: up to 5 pages but \textbf{only needed if you repeated experiments}.
+
+This is the place to show any repeated or additional experiments that you ran since milestone 1, for the reasons outlined in the description. If your previous submission had all necessary experiments for this milestone, remove the Appendix.
+
+\TwoFig {figures/max_tp_2/tp} {} {}
+		{figures/max_tp_2/rt} {} {}
+	
+\TwoFig {figures/db_1M_2/tp} {} {}
+		{figures/db_1M_2/rt} {} {}
+
+\TwoFig {figures/scalability/tp} {scalability} {}
+		{figures/scalability/rt} {scalability} {}
+
+\end{document}
