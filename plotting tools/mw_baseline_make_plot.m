@@ -25,6 +25,11 @@ for i = 1:2
         yt = currMedian.YData;
         ys(j) = mean(yt);
     end
+    if i == 1
+        rt2cm_means = ys;
+    else
+        rt1cm_means = ys;
+    end
     plot(xs, ys, 'color', colors(i), 'linewidth', 2)
 end
 %plot(1:10, q90/1000000, 'color', [1 0.5 0], 'LineStyle', '--', 'linewidth', 2)
@@ -59,6 +64,11 @@ for i = 1:2
         xs(j) = mean(xt);
         yt = currMedian.YData;
         ys(j) = mean(yt);
+    end
+    if i == 1
+        tp2cm_means = ys;
+    else
+        tp1cm_means = ys;
     end
     plot(xs, ys, 'color', colors(i), 'linewidth', 2)
 end

@@ -4,7 +4,7 @@ function rho0 = calculate_rho0(rho, m)
 len = length(rho);
 rho0 = zeros(len, 1);
 for i = 1:len
-    f1 = (m.*rho(i)).^m/(factorial(m)*(1-rho(i)));
+    f1 = (m.*rho(i))^m/(factorial(m)*(1-rho(i)));
     f2 = sum((m.*rho(i)).^(1:m-1)/factorial(1:(m-1)));
     rho0(i) = 1 + f1 + f2;
 end

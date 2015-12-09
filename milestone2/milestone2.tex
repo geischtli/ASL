@@ -142,7 +142,7 @@ Based on the following law:
 \end{equation}
 \TwoFig {figures/stability_2/tp.eps} {Throughput of the whole System} {fig:stab2tp}
 		{figures/stability_2/rt.eps} {Response Time per Request} {fig:stab2rt}
-the system should be heavily unstable. But multiple factors show evidence that this is not the case. First we can have a look at the plots displayed in figures \ref{fig:stab2tp} and \ref{fig:stab2rt}. It's clearly visible that the system is stable. Another factor worth considering in view of this problem is the standard deviation of the throughput and response time which are $20.122$ Req/sec and $7.85$ ms/Req respectively. These two values are identical to $3.626\%$ (throughput) and $3.625\%$ variation with respect to the corresponding overall mean value, which again indicate a very stable system.
+the system should be heavily unstable. But multiple factors show evidence that this is not the case. First we can have a look at the plots displayed in figures \ref{fig:stab2tp} and \ref{fig:stab2rt}. It's clearly visible that the system is stable. Another factor worth considering in view of this problem is the standard deviation of the throughput and response time which are $20.122$ Req/sec and $7.85$ ms/Req respectively. These two values are identical to $3.626\%$ (throughput) and $3.625\%$ (response time) variation with respect to the corresponding overall mean value, which again indicate a very stable system.
 
 So how to explain then that the traffic intensity $\rho$ $=39.91>1$? The answer lies in the choice of the model. Since the system that was built, internally has a lot of parallelism and works with threads that execute along eachother, the simple M/M/1 model is not able to explain this complex structure and thus fails. The value of the traffic intensity is not random at all though. It is still somewhat connected to the inner structure of the system. Precisely I am talking about the number of database connections, which are constantly 40 during the whole experiment (20 per middleware). In practice this means that on the database, 40 concurrent threads were available which serve concurrently all queries sent from the middlewares. This would perfectly explain the traffic intensity, since when inserting these 40 concurrent threads into the equation: $\rho$ $=\frac{\lambda}{40\mu}=\frac{554.94 \text{ sec/Req}}{40*13.91\text{ Req/sec}}=\frac{554.94 \text{ sec/Req}}{556.4 \text{ Req/sec}}=0.9973<1$. To be sure that all 40 threads on the database are really in use the whole time, we can see if there is queueing happening in the right part of the system. Each request has to go to the database somewhen. The connections are provided through a connection pool. If there are currently no connections available, the request has to wait. In figure \ref{fig:queue_length} we can see that the queue length per middleware is on average of length $38.9$, which makes visible that indeed the database is the bottleneck. These numbers do make sense, because we now can precisely say in which state all the requests are: 40 requests are processed on the database and $2*38.9=77.8$ are waiting for a database connection. Because there were exactly 120 clients online (each one having one open request in the system and the sleep time of $\approx0.003ms$ is negligable) we know that we are missing track of $120-40-77.8=2.2$ requests on average. But this makes sense, because there have to be some requests on the way from the database back to the clients and some new ones coming from the clients which did not yet reach the database connection queue.
 \begin{figure}
@@ -165,35 +165,41 @@ Also based on benchmarks evaluated in milestone one, we can assume that the data
 
 \begin{center}
 	\captionof{table}*{M/M/40 Model on Scalability Data for 1 Middleware}
-	\begin{tabular}{c|c|c||c}
+	\begin{tabular}{c|c|c||c|c|c}
 		\hline
-		& \multicolumn{2}{c||}{Model Parameters} & \multicolumn{1}{c}{Computed Variables} \\
+		& \multicolumn{2}{c||}{Model Parameters} & \multicolumn{3}{c}{Computed and Measured Variables} \\
 		\hline
-		\#Clients & $\lambda$ (Req/sec) & $\mu$ (Req/sec) & $\rho$ \\
+		\#Clients & $\lambda$ (Req/sec) & $\mu$ (Req/sec) & $\rho$ & $\varrho^{*_1}$(\%) & Queue Length$^{*_2}$ \\
 		\hline
-		10 & 2481.5 & 366.15 & 0.1694\\
-		20 & 4773.5 & 341.82 & 0.3491\\
-		30 & 7015.5 & 339.42 & 0.5167\\
-		40 & 9311.5 & 332.88 & 0.6993\\
-		50 & 10346.5 & 303.02 & 0.8536\\
-		60 & 12302 & 317.06 & 0.9700\\
-		70 & 13152 & 329.90 & 0.9967\\
-		80 & 13005.5 & 326.25 & 0.9966\\
-		90 & 12321 & 308.14 & 0.9996\\
-		100 & 13383 & 335.71 & 0.9966\\
-		110 & 13013.5 & 326.28 & 0.9971\\
-		120 & 12642.5 & 316.59 & 0.9983\\
+		10 & 2481.5 & 366.15 & 0.1694 & $2.5783*10^{-13}$ & 0.19\\
+		20 & 4773.5 & 341.82 & 0.3491 & 1.15 & 0.40\\
+		30 & 7015.5 & 339.42 & 0.5167 & 51.66 & 0.68\\
+		40 & 9311.5 & 332.88 & 0.6993 & 69.93 & 0.90\\
+		50 & 10346.5 & 303.02 & 0.8536 &85.36 & 1.36\\
+		60 & 12302 & 317.06 & 0.9700 & 97.00 & 5.79\\
+		70 & 13152 & 329.90 & 0.9967 & 99.67 & 21.31\\
+		80 & 13005.5 & 326.25 & 0.9966 & 99.66  & 40.83\\
+		90 & 12321 & 308.14 & 0.9996 & 99.96 & 61.68\\
+		100 & 13383 & 335.71 & 0.9966 & 99.66 & 77.74\\
+		110 & 13013.5 & 326.28 & 0.9971 & 99.71 & 99.13\\
+		120 & 12642.5 & 316.59 & 0.9983 & 99.83 & 119.10\\
 		\hline		
 	\end{tabular}
+	\captionof{table}*{$^{*_1}$: Probability of Queueing $^{*_2}$: Average per Request}
 \end{center}
+
+The first improvement of this model with respect to the simple M/M/1 model visible is the much better fit of the traffic intensity $\rho$. Indeed, the model does now also yield a stable system and thus is closer to reality. The model gives also reasonable insights into the probability of queueing happening. When we have values of the measured queue length which are $<1$, it means that more requests had an empty queue than requests which had another request actually waiting infront of them already.
 
 \section{Modeling Components as Independent Units}\label{sec:independent-units}
 
 Length: 1-5 pages
 
-In this section you will build M/M/m models of the middleware and the database and explain the characteristics of both. As before, compare them with relevant experimental data and analyze the similarities and differences between models and real behavior, and link these to specific design decisions in your system.
+In this section you will build M/M/m models of the middleware and the database and explain the characteristics of both. As before, compare them with relevant experimental data and analyse the similarities and differences between models and real behaviour, and link these to specific design decisions in your system.
 
 \subsection{Middleware}
+As already explained in the first Milestone the middleware was built with maximal adaptivity to the current situation in mind. This means that a middleware is able to dynamically allocate resources on demand when either more clients join the system, or in general more requests are generated. To get this behaviour a \textit{cached thread pool} of the \textit{ExecutorService} class has been instantiated to deal with the distribution of requests to threads. The magic behind this class is that it automatically creates and runs threads for each new job, in our case requests, entering the middleware. As shown in the benchmarks for the middleware, this setup allows a very high throughput of around 45'000 requests per second. Having this nice performance on the one hand, brings problem on the other with modelling, since there is no straight-forward approach of finding an obvious number of servers (threads). I try to solve the issue of dependence by choosing different m's for every configuration that leads to another load, since in the end an M/M/m model has to be applied. 
+
+Because of this load-dependence I expect that the middleware is strongly correlated to the number of clients, because every client does send as much as possible, all following the same pattern. Since it's known, that the clients are not limited by the hardware, all client processes are able to run at full power. For n clients the best model should therefore be M/M/n.
 
 \subsection{Database}
 
