@@ -35,6 +35,10 @@ wait_res_double = zeros((int_end - int_start + 1) * num_clients, 1);
 qlen_res_single = zeros((int_end - int_start + 1) * num_clients, 1);
 qlen_res_double = zeros((int_end - int_start + 1) * num_clients, 1);
 
+% number of threads in each middleware
+threads_res_single = zeros((int_end - int_start + 1) * num_clients, 1);
+threads_res_single_res_double = zeros((int_end - int_start + 1) * num_clients, 1);
+
 % indices for the boxplots
 idx_single = zeros((int_end - int_start + 1) * num_clients, 1);
 idx_double = zeros((int_end - int_start + 1) * num_clients, 1);
@@ -62,6 +66,7 @@ for i = 1:num_mws
         total_mw_rt = zeros(int_end - int_start + 1, 1);
         total_mw_wait = zeros(int_end - int_start + 1, 1);
         total_q_len = zeros(int_end - int_start + 1, 1);
+        total_threads = zeros(int_end - int_start + 1, 1);
         
         % run through the log files of the middleware(s)
         mw_log_dirs = char('data_mw1\', 'data_mw2\');
@@ -75,6 +80,7 @@ for i = 1:num_mws
             curr_rt = dlmread(strcat(log_folder, 'rtt.log'));
             curr_wait = dlmread(strcat(log_folder, 'waitForDbConn.log'));
             curr_q_len = dlmread(strcat(log_folder, 'db_conn_queue_length.log'));
+            curr_threads = dlmread(strcat(log_folder, 'threadCount.log'));
             
             % sum them up
             total_mw_tp = total_mw_tp + curr_tp(int_start:int_end);
@@ -83,6 +89,7 @@ for i = 1:num_mws
             total_mw_rt = total_mw_rt + curr_rt(int_start:int_end);
             total_mw_wait = total_mw_wait + curr_wait(int_start:int_end);
             total_q_len = total_q_len + curr_q_len(int_start:int_end);
+            total_threads = total_threads + curr_threads(int_start:int_end);
         end
         
         % calculate result matrix indices
@@ -96,6 +103,7 @@ for i = 1:num_mws
             rt_res_single(idx_lo:idx_hi) = total_mw_rt./total_mw_tp;
             wait_res_single(idx_lo:idx_hi) = total_mw_wait./total_mw_tp;
             qlen_res_single(idx_lo:idx_hi) = total_q_len./total_mw_tp;
+            threads_res_single(idx_lo:idx_hi) = total_threads;
             idx_single(idx_lo:idx_hi) = 2*curr_clients;
         else
             tp_res_double(idx_lo:idx_hi) = total_mw_tp;
@@ -103,6 +111,7 @@ for i = 1:num_mws
             rt_res_double(idx_lo:idx_hi) = total_mw_rt./total_mw_tp;
             wait_res_double(idx_lo:idx_hi) = total_mw_wait./total_mw_tp;
             qlen_res_double(idx_lo:idx_hi) = total_q_len./total_mw_tp;
+            threads_res_double(idx_lo:idx_hi) = total_threads;
             idx_double(idx_lo:idx_hi) = 2*curr_clients;
         end
     end
@@ -182,10 +191,10 @@ title('Timings of the whole System')
 set(gca, 'YLim', [0, 9])
 
 % calculate other model-related numbers
-m = 40.5;
+m = 40;
 %traffic intensity
 mu = 1./(single_service_means.*10^-3);
-rho = single_tp_means./(m.*(mu))
+rho = single_tp_means./(m.*(mu));
 % probability of 0 jobs in the system
 rho0 = calculate_rho0(rho, m);
 % probability of having n requests in the system
@@ -220,11 +229,12 @@ legend('120', '110', '100', '90', '80', '70', '60', ...
 hold off
 figure()
 hold on
-boxplot(2.*qlen_res_single, idx_single)
+boxplot(qlen_res_single, idx_single)
+boxplot(qlen_res_double, idx_single)
 medians = findobj(gca,'tag','Median');
-numMedians = length(medians);
-colors = ['b'];
-for i = 1:1
+numMedians = length(medians)/2;
+colors = ['r', 'b'];
+for i = 1:2
     currMedians = medians(((i-1)*numMedians + 1):(i*numMedians));
     xs = zeros(numMedians, 1);
     ys = zeros(numMedians, 1);
@@ -235,14 +245,75 @@ for i = 1:1
         yt = currMedian.YData;
         ys(j) = mean(yt);
     end
-    single_qlen_means = ys;
+    if i == 1
+        double_qlen_means = ys;
+    else
+        single_qlen_means = ys;
+    end
     plot(xs, ys, 'color', colors(i), 'linewidth', 2)
 end
 title('Measured Queue Length of DB Connection Pool')
 xlabel('Number of Clients in the System')
 ylabel('Queue Length')
+set(gca, 'YLim', [0 120])
+legend('2 MW', '1 MW')
 
+hold off
 figure()
-plot(ans)
 hold on
+plot(ans)
 plot(single_rt_means)
+
+% plot number of threads for all clients
+hold off
+figure()
+hold on
+
+% 4 threads run on each middleware when no requests have to be served
+boxplot(threads_res_single - 4, idx_single, 'symbol', '')
+boxplot(threads_res_double - 8, idx_double, 'symbol', '')
+
+medians = findobj(gca,'tag','Median');
+numMedians = length(medians)/2;
+colors = ['r', 'b'];
+plot(1:12, 10:10:120, 'color', 'g', 'linewidth', 2)
+for i = 1:2
+    currMedians = medians(((i-1)*numMedians + 1):(i*numMedians));
+    xs = zeros(numMedians, 1);
+    ys = zeros(numMedians, 1);
+    for j = 1:numMedians
+        currMedian = currMedians(j);
+        xt = currMedian.XData;
+        xs(j) = mean(xt);
+        yt = currMedian.YData;
+        ys(j) = mean(yt);
+    end
+    if i == 1
+        double_threads_means = ys;
+    else
+        single_threads_means = ys;
+    end
+    plot(xs, ys, 'color', colors(i), 'linewidth', 2)
+end
+legend('Expectation', '#Threads with 2 Middlewares', ...
+    '#Threads with 1 Middleware', 'location', 'southeast')
+xlabel('Number of Clients')
+ylabel('Total number of Threads')
+title('Number of Threads on all Middlewares')
+
+% plot effective number of requests in mw and db
+hold off
+figure()
+hold on
+
+loc_single_qlen_means = single_qlen_means./2;
+loc_single_threads_means = single_threads_means;
+qlen_idx = loc_single_qlen_means <= 1;
+db_num_req = 40*ones(length(loc_single_qlen_means), 1);
+db_num_req(qlen_idx) = db_num_req(qlen_idx).*loc_single_qlen_means(qlen_idx);
+single_total_req = flipud(db_num_req + loc_single_qlen_means + loc_single_threads_means);
+
+double_qlen_idx = double_qlen_means <= 1;
+
+plot(single_total_req)
+plot(1:12, 10:10:120)

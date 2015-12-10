@@ -14,7 +14,7 @@ service_time = rt_means;
 service_rate = 1./service_time;
 
 % try all these M/M/m's for all arr/servtime combinations
-m = 1:240;
+m = 1:110;
 mlen = length(m);
 
 % store all traffic intensities here
@@ -35,3 +35,14 @@ for i = 1:length(tp_means)
         end
     end
 end
+
+diff_rho = abs(1-rho);
+%imagesc(log1p(1./diff_rho))
+imagesc(log((1./diff_rho)+4))
+colormap('hot')
+ylabels = char('10', '20', '30', '40', '50', '60', '70', '80', '90', '100');
+set(gca, 'YTickLabels', ylabels)
+ylabel('Total number of clients online')
+xlabel('m-Values for the M/M/m model')
+title('Translated logarithmic inverse of traffic intensity - 1')
+colorbar
