@@ -306,14 +306,69 @@ hold off
 figure()
 hold on
 
-loc_single_qlen_means = single_qlen_means./2;
-loc_single_threads_means = single_threads_means;
+% loc_single_qlen_means = single_qlen_means;
+% loc_single_threads_means = single_threads_means./2;
+% qlen_idx = loc_single_qlen_means <= 1;
+% db_num_req = 40*ones(length(loc_single_qlen_means), 1);
+% db_num_req(qlen_idx) = db_num_req(qlen_idx).*loc_single_qlen_means(qlen_idx);
+% single_total_req = flipud(db_num_req + loc_single_qlen_means + loc_single_threads_means);
+% 
+% loc_double_qlen_means = double_qlen_means.*2;
+% loc_double_threads_means = double_threads_means./2;
+% double_qlen_idx = loc_double_qlen_means <= 1;
+% double_db_num_req = 40*ones(length(loc_double_qlen_means), 1);
+% double_db_num_req(double_qlen_idx) = ...
+%     double_db_num_req(double_qlen_idx).*loc_double_qlen_means(double_qlen_idx);
+% double_total_req = flipud(double_db_num_req + loc_double_qlen_means + ...
+%     loc_double_threads_means);
+
+% plot(1:12, 10:10:120, 'color', 'green', 'linewidth', 2)
+% plot(single_total_req, 'color', 'blue', 'linewidth', 2)
+% plot(double_total_req, 'color', 'red', 'linewidth', 2)
+% legend('Expectation', 'Estimation with 1 Middleware', ...
+%     'Estimation with 2 Middlewares', 'location', 'northwest')
+
+loc_single_qlen_means = qlen_res_single;
+loc_single_threads_means = (threads_res_single - 4)./2;
 qlen_idx = loc_single_qlen_means <= 1;
 db_num_req = 40*ones(length(loc_single_qlen_means), 1);
 db_num_req(qlen_idx) = db_num_req(qlen_idx).*loc_single_qlen_means(qlen_idx);
-single_total_req = flipud(db_num_req + loc_single_qlen_means + loc_single_threads_means);
+single_total_req = db_num_req + loc_single_qlen_means + loc_single_threads_means;
 
-double_qlen_idx = double_qlen_means <= 1;
+loc_double_qlen_means = qlen_res_double.*2;
+loc_double_threads_means = (threads_res_double - 8)./2;
+double_qlen_idx = loc_double_qlen_means <= 1;
+double_db_num_req = 40*ones(length(loc_double_qlen_means), 1);
+double_db_num_req(double_qlen_idx) = ...
+    double_db_num_req(double_qlen_idx).*loc_double_qlen_means(double_qlen_idx);
+double_total_req = double_db_num_req + loc_double_qlen_means + ...
+    loc_double_threads_means';
 
-plot(single_total_req)
-plot(1:12, 10:10:120)
+hold off
+figure()
+hold on
+boxplot(single_total_req, idx_single)
+boxplot(double_total_req, idx_double)
+
+medians = findobj(gca,'tag','Median');
+numMedians = length(medians)/2;
+colors = ['r', 'b'];
+plot(1:12, 10:10:120, 'color', 'g', 'linewidth', 2)
+for i = 1:2
+    currMedians = medians(((i-1)*numMedians + 1):(i*numMedians));
+    xs = zeros(numMedians, 1);
+    ys = zeros(numMedians, 1);
+    for j = 1:numMedians
+        currMedian = currMedians(j);
+        xt = currMedian.XData;
+        xs(j) = mean(xt);
+        yt = currMedian.YData;
+        ys(j) = mean(yt);
+    end
+    plot(xs, ys, 'color', colors(i), 'linewidth', 2)
+end
+legend('Expectation', '2 Middlewares', ...
+    '1 Middleware', 'location', 'northwest')
+xlabel('Number of Clients')
+ylabel('Requests in middleware or database')
+title('Relation between load and number of clients')

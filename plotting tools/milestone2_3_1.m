@@ -45,4 +45,5 @@ set(gca, 'YTickLabels', ylabels)
 ylabel('Total number of clients online')
 xlabel('m-Values for the M/M/m model')
 title('Translated logarithmic inverse of traffic intensity - 1')
-colorbar
+h =colorbar;
+ylabel(h, 'Fit of the model (higher is better)')
