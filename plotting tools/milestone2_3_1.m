@@ -86,6 +86,6 @@ end
 legend('Measurements 1 MW', 'Measurements 2 MWs', 'Model for 1 MW', ...
     'Model for 2 MWs', 'location', 'northwest')
 xlabel('Arrival Rate (Requests per second)')
-ylabel('Response Time (ms)')
+ylabel('Response Time (sec)')
 title('Fitting of the M/M/95 queueing model')
 set(gca, 'YLim', [0 3*10^-3])
