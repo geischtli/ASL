@@ -180,6 +180,13 @@ l = ((m.*rho).^m./(factorial(m)*(1-rho))).*rho0;
 Er = 1./service_rate.*(1 + (l)./(m.*(1-rho)));
 plot(arrival_rate, Er, 'r',  'linewidth', 2, 'color', 'blue')
 
+% mean waiting time
+Ew = l./(m.*service_rate.*(1 - rho));
+
+% q-percentile of the waiting time
+q_perc_90 = (Ew./l).*log((100.*l)./(100-90));
+q_wait_90 = max([zeros(size(q_perc_90)), q_perc_90], [], 2);
+
 
 hold off
 figure()
@@ -190,4 +197,5 @@ plot(arrival_rate, Er, 'linewidth', 2, 'color', 'red')
 legend('Measurements', 'Model', 'location', 'northwest')
 xlabel('Arrival Rate (Requests per Second)')
 ylabel('Response Time (ms)')
-title('Fitting of the M/M/20 queueing model')
+title('Fitting of the M/M/30 queueing model')
+set(gca, 'YLim', [0, 1.4])

@@ -39,6 +39,10 @@ qlen_res_double = zeros((int_end - int_start + 1) * num_clients, 1);
 threads_res_single = zeros((int_end - int_start + 1) * num_clients, 1);
 threads_res_single_res_double = zeros((int_end - int_start + 1) * num_clients, 1);
 
+% response time of db plus network
+db_plus_network_res_single = zeros((int_end - int_start + 1) * num_clients, 1);
+db_plus_network_res_double = zeros((int_end - int_start + 1) * num_clients, 1);
+
 % indices for the boxplots
 idx_single = zeros((int_end - int_start + 1) * num_clients, 1);
 idx_double = zeros((int_end - int_start + 1) * num_clients, 1);
@@ -67,6 +71,7 @@ for i = 1:num_mws
         total_mw_wait = zeros(int_end - int_start + 1, 1);
         total_q_len = zeros(int_end - int_start + 1, 1);
         total_threads = zeros(int_end - int_start + 1, 1);
+        total_db_plus_network = zeros(int_end - int_start + 1, 1);
         
         % run through the log files of the middleware(s)
         mw_log_dirs = char('data_mw1\', 'data_mw2\');
@@ -81,6 +86,7 @@ for i = 1:num_mws
             curr_wait = dlmread(strcat(log_folder, 'waitForDbConn.log'));
             curr_q_len = dlmread(strcat(log_folder, 'db_conn_queue_length.log'));
             curr_threads = dlmread(strcat(log_folder, 'threadCount.log'));
+            curr_db_plus_network = dlmread(strcat(log_folder, 'db_plus_network_rt.log'));
             
             % sum them up
             total_mw_tp = total_mw_tp + curr_tp(int_start:int_end);
@@ -90,6 +96,8 @@ for i = 1:num_mws
             total_mw_wait = total_mw_wait + curr_wait(int_start:int_end);
             total_q_len = total_q_len + curr_q_len(int_start:int_end);
             total_threads = total_threads + curr_threads(int_start:int_end);
+            total_db_plus_network = total_db_plus_network ...
+                + curr_db_plus_network(int_start:int_end);
         end
         
         % calculate result matrix indices
@@ -104,6 +112,8 @@ for i = 1:num_mws
             wait_res_single(idx_lo:idx_hi) = total_mw_wait./total_mw_tp;
             qlen_res_single(idx_lo:idx_hi) = total_q_len./total_mw_tp;
             threads_res_single(idx_lo:idx_hi) = total_threads;
+            db_plus_network_res_single(idx_lo:idx_hi) = ...
+                total_db_plus_network./total_mw_tp;
             idx_single(idx_lo:idx_hi) = 2*curr_clients;
         else
             tp_res_double(idx_lo:idx_hi) = total_mw_tp;
@@ -112,6 +122,8 @@ for i = 1:num_mws
             wait_res_double(idx_lo:idx_hi) = total_mw_wait./total_mw_tp;
             qlen_res_double(idx_lo:idx_hi) = total_q_len./total_mw_tp;
             threads_res_double(idx_lo:idx_hi) = total_threads;
+            db_plus_network_res_double(idx_lo:idx_hi) = ...
+                total_db_plus_network./total_mw_tp;
             idx_double(idx_lo:idx_hi) = 2*curr_clients;
         end
     end
@@ -122,6 +134,8 @@ rt_res_single = rt_res_single*10^-6;
 rt_res_double = rt_res_double*10^-6;
 wait_res_single = wait_res_single*10^-6;
 wait_res_double = wait_res_double*10^-6;
+db_plus_network_res_single = db_plus_network_res_single*10^-6;
+db_plus_network_res_double = db_plus_network_res_double*10^-6;
 
 %% GENERATE PLOTS
 
@@ -159,11 +173,12 @@ hold on
 boxplot(rt_res_single, idx_single)
 boxplot(wait_res_single, idx_single)
 boxplot(rt_res_single - wait_res_single, idx_single)
+boxplot(db_plus_network_res_single, idx_single)
 
 medians = findobj(gca,'tag','Median');
-numMedians = length(medians)/3;
-colors = ['g', 'r', 'b'];
-for i = 1:3
+numMedians = length(medians)/4;
+colors = ['k', 'g', 'r', 'b'];
+for i = 1:4
     currMedians = medians(((i-1)*numMedians + 1):(i*numMedians));
     xs = zeros(numMedians, 1);
     ys = zeros(numMedians, 1);
@@ -175,16 +190,19 @@ for i = 1:3
         ys(j) = mean(yt);
     end
     if i == 1
-        single_service_means = ys;
+        single_db_plus_network_means = flipud(ys);
     elseif i == 2
-        single_wait_means = ys;
+        single_service_means = flipud(ys);
+    elseif i == 3
+        single_wait_means = flipud(ys);
     else
-        single_rt_means = ys;
+        single_rt_means = flipud(ys);
     end
     plot(xs, ys, 'color', colors(i), 'linewidth', 2)
 end
 
-legend('Service Time', 'Wait Time', 'Response Time', 'location', 'northwest')
+legend('Database+Network Response Time', 'Service Time', ...
+    'Wait Time', 'Response Time', 'location', 'northwest')
 xlabel('Number of Clients in the System')
 ylabel('Milliseconds')
 title('Timings of the whole System')
