@@ -151,15 +151,6 @@ So how to explain then that the traffic intensity $\rho$ $=39.91>1$? The answer 
 \caption{Queue length in front of DB Connection pool}
 \label{fig:queue_length}
 \end{figure}
-\begin{figure}
-\centering
-\includegraphics[width=0.7\linewidth]{figures/middleware/mm95}
-\caption{}
-\label{fig:mm95}
-\end{figure}
-
-CONTINUE HERE, BY MERGING THE PLOTS AND THEN EXPLAIN THE MM95 PLOT. ALSO EXPLAIN WHY NO ERRORBARS, BECAUSE WORKED ALREADY WITH MEAN VALUES ONLY FOR EASIER USAGE IN MATLAB.
-
 
 \section{Analysis of System Based on Scalability Data}\label{sec:analysis-scalability}
 
@@ -219,14 +210,11 @@ The figure \ref{fig:refined_mw_load} does verify our assumption of having a line
 \newline\underline{Configuration}: The middleware was as isolated as possible, i.e. no database access was made. Two client machines were flooding either one or two middlewares with messages with content length 200. As service time, only the time within the middleware was measured. To apply an M/M/m model, the throughput and service time of the corresponding experiment data were taken. To get an idea of how well different models fit onto the data I did the following: For every point i.e. throughput and response time for $n$ clients, all M/M/m models with m going from 1 to 110 were applied. Because the system was stable in all phases of the experiment, the traffic intensity allows to see how well a model does fit.
 \newline\underline{Expectation}: As seen in figure \ref{fig:refined_mw_load}, the load seems to relate linearly to the number of clients, so I have no reason the expect anything else of the models.
 \newline\underline{Reality} (figure \ref{fig:load_dependence}): It's clearly visible that the linear trend could be verified also when applying the models. Since the system was stable, but still trying to get as much throughput as possible, a traffic intensity of just below $1$ is expectable. The plot was generated with this assumption in mind. This leads to the basic formula of $|(\rho-1)|^{-1}$, which models the closeness to 1. To have a visually more appealing plot, the final formula reads as $\log(|(\rho-1)|^{-1}+4)$. Additionally to the linear relationship, it's noticeable, that models with higher m's tend to fit more parts of the whole data. This insight is used for the second step, when trying to fit a single model onto the data.
-\begin{figure}[!htb]
-\centering
-\includegraphics[width=0.7\linewidth]{figures/middleware/load_dependence}
-\caption{Overview of how well the M/M/[1-110] models fit onto the middleware data with respect to a traffic intensity of $<1$, but still as close as possible to $1$.}
-\label{fig:load_dependence}
-\end{figure}
 
+\TwoFig {figures/middleware/load_dependence} {Overview of how well the \\M/M/[1-110] models fit onto the\\ middleware data with respect to the traffic\\ intensity} {fig:load_dependence}
+		{figures/middleware/mm95} {Applying the M/M/95 model onto the data of the middleware benchmark} {fig:mm95}
 
+To test a single model onto the middleware, the response time yield by the model and the measured one will be compared. This will give a detailed insight into if and where the model does fit the built system. The approach taken is to model the middleware best when being under maximal load, i.e. when the throughput stagnates, but the response time still grows. This is the case when having 60 clients or more. By examining different models, the best one was found to be the M/M/95 model, which is displayed in figure \ref{fig:mm95}. The model is capable of not only representing the middleware when under maximal load, but also can closely predict the early stages when having a low load. The reason for not having the variance in the plot, is that I already worked with only the 50\% quantile of the data, because the throughput and response time data were logged in different settings (per requests and per second). But to generate a plot like the one seen in figure \ref{fig:mm95}, it's needed to have some sort of common structure. Coming back to the actual plot itself, why is it that exactly the M/M/95 model does the best job, and what is the relation to the real system? As mentioned in the in the first part of this section, threads are reused and thus can handle multiple requests. We saw in figure \ref{fig:threads} that the number of threads when having the maximal throughput, is on average 47 (calculated from the mean values of both settings 1 and 2 MW's). When calculating that the model does yield, that queueing happens with $83.88\%$ on average, we can assume that on average each thread can indeed handle multiple requests, because of the waiting induced by the queueing, but not too much, because of the only very limited time spent in the middleware ($<2.5ms$ on average). Eyeing at the M/M/95 model we can see that a re-usage factor of $\frac{95}{47}=2.02$ requests per thread would not only fit the model perfectly, but also does make sense with respect to the measured data.
 
 
 \subsection{Database}

@@ -270,8 +270,8 @@ figure()
 hold on
 
 % 4 threads run on each middleware when no requests have to be served
-boxplot(threads_res_single - 4, idx_single, 'symbol', '')
-boxplot(threads_res_double - 8, idx_double, 'symbol', '')
+boxplot(threads_res_single, idx_single, 'symbol', '')
+boxplot(threads_res_double, idx_double, 'symbol', '')
 
 medians = findobj(gca,'tag','Median');
 numMedians = length(medians)/2;

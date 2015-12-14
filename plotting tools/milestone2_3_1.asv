@@ -61,30 +61,30 @@ ylabel(h, 'Fit of the model (higher is better)')
 %% apply mmm model
 figure()
 hold on
-plot(arrival_rate, response_time, 'color', 'blue', 'linewidth', 2, ...
-    'linestyle', ':')
-plot(double_arrival_rate, double_response_time, 'color', 'red', 'linewidth', 2, ...
-    'linestyle', ':')
+plot(arrival_rate, response_time, 'color', 'blue', 'linewidth', 2)
+plot(double_arrival_rate, double_response_time, 'color', 'red', 'linewidth', 2)
 
 mu = service_rate;
-ms = 95;
+ms = 100;
 for m = ms
     rho = arrival_rate./(m*service_rate);
     rho0 = calculate_rho0(rho, m);
-    single_l = ((m.*rho).^m./(factorial(m)*(1-rho))).*rho0
-    single_Er = 1./mu.*(1 + (single_l)./(m.*(1-rho)));
-    plot(arrival_rate, single_Er, 'r',  'linewidth', 2, 'color', 'blue')
+    l = ((m.*rho).^m./(factorial(m)*(1-rho))).*rho0
+    single_Er = 1./mu.*(1 + (l)./(m.*(1-rho)));
+    plot(arrival_rate, single_Er, 'r',  'linewidth', 2, 'color', 'blue', ...
+        'linestyle', ':')
     err = norm(response_time - single_Er)
     
     rho = double_arrival_rate./(m*double_service_rate);
     rho0 = calculate_rho0(rho, m);
-    double_l = ((m.*rho).^m./(factorial(m)*(1-rho))).*rho0
-    double_Er = 1./(double_service_rate).*(1 + (double_l)./(m.*(1-rho)));
-    plot(double_arrival_rate, double_Er, 'r',  'linewidth', 2, 'color', 'red')
-    err = norm(response_time - double_Er)
+    l = ((m.*rho).^m./(factorial(m)*(1-rho))).*rho0
+    double_Er = 1./(double_service_rate).*(1 + (l)./(m.*(1-rho)));
+    plot(double_arrival_rate, Er, 'r',  'linewidth', 2, 'color', 'red', ...
+        'linestyle', ':')
+    err = norm(response_time - Er)
 end
-legend('Measurements 1 MW', 'Measurements 2 MWs', 'Model for 1 MW', ...
-    'Model for 2 MWs', 'location', 'northwest')
+legend('Model for 1MW', 'Model for 2 MWs', 'Measurements 1 MW', ...
+    'Measurements 2 MWs', 'location', 'northwest')
 xlabel('Arrival Rate (Requests per second)')
 ylabel('Response Time (ms)')
 title('Fitting of the M/M/95 queueing model')
