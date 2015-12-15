@@ -17,4 +17,9 @@ public class FixedCapacityDevice extends Device {
 		Q = X*V*R;
 	}
 
+	@Override
+	public void computeUtilization(double X) {
+		U = X*S*V;
+	}
+
 }

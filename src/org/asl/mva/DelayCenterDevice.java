@@ -2,22 +2,24 @@ package org.asl.mva;
 
 public class DelayCenterDevice extends Device {
 	
-	public DelayCenterDevice(double Z, double S, double V) {
-		super(Z, S, V);
+	public DelayCenterDevice(double Z, double S, double V, int N) {
+		super(Z, S, V, N);
 	}
 
 	@Override
 	public double responseTime() {
-		// TODO Auto-generated method stub
-		return 0;
+		R = S;
+		return R;
 	}
 
 	@Override
 	public void updateProbabilities(double X) {
-		// TODO Auto-generated method stub
-		
+		Q = X*V*R;
 	}
 
-	
+	@Override
+	public void computeUtilization(double X) {
+		U = X*S*V;
+	}
 	
 }
