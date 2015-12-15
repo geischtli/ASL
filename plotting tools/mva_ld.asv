@@ -1,0 +1,42 @@
+function [X, Q, Ri, U, P] = mva_ld(Z, S, V, M, N, mu, A)
+% A = assignment vector of what type of devices there are
+% 1: Fixed Capacity
+% 2: Delay centers
+% 3: Load dependent
+Q = zeros(N, M);
+P = zeros(N, M);
+% response time of each iteration
+Ri = zeros(N, M);
+% queue lengths of last iteration
+Qi = zeros(M, 1);
+Pi = zeros(N+1, 1);
+% System response time
+R = zeros(N, 1);
+% system throughput
+X = zeros(N, 1);
+for n = 1:N
+    for m = 1:M
+        if A(m) == 1
+            % Fixed Capacity
+            Ri(n, m) = S(m)*(1 + Qi(m));
+        elseif A(m) == 2
+            % Delay Center
+            Ri(n, m) = S(m);
+        elseif A(m) == 3
+            % Load dependent
+            Ri(n, m) = sum(Pi(2:(n+1)).*((1:n)./(mu(1:n))));
+        end
+    end
+    R(n) = sum(Ri(n, :).*V);
+    X = N/(Z + R(n));
+    for m = 1:M
+        % Fixed or delay
+        Q(n, m) = X*V(m)*Ri(n, m);
+        % load dependent
+        for j = n:-1:1
+            Pi(j+1) = (X(n)/mu(j))*Pi(j);
+        end
+        Pi(1) = 1 - sum(Pi(2:end));
+    end
+end
+end
