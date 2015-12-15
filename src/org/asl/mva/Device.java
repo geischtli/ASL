@@ -38,11 +38,11 @@ public abstract class Device {
 		System.out.println("Device " + i + ": ");
 		System.out.println("\tThroughput: " + X);
 		System.out.println("\tUtilization: " + U);
-		System.out.println("\tResponse Time: " + R);
+		System.out.println("\tResponse Time: " + getR());
 	}
 	
 	public abstract double responseTime();
 	public abstract void updateProbabilities(double X);
 	public abstract void computeUtilization(double X);
-	
+	public abstract double getR();
 }

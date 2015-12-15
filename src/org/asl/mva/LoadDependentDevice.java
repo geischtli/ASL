@@ -43,4 +43,9 @@ public class LoadDependentDevice extends Device {
 		U = 1.0 - P[0];
 	}
 
+	@Override
+	public double getR() {
+		return P[0];
+	}
+	
 }

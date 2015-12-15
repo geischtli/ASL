@@ -22,4 +22,9 @@ public class DelayCenterDevice extends Device {
 		U = X*S*V;
 	}
 	
+	@Override
+	public double getR() {
+		return R;
+	}
+	
 }
