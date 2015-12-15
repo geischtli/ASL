@@ -2,7 +2,6 @@ package org.asl.mva;
 
 public abstract class Device {
 	
-	protected double Z;
 	protected double S;
 	protected double V;
 	protected double Q;
@@ -11,16 +10,15 @@ public abstract class Device {
 	protected double X;
 	protected double U;
 	
-	public Device(double Z, double S, double V, int N) {
-		initVars(Z, S, V, N);
+	public Device(double S, double V, int N) {
+		initVars(S, V, N);
 	}
 	
-	public Device(double Z, double S, double V) {
-		initVars(Z, S, V, 0);
+	public Device(double S, double V) {
+		initVars(S, V, 0);
 	}
 	
-	private void initVars(double Z, double S, double V, int N) {
-		this.Z = Z;
+	private void initVars(double S, double V, int N) {
 		this.S = S;
 		this.V = V;
 		this.Q = 0.0;
@@ -40,6 +38,7 @@ public abstract class Device {
 		System.out.println("Device " + i + ": ");
 		System.out.println("\tThroughput: " + X);
 		System.out.println("\tUtilization: " + U);
+		System.out.println("\tResponse Time: " + R);
 	}
 	
 	public abstract double responseTime();
