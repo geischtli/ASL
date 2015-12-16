@@ -9,13 +9,16 @@ public abstract class Device {
 	protected int N;
 	protected double X;
 	protected double U;
+	protected String name;
 	
-	public Device(double S, double V, int N) {
+	public Device(double S, double V, int N, String name) {
 		initVars(S, V, N);
+		this.name = name;
 	}
 	
-	public Device(double S, double V) {
+	public Device(double S, double V, String name) {
 		initVars(S, V, 0);
+		this.name = name;
 	}
 	
 	private void initVars(double S, double V, int N) {
@@ -35,7 +38,7 @@ public abstract class Device {
 	}
 	
 	public void printInfo(int i) {
-		System.out.println("Device " + i + ": ");
+		System.out.println(name + ": ");
 		System.out.println("\tThroughput: " + X);
 		System.out.println("\tUtilization: " + U);
 		System.out.println("\tResponse Time: " + getR());

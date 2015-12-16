@@ -6,8 +6,8 @@ public class LoadDependentDevice extends Device {
 	private int n;
 	private double[] mu;
 	
-	public LoadDependentDevice(double V, int N, double[] mu) {
-		super(0, V, N);
+	public LoadDependentDevice(double V, int N, double[] mu, String name) {
+		super(0, V, N, name);
 		// Allocate N+1, because the last iteration wants to write the prob
 		// for client N+1
 		this.P = new double[N+1];

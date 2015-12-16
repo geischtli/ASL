@@ -1,5 +1,10 @@
 package org.asl.mva;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class Main {
@@ -13,18 +18,24 @@ public class Main {
 		double Z = 0.0;
 		// system throughput
 		double X = 0.0;
-		// number of clients
+		// mu's
+		double[] mw_mu = null;
+		double[] db_mu = null;
+		// read mu's from db and mw from files
+		try {
+			BufferedReader reader = new BufferedReader(new FileReader(
+					"C:\\Users\\Sandro\\Documents\\eclipse\\ASL\\src\\org\\asl\\mva\\mu_mw.txt"));
+			mw_mu = readMu(reader);
+			reader = new BufferedReader(new FileReader(
+					"C:\\Users\\Sandro\\Documents\\eclipse\\ASL\\src\\org\\asl\\mva\\mu_db.txt"));
+			db_mu = readMu(reader);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		// setup devices
-		//FixedCapacityDevice disk_B = new FixedCapacityDevice(0, 0.26, 6);
-		//LoadDependentDevice fec = new LoadDependentDevice(0, 1, 3, new double[]{0.32, 0.39, 0.42});
-		//DelayCenterDevice client = new DelayCenterDevice(1/47.5059, 1, N);
-		//LoadDependentDevice tp = new LoadDependentDevice(1, N, new double[]{206.6073, 206.6073, 206.6073, 206.6073, 206.6073});
-		//LoadDependentDevice db = new LoadDependentDevice(1, N, new double[]{460.8295, 460.8295, 460.8295, 460.8295, 460.8295});
-		LoadDependentDevice db = new LoadDependentDevice(1, N, new double[]{1*417.232022165388, 2*414.97036957581, 3*412.179989871481, 4*408.955559006631,
-				5*405.389909679417, 6*401.572453203383, 7*397.588040395285, 8*393.516232876117, 9*389.430940509012, N*385.400372764355});
-		LoadDependentDevice mw = new LoadDependentDevice(1, N, new double[]{1*8409.87830457775, 2*8225.07137306733, 3*8062.26893987844, 4*7918.38966825234,
-				5*7790.83027659137, 6*7677.36448083654, 7*7576.06552702905, 8*7485.2461918263, 9*7403.41191580775, N*7329.22396112658});
-		DelayCenterDevice client = new DelayCenterDevice(0.0014, 1, N);
+		LoadDependentDevice mw = new LoadDependentDevice(1, N, mw_mu, "Middleware");
+		LoadDependentDevice db = new LoadDependentDevice(1, N, db_mu, "Database");
+		DelayCenterDevice client = new DelayCenterDevice(0.0014, 1, N, "Client");
 		// and store them in list
 		ArrayList<Device> devices = new ArrayList<Device>();
 		devices.add(mw);
@@ -61,6 +72,16 @@ public class Main {
 		for (int m = 0; m < M; ++m) {
 			devices.get(m).printInfo(m+1);
 		}
+	}
+	
+	private static double[] readMu(BufferedReader reader) throws IOException {
+		double[] ret = new double[120];
+		String line;
+		int i = 0;
+		while ((line = reader.readLine()) != null) {
+			ret[i++] = Double.parseDouble(line);
+		}
+		return ret;
 	}
 	
 }

@@ -2,8 +2,8 @@ package org.asl.mva;
 
 public class DelayCenterDevice extends Device {
 	
-	public DelayCenterDevice(double S, double V, int N) {
-		super(S, V, N);
+	public DelayCenterDevice(double S, double V, int N, String name) {
+		super(S, V, N, name);
 	}
 
 	@Override

@@ -2,8 +2,8 @@ package org.asl.mva;
 
 public class FixedCapacityDevice extends Device {
 	
-	public FixedCapacityDevice(double S, double V) {
-		super(S, V);
+	public FixedCapacityDevice(double S, double V, String name) {
+		super(S, V, name);
 	}
 	
 	@Override
