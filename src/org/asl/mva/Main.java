@@ -33,7 +33,7 @@ public class Main {
 		// setup devices
 		LoadDependentDevice mw = new LoadDependentDevice(1, N, mw_mu, "Middleware");
 		LoadDependentDevice db = new LoadDependentDevice(1, N, db_mu, "Database");
-		DelayCenterDevice client = new DelayCenterDevice(0.00864732, 1, N, "Clients and Network");
+		DelayCenterDevice client = new DelayCenterDevice(0.000864732*11, 1, N, "Clients and Network");
 		// and store them in list
 		ArrayList<Device> devices = new ArrayList<Device>();
 		devices.add(client);

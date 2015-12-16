@@ -1,6 +1,0 @@
-clear variables
-close all
-
-% at 30 clients
-mw_service_time = 0.000844386;
-db_service_time = 0.001327447;

@@ -149,6 +149,9 @@ for i = 1:2
         yt = currMedian.YData;
         ys(j) = mean(yt);
     end
+    if i == 2
+        single_rt_means = ys;
+    end
     plot(xs, ys, 'color', colors(i), 'linewidth', 2)
 end
 legend('1 Middleware', '2 Middlewares', 'location', 'northwest')

@@ -196,7 +196,7 @@ Length: 1-5 pages
 
 In this section you will build M/M/m models of the middleware and the database and explain the characteristics of both. As before, compare them with relevant experimental data and analyse the similarities and differences between models and real behaviour, and link these to specific design decisions in your system.
 
-\subsection{Middleware}
+\subsection{Middleware}\label{sec:mw}
 As already explained in the first Milestone, the middleware was built with maximal adaptivity to the current situation in mind. This means that a middleware is able to dynamically allocate resources on demand when either more clients join the system, or in general more requests are generated. To realize this feature, a \textit{cached thread pool} of the \textit{ExecutorService} class has been instantiated to deal with the distribution of requests to threads. The magic behind this class is that it automatically creates and runs threads for each new job, in our case requests, entering the middleware. As shown in the benchmarks for the middleware, this setup allows a very high throughput of around 45'000 requests per second. Since the behaviour of the \textit{cached thread pool} is not fully clear, because one just can't look into its source code, it's necessary to first understand the relationship between the two factors '\#Clients' and '\#Threads'. The number of requests is here not important, because it's not about the throughput (i.e. requests per second), but about the number of requests currently in the system, which is directly correlated to the number of clients.
 \newline\underline{Configuration}: This analysis was done on the scalability data. There were one or two middlewares, one database with 40 concurrent connections and two client machines online which provided system access for clients. If two middlewares were online, the clients and database connections were evenly split among both. The clients sent as much as they could, following the load configuration mentioned in milestone 1. Each message had a content of length 200. The number of threads was measured by looping through all available threads and counting those which were in the state \textit{RUNNABLE}.
 \newline\underline{Expectation}: The middleware structure is based on a two-step approach: Whenever a new requests enters the middleware, a new thread gets launched which handles the reading, deserialization and database access. When this is completed, this thread shuts down and fires up a second thread that handles the serialization of the answer and sends it back to the corresponding client. So in average there is one thread online per request. Thus we can expect that the equation $\text{'\#Requests in middleware or database'}=\text{'\#Request not in clients'}=\text{'\#Threads'}$ should hold. But in section \ref{sec:system-one-unit} we already saw that only a very small minority of requests is not found in the database or the middleware. With this reasoning we can expect the following behaviour for n clients: $\#Threads=n-\epsilon$, for $\epsilon>0$ and small.
@@ -216,7 +216,7 @@ The figure \ref{fig:refined_mw_load} does verify our assumption of having a line
 
 To test a single model onto the middleware, the response time yield by the model and the measured one will be compared. This will give a detailed insight into if and where the model does fit the built system. The approach taken is to model the middleware best when being under maximal load, i.e. when the throughput stagnates, but the response time still grows. This is the case when having 60 clients or more. By examining different models, the best one was found to be the M/M/95 model, which is displayed in figure \ref{fig:mm95}. The model is capable of not only representing the middleware when under maximal load, but also can closely predict the early stages when having a low load. The reason for not having the variance in the plot, is that I already worked with only the 50\% quantile of the data, because the throughput and response time data were logged in different settings (per requests and per second). But to generate a plot like the one seen in figure \ref{fig:mm95}, it's needed to have some sort of common structure. Coming back to the actual plot itself, why is it that exactly the M/M/95 model does the best job, and what is the relation to the real system? As mentioned in the in the first part of this section, threads are reused and thus can handle multiple requests. We saw in figure \ref{fig:threads} that the number of threads when having the maximal throughput, is on average 47 (calculated from the mean values of both settings 1 and 2 MW's). When calculating that the model does yield, that queueing happens with $83.88\%$ on average, we can assume that on average each thread can indeed handle multiple requests, because of the waiting induced by the queueing, but not too much, because of the only very limited time spent in the middleware ($<2.5ms$ on average). Eyeing at the M/M/95 model we can see that a re-usage factor of $\frac{95}{47}=2.02$ requests per thread would not only fit the model perfectly, but also does make sense with respect to the measured data.
 
-\subsection{Database}
+\subsection{Database}\label{sec:db}
 To find a queueing model for the database one has to take the hardware as well as the software setup into consideration. Let's first start with the hardware specification of the machine used during the experiments, since some of these led to later decisions in the experiment setup itself.
 
 The database was run on a r3.4xlarge machine. By providing 122GiB of RAM it was guaranteed to have small tables fit into the working memory and get good performance. The machine also contained 8 physical CPU's which allows to have 16 parallel threads with hyper threading. By the rule of thumb presented by PostgreSQL itself it holds that the best optimal number of connections is $2*\text{'\#physical cores'}+C$, where $C$ is a constant. In the benchmark it was found that the best performance is reached with 20 concurrent database connections (position of the knee), i.e. the moment before the throughput stops to increase as rapid as in the beginning. Optimality in this context means to have the highest throughput with the least response time. It can be easily viewed in the corresponding figure in milestone 1, that optimal is not equal to maximal. In our case, the maximal throughput is reached when having around 40 database connections. This finding was the reason to run the experiments with 40 database connection if not mentioned otherwise. So from the software point of view we have 40 as an initial guess for the model parameter $m$. When searching through this model space ($m\in[20, 40]$), the best one to come across with respect to the mean squared error between the modelled and measured response time is M/M/30 with $0.0012$ ms of deviation. How is this model connected to the real system? Obviously 30 is exactly between our initial numbers gotten from the hard- and software evaluation, so intuitively it seems to fit. Basically it means, that although 40 threads are running, the performance does not much change with respect to the scenario when having only 30 clients, flooding the database with requests. Eyeing at the throughput plot in milestone 1, we can see that this is indeed the case. The reason for not quite reaching the same throughput as with 40 clients, is because the model does also try to fit onto the the system when it's not fully loaded and thus favours a smaller $m$. It also shows that in our case the rule of thumb does underestimate the power of the system. This can be explained, because the general rule of thumb assumes a default amount of work to be done for every request. In the load used in the experiments we have only one costly (pop message) and four cheap requests. This allows the system to perform better than expected and thus also exceed the lower bound of 20. The M/M/30 model allows to get more insights into how the database performs, for example when the machine starts to reach its performance boundaries.
@@ -236,20 +236,42 @@ Length: 1-4 pages
 
 Based on the outcome of the different modeling efforts from the previous sections, build a comprehensive network of queues model for the whole system. Compare it with experimental data and use the methods discussed in the lecture and the book to provide an in-depth analysis of the behavior. This includes the identification and analysis of bottlenecks in your system.
 
+In the last three section, all important individual system parts have been modelled individually. We can now use this information to try to fit a model when combining the individual parts into a single system. To do this, a network of queues is built. To model my system i did choose to take one M/M/30 queue for modelling the database and a M/M/95 queue to simulate the behaviour of the middleware. The clients and the all network delays are packed into a single queue, because neither service time does change with different loads or is dependent on it's position in the system (e.g. before or after the middleware). All of these decision directly follow the results obtained in sections \ref{sec:mw} and \ref{sec:db}. The full setup is shown in figure \ref{fig:networkofqueues}.
+\begin{figure}[!htb]
+\centering
+\includegraphics[width=1.0\linewidth]{figures/mva/networkofqueues}
+\caption{Schematic setup of the Network of queues to simulate the behaviour of the whole system. The grey box corresponds to the delay center and the other ones to it's corresponding devices.}
+\label{fig:networkofqueues}
+\end{figure}
+To proceed with the modelling, we need to find suitable input parameters for each of the devices. Since each component is modelled as own queue, these number can get extracted out of the baselines computed in the first milestone. The findings are summarized in the following table:
+
 \begin{center}
 	\captionof{table}{Fixed Model Parameters for 30 Clients} 
 	\begin{tabular}{c|c}
 		\hline
-		Middleware Service Time & 0.844386 ms/Req\\
-		Database Service Time & 1.327447 ms/Req \\
-		Delay Center Service Time & 0.864723 ms/Req \\
-		Sleep Time $Z$ & 0.0020 ms/Req \\
-		Parallelization factor for Middleware & 95 \\
-		Parallelization factor for Middleware & 30 \\
+		Middleware Service Time & 0.844386 ms/req\\
+		Database Service Time & 1.327447 ms/req \\
+		Network delays & 0.864723 ms/req \\
+		Sleep Time $Z$ & 0.0020 ms/req \\
+		Parallelisation factor for Middleware & 95 \\
+		Parallelisation factor for Middleware & 30 \\
 		\hline
 	\end{tabular}
 \end{center}
-Table 1 fjdskafdjskfljsdlkfj
+The measurements shown in table 1 lead to the following device configuration which serve as input for the mean value analysis.
+\begin{center}
+	\captionof{table}{MVA Devices}
+	\begin{tabular}{c|c|c|c|c}
+		\hline
+		System part & Service Time (ms/req) & Type & Parallelisation & \#Visits/req\\
+		\hline
+		Client + Network & 0.864723 & DC$^{*_1}$ & 1 & 1\\
+		Middleware & 0.844386 & LDSC$^{*_2}$ & 95 & 1 \\
+		Database & 1.327447 & LDSC & 30 & 1 \\
+		\hline
+	\end{tabular}
+	\captionof{table}*{$^{*_1}$: Delay center $^{*_2}$: Load-dependent service center}
+\end{center}
 
 \begin{center}
 	\captionof{table}*{MVA on Scalability Data for 1 Middleware}
@@ -259,10 +281,20 @@ Table 1 fjdskafdjskfljsdlkfj
 		\hline
 		\#Clients & U$_{MW}$ & U$_{DB}$ & X (Req/sec) & R (ms) & X (Req/sec) & R (ms) \\
 		\hline
-		
+		10 & 0.03 & 0.2 & 2505 & 3.98 & 2482 & 2.76 \\
+		20 & 0.06 & 0.36 & 4496 & 4.44 & 4474 & 2.96 \\
+		30 & 0.10 & 0.563 & 7004 & 4.28 & 7016 & 2.98 \\
+		40 & 0.12 & 0.759 & 9322 & 4.29 & 9312 & 3.04 \\
+		50 & 0.14 & 0.86 & 10453 & 4.78 & 10347 & 3.5 \\
+		60 & 0.14 & 0.97 & 11180 & 5.36 & 12302 & 3.56 \\
+		70 & 0.14 & 0.99 & 11124 & 6.29 & 13152& 4.02 \\
+		80 & 0.14 & 0.97 & 11034 & 7.24 & 13006 & 4.81 \\
+		90 & 0.14 & 0.99 & 11043 & 8.14 & 12321 & 5.94 \\
+		100 & 0.14 & 0.99 & 11010 & 9.1 & 13383 & 6.06 \\
+		110 & 0.14 & 0.99 & 10980 & 10.00 & 13014 & 7.06 \\
+		120 & 0.14 & 0.99 & 10952 & 10.95 & 12643 & 8.05 \\
 		\hline		
 	\end{tabular}
-	\captionof{table}*{$^{*_1}$: Probability of Queueing $^{*_2}$: Average per Request}
 \end{center}
 
 \section{Interactive Law Verification}\label{sec:interactive-law}
