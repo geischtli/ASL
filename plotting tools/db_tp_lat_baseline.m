@@ -1,4 +1,5 @@
 clear variables
+close all
 
 basedir = '..\..\..\ASL_LOGS\summary_db_1_60_DB_CONNS_NO_DATA\';
 levels = char('level0\', 'level1\', 'level2WIND\', 'level2NIND\');
@@ -41,6 +42,9 @@ for level = numLevels:-1:1
             xs(medianCounter) = mean(xt);
             medianCounter = medianCounter + 1;
         end
+    end
+    if level == 4
+        mu_db = fliplr(ys)';
     end
     plot(xs, ys, 'color', colors(level, :), 'linewidth', 2)
     oldNumMedians = oldNumMedians + myNumMedians;
@@ -99,6 +103,9 @@ for level = 1:numLevels
             xs(medianCounter) = mean(xt);
             medianCounter = medianCounter + 1;
         end
+    end
+    if level == 4
+        rt_means = fliplr(ys)';
     end
     plot(xs, ys, 'color', colors(level, :), 'linewidth', 2)
     oldNumMedians = oldNumMedians + myNumMedians;

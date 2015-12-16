@@ -1,8 +1,6 @@
 package org.asl.mva;
 
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -11,11 +9,11 @@ public class Main {
 
 	public static void main(String[] args) {
 		// Input Parameters
-		int N = 10;
+		int N = 120;
 		// system response time
 		double R = 0.0;
 		// sleep time
-		double Z = 0.0;
+		double Z = 0.000002;
 		// system throughput
 		double X = 0.0;
 		// mu's
@@ -35,12 +33,12 @@ public class Main {
 		// setup devices
 		LoadDependentDevice mw = new LoadDependentDevice(1, N, mw_mu, "Middleware");
 		LoadDependentDevice db = new LoadDependentDevice(1, N, db_mu, "Database");
-		DelayCenterDevice client = new DelayCenterDevice(0.0014, 1, N, "Client");
+		DelayCenterDevice client = new DelayCenterDevice(0.00864732, 1, N, "Clients and Network");
 		// and store them in list
 		ArrayList<Device> devices = new ArrayList<Device>();
+		devices.add(client);
 		devices.add(mw);
 		devices.add(db);
-		devices.add(client);
 		// number of devices
 		int M = devices.size();
 		// Result Vectors
@@ -66,11 +64,12 @@ public class Main {
 		}
 		
 		// print some information
+		System.out.println("Results for N = " + N);
 		System.out.println("System Throughput: " + X);
 		System.out.println("System Response Time: " + R);
 		System.out.println();
 		for (int m = 0; m < M; ++m) {
-			devices.get(m).printInfo(m+1);
+			devices.get(m).printInfo();
 		}
 	}
 	

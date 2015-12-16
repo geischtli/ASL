@@ -37,7 +37,7 @@ public abstract class Device {
 		this.X = X*V;
 	}
 	
-	public void printInfo(int i) {
+	public void printInfo() {
 		System.out.println(name + ": ");
 		System.out.println("\tThroughput: " + X);
 		System.out.println("\tUtilization: " + U);
