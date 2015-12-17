@@ -9,7 +9,7 @@ public class Main {
 
 	public static void main(String[] args) {
 		// Input Parameters
-		int N = 120;
+		int N = 60;
 		// system response time
 		double R = 0.0;
 		// sleep time
@@ -33,7 +33,7 @@ public class Main {
 		// setup devices
 		LoadDependentDevice mw = new LoadDependentDevice(1, N, mw_mu, "Middleware");
 		LoadDependentDevice db = new LoadDependentDevice(1, N, db_mu, "Database");
-		DelayCenterDevice client = new DelayCenterDevice(0.000864732*11, 1, N, "Clients and Network");
+		DelayCenterDevice client = new DelayCenterDevice(0.000864732, 1, N, "Clients and Network");
 		// and store them in list
 		ArrayList<Device> devices = new ArrayList<Device>();
 		devices.add(client);

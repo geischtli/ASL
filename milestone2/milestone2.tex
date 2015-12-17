@@ -236,7 +236,8 @@ Length: 1-4 pages
 
 Based on the outcome of the different modeling efforts from the previous sections, build a comprehensive network of queues model for the whole system. Compare it with experimental data and use the methods discussed in the lecture and the book to provide an in-depth analysis of the behavior. This includes the identification and analysis of bottlenecks in your system.
 
-In the last three section, all important individual system parts have been modelled individually. We can now use this information to try to fit a model when combining the individual parts into a single system. To do this, a network of queues is built. To model my system i did choose to take one M/M/30 queue for modelling the database and a M/M/95 queue to simulate the behaviour of the middleware. The clients and the all network delays are packed into a single queue, because neither service time does change with different loads or is dependent on it's position in the system (e.g. before or after the middleware). All of these decision directly follow the results obtained in sections \ref{sec:mw} and \ref{sec:db}. The full setup is shown in figure \ref{fig:networkofqueues}.
+In the last three section, all important individual system parts have been modelled individually. We can now use this information to try to fit a model when combining the individual parts into a single system. To do this, a network of queues is built.
+\newline\underline{Configuration}: To model my system I did choose to take one M/M/30 queue for modelling the database and a M/M/95 queue to simulate the behaviour of the middleware. The clients and the all network delays are packed into a single queue, because neither service time does change with different loads or is dependent on it's position in the system (e.g. before or after the middleware). All of these decision directly follow the results obtained in sections \ref{sec:mw} and \ref{sec:db}. The full setup is shown in figure \ref{fig:networkofqueues}.
 \begin{figure}[!htb]
 \centering
 \includegraphics[width=1.0\linewidth]{figures/mva/networkofqueues}
@@ -246,19 +247,20 @@ In the last three section, all important individual system parts have been model
 To proceed with the modelling, we need to find suitable input parameters for each of the devices. Since each component is modelled as own queue, these number can get extracted out of the baselines computed in the first milestone. The findings are summarized in the following table:
 
 \begin{center}
-	\captionof{table}{Fixed Model Parameters for 30 Clients} 
+	\captionof{table}{Fixed Model Parameters} 
 	\begin{tabular}{c|c}
 		\hline
-		Middleware Service Time & 0.844386 ms/req\\
-		Database Service Time & 1.327447 ms/req \\
 		Network delays & 0.864723 ms/req \\
 		Sleep Time $Z$ & 0.0020 ms/req \\
 		Parallelisation factor for Middleware & 95 \\
-		Parallelisation factor for Middleware & 30 \\
+		Parallelisation factor for Database & 30 \\
 		\hline
 	\end{tabular}
+	\label{tbl:params}
 \end{center}
-The measurements shown in table 1 lead to the following device configuration which serve as input for the mean value analysis.
+
+Since we want to work with two load-dependent devices, we need to find a suitable service rate $\mu$ for each one. The problem is that, in contrast to a delay center, the amount of time spent in the device is - as the name suggests - dependent on the load. It thus holds that $\text{constant }C=\mu_{\text{delay denter}}\neq\mu_{\text{load-dependent device}}=f(\text{'\#Clients'})$. To have a suitable approximation of the service time, we used the measurements of the scalability experiment. There, the points for 10, 20, ... 120 clients were collected. It was thus possible to interpolate all missing values to get a fully defined function over the whole spectrum of clients. This was done in \textit{MATLAB} with a call like \textit{interp1(x\_measurements, y\_measurements, x\_estimated, 'pchip');}. It is highly important to account for the parallelisation in each part of the system. Because if a request takes $100$ ms to get processed, the MVA will never give a bigger throughput than $\frac{1}{0.1\text{sec}}=10$ requests per second. It's a good idea to follow an approach proposed in the book of Raj Jain and multiply the number of processed requests by the number of active clients, until either a physical (e.g. physical cores) or software (e.g. number of database connections) boundary is reached. In our case these boundaries were already computed and listed in table \ref{tbl:params}. For example, the multiplication vector for the database looks like $[1,2,3,...,30,30,30,...,30]$, with length of 120. The parameter values listed in table \ref{tbl:params} and the thoughts presented here, lead to the device definition shown in table \ref{tbl:devices}.
+
 \begin{center}
 	\captionof{table}{MVA Devices}
 	\begin{tabular}{c|c|c|c|c}
@@ -266,15 +268,19 @@ The measurements shown in table 1 lead to the following device configuration whi
 		System part & Service Time (ms/req) & Type & Parallelisation & \#Visits/req\\
 		\hline
 		Client + Network & 0.864723 & DC$^{*_1}$ & 1 & 1\\
-		Middleware & 0.844386 & LDSC$^{*_2}$ & 95 & 1 \\
-		Database & 1.327447 & LDSC & 30 & 1 \\
+		Middleware & 0.844386$^{*_3}$ & LDSC$^{*_2}$ & 95 & 1 \\
+		Database & 1.327447$^{*_3}$ & LDSC & 30 & 1 \\
 		\hline
 	\end{tabular}
-	\captionof{table}*{$^{*_1}$: Delay center $^{*_2}$: Load-dependent service center}
+	\label{tbl:devices}
+	\captionof{table}*{$^{*_1}$: Delay center $^{*_2}$: Load-dependent service center \\$^{*_3}$: Example values when having 30 clients}
 \end{center}
 
+Based on the device configuration presented in table \ref{tbl:devices} an MVA was performed. To have a fast implementation ready and bea able to evaluate the results properly, a JAVA program was written. The source code is found under $\backslash src\backslash org\backslash asl\backslash mva$.
+\newline\underline{Expectation}: As seen in the first milestone, the bottleneck of the whole system was identified as the database. So I expect the MVA to at least give a hint on this behaviour through the utilization output. Since measurements of a real experiment were used as input of the algorithm, the predicted values should come pretty close to the original ones, even thought the interpolation of missing values was only linear. 
+
 \begin{center}
-	\captionof{table}*{MVA on Scalability Data for 1 Middleware}
+	\captionof{table}{Results of the Mean Value Analysis}
 	\begin{tabular}{c|c|c|c|c||c|c}
 		\hline
 		& \multicolumn{4}{c||}{Computed Values} & \multicolumn{2}{c}{Measured Values} \\
@@ -296,6 +302,8 @@ The measurements shown in table 1 lead to the following device configuration whi
 		\hline		
 	\end{tabular}
 \end{center}
+
+
 
 \section{Interactive Law Verification}\label{sec:interactive-law}
 
