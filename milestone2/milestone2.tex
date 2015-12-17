@@ -301,9 +301,22 @@ Based on the device configuration presented in table \ref{tbl:devices} an MVA wa
 		120 & 0.14 & 0.99 & 10952 & 10.95 & 12643 & 8.05 \\
 		\hline		
 	\end{tabular}
+	\label{tbl:mva}
 \end{center}
+\underline{Reality} (table \ref{tbl:mva}): Let's first look at the both columns where the utilization of the middleware and database are listed. It's clearly visible, that the database is fully saturated around 60 clients, whereas the middleware only has to show only a small portion of its capabilities. The position of the knee does indeed also match the one seen in the actual experiment displayed in the figures \ref{fig:stability_tp} and \ref{fig:stability_rt}. From this perspective, the expectation is verified, that the MVA does also mirror the bottleneck behaviour of the database. From the matching of the measured and computed throughput and response time its a bit a different story. The throughput does match very well the measured one until 60 clients are reached. After that point, the throughput does also stagnate, but in a lower region as the one actually measured. Since the system throughput is limited by the database it's possible that the network latency between the middleware and the database was underestimated, and thus the service time of the database was a bit too high, which led to a lower total throughput. It's therefore also not surprising that the overall response time is higher than expected.
 
+The bottleneck is the core optimization point whenever a system is evaluated with respect to performance boosting. To get more insight into it, in the following a bottleneck analysis is done.
+\newline\underline{Configuration}: The analysis was done on the scalability data, but there was only one middleware considered (because already one is enough to fully saturate the database). Because of the above mismatch of the response times, the database service time was corrected by $1$ms. This is a big approximation of the real network latency happening between the middleware and the database, because simple pinging between two machines is always dependent on for example the current network usage or machine proximities. This change was needed, because in the original measurements, the database service time was estimated from the middleware, because the inspection of the postgres logs was not doable in time anymore and thus this shortcut had to be taken.
+\newline\underline{Expectation}: The database is already in the early stages, i.e. when low numbers of clients are online, the limiting factor in the system. It is therefore reasonable to assume that the actual throughput does follow the asymptotic limit quite closely, when the system if fully saturated. We just saw that this happens at around 60 clients, so there should be a visible come-together of both lines.
+\begin{figure}[!htb]
+\centering
+\includegraphics[width=0.7\linewidth]{figures/bottleneck/bottleneck}
+\caption{Asymptotic behaviour of the throughput when limited by the database as bottleneck.}
+\label{fig:bottleneck}
+\end{figure}
+\newline\underline{Reality} (figure \ref{fig:bottleneck}): Despite the coarse approximation of the network, it's possible to get some valuable information of the graph. First of all, the curves do show a very similar behaviour from the moment on, where the system is saturated, i.e. when the database starts to get overwhelmed by the amount of requests. When the system is only accessed by a low number of clients, the per-request service time is lower because there is no congestion happening between the different database threads. At 30 clients, this behaviour suddenly changes and the database starts to get the limiting factor of the whole system, visible by the shrinking distance between the two lines. That this break happens at 30 clients is not surprising at all, since in section \ref{sec:db} we concluded that the database is best represented by a M/M/30 queue. The discrepancy between the curve in the saturated region is explained by the rough approximation of the network latency between the middleware and database, the middleware service time which also introduces some milliseconds and the whole network between the clients and the middleware. This reasoning thus allows to confirm that the database is indeed the bottleneck.
 
+In case of wanting the system to perform better, the database would be the part where improvements are directly measurable. Having a better (i.e. more threads, more RAM, more CPU's, ect...) database the red line in figure \ref{fig:bottleneck} would not only be generally higher, but also the two points currently located at 30 and 60 clients could possibly move more towards the right. In practice this would mean that the overall system performance can handle more clients before it is saturated (assuming it is still the database is still the limiting system part).
 
 \section{Interactive Law Verification}\label{sec:interactive-law}
 
@@ -365,7 +378,7 @@ This is the place to show any repeated or additional experiments that you ran si
 \TwoFig {figures/db_1M_2/tp} {} {}
 		{figures/db_1M_2/rt} {} {}
 
-\TwoFig {figures/scalability/tp} {scalability} {}
-		{figures/scalability/rt} {scalability} {}
+\TwoFig {figures/scalability/tp} {scalability} {fig:stability_tp}
+		{figures/scalability/rt} {scalability} {fig:stability_rt}
 
 \end{document}

@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (MiKTeX 2.9) (preloaded format=pdflatex 2015.10.13)  17 DEC 2015 21:47
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (MiKTeX 2.9) (preloaded format=pdflatex 2015.10.13)  18 DEC 2015 00:03
 entering extended mode
 **milestone2.tex
 (milestone2.tex
@@ -297,12 +297,6 @@ Package: lscape 2000/10/22 v3.01 Landscape Pages (DPC)
 \IHeight=\skip53
 
 (milestone2.aux
-
-LaTeX Warning: Label `' multiply defined.
-
-
-LaTeX Warning: Label `' multiply defined.
-
 
 LaTeX Warning: Label `' multiply defined.
 
@@ -748,6 +742,27 @@ Package pdftex.def Info: figures/mva/networkofqueues.png used on input line 243
 (pdftex.def)             Requested size: 452.9679pt x 125.33752pt.
  [9 <./figures/database/mm30-eps-converted-to.pdf> <./figures/database/qprob-ep
 s-converted-to.pdf>] [10 <./figures/mva/networkofqueues.png>]
+Package epstopdf Info: Source file: <figures/bottleneck/bottleneck.eps>
+(epstopdf)                    date: 2015-12-17 23:19:42
+(epstopdf)                    size: 91595 bytes
+(epstopdf)             Output file: <figures/bottleneck/bottleneck-eps-converte
+d-to.pdf>
+(epstopdf)                    date: 2015-12-17 23:19:46
+(epstopdf)                    size: 5956 bytes
+(epstopdf)             Command: <epstopdf --outfile=figures/bottleneck/bottlene
+ck-eps-converted-to.pdf figures/bottleneck/bottleneck.eps>
+(epstopdf)             \includegraphics on input line 313.
+Package epstopdf Info: Output file is already uptodate.
+
+<figures/bottleneck/bottleneck-eps-converted-to.pdf, id=102, 421.575pt x 316.18
+124pt>
+File: figures/bottleneck/bottleneck-eps-converted-to.pdf Graphic file (type pdf
+)
+ <use figures/bottleneck/bottleneck-eps-converted-to.pdf>
+Package pdftex.def Info: figures/bottleneck/bottleneck-eps-converted-to.pdf use
+d on input line 313.
+(pdftex.def)             Requested size: 317.07614pt x 237.81078pt.
+ [11] [12 <./figures/bottleneck/bottleneck-eps-converted-to.pdf>]
 Package epstopdf Info: Source file: <figures/interactive_law/db_baseline.eps>
 (epstopdf)                    date: 2015-12-06 14:24:28
 (epstopdf)                    size: 267601 bytes
@@ -757,16 +772,16 @@ nverted-to.pdf>
 (epstopdf)                    size: 30429 bytes
 (epstopdf)             Command: <epstopdf --outfile=figures/interactive_law/db_
 baseline-eps-converted-to.pdf figures/interactive_law/db_baseline.eps>
-(epstopdf)             \includegraphics on input line 345.
+(epstopdf)             \includegraphics on input line 358.
 Package epstopdf Info: Output file is already uptodate.
 
-<figures/interactive_law/db_baseline-eps-converted-to.pdf, id=102, 421.575pt x 
+<figures/interactive_law/db_baseline-eps-converted-to.pdf, id=117, 421.575pt x 
 316.18124pt>
 File: figures/interactive_law/db_baseline-eps-converted-to.pdf Graphic file (ty
 pe pdf)
  <use figures/interactive_law/db_baseline-eps-converted-to.pdf>
 Package pdftex.def Info: figures/interactive_law/db_baseline-eps-converted-to.p
-df used on input line 345.
+df used on input line 358.
 (pdftex.def)             Requested size: 226.48395pt x 169.86691pt.
 Package epstopdf Info: Source file: <figures/interactive_law/db_data_baseline.e
 ps>
@@ -779,17 +794,17 @@ ps-converted-to.pdf>
 (epstopdf)             Command: <epstopdf --outfile=figures/interactive_law/db_
 data_baseline-eps-converted-to.pdf figures/interactive_law/db_data_baseline.eps
 >
-(epstopdf)             \includegraphics on input line 345.
+(epstopdf)             \includegraphics on input line 358.
 Package epstopdf Info: Output file is already uptodate.
 
-<figures/interactive_law/db_data_baseline-eps-converted-to.pdf, id=103, 421.575
+<figures/interactive_law/db_data_baseline-eps-converted-to.pdf, id=118, 421.575
 pt x 316.18124pt>
 File: figures/interactive_law/db_data_baseline-eps-converted-to.pdf Graphic fil
 e (type pdf)
 
 <use figures/interactive_law/db_data_baseline-eps-converted-to.pdf>
 Package pdftex.def Info: figures/interactive_law/db_data_baseline-eps-converted
--to.pdf used on input line 345.
+-to.pdf used on input line 358.
 (pdftex.def)             Requested size: 226.48395pt x 169.86691pt.
 Package epstopdf Info: Source file: <figures/interactive_law/db_baseline.eps>
 (epstopdf)                    date: 2015-12-06 14:24:28
@@ -800,14 +815,14 @@ nverted-to.pdf>
 (epstopdf)                    size: 30429 bytes
 (epstopdf)             Command: <epstopdf --outfile=figures/interactive_law/db_
 baseline-eps-converted-to.pdf figures/interactive_law/db_baseline.eps>
-(epstopdf)             \includegraphics on input line 345.
+(epstopdf)             \includegraphics on input line 358.
 Package epstopdf Info: Output file is already uptodate.
 File: figures/interactive_law/db_baseline-eps-converted-to.pdf Graphic file (ty
 pe pdf)
 
 <use figures/interactive_law/db_baseline-eps-converted-to.pdf>
 Package pdftex.def Info: figures/interactive_law/db_baseline-eps-converted-to.p
-df used on input line 345.
+df used on input line 358.
 (pdftex.def)             Requested size: 226.48921pt x 169.86691pt.
 Package epstopdf Info: Source file: <figures/interactive_law/db_data_baseline.e
 ps>
@@ -820,16 +835,15 @@ ps-converted-to.pdf>
 (epstopdf)             Command: <epstopdf --outfile=figures/interactive_law/db_
 data_baseline-eps-converted-to.pdf figures/interactive_law/db_data_baseline.eps
 >
-(epstopdf)             \includegraphics on input line 345.
+(epstopdf)             \includegraphics on input line 358.
 Package epstopdf Info: Output file is already uptodate.
 File: figures/interactive_law/db_data_baseline-eps-converted-to.pdf Graphic fil
 e (type pdf)
 
 <use figures/interactive_law/db_data_baseline-eps-converted-to.pdf>
 Package pdftex.def Info: figures/interactive_law/db_data_baseline-eps-converted
--to.pdf used on input line 345.
+-to.pdf used on input line 358.
 (pdftex.def)             Requested size: 226.48921pt x 169.86691pt.
- [11]
 Package epstopdf Info: Source file: <figures/interactive_law/db_data_baseline_t
 hird_index.eps>
 (epstopdf)                    date: 2015-12-06 14:24:28
@@ -841,17 +855,17 @@ hird_index-eps-converted-to.pdf>
 (epstopdf)             Command: <epstopdf --outfile=figures/interactive_law/db_
 data_baseline_third_index-eps-converted-to.pdf figures/interactive_law/db_data_
 baseline_third_index.eps>
-(epstopdf)             \includegraphics on input line 348.
+(epstopdf)             \includegraphics on input line 361.
 Package epstopdf Info: Output file is already uptodate.
 
 <figures/interactive_law/db_data_baseline_third_index-eps-converted-to.pdf, id=
-107, 421.575pt x 316.18124pt>
+119, 421.575pt x 316.18124pt>
 File: figures/interactive_law/db_data_baseline_third_index-eps-converted-to.pdf
  Graphic file (type pdf)
 
 <use figures/interactive_law/db_data_baseline_third_index-eps-converted-to.pdf>
 Package pdftex.def Info: figures/interactive_law/db_data_baseline_third_index-e
-ps-converted-to.pdf used on input line 348.
+ps-converted-to.pdf used on input line 361.
 (pdftex.def)             Requested size: 226.48395pt x 169.86691pt.
 Package epstopdf Info: Source file: <figures/interactive_law/mw_baseline.eps>
 (epstopdf)                    date: 2015-12-06 14:24:28
@@ -862,16 +876,16 @@ nverted-to.pdf>
 (epstopdf)                    size: 52684 bytes
 (epstopdf)             Command: <epstopdf --outfile=figures/interactive_law/mw_
 baseline-eps-converted-to.pdf figures/interactive_law/mw_baseline.eps>
-(epstopdf)             \includegraphics on input line 348.
+(epstopdf)             \includegraphics on input line 361.
 Package epstopdf Info: Output file is already uptodate.
 
-<figures/interactive_law/mw_baseline-eps-converted-to.pdf, id=108, 421.575pt x 
+<figures/interactive_law/mw_baseline-eps-converted-to.pdf, id=120, 421.575pt x 
 316.18124pt>
 File: figures/interactive_law/mw_baseline-eps-converted-to.pdf Graphic file (ty
 pe pdf)
  <use figures/interactive_law/mw_baseline-eps-converted-to.pdf>
 Package pdftex.def Info: figures/interactive_law/mw_baseline-eps-converted-to.p
-df used on input line 348.
+df used on input line 361.
 (pdftex.def)             Requested size: 226.48395pt x 169.86691pt.
 Package epstopdf Info: Source file: <figures/interactive_law/db_data_baseline_t
 hird_index.eps>
@@ -884,14 +898,14 @@ hird_index-eps-converted-to.pdf>
 (epstopdf)             Command: <epstopdf --outfile=figures/interactive_law/db_
 data_baseline_third_index-eps-converted-to.pdf figures/interactive_law/db_data_
 baseline_third_index.eps>
-(epstopdf)             \includegraphics on input line 348.
+(epstopdf)             \includegraphics on input line 361.
 Package epstopdf Info: Output file is already uptodate.
 File: figures/interactive_law/db_data_baseline_third_index-eps-converted-to.pdf
  Graphic file (type pdf)
 
 <use figures/interactive_law/db_data_baseline_third_index-eps-converted-to.pdf>
 Package pdftex.def Info: figures/interactive_law/db_data_baseline_third_index-e
-ps-converted-to.pdf used on input line 348.
+ps-converted-to.pdf used on input line 361.
 (pdftex.def)             Requested size: 226.48921pt x 169.86691pt.
 Package epstopdf Info: Source file: <figures/interactive_law/mw_baseline.eps>
 (epstopdf)                    date: 2015-12-06 14:24:28
@@ -902,13 +916,13 @@ nverted-to.pdf>
 (epstopdf)                    size: 52684 bytes
 (epstopdf)             Command: <epstopdf --outfile=figures/interactive_law/mw_
 baseline-eps-converted-to.pdf figures/interactive_law/mw_baseline.eps>
-(epstopdf)             \includegraphics on input line 348.
+(epstopdf)             \includegraphics on input line 361.
 Package epstopdf Info: Output file is already uptodate.
 File: figures/interactive_law/mw_baseline-eps-converted-to.pdf Graphic file (ty
 pe pdf)
 <use figures/interactive_law/mw_baseline-eps-converted-to.pdf>
 Package pdftex.def Info: figures/interactive_law/mw_baseline-eps-converted-to.p
-df used on input line 348.
+df used on input line 361.
 (pdftex.def)             Requested size: 226.48921pt x 169.86691pt.
 Package epstopdf Info: Source file: <figures/interactive_law/client_baseline.ep
 s>
@@ -920,17 +934,17 @@ s-converted-to.pdf>
 (epstopdf)                    size: 9610 bytes
 (epstopdf)             Command: <epstopdf --outfile=figures/interactive_law/cli
 ent_baseline-eps-converted-to.pdf figures/interactive_law/client_baseline.eps>
-(epstopdf)             \includegraphics on input line 351.
+(epstopdf)             \includegraphics on input line 364.
 Package epstopdf Info: Output file is already uptodate.
 
-<figures/interactive_law/client_baseline-eps-converted-to.pdf, id=109, 421.575p
+<figures/interactive_law/client_baseline-eps-converted-to.pdf, id=121, 421.575p
 t x 316.18124pt>
 File: figures/interactive_law/client_baseline-eps-converted-to.pdf Graphic file
  (type pdf)
 
 <use figures/interactive_law/client_baseline-eps-converted-to.pdf>
 Package pdftex.def Info: figures/interactive_law/client_baseline-eps-converted-
-to.pdf used on input line 351.
+to.pdf used on input line 364.
 (pdftex.def)             Requested size: 226.48395pt x 169.86691pt.
 Package epstopdf Info: Source file: <figures/interactive_law/stability.eps>
 (epstopdf)                    date: 2015-12-06 14:24:28
@@ -941,16 +955,16 @@ erted-to.pdf>
 (epstopdf)                    size: 9559 bytes
 (epstopdf)             Command: <epstopdf --outfile=figures/interactive_law/sta
 bility-eps-converted-to.pdf figures/interactive_law/stability.eps>
-(epstopdf)             \includegraphics on input line 351.
+(epstopdf)             \includegraphics on input line 364.
 Package epstopdf Info: Output file is already uptodate.
 
-<figures/interactive_law/stability-eps-converted-to.pdf, id=110, 421.575pt x 31
+<figures/interactive_law/stability-eps-converted-to.pdf, id=122, 421.575pt x 31
 6.18124pt>
 File: figures/interactive_law/stability-eps-converted-to.pdf Graphic file (type
  pdf)
  <use figures/interactive_law/stability-eps-converted-to.pdf>
 Package pdftex.def Info: figures/interactive_law/stability-eps-converted-to.pdf
- used on input line 351.
+ used on input line 364.
 (pdftex.def)             Requested size: 226.48395pt x 169.86691pt.
 Package epstopdf Info: Source file: <figures/interactive_law/client_baseline.ep
 s>
@@ -962,14 +976,14 @@ s-converted-to.pdf>
 (epstopdf)                    size: 9610 bytes
 (epstopdf)             Command: <epstopdf --outfile=figures/interactive_law/cli
 ent_baseline-eps-converted-to.pdf figures/interactive_law/client_baseline.eps>
-(epstopdf)             \includegraphics on input line 351.
+(epstopdf)             \includegraphics on input line 364.
 Package epstopdf Info: Output file is already uptodate.
 File: figures/interactive_law/client_baseline-eps-converted-to.pdf Graphic file
  (type pdf)
 
 <use figures/interactive_law/client_baseline-eps-converted-to.pdf>
 Package pdftex.def Info: figures/interactive_law/client_baseline-eps-converted-
-to.pdf used on input line 351.
+to.pdf used on input line 364.
 (pdftex.def)             Requested size: 226.48921pt x 169.86691pt.
 Package epstopdf Info: Source file: <figures/interactive_law/stability.eps>
 (epstopdf)                    date: 2015-12-06 14:24:28
@@ -980,14 +994,14 @@ erted-to.pdf>
 (epstopdf)                    size: 9559 bytes
 (epstopdf)             Command: <epstopdf --outfile=figures/interactive_law/sta
 bility-eps-converted-to.pdf figures/interactive_law/stability.eps>
-(epstopdf)             \includegraphics on input line 351.
+(epstopdf)             \includegraphics on input line 364.
 Package epstopdf Info: Output file is already uptodate.
 File: figures/interactive_law/stability-eps-converted-to.pdf Graphic file (type
  pdf)
 
 <use figures/interactive_law/stability-eps-converted-to.pdf>
 Package pdftex.def Info: figures/interactive_law/stability-eps-converted-to.pdf
- used on input line 351.
+ used on input line 364.
 (pdftex.def)             Requested size: 226.48921pt x 169.86691pt.
 Package epstopdf Info: Source file: <figures/interactive_law/rt_1cm.eps>
 (epstopdf)                    date: 2015-12-06 14:24:28
@@ -998,16 +1012,16 @@ ed-to.pdf>
 (epstopdf)                    size: 5501 bytes
 (epstopdf)             Command: <epstopdf --outfile=figures/interactive_law/rt_
 1cm-eps-converted-to.pdf figures/interactive_law/rt_1cm.eps>
-(epstopdf)             \includegraphics on input line 354.
+(epstopdf)             \includegraphics on input line 367.
 Package epstopdf Info: Output file is already uptodate.
 
-<figures/interactive_law/rt_1cm-eps-converted-to.pdf, id=111, 421.575pt x 316.1
+<figures/interactive_law/rt_1cm-eps-converted-to.pdf, id=123, 421.575pt x 316.1
 8124pt>
 File: figures/interactive_law/rt_1cm-eps-converted-to.pdf Graphic file (type pd
 f)
  <use figures/interactive_law/rt_1cm-eps-converted-to.pdf>
 Package pdftex.def Info: figures/interactive_law/rt_1cm-eps-converted-to.pdf us
-ed on input line 354.
+ed on input line 367.
 (pdftex.def)             Requested size: 226.48395pt x 169.86691pt.
 Package epstopdf Info: Source file: <figures/interactive_law/rt_2cm.eps>
 (epstopdf)                    date: 2015-12-06 14:24:28
@@ -1018,16 +1032,16 @@ ed-to.pdf>
 (epstopdf)                    size: 5620 bytes
 (epstopdf)             Command: <epstopdf --outfile=figures/interactive_law/rt_
 2cm-eps-converted-to.pdf figures/interactive_law/rt_2cm.eps>
-(epstopdf)             \includegraphics on input line 354.
+(epstopdf)             \includegraphics on input line 367.
 Package epstopdf Info: Output file is already uptodate.
 
-<figures/interactive_law/rt_2cm-eps-converted-to.pdf, id=112, 422.57875pt x 316
+<figures/interactive_law/rt_2cm-eps-converted-to.pdf, id=124, 422.57875pt x 316
 .18124pt>
 File: figures/interactive_law/rt_2cm-eps-converted-to.pdf Graphic file (type pd
 f)
  <use figures/interactive_law/rt_2cm-eps-converted-to.pdf>
 Package pdftex.def Info: figures/interactive_law/rt_2cm-eps-converted-to.pdf us
-ed on input line 354.
+ed on input line 367.
 (pdftex.def)             Requested size: 226.48395pt x 169.46164pt.
 Package epstopdf Info: Source file: <figures/interactive_law/rt_1cm.eps>
 (epstopdf)                    date: 2015-12-06 14:24:28
@@ -1038,14 +1052,14 @@ ed-to.pdf>
 (epstopdf)                    size: 5501 bytes
 (epstopdf)             Command: <epstopdf --outfile=figures/interactive_law/rt_
 1cm-eps-converted-to.pdf figures/interactive_law/rt_1cm.eps>
-(epstopdf)             \includegraphics on input line 354.
+(epstopdf)             \includegraphics on input line 367.
 Package epstopdf Info: Output file is already uptodate.
 File: figures/interactive_law/rt_1cm-eps-converted-to.pdf Graphic file (type pd
 f)
 
 <use figures/interactive_law/rt_1cm-eps-converted-to.pdf>
 Package pdftex.def Info: figures/interactive_law/rt_1cm-eps-converted-to.pdf us
-ed on input line 354.
+ed on input line 367.
 (pdftex.def)             Requested size: 225.94887pt x 169.46164pt.
 Package epstopdf Info: Source file: <figures/interactive_law/rt_2cm.eps>
 (epstopdf)                    date: 2015-12-06 14:24:28
@@ -1056,19 +1070,15 @@ ed-to.pdf>
 (epstopdf)                    size: 5620 bytes
 (epstopdf)             Command: <epstopdf --outfile=figures/interactive_law/rt_
 2cm-eps-converted-to.pdf figures/interactive_law/rt_2cm.eps>
-(epstopdf)             \includegraphics on input line 354.
+(epstopdf)             \includegraphics on input line 367.
 Package epstopdf Info: Output file is already uptodate.
 File: figures/interactive_law/rt_2cm-eps-converted-to.pdf Graphic file (type pd
 f)
 
 <use figures/interactive_law/rt_2cm-eps-converted-to.pdf>
 Package pdftex.def Info: figures/interactive_law/rt_2cm-eps-converted-to.pdf us
-ed on input line 354.
+ed on input line 367.
 (pdftex.def)             Requested size: 226.48685pt x 169.46164pt.
- [12 <./figures/interactive_law/db_baseline-eps-converted-to.pdf> <./figures/in
-teractive_law/db_data_baseline-eps-converted-to.pdf> <./figures/interactive_law
-/db_data_baseline_third_index-eps-converted-to.pdf> <./figures/interactive_law/
-mw_baseline-eps-converted-to.pdf>]
 Package epstopdf Info: Source file: <figures/max_tp_2/tp.eps>
 (epstopdf)                    date: 2015-12-06 14:24:30
 (epstopdf)                    size: 123296 bytes
@@ -1077,15 +1087,15 @@ Package epstopdf Info: Source file: <figures/max_tp_2/tp.eps>
 (epstopdf)                    size: 9127 bytes
 (epstopdf)             Command: <epstopdf --outfile=figures/max_tp_2/tp-eps-con
 verted-to.pdf figures/max_tp_2/tp.eps>
-(epstopdf)             \includegraphics on input line 363.
+(epstopdf)             \includegraphics on input line 376.
 Package epstopdf Info: Output file is already uptodate.
 
-<figures/max_tp_2/tp-eps-converted-to.pdf, id=132, 421.575pt x 316.18124pt>
+<figures/max_tp_2/tp-eps-converted-to.pdf, id=125, 421.575pt x 316.18124pt>
 File: figures/max_tp_2/tp-eps-converted-to.pdf Graphic file (type pdf)
 
 <use figures/max_tp_2/tp-eps-converted-to.pdf>
 Package pdftex.def Info: figures/max_tp_2/tp-eps-converted-to.pdf used on input
- line 363.
+ line 376.
 (pdftex.def)             Requested size: 226.48395pt x 169.86691pt.
 Package epstopdf Info: Source file: <figures/max_tp_2/rt.eps>
 (epstopdf)                    date: 2015-12-06 14:24:28
@@ -1095,15 +1105,15 @@ Package epstopdf Info: Source file: <figures/max_tp_2/rt.eps>
 (epstopdf)                    size: 8280 bytes
 (epstopdf)             Command: <epstopdf --outfile=figures/max_tp_2/rt-eps-con
 verted-to.pdf figures/max_tp_2/rt.eps>
-(epstopdf)             \includegraphics on input line 363.
+(epstopdf)             \includegraphics on input line 376.
 Package epstopdf Info: Output file is already uptodate.
 
-<figures/max_tp_2/rt-eps-converted-to.pdf, id=133, 422.57875pt x 316.18124pt>
+<figures/max_tp_2/rt-eps-converted-to.pdf, id=126, 422.57875pt x 316.18124pt>
 File: figures/max_tp_2/rt-eps-converted-to.pdf Graphic file (type pdf)
 
 <use figures/max_tp_2/rt-eps-converted-to.pdf>
 Package pdftex.def Info: figures/max_tp_2/rt-eps-converted-to.pdf used on input
- line 363.
+ line 376.
 (pdftex.def)             Requested size: 226.48395pt x 169.46164pt.
 Package epstopdf Info: Source file: <figures/max_tp_2/tp.eps>
 (epstopdf)                    date: 2015-12-06 14:24:30
@@ -1113,13 +1123,13 @@ Package epstopdf Info: Source file: <figures/max_tp_2/tp.eps>
 (epstopdf)                    size: 9127 bytes
 (epstopdf)             Command: <epstopdf --outfile=figures/max_tp_2/tp-eps-con
 verted-to.pdf figures/max_tp_2/tp.eps>
-(epstopdf)             \includegraphics on input line 363.
+(epstopdf)             \includegraphics on input line 376.
 Package epstopdf Info: Output file is already uptodate.
 File: figures/max_tp_2/tp-eps-converted-to.pdf Graphic file (type pdf)
 
 <use figures/max_tp_2/tp-eps-converted-to.pdf>
 Package pdftex.def Info: figures/max_tp_2/tp-eps-converted-to.pdf used on input
- line 363.
+ line 376.
 (pdftex.def)             Requested size: 225.94887pt x 169.46164pt.
 Package epstopdf Info: Source file: <figures/max_tp_2/rt.eps>
 (epstopdf)                    date: 2015-12-06 14:24:28
@@ -1129,13 +1139,13 @@ Package epstopdf Info: Source file: <figures/max_tp_2/rt.eps>
 (epstopdf)                    size: 8280 bytes
 (epstopdf)             Command: <epstopdf --outfile=figures/max_tp_2/rt-eps-con
 verted-to.pdf figures/max_tp_2/rt.eps>
-(epstopdf)             \includegraphics on input line 363.
+(epstopdf)             \includegraphics on input line 376.
 Package epstopdf Info: Output file is already uptodate.
 File: figures/max_tp_2/rt-eps-converted-to.pdf Graphic file (type pdf)
 
 <use figures/max_tp_2/rt-eps-converted-to.pdf>
 Package pdftex.def Info: figures/max_tp_2/rt-eps-converted-to.pdf used on input
- line 363.
+ line 376.
 (pdftex.def)             Requested size: 226.48685pt x 169.46164pt.
 Package epstopdf Info: Source file: <figures/db_1M_2/tp.eps>
 (epstopdf)                    date: 2015-12-06 14:24:28
@@ -1145,15 +1155,15 @@ Package epstopdf Info: Source file: <figures/db_1M_2/tp.eps>
 (epstopdf)                    size: 4705 bytes
 (epstopdf)             Command: <epstopdf --outfile=figures/db_1M_2/tp-eps-conv
 erted-to.pdf figures/db_1M_2/tp.eps>
-(epstopdf)             \includegraphics on input line 366.
+(epstopdf)             \includegraphics on input line 379.
 Package epstopdf Info: Output file is already uptodate.
 
-<figures/db_1M_2/tp-eps-converted-to.pdf, id=134, 421.575pt x 316.18124pt>
+<figures/db_1M_2/tp-eps-converted-to.pdf, id=127, 421.575pt x 316.18124pt>
 File: figures/db_1M_2/tp-eps-converted-to.pdf Graphic file (type pdf)
 
 <use figures/db_1M_2/tp-eps-converted-to.pdf>
 Package pdftex.def Info: figures/db_1M_2/tp-eps-converted-to.pdf used on input 
-line 366.
+line 379.
 (pdftex.def)             Requested size: 226.48395pt x 169.86691pt.
 Package epstopdf Info: Source file: <figures/db_1M_2/rt.eps>
 (epstopdf)                    date: 2015-12-06 14:24:28
@@ -1163,15 +1173,15 @@ Package epstopdf Info: Source file: <figures/db_1M_2/rt.eps>
 (epstopdf)                    size: 4702 bytes
 (epstopdf)             Command: <epstopdf --outfile=figures/db_1M_2/rt-eps-conv
 erted-to.pdf figures/db_1M_2/rt.eps>
-(epstopdf)             \includegraphics on input line 366.
+(epstopdf)             \includegraphics on input line 379.
 Package epstopdf Info: Output file is already uptodate.
 
-<figures/db_1M_2/rt-eps-converted-to.pdf, id=135, 422.57875pt x 316.18124pt>
+<figures/db_1M_2/rt-eps-converted-to.pdf, id=128, 422.57875pt x 316.18124pt>
 File: figures/db_1M_2/rt-eps-converted-to.pdf Graphic file (type pdf)
 
 <use figures/db_1M_2/rt-eps-converted-to.pdf>
 Package pdftex.def Info: figures/db_1M_2/rt-eps-converted-to.pdf used on input 
-line 366.
+line 379.
 (pdftex.def)             Requested size: 226.48395pt x 169.46164pt.
 Package epstopdf Info: Source file: <figures/db_1M_2/tp.eps>
 (epstopdf)                    date: 2015-12-06 14:24:28
@@ -1181,13 +1191,13 @@ Package epstopdf Info: Source file: <figures/db_1M_2/tp.eps>
 (epstopdf)                    size: 4705 bytes
 (epstopdf)             Command: <epstopdf --outfile=figures/db_1M_2/tp-eps-conv
 erted-to.pdf figures/db_1M_2/tp.eps>
-(epstopdf)             \includegraphics on input line 366.
+(epstopdf)             \includegraphics on input line 379.
 Package epstopdf Info: Output file is already uptodate.
 File: figures/db_1M_2/tp-eps-converted-to.pdf Graphic file (type pdf)
 
 <use figures/db_1M_2/tp-eps-converted-to.pdf>
 Package pdftex.def Info: figures/db_1M_2/tp-eps-converted-to.pdf used on input 
-line 366.
+line 379.
 (pdftex.def)             Requested size: 225.94887pt x 169.46164pt.
 Package epstopdf Info: Source file: <figures/db_1M_2/rt.eps>
 (epstopdf)                    date: 2015-12-06 14:24:28
@@ -1197,13 +1207,13 @@ Package epstopdf Info: Source file: <figures/db_1M_2/rt.eps>
 (epstopdf)                    size: 4702 bytes
 (epstopdf)             Command: <epstopdf --outfile=figures/db_1M_2/rt-eps-conv
 erted-to.pdf figures/db_1M_2/rt.eps>
-(epstopdf)             \includegraphics on input line 366.
+(epstopdf)             \includegraphics on input line 379.
 Package epstopdf Info: Output file is already uptodate.
 File: figures/db_1M_2/rt-eps-converted-to.pdf Graphic file (type pdf)
 
 <use figures/db_1M_2/rt-eps-converted-to.pdf>
 Package pdftex.def Info: figures/db_1M_2/rt-eps-converted-to.pdf used on input 
-line 366.
+line 379.
 (pdftex.def)             Requested size: 226.48685pt x 169.46164pt.
 Package epstopdf Info: Source file: <figures/scalability/tp.eps>
 (epstopdf)                    date: 2015-12-08 08:14:47
@@ -1214,15 +1224,15 @@ f>
 (epstopdf)                    size: 5656 bytes
 (epstopdf)             Command: <epstopdf --outfile=figures/scalability/tp-eps-
 converted-to.pdf figures/scalability/tp.eps>
-(epstopdf)             \includegraphics on input line 369.
+(epstopdf)             \includegraphics on input line 382.
 Package epstopdf Info: Output file is already uptodate.
 
-<figures/scalability/tp-eps-converted-to.pdf, id=136, 421.575pt x 316.18124pt>
+<figures/scalability/tp-eps-converted-to.pdf, id=129, 421.575pt x 316.18124pt>
 File: figures/scalability/tp-eps-converted-to.pdf Graphic file (type pdf)
 
 <use figures/scalability/tp-eps-converted-to.pdf>
 Package pdftex.def Info: figures/scalability/tp-eps-converted-to.pdf used on in
-put line 369.
+put line 382.
 (pdftex.def)             Requested size: 226.48395pt x 169.86691pt.
 Package epstopdf Info: Source file: <figures/scalability/rt.eps>
 (epstopdf)                    date: 2015-12-08 08:14:56
@@ -1233,15 +1243,15 @@ f>
 (epstopdf)                    size: 5971 bytes
 (epstopdf)             Command: <epstopdf --outfile=figures/scalability/rt-eps-
 converted-to.pdf figures/scalability/rt.eps>
-(epstopdf)             \includegraphics on input line 369.
+(epstopdf)             \includegraphics on input line 382.
 Package epstopdf Info: Output file is already uptodate.
 
-<figures/scalability/rt-eps-converted-to.pdf, id=137, 421.575pt x 316.18124pt>
+<figures/scalability/rt-eps-converted-to.pdf, id=130, 421.575pt x 316.18124pt>
 File: figures/scalability/rt-eps-converted-to.pdf Graphic file (type pdf)
 
 <use figures/scalability/rt-eps-converted-to.pdf>
 Package pdftex.def Info: figures/scalability/rt-eps-converted-to.pdf used on in
-put line 369.
+put line 382.
 (pdftex.def)             Requested size: 226.48395pt x 169.86691pt.
 Package epstopdf Info: Source file: <figures/scalability/tp.eps>
 (epstopdf)                    date: 2015-12-08 08:14:47
@@ -1252,13 +1262,13 @@ f>
 (epstopdf)                    size: 5656 bytes
 (epstopdf)             Command: <epstopdf --outfile=figures/scalability/tp-eps-
 converted-to.pdf figures/scalability/tp.eps>
-(epstopdf)             \includegraphics on input line 369.
+(epstopdf)             \includegraphics on input line 382.
 Package epstopdf Info: Output file is already uptodate.
 File: figures/scalability/tp-eps-converted-to.pdf Graphic file (type pdf)
 
 <use figures/scalability/tp-eps-converted-to.pdf>
 Package pdftex.def Info: figures/scalability/tp-eps-converted-to.pdf used on in
-put line 369.
+put line 382.
 (pdftex.def)             Requested size: 226.48921pt x 169.86691pt.
 Package epstopdf Info: Source file: <figures/scalability/rt.eps>
 (epstopdf)                    date: 2015-12-08 08:14:56
@@ -1269,30 +1279,34 @@ f>
 (epstopdf)                    size: 5971 bytes
 (epstopdf)             Command: <epstopdf --outfile=figures/scalability/rt-eps-
 converted-to.pdf figures/scalability/rt.eps>
-(epstopdf)             \includegraphics on input line 369.
+(epstopdf)             \includegraphics on input line 382.
 Package epstopdf Info: Output file is already uptodate.
 File: figures/scalability/rt-eps-converted-to.pdf Graphic file (type pdf)
 
 <use figures/scalability/rt-eps-converted-to.pdf>
 Package pdftex.def Info: figures/scalability/rt-eps-converted-to.pdf used on in
-put line 369.
+put line 382.
 (pdftex.def)             Requested size: 226.48921pt x 169.86691pt.
- [13 <./figures/interactive_law/client_baseline-eps-converted-to.pdf> <./figure
-s/interactive_law/stability-eps-converted-to.pdf> <./figures/interactive_law/rt
-_1cm-eps-converted-to.pdf> <./figures/interactive_law/rt_2cm-eps-converted-to.p
-df>] [14 <./figures/max_tp_2/tp-eps-converted-to.pdf> <./figures/max_tp_2/rt-ep
-s-converted-to.pdf> <./figures/db_1M_2/tp-eps-converted-to.pdf> <./figures/db_1
-M_2/rt-eps-converted-to.pdf> <./figures/scalability/tp-eps-converted-to.pdf> <.
-/figures/scalability/rt-eps-converted-to.pdf>] (milestone2.aux)
+ [13 <./figures/interactive_law/db_baseline-eps-converted-to.pdf> <./figures/in
+teractive_law/db_data_baseline-eps-converted-to.pdf>] [14 <./figures/interactiv
+e_law/db_data_baseline_third_index-eps-converted-to.pdf> <./figures/interactive
+_law/mw_baseline-eps-converted-to.pdf> <./figures/interactive_law/client_baseli
+ne-eps-converted-to.pdf> <./figures/interactive_law/stability-eps-converted-to.
+pdf> <./figures/interactive_law/rt_1cm-eps-converted-to.pdf> <./figures/interac
+tive_law/rt_2cm-eps-converted-to.pdf>] [15 <./figures/max_tp_2/tp-eps-converted
+-to.pdf> <./figures/max_tp_2/rt-eps-converted-to.pdf> <./figures/db_1M_2/tp-eps
+-converted-to.pdf> <./figures/db_1M_2/rt-eps-converted-to.pdf> <./figures/scala
+bility/tp-eps-converted-to.pdf> <./figures/scalability/rt-eps-converted-to.pdf>
+] (milestone2.aux)
 
 LaTeX Warning: There were multiply-defined labels.
 
  ) 
 Here is how much of TeX's memory you used:
- 5962 strings out of 493673
- 91886 string characters out of 3141526
- 179913 words of memory out of 3000000
- 9187 multiletter control sequences out of 15000+200000
+ 5972 strings out of 493673
+ 92199 string characters out of 3141526
+ 177952 words of memory out of 3000000
+ 9195 multiletter control sequences out of 15000+200000
  10701 words of font info for 38 fonts, out of 3000000 for 9000
  1025 hyphenation exceptions out of 8191
  42i,9n,81p,2609b,414s stack positions out of 5000i,500n,10000p,200000b,50000s
@@ -1310,9 +1324,9 @@ eX 2.9/fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/Program Files (x86)/MiKTeX
  2.9/fonts/type1/public/amsfonts/cm/cmsy8.pfb><C:/Program Files (x86)/MiKTeX 2.
 9/fonts/type1/public/amsfonts/cm/cmti10.pfb><C:/Program Files (x86)/MiKTeX 2.9/
 fonts/type1/public/amsfonts/cm/cmti12.pfb>
-Output written on milestone2.pdf (14 pages, 461827 bytes).
+Output written on milestone2.pdf (15 pages, 470259 bytes).
 PDF statistics:
- 233 PDF objects out of 1000 (max. 8388607)
+ 245 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
- 121 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 126 words of extra memory for PDF output out of 10000 (max. 10000000)
 
