@@ -83,52 +83,29 @@ Milestone}
 
 \newpage
 
-\section*{Notes on writing the report}
-
-The report does not need to be extensive but it must be concise, complete, and correct. Conciseness is important  in  terms  of  content  and explanations,  focusing  on  what  has  been  done and  explanations  of the results. A long report is not necessarily a better report, especially if there are aspects of the design or  the  experiments  that  remain  unexplained.  Completeness  implies  that  the  report  should  give  a comprehensive idea of what has been done by mentioning all key aspects of the modeling and analysis effort. You are allowed to modify the system designed in Milestone 1 (changes must be explained in the report)  and  you  can  run  new  experiments. If  you  have  been  told  that something  must  be corrected  in your system as a result of the evaluation of Milestone 1, please do so and indicate the corrections in the report. Limited analysis because of flaws in the system or lack of experimental data from milestone 1 are not  valid  arguments  for  an incomplete  report.  If  bugs  or  lack  of  data  prevent  you  from  doing  a  correct analysis, the system must be debugged and new data collected. 
-
-Remember  that  this is  a  report  about modeling  and  analyzing the  system you  have  designed  and  built, using  the experimental data you have collected. There is no unique way to do the report and you may choose  to  focus  on  different  aspects  of  the  system  as  long  as  you deliver a  complete analysis of  its behavior. Please do not contact us seeking confirmation and assurances about, e.g., whether the report is  sufficient,  your  interpretation  of  the  data,  validation  of  concrete  aspects  of  your model, or  whether you have done enough experiments. Making those decisions is your job and part of what the course will evaluate. 
-
-The milestone is worth 300 points. 
-
-The report should be organized in sections as explained in the next pages, and each section should address at least the questions mentioned for each point. You might be called for a meeting in person to clarify aspects of the report or the system and to make a short presentation of the work done. By submitting the report, you  confirm  that  you  have  done  the  work  on  your  own,  the  data used comes  from  experiments  your have  done,  you  have  written  the  report  on  your  own,  and  you have  not  copied  neither text  nor  data from other sources.
-
-\section*{Formatting guidelines}
-While you can use any text processor of your choice for writing the report, please conform to the following formatting rules:
-\begin{itemize}
-\item  We expect you to submit \textbf{a single PDF that has the same section structure as this template} (if you use this file, you should remove this page with notes, and the short description provided by us at the beginning of sections).
-\item  The main text should be in \textbf{single-column format with 11pt font on A4 paper}. In case you don't start with one of the files provided by us, \textbf{for margins use 2.54 cm (1 inch) on all sides}.
-\end{itemize}
-
-\pagebreak
-
-
 \section{System as One Unit}\label{sec:system-one-unit}
 
-\textbf{TODO: CLARIFY OPERATIONS VS REQUESTS (I.E.) 1 OPERATION = 5 REQUESTS, WHICH ONES? PLUS TELL THAT SLEEPTIME IS NEGLIBABLE IN IRTL PLOTS/CALCULATIONS}
+Before coming to the M/M/1 modelling of the system, let's first clarify the notion of request used in this report, since this was not done in the first milestone. In short, a requests is equal to one atomic action of a client, like sending a message or reading all messages of a certain queue. The workload is designed such that, the number of messages in the database stays constant over time. Now that this is explained, let's move to the actual modelling.
 
-Length: 1-2 pages
-
-Build an M/M/1 model of your entire system based on the stability trace that you had to run for the first milestone. Explain the characteristics and behavior of the model built, and compare it with the experimental data. Analyze the modeled and real-life behavior of the system (explain the similarities, the differences, and map them to aspects of the design or the experiments).
-
-The following numbers have been measured in the stability experiment 2, which only was ran for 120 seconds, since it was clear that the system itself is stably performing. All numbers are measured in the middleware, since this is the end and start of a request in the black box, which surrounds the middlewares and the database. To account for warmup and cooldown phase the first and last 10 seconds were ignored, such we end up with a 100 seconds of valid data. There were 2 middlewares and 1 database with 40 concurrent connections. Strangly the numbers from the milestone 1 couldn't be reached again, there was a constant shift by $\approx\frac{3}{5}$ over the whole data. So the bahaviour didn't change. The reason for this could be a higher network usage of the system or more distance between the individual machines hired. Because of the prizing and limited time budget I was not able to redo this experiment a third time.
+The following numbers have been measured in a new stability experiment. For a detailed insight into the configuration and setup, please see section \ref{sec:appendix}. The reason for running a new experiment was the lack of measurements which allow a decent modelling of the system. The following table summarises the measured input parameters for the M/M/1 model:
 \begin{center}
 	\captionof{table}*{Measured Data} 
 	\begin{tabular}{c|c}
 		\hline
-		Throughput $X$ & 554.94 Req/sec \\
-		Response Time $R$ & 216.5 ms/Req \\
-		Queueing Time $I$ & 142.6 ms/Req \\ \hline		
+		Throughput $X$ & 554.94 req/sec \\
+		Response Time $R$ & 216.5 ms/req \\
+		Queueing Time $I$ & 142.6 ms/req \\	
+		Sleep Time of clients $Z$ & 0.002 ms \\ \hline
 	\end{tabular}
 \end{center}
-
+When taking this data and putting it into the formulas of the M/M/1 model one ends up with this result:
 \begin{center}
 	\captionof{table}*{Calculated Data}
 	\begin{tabular}{c|c}
 		\hline
 		Arrival Rate $\lambda$ & $X$* \\
-		Service Time $S$ & 71.91 ms/Req \\
-		Service Rate $\mu$ & 13.91 Req/sec \\
+		Service Time $S$ & 71.91 ms/req \\
+		Service Rate $\mu$ & 13.91 req/sec \\
 		Traffic Intensity $\rho$ & 39.91 \\
 		\hline		
 	\end{tabular}
@@ -366,19 +343,18 @@ stability: discrepancy at the beginning due to the high think time used to setup
 \TwoFig {figures/interactive_law/rt_1cm} {IL on Client Baseline} {}
 		{figures/interactive_law/rt_2cm} {IL on Stability} {}
 
-\section*{Appendix: Repeated Experiments}
+\section*{Appendix: Repeated Experiments}\label{sec:appendix}
 
-Length: up to 5 pages but \textbf{only needed if you repeated experiments}.
+As told in section \ref{sec:system-one-unit}, the measured data from milestone one was not sufficient to do a modelling of the system. Thus, the two experiments stability and scalability were rerun. Let's first look at the stability experiment. Since this experiment did not change in setup, configuration or evaluation, here, just the main facts are repeated for locality and practicality reasons.
+\newline\underline{Configuration}: The stability trace was run with one database, two middlewares and two client machines, each providing 60 clients which send requests with a content length of 200. In total, 40 database connections were distributed. Both of the middlewares got 20 each. The database was initially filled with 300'000 messages to simulate a more real-world behaviour. In contrast to the long stability trace done in the first milestone, this experiment was only run for 120 seconds. This is ok, because in the first experiment the system was already stable after 10 seconds and thus it seemed enough to just get 100 seconds of valid stable data (when ignoring the first and last 10 seconds because of warm-up and cooldown phases).
+\newline\underline{Expectation}: The system was already confirmed to be able to run stably under this configuration, so there is no reason to expect something else.
+\newline\underline{Reality} (figures \ref{fig:stab2tp} and \ref{fig:stab2rt}): When comparing the results from this stability trace and the one done in milestone one, it's evident that there is a big mismatch with respect to throughput and response time. There was a constant shift down to $56\%$ of the throughput. This can be explained by either more network usage by other customers or a bigger distance between the machines. The important fact here though is, that the system is indeed stable again and thus is valid as input data for this modelling task. Sadly because of limited time and money budget I was not able to run the experiment again and thus had to work with this data.
 
-This is the place to show any repeated or additional experiments that you ran since milestone 1, for the reasons outlined in the description. If your previous submission had all necessary experiments for this milestone, remove the Appendix.
-
-\TwoFig {figures/max_tp_2/tp} {} {}
-		{figures/max_tp_2/rt} {} {}
-	
-\TwoFig {figures/db_1M_2/tp} {} {}
-		{figures/db_1M_2/rt} {} {}
-
-\TwoFig {figures/scalability/tp} {scalability} {fig:stability_tp}
-		{figures/scalability/rt} {scalability} {fig:stability_rt}
+As mentioned, the second experiment repeated for this milestone was the scalability run, let's go over its setup and outcome, too. The scalability experiment was not run explicitly enough in the first milestone and with the focus ond the wrong factors. This time the main factors numbers of middlewares and clients were closely analysed.
+\newline\underline{Configuration}: The goal of this experiment is to find out the impact of how different system sizes do influence the overall performance. To achieve this, either one or two middlewares were active, serving in total 10, up to 120 clients. Each of these clients followed the same workload procedure and sent messages with a content length of 200. Since it was already clear that the best configuration for the system includes 40 concurrent database connections this was fixed throughout the whole experiment. If there were two middlewares running, both got 20 connections for their internal connection pool. 
+\newline\underline{Expectation}: In the first milestone the maximal throughput yield a throughput knee with 60 clients, after that the throughput stagnates and only the response time per requests grows. It thus can be expected, that this behaviour should also be visible in this experiment. Estimating the number of requests per second is a bit tricky, since in the previous experiment there were some inconsistencies with respect to data earlier measured. It's known, that the database as limiting system piece maximally allows $\approx$ 20'000 requests per second. Since the overall system performance seems to be lower, the expected throughput lies at around $\approx$ 11'000. Because of the database limitation there should be no difference in throughput between the one or two middlewares setup.
+\TwoFig {figures/scalability/tp} {Throughput over the\\ whole system.} {fig:stability_tp}
+		{figures/scalability/rt} {Response time over the whole system.} {fig:stability_rt}	
+\newline\underline{Reality} (figures \ref{fig:stability_tp} and \ref{fig:stability_rt}): It's great, that the expectation could be verified, that the number of middlewares is not important, because the database cuts off earlier. The predicted knee at 60 clients is also visible and makes the experiment a success. The maximal number of requests per second was underestimated though. In the previous experiment, the database was not empty as in this one, so there are probably other hidden factors which influence this drop down. But overall the behaviour is the same as expected and is usable for the upcoming modelling tasks. For convenience, the interactive law is already plotted in figure \ref{fig:stability_rt}.
 
 \end{document}
