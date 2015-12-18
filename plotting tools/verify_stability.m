@@ -78,8 +78,8 @@ il_rt_c2 = il_rt_c2 * 10^3;
 %client1rtt = client1rtt/120;
 %client2rtt = client2rtt/120;
 
-boxplot(client1rtt(3:end), idx(3:end))
-boxplot(client2rtt(3:end), idx(3:end))
+boxplot(client1rtt(3:end), idx(3:end), 'symbol', '')
+boxplot(client2rtt(3:end), idx(3:end), 'symbol', '')
 medians = findobj(gca,'tag','Median');
 numMedians = length(medians)/2;
 colors = ['r', 'b'];
@@ -113,4 +113,4 @@ legend('50% Quantile of Client Machine 1', ...
     '50% Quantile of Client Machine 2', ...
     'Interactive Law Client Machine 2', ...
     'Interactive Law Client Machine 1', ...
-    'Location', 'northwest')
+    'Location', 'southwest')

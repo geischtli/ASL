@@ -28,7 +28,7 @@ for level = 1:numLevels
     % get the actual latency
     eff_lat = lat./tp;
     % plot the data
-    boxplot(eff_lat, idx)
+    boxplot(eff_lat, idx, 'symbol', '')
     % now add the 50% quantile line
     medians = findobj(gca,'tag','Median');
     numMedians = length(medians);
@@ -102,3 +102,5 @@ set(gca, 'XTickLabel', labels)
 rw_il_distance_mu
 rw_il_distance_stddev = sqrt(rw_il_distance_var);
 rw_il_distance_stddev_half = rw_il_distance_stddev./2
+
+set(gca, 'YLim', [0, 3000])

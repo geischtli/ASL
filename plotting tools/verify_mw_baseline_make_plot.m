@@ -25,8 +25,8 @@ rt2cm = rt2cm * 10^3;
 
 
 hold on
-boxplot(rttData1CM/1000000, rttIdx1CM)
-boxplot(rttData2CM/1000000, rttIdx2CM)
+boxplot(rttData1CM/1000000, rttIdx1CM, 'symbol', '')
+boxplot(rttData2CM/1000000, rttIdx2CM, 'symbol', '')
 xlabel('Number of concurrent Clients')
 ylabel('Response time (only within-middleware) (ms)')
 title('Middleware latency behaviour')
@@ -34,7 +34,7 @@ title('Middleware latency behaviour')
 
 medians = findobj(gca,'tag','Median');
 numMedians = length(medians)/2;
-colors = ['g', 'b'];
+colors = ['r', 'b'];
 for i = 1:2
     currMedians = medians(((i-1)*numMedians + 1):(i*numMedians));
     xs = zeros(numMedians, 1);
@@ -52,7 +52,7 @@ end
 
 % plot the computed response by the interactive law
 plot(rt1cm, 'color', 'blue', 'linewidth', 2)
-plot(rt2cm, 'color', 'green', 'linewidth', 2)
+plot(rt2cm, 'color', 'red', 'linewidth', 2)
 
 legend('50% quantile 2CM', ...
     '50% quantile 1CM', 'IL 1CM', 'IL 2CM', ...

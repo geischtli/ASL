@@ -52,7 +52,7 @@ frac_two_indices = data(:, 3)./data(:, 6);
 % now plot the data
 hold on
 
-boxplot(deletes(:, 3), deletes(:, 5), 'symbol', 'r+')
+boxplot(deletes(:, 3), deletes(:, 5), 'symbol', '')
 
 % plot additionally the 50% quantile (media) for readability and
 % a nice legend reference

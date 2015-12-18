@@ -317,11 +317,28 @@ In case of wanting the system to perform better, the database would be the part 
 
 \section{Interactive Law Verification}\label{sec:interactive-law}
 
-mw baseline: with 1 cm interactive law does not fit the line, because with that setup the system was not closed? the client was not able to bring enough reqeuests, and started to block itself. thats way less throughput was registered and higher response times are expected, but not measured, because the middleware was not at it's limits yet.
+The interactive law is used to get a verification of the correctness of the experiments, the data and the plots itself. In this report, the interactive response time law of the form
+\begin{equation*}
+	R=\frac{N}{X}-Z
+\end{equation*}
+is used. All plots are always showing the matching between the measured and computed response time from the interactive law.
 
-stability: discrepancy at the beginning due to the high think time used to setup clients.
-
-2k verification:
+Let's follow the order of the first milestone and start with the database, followed by the baselines of the other two parts of the system.
+\TwoFig {figures/interactive_law/db_baseline} {IRL on DB baseline} {fig:v_db_baseline}
+{figures/interactive_law/db_data_baseline} {IRL on remove querey baseline} {fig:v_db_data}
+\newline\underline{Database baseline} (figure \ref{fig:v_db_baseline}): The plot shows a very good fit for the levels 0, 1 and 2 with indices. The discrepancy of the law and the measurements on the level 2 without indices is explained by the much bigger variance compared to the other levels.
+\newline\underline{Remove query performance} (figure \ref{fig:v_db_data}): In the beginning the lines follow each other closely. The growing difference is explained by a) the growing variance and b) early client finishings as can bee seen by the green line in the plot.
+\TwoFig {figures/interactive_law/db_data_baseline_third_index} {IRL on DB third index} {fig:v_db_third}
+		{figures/interactive_law/mw_baseline} {IRL on middleware baseline} {fig:v_mw_baseline}
+\newline\underline{Third index in database} (figure \ref{fig:v_db_third}): Same reasoning as for figure \ref{fig:v_db_data}.
+\newline\underline{Middleware baseline} (figure \ref{fig:v_mw_baseline}): The two aspects of the experiment when either having one or two client machines flooding requests are also visible in the interactive response time law. Having only one client machine was not enough when running more than 60 clients, because the resource limit on the client machine was reached. Thus, less throughput was registered and higher response times are expected, but not measured and therefore the difference between the blue lines.
+\TwoFig {figures/interactive_law/client_baseline} {IL on client baseline} {fig:v_client_baseline}
+{figures/interactive_law/stability} {IL on Stability} {fig:v_stability}
+\newline\underline{Client baseline} (figure \ref{fig:v_client_baseline}): Everything is ok here.
+\newline\underline{Stability} (figure \ref{fig:v_stability}): The y axis is intentionally not starting from 0, because then the information of how exact the lines do fit would be less, and in case of only having a plot as verification it certainly helps to have a more detailed view. The lines do also fit very well and mirror the measured behaviour.
+\TwoFig {figures/interactive_law/rt_1cm} {IRL on RT Experiment 1 MW} {fig:v_rt1mw}
+{figures/interactive_law/rt_2cm} {IRL on RT Experiment 1 MW} {fig:v_rt2mw}
+\newline\underline{Response Time Experiment} (figures \ref{fig:v_rt1mw} and \ref{fig:v_rt2mw}): Everything is ok.
 
 \begin{tabular}{c|c|c||c|c}
 	TP(Req/s) & RT(ms) & IRL(ms) & Abs. Difference(ms) & Percentual Difference(\%) \\
@@ -347,17 +364,9 @@ stability: discrepancy at the beginning due to the high think time used to setup
 	\hline  
 \end{tabular}
 
-\TwoFig {figures/interactive_law/db_baseline} {IL on DB Baseline} {}
-		{figures/interactive_law/db_data_baseline} {IL on DB Data Baseline} {}
+\bigskip
 
-\TwoFig {figures/interactive_law/db_data_baseline_third_index} {IL on DB Data Baseline with 3rd Index} {}
-		{figures/interactive_law/mw_baseline} {IL on MW Baseline} {}
-		
-\TwoFig {figures/interactive_law/client_baseline} {IL on Client Baseline} {}
-		{figures/interactive_law/stability} {IL on Stability} {}
-		
-\TwoFig {figures/interactive_law/rt_1cm} {IL on Client Baseline} {}
-		{figures/interactive_law/rt_2cm} {IL on Stability} {}
+And last, but not least, let's quickly go through the 2$^k$ verification via the interactive response time law. We can see, that the calculated and measured points are fitting well onto each other. On average we have $<5\%$ of difference, which indicates that the law also holds here.
 
 \section*{Appendix: Repeated Experiments}\label{sec:appendix}
 
@@ -372,5 +381,11 @@ As mentioned, the second experiment repeated for this milestone was the scalabil
 \TwoFig {figures/scalability/tp} {Throughput over the\\ whole system.} {fig:scalability_tp}
 		{figures/scalability/rt} {Response time over the whole system.} {fig:scalability_rt}	
 \newline\underline{Reality} (figures \ref{fig:scalability_tp} and \ref{fig:scalability_rt}): It's great, that the expectation could be verified, that the number of middlewares is not important, because the database cuts off earlier. The predicted knee at 60 clients is also visible and makes the experiment a success. The maximal number of requests per second was underestimated though. In the previous experiment, the database was not empty as in this one, so there are probably other hidden factors which influence this drop down. But overall the behaviour is the same as expected and is usable for the upcoming modelling tasks. For convenience, the interactive law is already plotted in figure \ref{fig:stability_rt}.
+
+Because of incomplete logs in the maximum throughput experiment of the first milestone I was forced to redo the experiment.
+\newline\underline{Configuration and expectation}: Because there was no change here, please refer to the first milestone.
+\TwoFig	{figures/max_tp_2/tp} {Throughput of the whole system} {fig:max_tp_tp}
+		{figures/max_tp_2/rt} {Response time of the whole system} {fig:max_tp_rt}
+\newline\underline{Reality} (figures \ref{fig:max_tp_tp} and \ref{fig:max_tp_rt}): Nothing did change on the outcome.
 
 \end{document}

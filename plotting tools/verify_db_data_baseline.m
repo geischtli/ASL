@@ -1,4 +1,5 @@
 clear variables
+close all
 
 basedir = 'C:\Users\Sandro\Documents\ASL_LOGS\db_data_baseline\';
 files = dir(basedir);
@@ -52,7 +53,7 @@ frac_two_indices = data(:, 3)./data(:, 6);
 % now plot the data
 hold on
 
-boxplot(deletes(:, 3), deletes(:, 5), 'symbol', 'r+')
+boxplot(deletes(:, 3), deletes(:, 5), 'symbol', '')
 
 % plot additionally the 50% quantile (media) for readability and
 % a nice legend reference
@@ -184,6 +185,8 @@ xlabel('Operation time (seconds)')
 ylabel('Time needed to complete action (ms)')
 title('Behaviour of the remove-top-most query')
 
+set(gca, 'YLim', [0 700])
+
 % set xticks before confusing everything with second yaxis
 xticks = char('0', '', '20', '', '40', '', '60', '', '80', '', ...
     '100', '', '120', '', '140', '', '160', '', '180', '', ...
@@ -195,9 +198,9 @@ set(gca,'Box', 'off');
 axesPosition = get(gca, 'Position');
 hyNewAxes = axes('Position', axesPosition,...
                 'Color', 'none',...
-                'YLim', [0 60],...
+                'YLim', [0 57],...
                 'YAxisLocation', 'right',...
                 'XTick', [], ...
-                'YTick', [0 10 20 30 40 50 60], ...
+                'YTick', [0 10 20 30 40 50], ...
                 'Box', 'off');
 ylabel(hyNewAxes,'Number of active Clients');

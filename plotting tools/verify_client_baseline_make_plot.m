@@ -35,7 +35,7 @@ hold on
 oldnumMedians = 1;
 oldval = 0;
 for k = 2:-1:1
-    boxplot(cell2mat(rt_data(k)), cell2mat(indices(k)), 'symbol', strcat(colors(k), '+'));
+    boxplot(cell2mat(rt_data(k)), cell2mat(indices(k)), 'symbol', '');
     medians = findobj(gca,'tag','Median');
     numMedians = length(medians);
     xs = zeros(numMedians, 1);
