@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (MiKTeX 2.9) (preloaded format=pdflatex 2015.10.13)  18 DEC 2015 15:16
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (MiKTeX 2.9) (preloaded format=pdflatex 2015.10.13)  18 DEC 2015 15:21
 entering extended mode
 **milestone2.tex
 (milestone2.tex
@@ -1138,24 +1138,30 @@ File: figures/max_tp_2/tp-eps-converted-to.pdf Graphic file (type pdf)
 Package pdftex.def Info: figures/max_tp_2/tp-eps-converted-to.pdf used on input
  line 388.
 (pdftex.def)             Requested size: 226.48395pt x 169.86691pt.
-Package epstopdf Info: Source file: <figures/max_tp_2/rt.eps>
-(epstopdf)                    date: 2015-12-06 14:24:28
-(epstopdf)                    size: 63118 bytes
-(epstopdf)             Output file: <figures/max_tp_2/rt-eps-converted-to.pdf>
-(epstopdf)                    date: 2015-12-06 14:24:30
-(epstopdf)                    size: 8280 bytes
-(epstopdf)             Command: <epstopdf --outfile=figures/max_tp_2/rt-eps-con
-verted-to.pdf figures/max_tp_2/rt.eps>
+Package epstopdf Info: Source file: <figures/interactive_law/max_tp_2.eps>
+(epstopdf)                    date: 2015-12-18 15:03:29
+(epstopdf)                    size: 102880 bytes
+(epstopdf)             Output file: <figures/interactive_law/max_tp_2-eps-conve
+rted-to.pdf>
+(epstopdf)             Command: <epstopdf --outfile=figures/interactive_law/max
+_tp_2-eps-converted-to.pdf figures/interactive_law/max_tp_2.eps>
 (epstopdf)             \includegraphics on input line 388.
-Package epstopdf Info: Output file is already uptodate.
+runsystem(epstopdf --outfile=figures/interactive_law/max_tp_2-eps-converted-to.
+pdf figures/interactive_law/max_tp_2.eps)...executed (allowed).
 
-<figures/max_tp_2/rt-eps-converted-to.pdf, id=171, 422.57875pt x 316.18124pt>
-File: figures/max_tp_2/rt-eps-converted-to.pdf Graphic file (type pdf)
+Package epstopdf Info: Result file: <figures/interactive_law/max_tp_2-eps-conve
+rted-to.pdf>
+(epstopdf)                    date: 2015-12-18 15:21:56
+(epstopdf)                    size: 12741 bytes.
 
-<use figures/max_tp_2/rt-eps-converted-to.pdf>
-Package pdftex.def Info: figures/max_tp_2/rt-eps-converted-to.pdf used on input
- line 388.
-(pdftex.def)             Requested size: 226.48395pt x 169.46164pt.
+<figures/interactive_law/max_tp_2-eps-converted-to.pdf, id=171, 421.575pt x 316
+.18124pt>
+File: figures/interactive_law/max_tp_2-eps-converted-to.pdf Graphic file (type 
+pdf)
+ <use figures/interactive_law/max_tp_2-eps-converted-to.pdf>
+Package pdftex.def Info: figures/interactive_law/max_tp_2-eps-converted-to.pdf 
+used on input line 388.
+(pdftex.def)             Requested size: 226.48395pt x 169.86691pt.
 Package epstopdf Info: Source file: <figures/max_tp_2/tp.eps>
 (epstopdf)                    date: 2015-12-06 14:24:30
 (epstopdf)                    size: 123296 bytes
@@ -1171,51 +1177,53 @@ File: figures/max_tp_2/tp-eps-converted-to.pdf Graphic file (type pdf)
 <use figures/max_tp_2/tp-eps-converted-to.pdf>
 Package pdftex.def Info: figures/max_tp_2/tp-eps-converted-to.pdf used on input
  line 388.
-(pdftex.def)             Requested size: 225.94887pt x 169.46164pt.
-Package epstopdf Info: Source file: <figures/max_tp_2/rt.eps>
-(epstopdf)                    date: 2015-12-06 14:24:28
-(epstopdf)                    size: 63118 bytes
-(epstopdf)             Output file: <figures/max_tp_2/rt-eps-converted-to.pdf>
-(epstopdf)                    date: 2015-12-06 14:24:30
-(epstopdf)                    size: 8280 bytes
-(epstopdf)             Command: <epstopdf --outfile=figures/max_tp_2/rt-eps-con
-verted-to.pdf figures/max_tp_2/rt.eps>
+(pdftex.def)             Requested size: 226.48921pt x 169.86691pt.
+Package epstopdf Info: Source file: <figures/interactive_law/max_tp_2.eps>
+(epstopdf)                    date: 2015-12-18 15:03:29
+(epstopdf)                    size: 102880 bytes
+(epstopdf)             Output file: <figures/interactive_law/max_tp_2-eps-conve
+rted-to.pdf>
+(epstopdf)                    date: 2015-12-18 15:21:56
+(epstopdf)                    size: 12741 bytes
+(epstopdf)             Command: <epstopdf --outfile=figures/interactive_law/max
+_tp_2-eps-converted-to.pdf figures/interactive_law/max_tp_2.eps>
 (epstopdf)             \includegraphics on input line 388.
 Package epstopdf Info: Output file is already uptodate.
-File: figures/max_tp_2/rt-eps-converted-to.pdf Graphic file (type pdf)
+File: figures/interactive_law/max_tp_2-eps-converted-to.pdf Graphic file (type 
+pdf)
 
-<use figures/max_tp_2/rt-eps-converted-to.pdf>
-Package pdftex.def Info: figures/max_tp_2/rt-eps-converted-to.pdf used on input
- line 388.
-(pdftex.def)             Requested size: 226.48685pt x 169.46164pt.
+<use figures/interactive_law/max_tp_2-eps-converted-to.pdf>
+Package pdftex.def Info: figures/interactive_law/max_tp_2-eps-converted-to.pdf 
+used on input line 388.
+(pdftex.def)             Requested size: 226.48921pt x 169.86691pt.
  [16 <./figures/scalability/tp-eps-converted-to.pdf> <./figures/scalability/rt-
-eps-converted-to.pdf> <./figures/max_tp_2/tp-eps-converted-to.pdf> <./figures/m
-ax_tp_2/rt-eps-converted-to.pdf>] (milestone2.aux) ) 
+eps-converted-to.pdf> <./figures/max_tp_2/tp-eps-converted-to.pdf> <./figures/i
+nteractive_law/max_tp_2-eps-converted-to.pdf>] (milestone2.aux) ) 
 Here is how much of TeX's memory you used:
- 5954 strings out of 493673
- 91679 string characters out of 3141526
+ 5955 strings out of 493673
+ 91739 string characters out of 3141526
  179011 words of memory out of 3000000
  9182 multiletter control sequences out of 15000+200000
  10393 words of font info for 37 fonts, out of 3000000 for 9000
  1025 hyphenation exceptions out of 8191
  42i,9n,81p,2827b,414s stack positions out of 5000i,500n,10000p,200000b,50000s
-<C:/Program Files (x86)/MiK
-TeX 2.9/fonts/type1/public/amsfonts/cm/cmbx12.pfb><C:/Program Files (x86)/MiKTe
-X 2.9/fonts/type1/public/amsfonts/cm/cmex10.pfb><C:/Program Files (x86)/MiKTeX 
-2.9/fonts/type1/public/amsfonts/cm/cmmi10.pfb><C:/Program Files (x86)/MiKTeX 2.
-9/fonts/type1/public/amsfonts/cm/cmmi6.pfb><C:/Program Files (x86)/MiKTeX 2.9/f
-onts/type1/public/amsfonts/cm/cmmi8.pfb><C:/Program Files (x86)/MiKTeX 2.9/font
-s/type1/public/amsfonts/cm/cmr10.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/t
-ype1/public/amsfonts/cm/cmr12.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type
-1/public/amsfonts/cm/cmr17.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/p
-ublic/amsfonts/cm/cmr6.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/publi
-c/amsfonts/cm/cmr8.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/am
-sfonts/cm/cmr9.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfon
-ts/cm/cmsy10.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts
-/cm/cmsy8.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm
-/cmti10.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/c
-mti12.pfb>
-Output written on milestone2.pdf (16 pages, 384018 bytes).
+<C:/Program Fi
+les (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmbx12.pfb><C:/Program File
+s (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmex10.pfb><C:/Program Files 
+(x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi10.pfb><C:/Program Files (x
+86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi6.pfb><C:/Program Files (x86)
+/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi8.pfb><C:/Program Files (x86)/Mi
+KTeX 2.9/fonts/type1/public/amsfonts/cm/cmr10.pfb><C:/Program Files (x86)/MiKTe
+X 2.9/fonts/type1/public/amsfonts/cm/cmr12.pfb><C:/Program Files (x86)/MiKTeX 2
+.9/fonts/type1/public/amsfonts/cm/cmr17.pfb><C:/Program Files (x86)/MiKTeX 2.9/
+fonts/type1/public/amsfonts/cm/cmr6.pfb><C:/Program Files (x86)/MiKTeX 2.9/font
+s/type1/public/amsfonts/cm/cmr8.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/ty
+pe1/public/amsfonts/cm/cmr9.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/
+public/amsfonts/cm/cmsy10.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/pu
+blic/amsfonts/cm/cmsy8.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/publi
+c/amsfonts/cm/cmti10.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/
+amsfonts/cm/cmti12.pfb>
+Output written on milestone2.pdf (16 pages, 388450 bytes).
 PDF statistics:
  242 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
