@@ -94,19 +94,19 @@ The following numbers have been measured in a new stability experiment. For a de
 		\hline
 		Throughput $X$ & 554.94 req/sec \\
 		Response Time $R$ & 216.5 ms/req \\
-		Queueing Time $I$ & 142.6 ms/req \\	
+		Queueing Time $Q$ & 142.6 ms/req \\	
 		Sleep Time of clients $Z$ & 0.002 ms \\ \hline
 	\end{tabular}
 \end{center}
 When taking this data and putting it into the formulas of the M/M/1 model one ends up with this result:
 \begin{center}
 	\captionof{table}*{Calculated Data}
-	\begin{tabular}{c|c}
+	\begin{tabular}{c|c|c}
 		\hline
-		Arrival Rate $\lambda$ & $X$* \\
-		Service Time $S$ & 71.91 ms/req \\
-		Service Rate $\mu$ & 13.91 req/sec \\
-		Traffic Intensity $\rho$ & 39.91 \\
+		Arrival Rate $\lambda$ & $\lambda=X$* & $X$ \\
+		Service Time $S$ & $S=R-Q$ &71.91 ms/req \\
+		Service Rate $\mu$ & $\mu=\frac{1}{S}$ & 13.91 req/sec \\
+		Traffic Intensity $\rho$ & $\rho=\frac{\lambda}{\mu}$ & 39.91 \\
 		\hline		
 	\end{tabular}
 \end{center}
@@ -121,24 +121,19 @@ Based on the following law:
 		{figures/stability_2/rt.eps} {Response Time per Request} {fig:stab2rt}
 the system should be heavily unstable. But multiple factors show evidence that this is not the case. First we can have a look at the plots displayed in figures \ref{fig:stab2tp} and \ref{fig:stab2rt}. It's clearly visible that the system is stable. Another factor worth considering in view of this problem is the standard deviation of the throughput and response time which are $20.122$ Req/sec and $7.85$ ms/Req respectively. These two values are identical to $3.626\%$ (throughput) and $3.625\%$ (response time) variation with respect to the corresponding overall mean value, which again indicate a very stable system.
 
-So how to explain then that the traffic intensity $\rho$ $=39.91>1$? The answer lies in the choice of the model. Since the system that was built, internally has a lot of parallelism and works with threads that execute along eachother, the simple M/M/1 model is not able to explain this complex structure and thus fails. The value of the traffic intensity is not random at all though. It is still somewhat connected to the inner structure of the system. Precisely I am talking about the number of database connections, which are constantly 40 during the whole experiment (20 per middleware). In practice this means that on the database, 40 concurrent threads were available which serve concurrently all queries sent from the middlewares. This would perfectly explain the traffic intensity, since when inserting these 40 concurrent threads into the equation: $\rho$ $=\frac{\lambda}{40\mu}=\frac{554.94 \text{ sec/Req}}{40*13.91\text{ Req/sec}}=\frac{554.94 \text{ sec/Req}}{556.4 \text{ Req/sec}}=0.9973<1$. To be sure that all 40 threads on the database are really in use the whole time, we can see if there is queueing happening in the right part of the system. Each request has to go to the database somewhen. The connections are provided through a connection pool. If there are currently no connections available, the request has to wait. In figure \ref{fig:queue_length} we can see that the queue length per middleware is on average of length $38.9$, which makes visible that indeed the database is the bottleneck. These numbers do make sense, because we now can precisely say in which state all the requests are: 40 requests are processed on the database and $2*38.9=77.8$ are waiting for a database connection. Because there were exactly 120 clients online (each one having one open request in the system and the sleep time of $\approx0.003ms$ is negligable) we know that we are missing track of $120-40-77.8=2.2$ requests on average. But this makes sense, because there have to be some requests on the way from the database back to the clients and some new ones coming from the clients which did not yet reach the database connection queue.
+So how to explain then that the traffic intensity $\rho$ $=39.91>1$? The answer lies in the choice of the model. Since the system that was built, internally has a lot of parallelism and works with threads that execute along eachother, the simple M/M/1 model is not able to explain this complex structure and thus fails. The value of the traffic intensity is not random at all though. It is still somewhat connected to the inner structure of the system. Precisely I am talking about the number of database connections, which are constantly 40 during the whole experiment (20 per middleware). In practice this means that on the database, 40 concurrent threads were available which serve concurrently all queries sent from the middlewares. This would perfectly explain the traffic intensity, because when inserting these 40 concurrent threads into the equation: $\rho$ $=\frac{\lambda}{40\mu}=\frac{554.94 \text{ sec/Req}}{40*13.91\text{ Req/sec}}=\frac{554.94 \text{ sec/Req}}{556.4 \text{ Req/sec}}=0.9973<1$. To be sure that all 40 threads on the database are really in use the whole time, we can see if there is queueing happening in the right part of the system. Each request has to go to the database somewhen. The connections are provided through a connection pool. If there are currently no connections available, the request has to wait. In figure \ref{fig:queue_length} we can see that the queue length per middleware is on average of length $38.9$, which makes visible that indeed the database is the bottleneck. These numbers do make sense, because we now can precisely say in which state all the requests are: 40 requests are processed on the database and $2*38.9=77.8$ are waiting for a database connection. Because there were exactly 120 clients online (each one having one open request in the system) we know that we are missing track of $120-40-77.8=2.2$ requests on average. But this makes sense, because there have to be some requests on the way from the database back to the clients and some new ones coming from the clients which did not yet reach the database connection queue.
 \begin{figure}
 \centering
-\includegraphics[width=0.5\linewidth]{figures/stability_2/queue_length}
+\includegraphics[width=0.6\linewidth]{figures/stability_2/queue_length}
 \caption{Queue length in front of DB Connection pool}
 \label{fig:queue_length}
 \end{figure}
 
 \section{Analysis of System Based on Scalability Data}\label{sec:analysis-scalability}
 
-Length: 1-4 pages
+The scalability of a system has two aspects: it describes the capability of the system to handle an increasing number of requests, but also the possibility of boosting the system performance by adding more modules. It's thus important to include both factors into the analysis. For a detailed description of the experiment setup, please refer to section \ref{sec:appendix}. 
 
-Starting from the different configurations that you used in the first milestone, build queuing models of the system. Detail the characteristics of these series of models and compare them with experimental data. The goal is the analysis of the model and the real scalability of the system (explain the similarities, the 
-differences, and map them to aspects of the design or the experiments).
-
-The scalability of a system has two aspects: it describes the capability of the system to handle an increasing number of requests, but also the possibility of boosting the system performance by adding more modules. It's thus important to include both factors into the analysis. This is done by varying the number of clients as well as the number of middlewares. The number of clients ranged from 10 to 120 in steps of 10, whereas the number of middlewares were chosen to be either one or two. The reason for the client and middleware numbers are both based on benchmarks done in milestone 1. In short it holds that the database is the bottleneck and is saturated by already 60 clients in total operating on one middleware. To get the full picture, the range of possible values was enlarged. In case of two middlewares, the clients as well as the totally 40 database connections were evenly split among both. Let's analyse the first configuration with one middleware, all possible number of clients (evenly split among two client machines) and one database providing 40 concurrent connections.
-
-Also based on benchmarks evaluated in milestone one, we can assume that the database is the bottleneck in this configuration. As in the book of Raj Jain is written, an M/M/m queue is used to model a multi-server system where jobs for these servers are kept in one queue. In our case, the servers are equal to the threads on the database and the single queue is found as the waiting queue for a database connection on the middleware. It thus make sense to apply an M/M/40 queueing model, because as said, the database provides 40 concurrent connections, and thus, internally runs 40 threads.
+Based on benchmarks evaluated in milestone one, we can assume that the database is the bottleneck in this configuration. As in the book of Raj Jain is written, an M/M/m queue is used to model a multi-server system where jobs for these servers are kept in one queue. In our case, the servers are equal to the threads on the database and the single queue is found as the waiting queue for a database connection on the middleware. It thus make sense to apply an M/M/40 queueing model, because as said, the database provides 40 concurrent connections, and thus, internally runs 40 threads. 
 
 \begin{center}
 	\captionof{table}*{M/M/40 Model on Scalability Data for 1 Middleware}
@@ -148,24 +143,61 @@ Also based on benchmarks evaluated in milestone one, we can assume that the data
 		\hline
 		\#Clients & $\lambda$ (Req/sec) & $\mu$ (Req/sec) & $\rho$ & $\varrho^{*_1}$(\%) & Queue Length$^{*_2}$ \\
 		\hline
-		10 & 2481.5 & 366.15 & 0.1694 & $2.5783*10^{-13}$ & 0.19\\
-		20 & 4773.5 & 341.82 & 0.3491 & 1.15 & 0.40\\
-		30 & 7015.5 & 339.42 & 0.5167 & 51.66 & 0.68\\
-		40 & 9311.5 & 332.88 & 0.6993 & 69.93 & 0.90\\
-		50 & 10346.5 & 303.02 & 0.8536 &85.36 & 1.36\\
-		60 & 12302 & 317.06 & 0.9700 & 97.00 & 5.79\\
-		70 & 13152 & 329.90 & 0.9967 & 99.67 & 21.31\\
-		80 & 13005.5 & 326.25 & 0.9966 & 99.66  & 40.83\\
-		90 & 12321 & 308.14 & 0.9996 & 99.96 & 61.68\\
-		100 & 13383 & 335.71 & 0.9966 & 99.66 & 77.74\\
-		110 & 13013.5 & 326.28 & 0.9971 & 99.71 & 99.13\\
-		120 & 12642.5 & 316.59 & 0.9983 & 99.83 & 119.10\\
+		10 & 2481.5 & 366.15 & 0.1694 & $2.5783*10^{-13}$ & 0.10\\
+		20 & 4773.5 & 341.82 & 0.3491 & 1.15 & 0.20\\
+		30 & 7015.5 & 339.42 & 0.5167 & 51.66 & 0.34\\
+		40 & 9311.5 & 332.88 & 0.6993 & 69.93 & 0.45\\
+		50 & 10346.5 & 303.02 & 0.8536 &85.36 & 0.68\\
+		60 & 12302 & 317.06 & 0.9700 & 97.00 & 2.90\\
+		70 & 13152 & 329.90 & 0.9967 & 99.67 & 10.66\\
+		80 & 13005.5 & 326.25 & 0.9966 & 99.66  & 20.41\\
+		90 & 12321 & 308.14 & 0.9996 & 99.96 & 30.84\\
+		100 & 13383 & 335.71 & 0.9966 & 99.66 & 38.87\\
+		110 & 13013.5 & 326.28 & 0.9971 & 99.71 & 49.56\\
+		120 & 12642.5 & 316.59 & 0.9983 & 99.83 & 59.55\\
 		\hline		
 	\end{tabular}
-	\captionof{table}*{$^{*_1}$: Probability of Queueing $^{*_2}$: Average per Request}
+	\captionof{table}*{$^{*_1}$: Probability of Queueing $^{*_2}$: Measured and averaged per Request}
 \end{center}
 
-The first improvement of this model with respect to the simple M/M/1 model visible is the much better fit of the traffic intensity $\rho$. Indeed, the model does now also yield a stable system and thus is closer to reality. The model gives also reasonable insights into the probability of queueing happening. When we have values of the measured queue length which are $<1$, it means that more requests had an empty queue than requests which had another request actually waiting infront of them already.
+Let's analyse the outcome of this modelling approach with respect to the previous M/M/1 model. The first improvement visible is the much better fit of the traffic intensity $\rho$. Indeed, the model does now also yield a stable system and thus now mirrors the reality. The model gives also reasonable insights into the probability of when queueing is happening. When we have values of the measured queue length which are $<1$, it means that more requests had an empty queue than requests which had another request actually waiting infront of them already. But the model does also fail in some predictions: For example when wanting to compute the queue length yield by the model via $E[n_q]=\frac{\rho}{\varrho}*(1-\rho)$ the mismatch is immense:
+
+\begin{center}
+	\begin{tabular}{c|cccccccccccc}
+		\#C & 10 & 20& 30 & 40 & 50 & 60 & 70 & 80 & 90 & 100 & 110 & 120\\\hline
+		 & 0.10 & 0.20 & 0.34 & 0.45 & 0.68 & 2.90 & 10.66 & 20.41 & 30.84 & 38.87 & 49.56 & 59.55 \\
+		 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.03 & 0.14 & 0.30 & 0.48 & 15.14 & $5*10^{15}$\\
+	\end{tabular}
+\end{center}
+
+The first column shows the measured effective queue lengths on the middleware and the second, the computed one. It is evident that neither the point of the knee, nor the slope of the line does fit onto the data. This is due to the simple M/M/40 modelling approach which does not take into account, that there are effectively two separate components existing in this modelled unit. This leads to the conclusion that this M/M/40 model does fit already quite well onto some initial parameters, but does not lead to further insights afterwards.
+
+The follow-up question to this is, if there are any other models worth trying for the one-middleware setup? The answer is no. Since the whole system is still treated as a black box, there is no other parameter indication besides the one yield by the bottleneck (in our case 40 connections on the database). Additionally it does not make sense to try other ones, when thinking about what context the M/M/40 model was presented: The scalability experiment was run with clients, which tried to send as much as possible. Thus a traffic intensity $\rho$ of close to $1$ does make sense. What happens when trying $m_1<40<m_2$? The M/M/$m_1$ model will yield $\rho>1$, because the parallelism of the database was not fully taken into account and thus the system seems to be unstable. A M/M/$m_2$ model will lead into $\rho<1$, but that's also not optimal, because we already know that the system was operating at its limits. It is therefore not needed to apply another M/M/m model onto the data.
+
+Seeing the resulting throughput of the scalability experiment in figure \ref{fig:scalability_tp} in section \ref{sec:appendix} it's mentionable that having one or two middlewares in action does throughput-wise not make a difference. This should also be expressed in the modelling, when applying the M/M/40 model onto the data of two middlewares. For the sake of redundancy, only the traffic intensity $\rho$ is calculated, to give a brief overview over the fitting quality.
+
+\begin{center}
+	\captionof{table}*{M/M/40 Model on Scalability Data for 2 Middlewares}
+	\begin{tabular}{c|c|c||c}
+		\hline
+		& \multicolumn{2}{c||}{Model Parameters} & \multicolumn{1}{c}{Computed and Measured Variables} \\
+		\hline
+		\#Clients & & & \\
+		10  & & & \\
+		20 & & & \\
+		30 & & & \\
+		40 & & & \\
+		50 & & & \\
+		60 & & & \\
+		70 & & & \\
+		80 & & & \\
+		90 & & & \\
+		100 & & & \\
+		110 & & & \\
+		120 & & & \\
+		\hline
+	\end{tabular}
+\end{center}
 
 \section{Modeling Components as Independent Units}\label{sec:independent-units}
 
@@ -348,13 +380,13 @@ stability: discrepancy at the beginning due to the high think time used to setup
 As told in section \ref{sec:system-one-unit}, the measured data from milestone one was not sufficient to do a modelling of the system. Thus, the two experiments stability and scalability were rerun. Let's first look at the stability experiment. Since this experiment did not change in setup, configuration or evaluation, here, just the main facts are repeated for locality and practicality reasons.
 \newline\underline{Configuration}: The stability trace was run with one database, two middlewares and two client machines, each providing 60 clients which send requests with a content length of 200. In total, 40 database connections were distributed. Both of the middlewares got 20 each. The database was initially filled with 300'000 messages to simulate a more real-world behaviour. In contrast to the long stability trace done in the first milestone, this experiment was only run for 120 seconds. This is ok, because in the first experiment the system was already stable after 10 seconds and thus it seemed enough to just get 100 seconds of valid stable data (when ignoring the first and last 10 seconds because of warm-up and cooldown phases).
 \newline\underline{Expectation}: The system was already confirmed to be able to run stably under this configuration, so there is no reason to expect something else.
-\newline\underline{Reality} (figures \ref{fig:stab2tp} and \ref{fig:stab2rt}): When comparing the results from this stability trace and the one done in milestone one, it's evident that there is a big mismatch with respect to throughput and response time. There was a constant shift down to $56\%$ of the throughput. This can be explained by either more network usage by other customers or a bigger distance between the machines. The important fact here though is, that the system is indeed stable again and thus is valid as input data for this modelling task. Sadly because of limited time and money budget I was not able to run the experiment again and thus had to work with this data.
+\newline\underline{Reality} (figures \ref{fig:stab2tp} and \ref{fig:stab2rt}): When comparing the results from this stability trace and the one done in milestone one, it's evident that there is a big mismatch with respect to throughput and response time. There was a constant shift down to $56\%$ of the throughput. This can be explained by either more network usage by other customers or a bigger distance between the machines. The important fact here though is, that the system is indeed stable again and thus is valid as input data for this modelling task. Sadly because of limited time and money budget I was not able to run the experiment again and thus had to work with this data. For the sake of not repeating plots or data, the interactive law verification is already shown in figure \ref{fig:stab2rt}.
 
 As mentioned, the second experiment repeated for this milestone was the scalability run, let's go over its setup and outcome, too. The scalability experiment was not run explicitly enough in the first milestone and with the focus ond the wrong factors. This time the main factors numbers of middlewares and clients were closely analysed.
 \newline\underline{Configuration}: The goal of this experiment is to find out the impact of how different system sizes do influence the overall performance. To achieve this, either one or two middlewares were active, serving in total 10, up to 120 clients. Each of these clients followed the same workload procedure and sent messages with a content length of 200. Since it was already clear that the best configuration for the system includes 40 concurrent database connections this was fixed throughout the whole experiment. If there were two middlewares running, both got 20 connections for their internal connection pool. 
 \newline\underline{Expectation}: In the first milestone the maximal throughput yield a throughput knee with 60 clients, after that the throughput stagnates and only the response time per requests grows. It thus can be expected, that this behaviour should also be visible in this experiment. Estimating the number of requests per second is a bit tricky, since in the previous experiment there were some inconsistencies with respect to data earlier measured. It's known, that the database as limiting system piece maximally allows $\approx$ 20'000 requests per second. Since the overall system performance seems to be lower, the expected throughput lies at around $\approx$ 11'000. Because of the database limitation there should be no difference in throughput between the one or two middlewares setup.
-\TwoFig {figures/scalability/tp} {Throughput over the\\ whole system.} {fig:stability_tp}
-		{figures/scalability/rt} {Response time over the whole system.} {fig:stability_rt}	
-\newline\underline{Reality} (figures \ref{fig:stability_tp} and \ref{fig:stability_rt}): It's great, that the expectation could be verified, that the number of middlewares is not important, because the database cuts off earlier. The predicted knee at 60 clients is also visible and makes the experiment a success. The maximal number of requests per second was underestimated though. In the previous experiment, the database was not empty as in this one, so there are probably other hidden factors which influence this drop down. But overall the behaviour is the same as expected and is usable for the upcoming modelling tasks. For convenience, the interactive law is already plotted in figure \ref{fig:stability_rt}.
+\TwoFig {figures/scalability/tp} {Throughput over the\\ whole system.} {fig:scalability_tp}
+		{figures/scalability/rt} {Response time over the whole system.} {fig:scalability_rt}	
+\newline\underline{Reality} (figures \ref{fig:scalability_tp} and \ref{fig:scalability_rt}): It's great, that the expectation could be verified, that the number of middlewares is not important, because the database cuts off earlier. The predicted knee at 60 clients is also visible and makes the experiment a success. The maximal number of requests per second was underestimated though. In the previous experiment, the database was not empty as in this one, so there are probably other hidden factors which influence this drop down. But overall the behaviour is the same as expected and is usable for the upcoming modelling tasks. For convenience, the interactive law is already plotted in figure \ref{fig:stability_rt}.
 
 \end{document}
