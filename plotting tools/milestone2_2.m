@@ -142,7 +142,7 @@ db_plus_network_res_double = db_plus_network_res_double*10^-6;
 figure()
 hold on
 
-boxplot(tp_res_double, idx_single)
+boxplot(tp_res_single, idx_single)
 
 medians = findobj(gca,'tag','Median');
 numMedians = length(medians);
@@ -158,7 +158,7 @@ for i = 1:1
         yt = currMedian.YData;
         ys(j) = mean(yt);
     end
-    double_tp_means = ys;
+    single_tp_means = ys;
     plot(xs, ys, 'color', colors(i), 'linewidth', 2)
 end
 legend('1 Middleware', 'location', 'northwest')
@@ -248,11 +248,11 @@ hold off
 figure()
 hold on
 boxplot(qlen_res_single, idx_single)
-%boxplot(qlen_res_double, idx_single)
+boxplot(qlen_res_double, idx_single)
 medians = findobj(gca,'tag','Median');
-numMedians = length(medians);
-colors = ['b', 'b'];
-for i = 1:1
+numMedians = length(medians)/2;
+colors = ['r', 'b'];
+for i = 1:2
     currMedians = medians(((i-1)*numMedians + 1):(i*numMedians));
     xs = zeros(numMedians, 1);
     ys = zeros(numMedians, 1);
@@ -270,14 +270,11 @@ for i = 1:1
     end
     plot(xs, ys, 'color', colors(i), 'linewidth', 2)
 end
-plot(1:12, [0.1 0.2 0.34 0.45 0.68 2.90 10.66 20.41 30.84 38.87 49.56 59.55], ...
-    'color', 'red', 'linewidth', 2)
-title('Queue Length Comparison of DB Connection Pool')
+title('Measured Queue Length of DB Connection Pool')
 xlabel('Number of Clients in the System')
 ylabel('Queue Length')
 set(gca, 'YLim', [0 120])
-legend('Estimated by M/M/40', 'Measured for 1 Middleware', 'location', ...
-    'northwest')
+legend('2 MW', '1 MW')
 
 hold off
 figure()
@@ -368,8 +365,8 @@ double_total_req = double_db_num_req + loc_double_qlen_means + ...
 hold off
 figure()
 hold on
-boxplot(single_total_req, idx_single)
-boxplot(double_total_req, idx_double)
+boxplot(single_total_req, idx_single, 'symbol', '')
+boxplot(double_total_req, idx_double, 'symbol', '')
 
 medians = findobj(gca,'tag','Median');
 numMedians = length(medians)/2;
